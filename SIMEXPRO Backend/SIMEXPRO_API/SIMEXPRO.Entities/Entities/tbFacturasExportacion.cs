@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
@@ -23,6 +24,18 @@ namespace SIMEXPRO.Entities.Entities
         public DateTime faex_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }
         public DateTime? faex_FechaModificacion { get; set; }
+
+        [NotMapped]
+        public string clie_Nombre_O_Razon_Social { get; set; }
+
+        [NotMapped]
+        public string usuarioCreacionNombre { get; set; }
+
+        [NotMapped]
+        public string usuarioModificacionNombre { get; set; }
+
+        [NotMapped]
+        public string Detalles { get; set; }
 
         public virtual tbOrdenCompra orco { get; set; }
         public virtual tbDuca duca_No_DucaNavigation { get; set; }
