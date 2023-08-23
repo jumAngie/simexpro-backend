@@ -10847,6 +10847,34 @@ FROM	Prod.tbReporteModuloDia rmd
 END
 GO
 
+--*****Listado por fechas*****--
+Create   PROCEDURE [Prod].[UDP_tbReporteModuloDia_ListarPorFechas]
+@FechaInicio	DATE,
+@FechaFin		DATE
+AS
+BEGIN
+SELECT	remo_Id, 
+		rmd.modu_Id, 
+		modu.modu_Nombre,
+		remo_Fecha, 
+		remo_TotalDia, 
+		remo_TotalDanado, 
+		rmd.usua_UsuarioCreacion,
+		crea.usua_Nombre usua_UsuarioCrea, 
+		remo_FechaCreacion, 
+		rmd.usua_UsuarioModificacion,
+		modi.usua_Nombre usua_UsuarioModifica, 
+		remo_FechaModificacion, 
+		remo_Estado 
+FROM	Prod.tbReporteModuloDia rmd 
+		LEFT JOIN Prod.tbModulos modu				ON rmd.modu_Id = modu.modu_Id 
+		INNER JOIN Acce.tbUsuarios crea				ON crea.usua_Id = rmd.usua_UsuarioCreacion 
+		LEFT JOIN  Acce.tbUsuarios modi				ON modi.usua_Id = rmd.usua_UsuarioModificacion 	
+WHERE	(remo_Fecha >= @FechaInicio AND remo_Fecha <= @FechaFin) OR (@FechaInicio IS NULL AND @FechaFin IS NULL)
+END
+GO
+
+
 --*****Insertar*****--
 CREATE OR ALTER PROCEDURE Prod.UDP_tbReporteModuloDia_Insertar
 @modu_Id				INT, 
