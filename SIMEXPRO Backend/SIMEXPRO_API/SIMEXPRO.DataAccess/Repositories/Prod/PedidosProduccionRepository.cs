@@ -23,6 +23,17 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             result.MessageStatus = answer;
             return result;
         }
+
+        public RequestStatus Finalizapedidoproduccion(tbPedidosProduccion item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@ppro_Id", item.ppro_Id, DbType.Int32, ParameterDirection.Input);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.FinalizarPedidosProduccion, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
+        }
         public tbPedidosProduccion Find(int? id)
         {
             throw new NotImplementedException();

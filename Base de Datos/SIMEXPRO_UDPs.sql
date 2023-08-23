@@ -13666,24 +13666,23 @@ CREATE OR ALTER PROC Prod.UDP_tbPedidosProduccion_Eliminar
 AS
 BEGIN
 	BEGIN TRY
-		IF EXISTS(SELECT [ppde_Id] FROM [Prod].[tbPedidosProduccionDetalles] WHERE [ppro_Id] = @ppro_Id )
-			BEGIN
-				SELECT 2
-			END
-		ELSE
-			BEGIN	
+		DECLARE @respuesta INT
+			EXEC dbo.UDP_ValidarReferencias 'ppro_Id', @ppro_Id, 'Prod.tbPedidosProduccion', @respuesta OUTPUT
+
+			IF(@respuesta) = 1
+					BEGIN
 				UPDATE [Prod].[tbPedidosProduccion]
 				SET	   [ppro_Estado] = 0
 				WHERE  [ppro_Id] = @ppro_Id
 
-				SELECT 1
-			END
+				END
+			SELECT @respuesta AS Resultado
 	END TRY	
 	BEGIN CATCH
-		SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END CATCH
+		SELECT 0
+	END CATCH
 END
-GO
+GO 
 
 CREATE OR ALTER PROC Prod.UDP_tbPedidosProduccion_Insertar
 	@empl_Id					INT,
@@ -13770,6 +13769,24 @@ END
 
 GO
 
+CREATE OR ALTER PROCEDURE Prod.UDP_tbPedidosProduccion_Finalizado
+	@ppro_Id	INT
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE [Prod].[tbPedidosProduccion]
+		SET	   [ppro_Finalizado] = 1
+		WHERE  ppro_Id = @ppro_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error:' + ERROR_MESSAGE()
+	END CATCH
+END
+
+GO
+
 CREATE OR ALTER PROC Prod.UDP_tbPedidosProduccionDetalle_Listar 
 	@ppro_Id INT
 AS 
@@ -13843,29 +13860,26 @@ BEGIN
 	END CATCH
 END
 
-
-
 GO
+
 CREATE OR ALTER PROC Prod.UDP_tbPedidosProduccionDetalle_Eliminar
 (@ppde_Id					INT)
 AS
 BEGIN
 	BEGIN TRY
 
-		UPDATE [Prod].[tbPedidosProduccionDetalles]
-		SET [ppde_Estado] = 0
+		DELETE FROM [Prod].[tbPedidosProduccionDetalles]
 		WHERE ppde_Id = @ppde_Id
 
 		SELECT 1
 	END TRY
 	BEGIN CATCH
 			SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END CATCH
+	END CATCH
 END
 
-
-
 GO
+
 CREATE OR ALTER PROCEDURE Prod.UDP_tbPedidosProduccionDetalle_Filtrar_Estado
 (
 @ppro_Id INT

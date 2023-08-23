@@ -2303,6 +2303,21 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
                 return result.Error(ex.Message);
             }         
         }
+
+        public ServiceResult Finalizapedido(tbPedidosProduccion item)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _pedidosProduccionRepository.Finalizapedidoproduccion(item);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region PO Detalle Por Pedido Orden Detalle

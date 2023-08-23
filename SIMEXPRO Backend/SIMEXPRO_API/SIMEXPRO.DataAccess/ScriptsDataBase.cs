@@ -642,6 +642,7 @@ namespace SIMEXPRO.DataAccess
         public static string InsertarPedidosProduccion = "Prod.UDP_tbPedidosProduccion_Insertar";
         public static string EditarPedidosProduccion = "Prod.UDP_tbPedidosProduccion_Editar";
         public static string EliminarPedidosProduccion = "Prod.UDP_tbPedidosProduccion_Eliminar";
+        public static string FinalizarPedidosProduccion = "Prod.UDP_tbPedidosProduccion_Finalizado";
         #endregion
 
         #region Pedidos Produccion Detalles
