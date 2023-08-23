@@ -10275,6 +10275,35 @@ END
 GO
 
 GO
+CREATE OR ALTER PROCEDURE Prod.UDP_tbProcesoPorOrdenCompraDetalle_Insertar
+(
+@code_Id				INT,
+@proc_Id				INT,
+@usua_UsuarioCreacion	INT,
+@poco_FechaCreacion		DATETIME
+)
+AS
+BEGIN
+	BEGIN TRY
+		INSERT INTO	Prod.tbProcesoPorOrdenCompraDetalle
+					(code_Id,
+					proc_Id,
+					usua_UsuarioCreacion,
+					poco_FechaCreacion)
+		VALUES		(@code_Id,
+					@proc_Id,
+					@usua_UsuarioCreacion,
+					@poco_FechaCreacion)
+
+		SELECT SCOPE_IDENTITY() AS Resultado
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+	END CATCH
+END
+GO
+
+GO
 CREATE OR ALTER PROCEDURE Prod.UDP_tbProcesoPorOrdenCompraDetalle_Eliminar
 (
 @code_Id INT
