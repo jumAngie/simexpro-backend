@@ -1933,7 +1933,7 @@ CREATE TABLE Prod.tbProcesoPorOrdenCompraDetalle(
 
 	CONSTRAINT PK_Prod_tbProcesoPorOrdenCompraDetalle_poco_Id											PRIMARY KEY(poco_Id),
 	CONSTRAINT FK_Prod_tbProcesoPorOrdenCompraDetalle_code_Id_Prod_tbOrdenCompraDetalles_code_Id		FOREIGN KEY(code_Id) REFERENCES Prod.tbOrdenCompraDetalles(code_Id),
-	CONSTRAINT FK_Prod_tbProcesoPorOrdenCompraDetalle_proc_Id_Prod_tbProcesos_proc_Id					FOREIGN KEY(code_Id) REFERENCES Prod.tbProcesos(proc_Id),
+	CONSTRAINT FK_Prod_tbProcesoPorOrdenCompraDetalle_proc_Id_Prod_tbProcesos_proc_Id					FOREIGN KEY(proc_Id) REFERENCES Prod.tbProcesos(proc_Id),
 	CONSTRAINT FK_Prod_tbProcesoPorOrdenCompraDetalle_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id		FOREIGN KEY(usua_UsuarioCreacion)		REFERENCES Acce.tbUsuarios (usua_Id),
 	CONSTRAINT FK_Prod_tbProcesoPorOrdenCompraDetalle_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id	FOREIGN KEY(usua_UsuarioModificacion)	REFERENCES Acce.tbUsuarios (usua_Id)
 );
