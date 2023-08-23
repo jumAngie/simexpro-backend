@@ -12,7 +12,6 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public int mate_Id { get; set; }
         public int unme_Id { get; set; }
         public int? prod_Id { get; set; }
-        public int lote_Stock { get; set; }
         public int lote_CantIngresada { get; set; }
         public string lote_Observaciones { get; set; }
         public int tipa_Id { get; set; }

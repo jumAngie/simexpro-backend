@@ -35,6 +35,7 @@ namespace SIMEXPRO.Entities.Entities
         public string usua_UsuarioCrea { get; set; }
         [NotMapped]
         public string usua_UsuarioModifica { get; set; }
+        public bool? remo_Finalizado { get; set; }
 
         public virtual tbModulos modu { get; set; }
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }

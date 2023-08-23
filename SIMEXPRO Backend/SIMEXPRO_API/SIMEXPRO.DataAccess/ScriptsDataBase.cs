@@ -626,6 +626,11 @@ namespace SIMEXPRO.DataAccess
         public static string EliminarOrdenCompraDetalles = "Prod.UDP_tbOrdenCompraDetalles_Eliminar";
         #endregion
 
+        #region Proceso por Orden de compra detalle
+        public static string ListarProcesoPorOrdenCompraDetalle = "Prod.UDP_tbProcesoPorOrdenCompraDetalle_Listado_PorDetalle";
+        public static string InsertarProcesoPorOrdenCompraDetalle = "Prod.UDP_tbProcesoPorOrdenCompraDetalle_Insertar";
+        #endregion
+
         #region Orden de Pedido
         public static string ListarPedidosOrden = "Prod.UDP_tbPedidosOrden_Listar";
         public static string InsertarPedidosOrden = "Prod.UDP_tbPedidosOrden_Insertar";
@@ -659,6 +664,10 @@ namespace SIMEXPRO.DataAccess
         public static string ListarPODetallePorPedidoOrdenDetalle = "Prod.UDP_tbPODetallePorPedidoOrdenDetalle_Listar";
         public static string InsertarPODetallePorPedidoOrdenDetalle = "Prod.UDP_tbPODetallePorPedidoOrdenDetalle_Insertar";
         public static string EliminarPedidosOrdenDetalles = "Prod.UDP_tbPODetallePorPedidoOrdenDetalle_Eliminar";
+        #endregion
+
+        #region Procesos
+        public static string FiltrarProcesos = "Prod.UDP_tbProcesos_Filtrar_Modulos";
         #endregion
 
 
