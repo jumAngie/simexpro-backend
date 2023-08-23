@@ -40,7 +40,7 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
         private readonly TipoEmbalajeRepository _tipoEmbalajeRepository;
         private readonly DocumentosOrdenCompraDetallesRepository _documentosOrdenCompraDetallesRepository;
         private readonly GraficasRepository _graficasRepository;
-
+        private readonly ProcesoPorOrdenCompraDetalleRepository _procesoPorOrdenCompraDetalleRepository;
 
         public ProduccionServices(AreasRepository areasRepository,
                                     AsignacionesOrdenDetalleRepository asignacionesOrdenDetalleRepository,
@@ -74,7 +74,8 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
                                     TallasRepository tallasRepository,
                                     TipoEmbalajeRepository tipoEmbalajeRepository,
                                     DocumentosOrdenCompraDetallesRepository documentosOrdenCompraDetallesRepository,
-                                    GraficasRepository graficasRepository
+                                    GraficasRepository graficasRepository,
+                                   ProcesoPorOrdenCompraDetalleRepository procesoPorOrdenCompraDetalleRepository
 
             )
         {
@@ -113,6 +114,7 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             _tipoEmbalajeRepository = tipoEmbalajeRepository;
             _documentosOrdenCompraDetallesRepository = documentosOrdenCompraDetallesRepository;
             _graficasRepository = graficasRepository;
+            _procesoPorOrdenCompraDetalleRepository = procesoPorOrdenCompraDetalleRepository;
 
         }
 
@@ -1925,6 +1927,53 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
 
         #endregion
 
+        #region Proceso por Orden compra detalle
+        public ServiceResult ListarProcesoOrdenCompraDetalles(int cade_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _procesoPorOrdenCompraDetalleRepository.Listar(cade_Id);
+                return result.Ok(list);
+
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+
+            }
+        }
+
+        public ServiceResult InsertarProcesoOrdenCompraDetalles(tbProcesoPorOrdenCompraDetalle item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                if (item.code_Id.ToString() != "")
+                {
+                    var map = _procesoPorOrdenCompraDetalleRepository.Insert(item);
+                    if (map.MessageStatus != "0")
+                    {
+                        return result.Ok(map);
+                    }
+                    else
+                    {
+
+                        return result.Error(map);
+                    }
+                }
+                else
+                {
+                    return result.SetMessage("La solicitud contiene sintaxis erronea", ServiceResultType.BadRecuest);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        #endregion
+
         #region Pedidos Orden Detalles
         public ServiceResult ListarPedidosOrdenDetalle()
         {
@@ -2475,6 +2524,22 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             catch (Exception ex)
             {
                 return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult FiltrarProcesos(int proc_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _procesosRepository.Filtrar(proc_Id);
+                return result.Ok(list);
+
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+
             }
         }
         #endregion
