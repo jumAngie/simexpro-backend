@@ -12,15 +12,15 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProcesoPorOrdenCompraDetalleController : Controller
+    public class ProcesoPorOrdenCompraDetalleController : ControllerBase
     {
         private readonly ProduccionServices _produccionServices;
         private readonly IMapper _mapper;
 
         [HttpGet("Listar")]
-        public IActionResult Index(int cade_Id)
+        public IActionResult Index(int code_Id)
         {
-            var listado = _produccionServices.ListarProcesoOrdenCompraDetalles(cade_Id);
+            var listado = _produccionServices.ListarProcesoOrdenCompraDetalles(code_Id);
             listado.Data = _mapper.Map<IEnumerable<ProcesoPorOrdenCompraDetalleViewModel>>(listado.Data);
             return Ok(listado);
         }
