@@ -414,6 +414,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[Prod].[tbProcesoPorOrdenCompraDetalle]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[Prod].[tbProcesos]",
          "ObjectType": 0
       },
@@ -450,7 +454,7 @@
          "ObjectType": 3
       }
    ],
-   "UiHint": "practicaahm.SIMEXPRO",
+   "UiHint": "simexpro.SIMEXPRO",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": true,
    "UseDbContextSplitting": false,

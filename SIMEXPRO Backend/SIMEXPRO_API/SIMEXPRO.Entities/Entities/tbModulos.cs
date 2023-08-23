@@ -38,6 +38,8 @@ namespace SIMEXPRO.Entities.Entities
         public DateTime? modu_FechaEliminacion { get; set; }
         public bool? modu_Estado { get; set; }
 
+        public bool? remo_Finalizado { get; set; }
+
         public virtual tbEmpleados empr { get; set; }
         public virtual tbProcesos proc { get; set; }
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }

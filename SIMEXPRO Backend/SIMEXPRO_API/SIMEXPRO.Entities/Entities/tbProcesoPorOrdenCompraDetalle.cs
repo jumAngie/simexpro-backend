@@ -9,6 +9,12 @@ namespace SIMEXPRO.Entities.Entities
 {
     public partial class tbProcesoPorOrdenCompraDetalle
     {
+        public tbProcesoPorOrdenCompraDetalle()
+        {
+            tbOrdenCompraDetalles = new HashSet<tbOrdenCompraDetalles>();
+            tbProcesos = new HashSet<tbProcesos>();
+        }
+
         public int poco_Id { get; set; }
         public int code_Id { get; set; }
         public int proc_Id { get; set; }
@@ -19,5 +25,17 @@ namespace SIMEXPRO.Entities.Entities
         public int? usua_UsuarioModificacion { get; set; }
         public DateTime? poco_FechaModificacion { get; set; }
         public bool? code_Estado { get; set; }
+
+        
+        public virtual tbOrdenCompraDetalles code { get; set; }
+        public virtual tbProcesos codeNavigation { get; set; }
+        public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
+        public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }
+
+        public virtual ICollection<tbOrdenCompraDetalles> tbOrdenCompraDetalles { get; set; }
+        public virtual ICollection<tbProcesos> tbProcesos { get; set; }
+
+
+
     }
 }

@@ -107,6 +107,7 @@ namespace SIMEXPRO.DataAccess.Context
         public virtual DbSet<tbPersonaJuridica> tbPersonaJuridica { get; set; }
         public virtual DbSet<tbPersonaNatural> tbPersonaNatural { get; set; }
         public virtual DbSet<tbPersonas> tbPersonas { get; set; }
+        public virtual DbSet<tbProcesoPorOrdenCompraDetalle> tbProcesoPorOrdenCompraDetalle { get; set; }
         public virtual DbSet<tbProcesos> tbProcesos { get; set; }
         public virtual DbSet<tbProveedores> tbProveedores { get; set; }
         public virtual DbSet<tbProveedoresDeclaracion> tbProveedoresDeclaracion { get; set; }
@@ -3336,7 +3337,7 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.mate_FechaModificacion).HasColumnType("datetime");
 
-              //  entity.Property(e => e.mate_Precio).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.mate_Imagen).IsRequired();
 
                 entity.HasOne(d => d.subc)
                     .WithMany(p => p.tbMateriales)
@@ -3493,6 +3494,9 @@ namespace SIMEXPRO.DataAccess.Context
                     .HasName("PK_Prod_tbModulos_modu_Id");
 
                 entity.ToTable("tbModulos", "Prod");
+
+                entity.HasIndex(e => e.modu_Nombre, "UQ_Prod_tbModulos_modu_Nombre")
+                    .IsUnique();
 
                 entity.Property(e => e.modu_Estado).HasDefaultValueSql("((1))");
 
@@ -3732,12 +3736,6 @@ namespace SIMEXPRO.DataAccess.Context
                     .HasForeignKey(d => d.ppro_Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Prod_tbOrdenCorte_Ensamblado_Acabado_Etiquetado_ppro_Id_Prod_tbPedidoProduccion_ppro_Id");
-
-                entity.HasOne(d => d.proc)
-                    .WithMany(p => p.tbOrde_Ensa_Acab_Etiq)
-                    .HasForeignKey(d => d.proc_Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Prod_tbOrdenCorte_Ensamblado_Acabado_Etiquetado_Prod_tbProcesos_proc_Id");
 
                 entity.HasOne(d => d.usua_UsuarioCreacionNavigation)
                     .WithMany(p => p.tbOrde_Ensa_Acab_Etiqusua_UsuarioCreacionNavigation)
@@ -3987,9 +3985,9 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.pant_Nombre).HasMaxLength(100);
 
-                entity.Property(e => e.pant_Subcategoria).HasMaxLength(100);
-
                 entity.Property(e => e.pant_URL).HasMaxLength(100);
+
+             /*   entity.Property(e => e.pant_subCategoria).HasMaxLength(150);*/
 
                 entity.HasOne(d => d.usua_UsuarioCreacionNavigation)
                     .WithMany(p => p.tbPantallasusua_UsuarioCreacionNavigation)
@@ -4064,8 +4062,6 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.prod_FechaModificacion).HasColumnType("datetime");
 
-                entity.Property(e => e.prod_Peso).HasColumnType("decimal(18, 2)");
-
                 entity.Property(e => e.prod_Precio).HasColumnType("decimal(18, 2)");
 
                 entity.HasOne(d => d.mate)
@@ -4110,6 +4106,8 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.Property(e => e.ppro_FechaCreacion).HasColumnType("datetime");
 
                 entity.Property(e => e.ppro_FechaModificacion).HasColumnType("datetime");
+
+             /*   entity.Property(e => e.ppro_Finalizado).HasDefaultValueSql("((0))");*/
 
                 entity.Property(e => e.ppro_Observaciones).IsRequired();
 
@@ -4381,6 +4379,46 @@ namespace SIMEXPRO.DataAccess.Context
                     .HasConstraintName("FK_Adua_Personas_pers_UsuarioModificacion_Acce_tbUsuarios_usua_Id");
             });
 
+            modelBuilder.Entity<tbProcesoPorOrdenCompraDetalle>(entity =>
+            {
+                entity.HasKey(e => e.poco_Id)
+                    .HasName("PK_Prod_tbProcesoPorOrdenCompraDetalle_poco_Id");
+
+                entity.ToTable("tbProcesoPorOrdenCompraDetalle", "Prod");
+
+                entity.Property(e => e.code_Estado).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.poco_FechaCreacion).HasColumnType("datetime");
+
+                entity.Property(e => e.poco_FechaModificacion).HasColumnType("datetime");
+
+                entity.HasOne(d => d.code)
+                    .WithMany(p => p.tbProcesoPorOrdenCompraDetalle)
+                    .HasForeignKey(d => d.code_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Prod_tbProcesoPorOrdenCompraDetalle_code_Id_Prod_tbOrdenCompraDetalles_code_Id");
+
+                entity.HasOne(d => d.codeNavigation)
+                    .WithMany(p => p.tbProcesoPorOrdenCompraDetalle)
+                    .HasForeignKey(d => d.proc_Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Prod_tbProcesoPorOrdenCompraDetalle_proc_Id_Prod_tbProcesos_proc_Id");
+
+                entity.HasOne(d => d.usua_UsuarioCreacionNavigation)
+                    .WithMany(p => p.tbProcesoPorOrdenCompraDetalle_UsuarioCreacionNavigation)
+                    .HasForeignKey(d => d.usua_UsuarioCreacion)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Prod_tbProcesoPorOrdenCompraDetalle_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id");
+
+                entity.HasOne(d => d.usua_UsuarioModificacionNavigation)
+                    .WithMany(p => p.tbProcesoPorOrdenCompraDetalle_UsuarioModificacionNavigation)
+                    .HasForeignKey(d => d.usua_UsuarioModificacion)
+                    .HasConstraintName("FK_Prod_tbProcesoPorOrdenCompraDetalle_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id");
+
+            });
+
+
+
             modelBuilder.Entity<tbProcesos>(entity =>
             {
                 entity.HasKey(e => e.proc_Id)
@@ -4620,6 +4658,8 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.Property(e => e.remo_FechaCreacion).HasColumnType("datetime");
 
                 entity.Property(e => e.remo_FechaModificacion).HasColumnType("datetime");
+
+                entity.Property(e => e.remo_Finalizado).HasDefaultValueSql("((0))");
 
                 entity.HasOne(d => d.modu)
                     .WithMany(p => p.tbReporteModuloDia)
