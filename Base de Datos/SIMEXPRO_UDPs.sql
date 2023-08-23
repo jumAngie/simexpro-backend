@@ -13075,14 +13075,14 @@ BEGIN
 				mate_Id						= @mate_Id,				 
 				mabr_Cantidad				= @mabr_Cantidad,
 				unme_Id						= @unme_Id,
-				usua_UsuarioCreacion		= @usua_UsuarioModificacion,
-				mabr_FechaCreacion			= @mabr_FechaModificacion	
+				usua_UsuarioModificacion	= @usua_UsuarioModificacion,
+				mabr_FechaModificacion		= @mabr_FechaModificacion	
 		WHERE	mabr_Id						= @mabr_Id
 		SELECT 1
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END CATCH
+	END CATCH
 END
 
 GO
