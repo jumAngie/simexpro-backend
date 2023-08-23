@@ -25,10 +25,10 @@ namespace SIMEXPRO.Entities.Entities
         public bool? reca_Estado { get; set; }
 
         [NotMapped]
-        public string usua_NombreUsuarioCreacion { get; set; }
+        public string usuarioCreacionNombre { get; set; }
 
         [NotMapped]
-        public string usua_NombreUsuarioModificacion { get; set; }
+        public string usuarioModificacionNombre { get; set; }
         public virtual tbOrde_Ensa_Acab_Etiq ensa { get; set; }
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }

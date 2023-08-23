@@ -13224,15 +13224,18 @@ GO
 
 ----------------------------UDPS Pedidos Orden Detalle-----------------------------
 --LISTAR
-CREATE OR ALTER PROCEDURE Prod.UDP_tbPedidosOrdenDetalle_Listar
+CREATE OR ALTER   PROCEDURE [Prod].[UDP_tbPedidosOrdenDetalle_Listar] 
+(
+@pedi_Id INT
+)
 AS
 BEGIN
   SELECT    prod.prod_Id           
 		    ,prod.pedi_Id           
-		    ,prod.mate_Id           
+		    ,prod.mate_Id       
+			,mate.mate_Descripcion
 		    ,prod.prod_Cantidad     
 			,prod.prod_Precio       
-			,prod.prod_Peso         
 		   		
 			,usu.usua_Id            
 			,usu.usua_Nombre         AS UsuarioCreacionNombre 
@@ -13247,8 +13250,8 @@ BEGIN
 			INNER JOIN Acce.tbUsuarios usu          ON usu.usua_Id = prod.usua_UsuarioCreacion 
 			LEFT JOIN Acce.tbUsuarios usu1          ON usu1.usua_UsuarioModificacion = prod.usua_UsuarioModificacion
 			INNER JOIN Prod.tbMateriales mate   ON prod.mate_Id = mate.mate_Id
-			WHERE prod.prod_Estado = 1
-END 
+			WHERE prod.prod_Estado = 1 AND prod.pedi_Id = @pedi_Id
+END
 GO
 
 /*Find de pedidos Orden detalles*/

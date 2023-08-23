@@ -38,7 +38,6 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             parametros.Add("@mate_Id", item.mate_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@unme_Id", item.unme_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@prod_Id", item.prod_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@lote_Stock", item.lote_Stock, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@lote_CantIngresada", item.lote_CantIngresada, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@tipa_Id", item.tipa_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@lote_Observaciones", item.lote_Observaciones, DbType.String, ParameterDirection.Input);
@@ -65,7 +64,6 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             parametros.Add("@mate_Id", item.mate_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@unme_Id", item.unme_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@prod_Id", item.prod_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@lote_Stock", item.lote_Stock, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@lote_CantIngresada", item.lote_CantIngresada, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@tipa_Id", item.tipa_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@lote_Observcaciones", item.lote_Observaciones, DbType.String, ParameterDirection.Input);
