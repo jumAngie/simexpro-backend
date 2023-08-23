@@ -11149,7 +11149,9 @@ AS
 BEGIN
 	BEGIN TRY
 		SELECT	[modu_Id],
-				[modu_Nombre]
+				[modu_Nombre],
+				Proce.proc_Id,
+				Proce.proc_Descripcion
 		FROM	Prod.tbProcesos Proce
 				INNER JOIN Prod.tbModulos Modu
 				ON	Proce.proc_Id = Modu.proc_Id
