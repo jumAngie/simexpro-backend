@@ -10,9 +10,7 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
     {
         public int proc_Id { get; set; }
         public string proc_Descripcion { get; set; }
-        [NotMapped]
         public int modu_Id { get; set; }
-        [NotMapped]
         public string modu_Nombre { get; set; }
         public int? usua_UsuarioCreacion { get; set; }
          public string usarioCreacion { get; set; }
