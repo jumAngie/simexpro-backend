@@ -256,7 +256,7 @@ namespace SIMEXPRO.Entities.Entities
         public string empl_CorreoElectronico { get; set; }
 
         [NotMapped]
-        public string  empleadoNombreCompleto { get; set; }
+        public string emplNombreCompleto { get; set; }
 
 
         public int empl_Id { get; set; }
