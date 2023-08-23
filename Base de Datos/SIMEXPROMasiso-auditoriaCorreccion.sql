@@ -2096,6 +2096,7 @@ CREATE TABLE Prod.tbMaquinas(
 	
 	CONSTRAINT PK_Prod_tbMaquinas_maqu_Id										PRIMARY KEY (maqu_Id),
 	CONSTRAINT FK_Prod_tbMaquinas_Prod_tbModulos_modu_Id 						FOREIGN KEY(modu_Id) 							REFERENCES Prod.tbModulos(modu_Id),
+	CONSTRAINT UQ_Prdo_tbMaquinas_maqu_NumeroSerie								UNIQUE(maqu_NumeroSerie),
 	CONSTRAINT FK_Prod_tbMaquinas_Prod_tbModelosMaquina_mmaq_Id					FOREIGN KEY (mmaq_Id)					REFERENCES Prod.tbModelosMaquina(mmaq_Id),
 	CONSTRAINT FK_Prod_tbMaquinas_usua_UsuarioCreacion_tbUsuarios_usua_Id		FOREIGN KEY (usua_UsuarioCreacion)     REFERENCES Acce.tbUsuarios (usua_Id),
 	CONSTRAINT FK_Prod_tbMaquinas_usua_UsuarioModificacion_tbUsuarios_usua_Id	FOREIGN KEY (usua_UsuarioModificacion) REFERENCES Acce.tbUsuarios (usua_Id),
