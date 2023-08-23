@@ -10839,7 +10839,8 @@ SELECT	remo_Id,
 		rmd.usua_UsuarioModificacion,
 		modi.usua_Nombre AS usua_NombreUsuarioModificacion, 
 		remo_FechaModificacion, 
-		remo_Estado 
+		remo_Estado, 
+		remo_Finalizado
 FROM	Prod.tbReporteModuloDia rmd 
 		INNER JOIN Prod.tbModulos modu				ON rmd.modu_Id = modu.modu_Id 
 		INNER JOIN Acce.tbUsuarios crea				ON crea.usua_Id = rmd.usua_UsuarioCreacion 
@@ -10865,7 +10866,8 @@ SELECT	remo_Id,
 		rmd.usua_UsuarioModificacion,
 		modi.usua_Nombre usua_UsuarioModifica, 
 		remo_FechaModificacion, 
-		remo_Estado 
+		remo_Estado,
+		remo_Finalizado
 FROM	Prod.tbReporteModuloDia rmd 
 		LEFT JOIN Prod.tbModulos modu				ON rmd.modu_Id = modu.modu_Id 
 		INNER JOIN Acce.tbUsuarios crea				ON crea.usua_Id = rmd.usua_UsuarioCreacion 
