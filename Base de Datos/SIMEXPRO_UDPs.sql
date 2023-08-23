@@ -13976,10 +13976,10 @@ BEGIN
 			maqu.usua_UsuarioEliminacion,
 			maqu_Estado
      FROM	Prod.tbMaquinas maqu		
-            LEFT JOIN  Prod.tbModulos modu         ON modu.modu_Id                   = maqu.modu_Id
-            LEFT JOIN  Acce.tbUsuarios usu         ON usu.usua_Id                    = maqu.usua_UsuarioCreacion
-            LEFT JOIN   Acce.tbUsuarios usu1       ON usu1.usua_UsuarioModificacion  = maqu.usua_UsuarioModificacion
-            LEFT JOIN   Acce.tbUsuarios usu2       ON usu2.usua_UsuarioEliminacion   = maqu.usua_UsuarioEliminacion
+            LEFT JOIN   Prod.tbModulos modu         ON modu.modu_Id                   = maqu.modu_Id
+            LEFT JOIN   Acce.tbUsuarios usu         ON usu.usua_Id                    = maqu.usua_UsuarioCreacion
+            LEFT JOIN   Acce.tbUsuarios usu1       ON usu1.usua_Id  = maqu.usua_UsuarioModificacion
+            LEFT JOIN   Acce.tbUsuarios usu2       ON usu2.usua_Id   = maqu.usua_UsuarioEliminacion
 			LEFT JOIN  Prod.tbModelosMaquina molM  ON molM.mmaq_Id                   = maqu.mmaq_Id
      WHERE  maqu.maqu_Estado                                                         = 1
 END
