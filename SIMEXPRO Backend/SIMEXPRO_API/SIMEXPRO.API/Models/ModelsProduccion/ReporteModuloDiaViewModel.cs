@@ -20,8 +20,9 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public int? usua_UsuarioModificacion { get; set; }
         public DateTime? remo_FechaModificacion { get; set; }
         public bool? remo_Estado { get; set; }
+        public bool? remo_Finalizado { get; set; }
 
-         public string usua_UsuarioCrea { get; set; }
+        public string usua_UsuarioCrea { get; set; }
          public string usua_UsuarioModifica { get; set; }
 
     }

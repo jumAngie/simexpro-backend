@@ -10930,6 +10930,24 @@ END
 GO
 
 
+--*****Finalizar*****--
+
+CREATE OR ALTER  PROCEDURE [Prod].[UDP_tbReporteModuloDia_Finalizado]
+	@remo_Id	INT
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE [Prod].[tbReporteModuloDia]
+		SET	   [remo_Finalizado] = 1
+		WHERE  remo_Id = @remo_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error:' + ERROR_MESSAGE()
+	END CATCH
+END
+
 --**********REVISION DE CALIDAD**********--
 /*Listar revisión de calidad*/
 CREATE OR ALTER PROCEDURE Prod.UDP_tbRevisionDeCalidad_Listar

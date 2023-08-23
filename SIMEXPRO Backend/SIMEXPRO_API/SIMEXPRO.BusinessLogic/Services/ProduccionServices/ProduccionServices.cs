@@ -2619,6 +2619,29 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
+
+        public ServiceResult FinalizarReporteModuloDia(tbReporteModuloDia item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _reporteModuloDiaRepository.Finalizar(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+
         public ServiceResult EliminarReporteModuloDia(tbReporteModuloDia item)
         {
             var result = new ServiceResult();

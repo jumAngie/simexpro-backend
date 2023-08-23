@@ -443,6 +443,7 @@ namespace SIMEXPRO.DataAccess
         public static string ListarReporteModuloDiaPorFechas = "Prod.UDP_tbReporteModuloDia_ListarPorFechas";
         public static string InsertarReporteModuloDia = "Prod.UDP_tbReporteModuloDia_Insertar";
         public static string EditarReporteModuloDia = "Prod.UDP_tbReporteModuloDia_Editar";
+        public static string FinalizarReporteModuloDia = "Prod.UDP_tbReporteModuloDia_Finalizado";
 
         #endregion
 
