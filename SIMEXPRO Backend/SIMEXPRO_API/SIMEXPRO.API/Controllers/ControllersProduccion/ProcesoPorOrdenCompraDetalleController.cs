@@ -17,6 +17,12 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
         private readonly ProduccionServices _produccionServices;
         private readonly IMapper _mapper;
 
+        public ProcesoPorOrdenCompraDetalleController(ProduccionServices produccionServices, IMapper mapper)
+        {
+            _produccionServices = produccionServices;
+            _mapper = mapper;
+        }
+
         [HttpGet("Listar")]
         public IActionResult Index(int code_Id)
         {
