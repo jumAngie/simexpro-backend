@@ -1,10 +1,10 @@
 PROD:
 	-Planificación
 	-Módulos --------------------- REVISADO
-	-Orden de Procesos
+	-Orden de Procesos------------ REVISADO
 	-Orden de Compra
-	-Orden de Pedido
-	-Pedidos de Producción
+	-Orden de Pedido--------------- REVISADO
+	-Pedidos de Producción--------- REVISADO
 	-Procesos --------------------- REVISADO
 	-Revisión de Calidad----------- REVISADO
 	-Funciones de Máquina---------- REVISADO
@@ -25,22 +25,22 @@ PROD:
 	-Reportes Modulos.
 
 Gral.
-	-Formas de Envío
-	-Monedas
-	-Tipos de Identificación
-	-Oficios y Profesiones
-	-Unidades de Medida
-	-Aldeas
-	-Ciudades
-	-Colonias
-	-Países
-	-Provincias
-	-Cargos
+	-Formas de Envío-----------------------REVISADO
+	-Monedas-------------------------------REVISADO
+	-Tipos de Identificación---------------REVISADO
+	-Oficios y Profesiones-----------------REVISADO
+	-Unidades de Medida--------------------REVISADO
+	-Aldeas--------------------------------REVISADO
+	-Ciudades------------------------------
+	-Colonias------------------------------
+	-Países--------------------------------
+	-Provincias----------------------------
+	-Cargos--------------------------------
 	-Estados Civiles
 	-Empleados
 	-Clientes
 	-Proveedores
 	
 Acce.
-	-Usuarios
+	-Usuarios----------------    REVISADO
 	-Roles
