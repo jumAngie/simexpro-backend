@@ -745,12 +745,12 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
         #endregion
 
         #region DocumentosOrdenCompraDetalles
-        public ServiceResult ListarDocumentosOrdenCompraDetalles(int Orco_Id)
+        public ServiceResult ListarDocumentosOrdenCompraDetalles(int code_Id)
         {
             var result = new ServiceResult();
             try
             {
-                var list = _documentosOrdenCompraDetallesRepository.ListarByOrcoId(Orco_Id);
+                var list = _documentosOrdenCompraDetallesRepository.ListarByCodeId(code_Id);
                 return result.Ok(list);
             }
             catch (Exception ex)
@@ -2472,6 +2472,20 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             try
             {
                 var list = _reporteModuloDiaRepository.List();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult ListarReporteModuloDiaPorFechas(DateTime FechaI, DateTime FechaF)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _reporteModuloDiaRepository.ListadoPorFechas(FechaI, FechaF);
                 return result.Ok(list);
             }
             catch (Exception ex)

@@ -32,6 +32,14 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             return Ok(listado);
         }
 
+        [HttpGet("ListarPorFecha")]
+        public IActionResult IndexPorFecha(DateTime FechaInicio, DateTime FechaFin)
+        {
+            var listado = _produccionServices.ListarReporteModuloDiaPorFechas(FechaInicio, FechaFin);
+            listado.Data = _mapper.Map<IEnumerable<ReporteModuloDiaViewModel>>(listado.Data);
+            return Ok(listado);
+        }
+
         [HttpPost("Insertar")]
         public IActionResult Insert(ReporteModuloDiaViewModel ReporteModuloDiaViewModel)
         {

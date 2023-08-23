@@ -21,6 +21,10 @@ namespace SIMEXPRO.Entities.Entities
         public DateTime remo_Fecha { get; set; }
         public int remo_TotalDia { get; set; }
         public int remo_TotalDanado { get; set; }
+        [NotMapped]
+        public string detalles { get; set; }
+        [NotMapped]
+        public decimal CantidadTotal { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         public DateTime remo_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }
