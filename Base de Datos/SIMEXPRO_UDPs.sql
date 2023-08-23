@@ -13125,6 +13125,70 @@ END
 GO
 
 
+--------------------------------------------------------------- TABLA Procesos por orden de compra detalle  ---------------------------------------------------------------
+
+CREATE OR ALTER   PROCEDURE [Prod].[UDP_tbProcesoPorOrdenCompraDetalle_Listado_PorDetalle]
+(
+@code_Id INT
+)
+AS
+BEGIN
+	BEGIN TRY
+		SELECT	PPOCD.[poco_Id], 
+				PPOCD.[code_Id], 
+				PPOCD.[proc_Id], 
+				PROCE.[proc_Descripcion],
+				PPOCD.[usua_UsuarioCreacion], 
+				PPOCD.[poco_FechaCreacion], 
+				PPOCD.[usua_UsuarioModificacion], 
+				PPOCD.[poco_FechaModificacion], 
+				PPOCD.[code_Estado]
+		FROM Prod.tbProcesoPorOrdenCompraDetalle PPOCD
+			INNER JOIN Prod.tbOrdenCompraDetalles OCD
+			ON PPOCD.code_Id = OCD.code_Id
+			INNER JOIN Prod.tbProcesos PROCE
+			ON PPOCD.proc_Id = PROCE.proc_Id
+			WHERE PPOCD.code_Id = @code_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+			SELECT 'Error Message: ' + ERROR_MESSAGE()
+	END CATCH
+END
+
+GO
+
+CREATE OR ALTER   PROCEDURE [Prod].[UDP_tbProcesoPorOrdenCompraDetalle_Insertar]
+(
+@code_Id				INT,
+@proc_Id				INT,
+@usua_UsuarioCreacion	INT,
+@poco_FechaCreacion		DATETIME
+)
+AS
+BEGIN
+	BEGIN TRY
+		INSERT INTO	Prod.tbProcesoPorOrdenCompraDetalle
+					(code_Id,
+					proc_Id,
+					usua_UsuarioCreacion,
+					poco_FechaCreacion)
+		VALUES		(@code_Id,
+					@proc_Id,
+					@usua_UsuarioCreacion,
+					@poco_FechaCreacion)
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+	END CATCH
+END
+
+GO
+
+
 --------------------------------------------------------------- TABLA REPORTE MODULO DIA DETALLE ---------------------------------------------------------------
 /* LISTAR REPORTE MODULO DIA DETALLE */
 CREATE OR ALTER PROCEDURE Prod.UDP_tbReporteModuloDiaDetalle_Listar	

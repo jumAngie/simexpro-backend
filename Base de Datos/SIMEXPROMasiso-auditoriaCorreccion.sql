@@ -1920,6 +1920,7 @@ CREATE TABLE Prod.tbOrdenCompraDetalles(
 );
 GO
 
+
 CREATE TABLE Prod.tbProcesoPorOrdenCompraDetalle(
 	poco_Id						INT IDENTITY(1,1),
 	code_Id						INT NOT NULL,

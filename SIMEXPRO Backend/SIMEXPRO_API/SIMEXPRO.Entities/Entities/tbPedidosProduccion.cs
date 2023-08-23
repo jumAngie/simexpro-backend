@@ -39,6 +39,7 @@ namespace SIMEXPRO.Entities.Entities
 
         [NotMapped]
         public string UsuarioCreacionNombre { get; set; }
+
         [NotMapped]
         public string UsuarioModificacionNombre { get; set; }
         [NotMapped]
