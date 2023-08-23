@@ -72,6 +72,15 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             return db.Query<tbProcesos>(ScriptsDataBase.ListarProcesos, null, commandType: CommandType.StoredProcedure);
         }
 
+        public IEnumerable<tbProcesos> Filtrar(int proc_Id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@proc_Id", proc_Id, DbType.Int32, ParameterDirection.Input);
+
+            var result = db.Query<tbProcesos>(ScriptsDataBase.FiltrarProcesos, parametros, commandType: System.Data.CommandType.StoredProcedure);
+            return result;
+        }
 
     }
 }

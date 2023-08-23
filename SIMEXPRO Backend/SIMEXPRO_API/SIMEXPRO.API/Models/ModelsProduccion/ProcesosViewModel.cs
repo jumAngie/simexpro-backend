@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,6 +10,10 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
     {
         public int proc_Id { get; set; }
         public string proc_Descripcion { get; set; }
+        [NotMapped]
+        public int modu_Id { get; set; }
+        [NotMapped]
+        public string modu_Nombre { get; set; }
         public int? usua_UsuarioCreacion { get; set; }
          public string usarioCreacion { get; set; }
         public DateTime proc_FechaCreacion { get; set; }
