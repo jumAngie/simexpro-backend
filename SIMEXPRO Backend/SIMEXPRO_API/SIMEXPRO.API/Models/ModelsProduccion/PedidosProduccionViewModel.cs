@@ -14,6 +14,7 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public DateTime ppro_Fecha { get; set; }
         public string ppro_Estados { get; set; }
         public string ppro_Observaciones { get; set; }
+        public bool? ppro_Finalizado { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         
         public int lote_Id { get; set; }
