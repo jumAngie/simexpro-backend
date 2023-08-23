@@ -440,6 +440,7 @@ namespace SIMEXPRO.DataAccess
 
         #region Reporte Modulo del Dia
         public static string ListarReporteModuloDia = "Prod.UDP_tbReporteModuloDia_Listar";
+        public static string ListarReporteModuloDiaPorFechas = "Prod.UDP_tbReporteModuloDia_ListarPorFechas";
         public static string InsertarReporteModuloDia = "Prod.UDP_tbReporteModuloDia_Insertar";
         public static string EditarReporteModuloDia = "Prod.UDP_tbReporteModuloDia_Editar";
 
