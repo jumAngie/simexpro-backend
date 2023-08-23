@@ -21,9 +21,8 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public DateTime? reca_FechaModificacion { get; set; }
         public bool? reca_Estado { get; set; }
 
-         public string usua_NombreUsuarioCreacion { get; set; }
-
-         public string usua_NombreUsuarioModificacion { get; set; }
+        public string usuarioCreacionNombre { get; set; }
+        public string usuarioModificacionNombre { get; set; }
 
 
     }
