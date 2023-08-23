@@ -31,6 +31,9 @@ namespace SIMEXPRO.Entities.Entities
         public int lote_Id { get; set; }
 
         [NotMapped]
+        public int ppro_Finalizado { get; set; }
+
+        [NotMapped]
         public int ppde_Cantidad { get; set; }
 
 

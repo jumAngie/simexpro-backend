@@ -74,8 +74,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             parametros.Add("@empl_Id", item.empl_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@ppro_Fecha", item.ppro_Fecha, DbType.DateTime, ParameterDirection.Input);
             parametros.Add("@ppro_Estados", item.ppro_Estados, DbType.String, ParameterDirection.Input);
-            parametros.Add("@ppr_Observaciones", item.ppro_Observaciones, DbType.String, ParameterDirection.Input);
-            parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@ppro_Observaciones", item.ppro_Observaciones, DbType.String, ParameterDirection.Input);
+            parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@ppro_FechaModificacion", item.ppro_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
 
             var answer = db.QueryFirst<string>(ScriptsDataBase.EditarPedidosProduccion, parametros, commandType: CommandType.StoredProcedure);
