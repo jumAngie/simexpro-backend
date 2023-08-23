@@ -12675,10 +12675,15 @@ SELECT	peor_Id,
 		prov.prov_Id, 
 		prov.prov_NombreCompania,
 		prov.prov_NombreContacto,
-		prov.prov_Ciudad,
 		peor_No_Duca, 
-		po.ciud_Id,
+		ciud.ciud_Id,
 		ciud.ciud_Nombre,
+		pais.pais_Codigo,
+		pais.pais_Id,
+		pais.pais_Nombre,
+		pvin.pvin_Codigo,
+		pvin.pvin_Id,
+		pvin.pvin_Nombre,
 		po.peor_DireccionExacta,
 		peor_FechaEntrada, 
 		peor_Obsevaciones, 
@@ -12708,11 +12713,13 @@ SELECT	peor_Id,
    FOR JSON PATH) 
    AS Detalles
 FROM	Prod.tbPedidosOrden po
-		INNER JOIN Gral.tbProveedores prov			ON po.prov_Id   = prov.prov_Id
-		LEFT JOIN gral.tbCiudades	ciud			ON po.ciud_Id = ciud.ciud_Id
-		LEFT JOIN  Adua.tbDuca duca					ON po.peor_No_Duca = duca.duca_No_Duca
-		LEFT JOIN Acce.tbUsuarios crea				ON crea.usua_Id = po.usua_UsuarioCreacion 
-		LEFT JOIN  Acce.tbUsuarios modi				ON modi.usua_Id = po.usua_UsuarioModificacion 	
+		INNER JOIN Gral.tbProveedores prov			    ON po.prov_Id   = prov.prov_Id
+		LEFT JOIN  gral.tbCiudades	  ciud			    ON po.ciud_Id = ciud.ciud_Id
+		LEFT JOIN Gral.tbProvincias   pvin				ON pvin.pvin_Id = ciud.pvin_Id
+		LEFT JOIN Gral.tbPaises	      pais				ON pvin.pais_Id = pais.pais_Id
+		LEFT JOIN  Adua.tbDuca        duca			    ON po.peor_No_Duca = duca.duca_No_Duca
+		LEFT JOIN  Acce.tbUsuarios    crea				ON crea.usua_Id = po.usua_UsuarioCreacion 
+		LEFT JOIN  Acce.tbUsuarios    modi				ON modi.usua_Id = po.usua_UsuarioModificacion 	
 END
 GO
 

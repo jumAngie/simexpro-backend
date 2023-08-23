@@ -12,6 +12,13 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public int? prov_Id { get; set; }
         public string peor_No_Duca { get; set; }
         public int ciud_Id { get; set; }
+        public string ciud_Nombre { get; set; }
+        public int pais_Id { get; set; }
+        public string pais_Codigo { get; set; }
+        public string pais_Nombre { get; set; }
+        public int pvin_Id { get; set; }
+        public string pvin_Codigo { get; set; }
+        public string pvin_Nombre { get; set; }
         public string peor_DireccionExacta { get; set; }
         public DateTime? peor_FechaEntrada { get; set; }
         public string peor_Obsevaciones { get; set; }
@@ -26,7 +33,6 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public string prov_NombreCompania { get; set; }
         public string prov_NombreContacto { get; set; }
         public int prov_Ciudad { get; set; }
-        public string ciud_Nombre { get; set; }
         public string UsuarioCreacionNombre { get; set; }
         public string UsuarioModificacionNombre { get; set; }
         public string DadoCliente { get; set; }

@@ -1972,6 +1972,34 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
                 return result.Error(ex.Message);
             }
         }
+        public ServiceResult EliminarProcesoPorOrdenCompraDetalle(tbProcesoPorOrdenCompraDetalle item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                if (item.code_Id != 0)
+                {
+                    var map = _procesoPorOrdenCompraDetalleRepository.Delete(item);
+                    if (map.MessageStatus == "1")
+                    {
+                        return result.Ok(map);
+                    }
+                    else
+                    {
+
+                        return result.Error(map);
+                    }
+                }
+                else
+                {
+                    return result.SetMessage("La solicitud contiene sintaxis erronea", ServiceResultType.BadRecuest);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region Pedidos Orden Detalles
