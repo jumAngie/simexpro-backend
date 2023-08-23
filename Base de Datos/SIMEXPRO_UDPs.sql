@@ -10848,7 +10848,7 @@ END
 GO
 
 --*****Listado por fechas*****--
-Create   PROCEDURE [Prod].[UDP_tbReporteModuloDia_ListarPorFechas]
+Create or ALTER PROCEDURE [Prod].[UDP_tbReporteModuloDia_ListarPorFechas]
 @FechaInicio	DATE,
 @FechaFin		DATE
 AS
