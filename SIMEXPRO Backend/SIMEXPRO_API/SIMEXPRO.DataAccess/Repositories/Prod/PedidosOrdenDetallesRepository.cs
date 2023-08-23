@@ -41,12 +41,18 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             return result;
         }
 
-        public IEnumerable<tbPedidosOrdenDetalle> List()
+        public IEnumerable<tbPedidosOrdenDetalle> List( int? pedi_Id)
         {
+
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
-            var result = db.Query<tbPedidosOrdenDetalle>(ScriptsDataBase.ListarPedidosOrdenDetalles, null, commandType: System.Data.CommandType.StoredProcedure);
+            var parametros = new DynamicParameters();
+            parametros.Add("@pedi_Id", pedi_Id, DbType.Int32, ParameterDirection.Input);
+
+            var result = db.Query<tbPedidosOrdenDetalle>(ScriptsDataBase.ListarPedidosOrdenDetalles, parametros, commandType: System.Data.CommandType.StoredProcedure);
             return result;
         }
+
+
 
         public RequestStatus Update(tbPedidosOrdenDetalle item)
         {
