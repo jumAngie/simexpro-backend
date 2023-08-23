@@ -10830,33 +10830,9 @@ BEGIN
 SELECT	remo_Id, 
 		modu.modu_Id, 
 		modu.modu_Nombre,
-		remo_Fecha,
-		remo_TotalDia - remo_TotalDanado as CantidadTotal,
+		remo_Fecha, 
 		remo_TotalDia, 
 		remo_TotalDanado, 
-		(SELECT	rdet_Id, 
-			remo_Id, 
-			rdet_TotalDia, 
-			rdet_TotalDanado, 
-			OrdenCompra.orco_Id,
-			colores.colr_Nombre,
-			case ordencompradetalle.code_Sexo 
-			when 'M' then 'Masculino'
-			when 'F' then 'Femenino'
-			else ordencompradetalle.code_Sexo end as Sexo,
-			clientes.[clie_Nombre_Contacto],
-			clientes.[clie_RTN],
- 			ReporteModuloDia.code_Id, 
-			ordencompradetalle.esti_Id,
-			estilos.esti_Descripcion
-	FROM	Prod.tbReporteModuloDiaDetalle ReporteModuloDia
-			INNER JOIN Prod.tbOrdenCompraDetalles ordencompradetalle  	ON  ReporteModuloDia.code_Id = ordencompradetalle.code_Id 
-			INNER JOIN Prod.tbEstilos			estilos					ON ordencompradetalle.esti_Id = estilos.esti_Id
-			INNER JOIN Prod.tbOrdenCompra		OrdenCompra				ON	ordencompradetalle.orco_Id = OrdenCompra.orco_Id
-			INNER JOIN Prod.tbClientes			clientes				ON  OrdenCompra.orco_IdCliente = clientes.clie_Id
-			INNER JOIN Prod.tbColores			colores					ON	ordencompradetalle.code_Id	= colores.colr_Id
-			WHERE rmd.remo_Id = remo_Id AND rdet_Estado = 1 
-			FOR JSON PATH) as detalles,
 		rmd.usua_UsuarioCreacion, 
 		crea.usua_Nombre AS usua_NombreUsuarioCreacion, 
 		remo_FechaCreacion, 
@@ -10878,44 +10854,20 @@ Create or ALTER PROCEDURE [Prod].[UDP_tbReporteModuloDia_ListarPorFechas]
 AS
 BEGIN
 SELECT	remo_Id, 
-		modu.modu_Id, 
+		rmd.modu_Id, 
 		modu.modu_Nombre,
-		remo_Fecha,
-		remo_TotalDia - remo_TotalDanado as CantidadTotal,
+		remo_Fecha, 
 		remo_TotalDia, 
 		remo_TotalDanado, 
-		(SELECT	rdet_Id, 
-			remo_Id, 
-			rdet_TotalDia, 
-			rdet_TotalDanado, 
-			OrdenCompra.orco_Id,
-			colores.colr_Nombre,
-			case ordencompradetalle.code_Sexo 
-			when 'M' then 'Masculino'
-			when 'F' then 'Femenino'
-			else ordencompradetalle.code_Sexo end as Sexo,
-			clientes.[clie_Nombre_Contacto],
-			clientes.[clie_RTN],
- 			ReporteModuloDia.code_Id, 
-			ordencompradetalle.esti_Id,
-			estilos.esti_Descripcion
-	FROM	Prod.tbReporteModuloDiaDetalle ReporteModuloDia
-			INNER JOIN Prod.tbOrdenCompraDetalles ordencompradetalle  	ON  ReporteModuloDia.code_Id = ordencompradetalle.code_Id 
-			INNER JOIN Prod.tbEstilos			estilos					ON ordencompradetalle.esti_Id = estilos.esti_Id
-			INNER JOIN Prod.tbOrdenCompra		OrdenCompra				ON	ordencompradetalle.orco_Id = OrdenCompra.orco_Id
-			INNER JOIN Prod.tbClientes			clientes				ON  OrdenCompra.orco_IdCliente = clientes.clie_Id
-			INNER JOIN Prod.tbColores			colores					ON	ordencompradetalle.code_Id	= colores.colr_Id
-			WHERE rmd.remo_Id = remo_Id AND rdet_Estado = 1 
-			FOR JSON PATH) as detalles,
-		rmd.usua_UsuarioCreacion, 
-		crea.usua_Nombre AS usua_NombreUsuarioCreacion, 
+		rmd.usua_UsuarioCreacion,
+		crea.usua_Nombre usua_UsuarioCrea, 
 		remo_FechaCreacion, 
 		rmd.usua_UsuarioModificacion,
-		modi.usua_Nombre AS usua_NombreUsuarioModificacion, 
+		modi.usua_Nombre usua_UsuarioModifica, 
 		remo_FechaModificacion, 
 		remo_Estado 
 FROM	Prod.tbReporteModuloDia rmd 
-		INNER JOIN Prod.tbModulos modu				ON rmd.modu_Id = modu.modu_Id 
+		LEFT JOIN Prod.tbModulos modu				ON rmd.modu_Id = modu.modu_Id 
 		INNER JOIN Acce.tbUsuarios crea				ON crea.usua_Id = rmd.usua_UsuarioCreacion 
 		LEFT JOIN  Acce.tbUsuarios modi				ON modi.usua_Id = rmd.usua_UsuarioModificacion 	
 WHERE	(remo_Fecha >= @FechaInicio AND remo_Fecha <= @FechaFin) OR (@FechaInicio IS NULL AND @FechaFin IS NULL)
@@ -11168,6 +11120,28 @@ BEGIN
 	BEGIN CATCH 
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
 	END CATCH
+END
+GO
+
+CREATE OR ALTER PROCEDURE Prod.UDP_tbProcesos_Filtrar_Modulos
+(
+@proc_Id INT
+)
+AS
+BEGIN
+	BEGIN TRY
+		SELECT	[modu_Id],
+				[modu_Nombre]
+		FROM	Prod.tbProcesos Proce
+				INNER JOIN Prod.tbModulos Modu
+				ON	Proce.proc_Id = Modu.proc_Id
+		WHERE Proce.proc_Id = @proc_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+			SELECT 'Error Message: ' + ERROR_MESSAGE()
+	END CATCH
 END
 GO
 
@@ -13277,6 +13251,23 @@ BEGIN
 END 
 GO
 
+/*Find de pedidos Orden detalles*/
+CREATE OR ALTER PROCEDURE Prod.UDP_tbPedidosOrdenDetalle_Find
+	@prod_Id INT
+AS 
+BEGIN
+	SELECT	peor.prod_Id,
+			peor.pedi_Id,
+			peor.prod_Cantidad,
+			peor.mate_Id,
+			mate_Descripcion,
+			peor.prod_Precio	  
+	FROM	[Prod].[tbPedidosOrdenDetalle]	peor
+			INNER JOIN Prod.tbMateriales tbmats		ON peor.mate_Id = tbmats.mate_Id
+	WHERE	peor.prod_Id = @prod_Id
+END
+GO
+
 --INSERTAR
 CREATE OR ALTER PROCEDURE Prod.UDP_tbPedidosOrdenDetalle_Insertar
 (
@@ -13545,7 +13536,6 @@ CREATE OR ALTER PROC Prod.UDP_tbLotes_Insertar
 	@mate_Id				INT,
 	@unme_Id				INT,
 	@prod_Id				INT,
-	@lote_Stock				INT,
 	@lote_CantIngresada		INT,
 	@tipa_Id				INT,
 	@lote_Observaciones		NVARCHAR(MAX),
@@ -13556,7 +13546,6 @@ BEGIN TRY
 	INSERT INTO Prod.tbLotes(mate_Id, 
 							 unme_Id,
 							 prod_Id,
-						     lote_Stock, 
 							 lote_CantIngresada, 
 							 tipa_Id, 
 							 lote_Observaciones,
@@ -13565,8 +13554,7 @@ BEGIN TRY
 
 	VALUES					(@mate_Id,		
 							 @unme_Id,
-							 @prod_Id,
-							 @lote_Stock,			
+							 @prod_Id,			
 							 @lote_CantIngresada,	
 							 @tipa_Id,
 							 @lote_Observaciones,
@@ -13587,7 +13575,6 @@ CREATE OR ALTER PROC Prod.UDP_tbLotes_Editar
 @mate_Id				  INT,
 @unme_Id				  INT,
 @prod_Id				  INT,
-@lote_Stock				  INT,
 @lote_CantIngresada		  INT,
 @tipa_Id				  INT,
 @lote_Observcaciones	  NVARCHAR(MAX),
@@ -13599,7 +13586,6 @@ BEGIN TRY
 	                    SET  mate_Id                   = @mate_Id, 
 						     unme_Id                   = @unme_Id,
 							 prod_Id				   = @prod_Id,
-						     lote_Stock                = @lote_Stock, 
 							 lote_CantIngresada        = @lote_CantIngresada, 
 							 tipa_Id                   = @tipa_Id, 
 							 lote_Observaciones        = @lote_Observcaciones,
@@ -13614,6 +13600,8 @@ BEGIN CATCH
 
 END CATCH
 END	
+
+GO
 
 GO
 
@@ -13682,6 +13670,7 @@ AS BEGIN
 		   Modificacion.usua_Nombre										AS UsuarioModificacionNombre,
 		   pediproduccion.usua_UsuarioModificacion, 
 		   ppro_FechaModificacion,
+		   ppro_Finalizado,
 		   ppro_Estado,
 	   	      (SELECT ppde_Id,
 		   		   tbdetalles.lote_Id,

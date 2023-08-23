@@ -1942,6 +1942,22 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
+        public ServiceResult PedidosOrdenFind(int prod_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var respuesta = _pedidosOrdenDetallesRepository.Find(prod_Id);
+
+                return result.Ok(respuesta);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+
         public ServiceResult InsertarPedidosOrdenDetalle(tbPedidosOrdenDetalle item)
         {
             var result = new ServiceResult();

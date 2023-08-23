@@ -32,6 +32,14 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             return Ok(listado);
         }
 
+        [HttpGet("Find")]
+        public IActionResult PedidosOrdenFind(int prod_Id)
+        {
+            var resultado = _produccionServices.PedidosOrdenFind(prod_Id);
+            resultado.Data = _mapper.Map<IEnumerable<PedidosOrdenDetalleViewModel>>(resultado.Data);
+
+            return Ok(resultado);
+        }
 
         [HttpPost("Insertar")]
         public IActionResult Insert(PedidosOrdenDetalleViewModel pedidosOrdenDetalleViewModel)

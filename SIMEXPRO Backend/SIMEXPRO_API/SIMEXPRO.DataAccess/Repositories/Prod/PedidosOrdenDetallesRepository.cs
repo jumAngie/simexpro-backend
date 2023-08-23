@@ -48,6 +48,14 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             return result;
         }
 
+        public IEnumerable<tbPedidosOrdenDetalle> Find(int prod_Id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@prod_Id", prod_Id, DbType.Int32, ParameterDirection.Input);
+
+            return db.Query<tbPedidosOrdenDetalle>(ScriptsDataBase.PedidosOrdenDetallesFind, parametros, commandType: CommandType.StoredProcedure);
+        }
         public RequestStatus Update(tbPedidosOrdenDetalle item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);

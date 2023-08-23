@@ -18,6 +18,8 @@ namespace SIMEXPRO.Entities.Entities
         public int prod_Id { get; set; }
         public int pedi_Id { get; set; }
         public int mate_Id { get; set; }
+        [NotMapped]
+        public string mate_Descripcion { get; set; }
         public int prod_Cantidad { get; set; }
         public decimal prod_Precio { get; set; }
         public decimal prod_Peso { get; set; }
