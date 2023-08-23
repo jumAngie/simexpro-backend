@@ -13970,8 +13970,10 @@ BEGIN
 			modu.modu_Nombre                    ,
 			maqu.usua_UsuarioCreacion,
 		    usu.usua_Nombre                     AS usuarioCreacionNombre,
+			maqu_FechaCreacion,
 		    maqu.usua_UsuarioModificacion,
 		    usu1.usua_Nombre                    AS usuarioModificacionNombre,
+			maqu_FechaModificacion,
 			usu2.usua_Nombre                    AS usuarioEliminacionNombre,
 			maqu.usua_UsuarioEliminacion,
 			maqu_Estado
