@@ -1,0 +1,15 @@
+/SIMEXPRO.API/appsettings.Development.json
+/SIMEXPRO.API/appsettings.json
+/SIMEXPRO.API/obj/
+/SIMEXPRO.API/bin/
+
+/SIMEXPRO.BusinessLogic/obj/
+/SIMEXPRO.BusinessLogic/bin/
+
+/SIMEXPRO.DataAccess/obj/
+/SIMEXPRO.DataAccess/bin/
+
+/SIMEXPRO.Entities/obj/
+/SIMEXPRO.Entities/bin/
+
+/.vs

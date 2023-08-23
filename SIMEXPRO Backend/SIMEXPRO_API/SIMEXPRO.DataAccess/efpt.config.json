@@ -1,0 +1,469 @@
+﻿{
+   "CodeGenerationMode": 0,
+   "ContextClassName": "SIMEXPROContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": null,
+   "OutputPath": "Context",
+   "ProjectRootNamespace": "SIMEXPRO.DataAccess",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 1,
+   "Tables": [
+      {
+         "Name": "[Acce].[tbPantallas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Acce].[tbRoles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Acce].[tbRolesXPantallas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Acce].[tbUsuarios]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Acce].[tbUsuariosHistorial]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbAduanas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbAranceles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbBaseCalculos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbBaseCalculosHistorial]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbBoletinPago]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbBoletinPagoDetalles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbCodigoImpuesto]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbComercianteIndividual]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbConceptoPago]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbCondiciones]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbCondicionesComerciales]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbCondicionesHistorial]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbConductor]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbDeclaraciones_Valor]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbDeclaraciones_ValorHistorial]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbDeclarantes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbDeclarantesHistorial]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbDocumentosContratos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbDocumentosDeSoporte]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbDocumentosPDF]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbDocumentosPDFHistorial]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbDuca]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbDucaHistorial]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbEstadoBoletin]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbEstadoMercancias]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbFacturas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbFacturasHistorial]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbFormasdePago]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbImportadores]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbImportadoresHistorial]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbImpuestos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbImpuestosPorArancel]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbIncoterm]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbIntermediarios]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbIntermediariosHistorial]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbItems]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbItemsHistorial]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbLiquidacionGeneral]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbLiquidacionGeneralHistorial]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbLiquidacionPorLinea]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbLugaresEmbarque]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbMarcas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbModoTransporte]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbNivelesComerciales]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbPersonaJuridica]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbPersonaNatural]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbPersonas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbProveedoresDeclaracion]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbProveedoresDeclaracionHistorial]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbTipoDocumento]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbTipoIntermediario]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbTipoLiquidacion]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbTiposIdentificacion]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbTransporte]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbAldeas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbCargos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbCiudades]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbColonias]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbEmpleados]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbEstadosCiviles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbFormas_Envio]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbMonedas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbOficinas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbOficio_Profesiones]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbPaises]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbProveedores]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbProvincias]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Gral].[tbUnidadMedidas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbArea]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbAsignacionesOrden]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbAsignacionesOrdenDetalle]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbCategoria]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbClientes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbColores]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbDocumentosOrdenCompraDetalles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbEstilos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbFacturasExportacion]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbFacturasExportacionDetalles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbFuncionesMaquina]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbLotes]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbMaquinaHistorial]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbMaquinas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbMarcasMaquina]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbMateriales]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbMaterialesBrindar]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbModelosMaquina]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbModulos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbOrde_Ensa_Acab_Etiq]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbOrdenCompra]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbOrdenCompraDetalles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbPedidosOrden]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbPedidosOrdenDetalle]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbPedidosProduccion]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbPedidosProduccionDetalles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbPODetallePorPedidoOrdenDetalle]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbProcesos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbReporteModuloDia]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbReporteModuloDiaDetalle]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbRevisionDeCalidad]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbSubcategoria]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbTallas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbTipoEmbalaje]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[VW_tbDeclaraciones_ValorCompleto]",
+         "ObjectType": 3
+      },
+      {
+         "Name": "[Prod].[VW_tbOrdenCompraDetalle_LineaTiempo]",
+         "ObjectType": 3
+      }
+   ],
+   "UiHint": "practicaahm.SIMEXPRO",
+   "UseBoolPropertiesWithoutDefaultSql": false,
+   "UseDatabaseNames": true,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseNoConstructor": false,
+   "UseNoDefaultConstructor": false,
+   "UseNoNavigations": false,
+   "UseNoObjectFilter": false,
+   "UseNodaTime": false,
+   "UseNullableReferences": false,
+   "UseSchemaFolders": false,
+   "UseSpatial": false
+}
