@@ -169,10 +169,27 @@ namespace SIMEXPRO.BussinessLogic.Services.AccesoServices
                 return resultado.Error(ex.Message);
             }
         }
-        #endregion
 
-        #region Roles Por Pantalla
-        public ServiceResult Pantallas_Por_Rol(tbRolesXPantallas item)
+        public ServiceResult CambiarPerfilUsuario(tbUsuarios item)
+        {
+
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _usuariosRepository.CambiarPerfil(item);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
+
+            #endregion
+
+            #region Roles Por Pantalla
+            public ServiceResult Pantallas_Por_Rol(tbRolesXPantallas item)
         {
             var resultado = new ServiceResult();
 
