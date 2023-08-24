@@ -298,10 +298,6 @@ INSERT INTO [Acce].[tbPantallas]([pant_Nombre],[pant_URL],[pant_Icono],[pant_Esq
 GO
 
 INSERT INTO [Acce].[tbPantallas]([pant_Nombre],[pant_URL],[pant_Icono],[pant_Esquema], [pant_Subcategoria],[pant_EsAduana],[usua_UsuarioCreacion],[pant_FechaCreacion])
-     VALUES ('Inspecciones','/Inspecciones/Index','material-outline:manage_search','Prod', 'Producción',0,1,GETDATE())
-GO
-
-INSERT INTO [Acce].[tbPantallas]([pant_Nombre],[pant_URL],[pant_Icono],[pant_Esquema], [pant_Subcategoria],[pant_EsAduana],[usua_UsuarioCreacion],[pant_FechaCreacion])
      VALUES ('Módulos','/Modulos/Index','material-outline:iron','Prod', 'Producción',0,1,GETDATE())
 GO
 
