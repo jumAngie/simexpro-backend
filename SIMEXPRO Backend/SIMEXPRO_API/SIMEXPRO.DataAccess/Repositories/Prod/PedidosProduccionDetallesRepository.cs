@@ -68,7 +68,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             parametros.Add("@lote_Id", item.lote_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@ppde_Cantidad", item.ppde_Cantidad, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@ppde_FechaModificacion", item.ppde_FechaModificacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@ppde_FechaModificacion", item.ppde_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.EditarPedidosProduccionDetalles, parametros, commandType: System.Data.CommandType.StoredProcedure);
             result.MessageStatus = answer;
             return result;
