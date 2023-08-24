@@ -2589,7 +2589,7 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
-        public ServiceResult ListarReporteModuloDiaPorFechas(DateTime FechaI, DateTime FechaF)
+        public ServiceResult ListarReporteModuloDiaPorFechas(DateTime? FechaI, DateTime? FechaF)
         {
             var result = new ServiceResult();
             try

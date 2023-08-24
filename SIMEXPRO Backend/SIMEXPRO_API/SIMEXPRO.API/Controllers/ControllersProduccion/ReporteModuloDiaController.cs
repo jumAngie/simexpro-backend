@@ -33,7 +33,7 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
         }
 
         [HttpGet("ListarPorFecha")]
-        public IActionResult IndexPorFecha(DateTime FechaInicio, DateTime FechaFin)
+        public IActionResult IndexPorFecha(DateTime? FechaInicio, DateTime? FechaFin)
         {
             var listado = _produccionServices.ListarReporteModuloDiaPorFechas(FechaInicio, FechaFin);
             listado.Data = _mapper.Map<IEnumerable<ReporteModuloDiaViewModel>>(listado.Data);

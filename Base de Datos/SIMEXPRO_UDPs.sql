@@ -10878,21 +10878,46 @@ BEGIN
 SELECT	remo_Id, 
 		modu.modu_Id, 
 		modu.modu_Nombre,
-		remo_Fecha, 
+		remo_Fecha,
+		remo_TotalDia - remo_TotalDanado as CantidadTotal,
 		remo_TotalDia, 
 		remo_TotalDanado, 
+		(SELECT	rdet_Id, 
+			remo_Id, 
+			rdet_TotalDia, 
+			rdet_TotalDanado, 
+			OrdenCompra.orco_Id,
+			colores.colr_Nombre,
+			case ordencompradetalle.code_Sexo 
+			when 'M' then 'Masculino'
+			when 'F' then 'Femenino'
+			else ordencompradetalle.code_Sexo end as Sexo,
+			clientes.[clie_Nombre_Contacto],
+			clientes.[clie_RTN],
+ 			ReporteModuloDia.code_Id, 
+			ordencompradetalle.esti_Id,
+			estilos.esti_Descripcion
+	FROM	Prod.tbReporteModuloDiaDetalle ReporteModuloDia
+			INNER JOIN Prod.tbOrdenCompraDetalles ordencompradetalle  	ON  ReporteModuloDia.code_Id = ordencompradetalle.code_Id 
+			INNER JOIN Prod.tbEstilos			estilos					ON ordencompradetalle.esti_Id = estilos.esti_Id
+			INNER JOIN Prod.tbOrdenCompra		OrdenCompra				ON	ordencompradetalle.orco_Id = OrdenCompra.orco_Id
+			INNER JOIN Prod.tbClientes			clientes				ON  OrdenCompra.orco_IdCliente = clientes.clie_Id
+			INNER JOIN Prod.tbColores			colores					ON	ordencompradetalle.code_Id	= colores.colr_Id
+			WHERE rmd.remo_Id = remo_Id AND rdet_Estado = 1 
+			FOR JSON PATH) as detalles,
 		rmd.usua_UsuarioCreacion, 
 		crea.usua_Nombre AS usua_NombreUsuarioCreacion, 
 		remo_FechaCreacion, 
 		rmd.usua_UsuarioModificacion,
 		modi.usua_Nombre AS usua_NombreUsuarioModificacion, 
 		remo_FechaModificacion, 
-		remo_Estado, 
-		remo_Finalizado
+		remo_Estado,
+		remo_Finalizado 
 FROM	Prod.tbReporteModuloDia rmd 
 		INNER JOIN Prod.tbModulos modu				ON rmd.modu_Id = modu.modu_Id 
 		INNER JOIN Acce.tbUsuarios crea				ON crea.usua_Id = rmd.usua_UsuarioCreacion 
 		LEFT JOIN  Acce.tbUsuarios modi				ON modi.usua_Id = rmd.usua_UsuarioModificacion 	
+ORDER BY remo_Fecha desc
 END
 GO
 
@@ -10903,24 +10928,49 @@ Create or ALTER PROCEDURE [Prod].[UDP_tbReporteModuloDia_ListarPorFechas]
 AS
 BEGIN
 SELECT	remo_Id, 
-		rmd.modu_Id, 
+		modu.modu_Id, 
 		modu.modu_Nombre,
-		remo_Fecha, 
+		remo_Fecha,
+		remo_TotalDia - remo_TotalDanado as CantidadTotal,
 		remo_TotalDia, 
 		remo_TotalDanado, 
-		rmd.usua_UsuarioCreacion,
-		crea.usua_Nombre usua_UsuarioCrea, 
+		(SELECT	rdet_Id, 
+			remo_Id, 
+			rdet_TotalDia, 
+			rdet_TotalDanado, 
+			OrdenCompra.orco_Id,
+			colores.colr_Nombre,
+			case ordencompradetalle.code_Sexo 
+			when 'M' then 'Masculino'
+			when 'F' then 'Femenino'
+			else ordencompradetalle.code_Sexo end as Sexo,
+			clientes.[clie_Nombre_Contacto],
+			clientes.[clie_RTN],
+ 			ReporteModuloDia.code_Id, 
+			ordencompradetalle.esti_Id,
+			estilos.esti_Descripcion
+	FROM	Prod.tbReporteModuloDiaDetalle ReporteModuloDia
+			INNER JOIN Prod.tbOrdenCompraDetalles ordencompradetalle  	ON  ReporteModuloDia.code_Id = ordencompradetalle.code_Id 
+			INNER JOIN Prod.tbEstilos			estilos					ON ordencompradetalle.esti_Id = estilos.esti_Id
+			INNER JOIN Prod.tbOrdenCompra		OrdenCompra				ON	ordencompradetalle.orco_Id = OrdenCompra.orco_Id
+			INNER JOIN Prod.tbClientes			clientes				ON  OrdenCompra.orco_IdCliente = clientes.clie_Id
+			INNER JOIN Prod.tbColores			colores					ON	ordencompradetalle.code_Id	= colores.colr_Id
+			WHERE rmd.remo_Id = remo_Id AND rdet_Estado = 1 
+			FOR JSON PATH) as detalles,
+		rmd.usua_UsuarioCreacion, 
+		crea.usua_Nombre AS usua_NombreUsuarioCreacion, 
 		remo_FechaCreacion, 
 		rmd.usua_UsuarioModificacion,
-		modi.usua_Nombre usua_UsuarioModifica, 
+		modi.usua_Nombre AS usua_NombreUsuarioModificacion, 
 		remo_FechaModificacion, 
 		remo_Estado,
-		remo_Finalizado
+		remo_Finalizado 
 FROM	Prod.tbReporteModuloDia rmd 
-		LEFT JOIN Prod.tbModulos modu				ON rmd.modu_Id = modu.modu_Id 
+		INNER JOIN Prod.tbModulos modu				ON rmd.modu_Id = modu.modu_Id 
 		INNER JOIN Acce.tbUsuarios crea				ON crea.usua_Id = rmd.usua_UsuarioCreacion 
-		LEFT JOIN  Acce.tbUsuarios modi				ON modi.usua_Id = rmd.usua_UsuarioModificacion 	
+		LEFT JOIN  Acce.tbUsuarios modi				ON modi.usua_Id = rmd.usua_UsuarioModificacion 		
 WHERE	(remo_Fecha >= @FechaInicio AND remo_Fecha <= @FechaFin) OR (@FechaInicio IS NULL AND @FechaFin IS NULL)
+ORDER BY remo_Fecha desc
 END
 GO
 

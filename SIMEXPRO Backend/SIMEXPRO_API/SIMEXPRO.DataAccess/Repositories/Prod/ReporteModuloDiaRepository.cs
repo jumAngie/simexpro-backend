@@ -45,7 +45,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             return db.Query<tbReporteModuloDia>(ScriptsDataBase.ListarReporteModuloDia, null, commandType: CommandType.StoredProcedure);
         }
 
-        public IEnumerable<tbReporteModuloDia> ListadoPorFechas(DateTime FechaI, DateTime FechaF)
+        public IEnumerable<tbReporteModuloDia> ListadoPorFechas(DateTime? FechaI, DateTime? FechaF)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             var parametros = new DynamicParameters();
