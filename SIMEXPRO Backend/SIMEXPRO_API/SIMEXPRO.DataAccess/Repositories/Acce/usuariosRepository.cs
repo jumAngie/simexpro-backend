@@ -144,5 +144,19 @@ namespace SIMEXPRO.DataAccess.Repositories.Acce
             result.MessageStatus = answer;
             return result;
         }
+
+        public RequestStatus CambiarPerfil(tbUsuarios item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@usua_Id", item.usua_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@usua_Image", item.usua_Image, DbType.String, ParameterDirection.Input);
+            parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@usua_FechaModificacion", item.usua_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.CambiarFotoPerfil, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
+        }
     }
 }

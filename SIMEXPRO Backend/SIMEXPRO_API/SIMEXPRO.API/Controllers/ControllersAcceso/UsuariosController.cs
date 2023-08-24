@@ -115,5 +115,13 @@ namespace SIMEXPRO.API.Controllers.ControllersAcceso
             var datos = _accesoServices.DeleteUsuario(mapped);
             return Ok(datos);
         }
+
+        [HttpPost("CambiarPerfil")]
+        public IActionResult CambiarFotoPerfil(UsuariosViewModel usuarios)
+        {
+            var mapped = _mapper.Map<tbUsuarios>(usuarios);
+            var datos = _accesoServices.CambiarPerfilUsuario(mapped);
+            return Ok(datos);
+        }
     }
 }

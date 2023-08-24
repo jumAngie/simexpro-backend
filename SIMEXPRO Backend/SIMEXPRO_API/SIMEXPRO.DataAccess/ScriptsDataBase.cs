@@ -20,6 +20,7 @@ namespace SIMEXPRO.DataAccess
         public static string CorreoSegunUsuario = "acce.UDP_CorreoUsuario";
         public static string CambiarContrasenia = "acce.UDP_CambiarContrasena";
         public static string ActivarEstadoUsuarios = "Acce.UDP_tbUsuarios_Activar";
+        public static string CambiarFotoPerfil = "acce.UDP_tbUsuarios_CambiarFoto";
         #endregion
 
         #region Pantallas
