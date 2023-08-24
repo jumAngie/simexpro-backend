@@ -17,12 +17,13 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public int orco_IdEmbalaje { get; set; }
         public string orco_EstadoOrdenCompra { get; set; }
         public string orco_DireccionEntrega { get; set; }
+        public bool orco_EstadoFinalizado { get; set; }
+        public string fopa_Descripcion { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         public DateTime orco_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }
         public DateTime? orco_FechaModificacion { get; set; }
         public bool? orco_Estado { get; set; }
-
         public string clie_Nombre_O_Razon_Social { get; set; }
         public string clie_Direccion { get; set; }
         public string clie_RTN { get; set; }
@@ -30,8 +31,6 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public string clie_Numero_Contacto { get; set; }
         public string clie_Correo_Electronico { get; set; }
         public string clie_FAX { get; set; }
-
-        public string fopa_Descripcion { get; set; }
 
         public string tiem_Descripcion { get; set; }
 

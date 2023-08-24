@@ -197,6 +197,8 @@ namespace SIMEXPRO.Entities.Entities
             tbPersonasusua_UsuarioModificacionNavigation = new HashSet<tbPersonas>();
             tbPODetallePorPedidoOrdenDetalleusua_UsuarioCreacionNavigation = new HashSet<tbPODetallePorPedidoOrdenDetalle>();
             tbPODetallePorPedidoOrdenDetalleusua_UsuarioModificacionNavigation = new HashSet<tbPODetallePorPedidoOrdenDetalle>();
+            tbProcesoPorOrdenCompraDetalleusua_UsuarioCreacionNavigation = new HashSet<tbProcesoPorOrdenCompraDetalle>();
+            tbProcesoPorOrdenCompraDetalleusua_UsuarioModificacionNavigation = new HashSet<tbProcesoPorOrdenCompraDetalle>();
             tbProcesosusua_UsuarioCreacionNavigation = new HashSet<tbProcesos>();
             tbProcesosusua_UsuarioEliminacionNavigation = new HashSet<tbProcesos>();
             tbProcesosusua_UsuarioModificacionNavigation = new HashSet<tbProcesos>();
@@ -481,6 +483,8 @@ namespace SIMEXPRO.Entities.Entities
         public virtual ICollection<tbPODetallePorPedidoOrdenDetalle> tbPODetallePorPedidoOrdenDetalleusua_UsuarioCreacionNavigation { get; set; }
         public virtual ICollection<tbPODetallePorPedidoOrdenDetalle> tbPODetallePorPedidoOrdenDetalleusua_UsuarioModificacionNavigation { get; set; }
         public virtual ICollection<tbProcesos> tbProcesosusua_UsuarioCreacionNavigation { get; set; }
+        public virtual ICollection<tbProcesoPorOrdenCompraDetalle> tbProcesoPorOrdenCompraDetalleusua_UsuarioCreacionNavigation { get; set; }
+        public virtual ICollection<tbProcesoPorOrdenCompraDetalle> tbProcesoPorOrdenCompraDetalleusua_UsuarioModificacionNavigation { get; set; }
         public virtual ICollection<tbProcesos> tbProcesosusua_UsuarioEliminacionNavigation { get; set; }
         public virtual ICollection<tbProcesos> tbProcesosusua_UsuarioModificacionNavigation { get; set; }
         public virtual ICollection<tbProveedoresDeclaracion> tbProveedoresDeclaracionusua_UsuarioCreacionNavigation { get; set; }

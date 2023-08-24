@@ -3200,6 +3200,9 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.ToTable("tbMaquinas", "Prod");
 
+                entity.HasIndex(e => e.maqu_NumeroSerie, "UQ_Prod_tbMaquinas_maqu_NumeroSerie")
+                    .IsUnique();
+
                 entity.Property(e => e.maqu_Estado).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.maqu_FechaCreacion).HasColumnType("datetime");
@@ -3987,7 +3990,7 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.pant_URL).HasMaxLength(100);
 
-             /*   entity.Property(e => e.pant_subCategoria).HasMaxLength(150);*/
+                entity.Property(e => e.pant_subCategoria).HasMaxLength(150);
 
                 entity.HasOne(d => d.usua_UsuarioCreacionNavigation)
                     .WithMany(p => p.tbPantallasusua_UsuarioCreacionNavigation)
@@ -4070,12 +4073,6 @@ namespace SIMEXPRO.DataAccess.Context
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Prod_tbPedidosOrdenDetalle_mate_Id_Pro_tbMateriales");
 
-                entity.HasOne(d => d.pedi)
-                    .WithMany(p => p.tbPedidosOrdenDetalle)
-                    .HasForeignKey(d => d.pedi_Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Prod_tbPedidosOrdenDetalle_pedi_Id_Pro_tbPedidos");
-
                 entity.HasOne(d => d.usua_UsuarioCreacionNavigation)
                     .WithMany(p => p.tbPedidosOrdenDetalleusua_UsuarioCreacionNavigation)
                     .HasForeignKey(d => d.usua_UsuarioCreacion)
@@ -4107,7 +4104,7 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.ppro_FechaModificacion).HasColumnType("datetime");
 
-             /*   entity.Property(e => e.ppro_Finalizado).HasDefaultValueSql("((0))");*/
+                entity.Property(e => e.ppro_Finalizado).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.ppro_Observaciones).IsRequired();
 
@@ -4398,26 +4395,23 @@ namespace SIMEXPRO.DataAccess.Context
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Prod_tbProcesoPorOrdenCompraDetalle_code_Id_Prod_tbOrdenCompraDetalles_code_Id");
 
-                entity.HasOne(d => d.codeNavigation)
+                entity.HasOne(d => d.proc)
                     .WithMany(p => p.tbProcesoPorOrdenCompraDetalle)
                     .HasForeignKey(d => d.proc_Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Prod_tbProcesoPorOrdenCompraDetalle_proc_Id_Prod_tbProcesos_proc_Id");
 
                 entity.HasOne(d => d.usua_UsuarioCreacionNavigation)
-                    .WithMany(p => p.tbProcesoPorOrdenCompraDetalle_UsuarioCreacionNavigation)
+                    .WithMany(p => p.tbProcesoPorOrdenCompraDetalleusua_UsuarioCreacionNavigation)
                     .HasForeignKey(d => d.usua_UsuarioCreacion)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Prod_tbProcesoPorOrdenCompraDetalle_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id");
 
                 entity.HasOne(d => d.usua_UsuarioModificacionNavigation)
-                    .WithMany(p => p.tbProcesoPorOrdenCompraDetalle_UsuarioModificacionNavigation)
+                    .WithMany(p => p.tbProcesoPorOrdenCompraDetalleusua_UsuarioModificacionNavigation)
                     .HasForeignKey(d => d.usua_UsuarioModificacion)
                     .HasConstraintName("FK_Prod_tbProcesoPorOrdenCompraDetalle_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id");
-
             });
-
-
 
             modelBuilder.Entity<tbProcesos>(entity =>
             {
@@ -4599,10 +4593,10 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.ToTable("tbProvincias", "Gral");
 
-                entity.HasIndex(e => new { e.pvin_Codigo, e.pvin_EsAduana }, "UQ_Gral_tbProvincias_pvin_Codigo")
+                entity.HasIndex(e => new { e.pvin_Codigo, e.pais_Id, e.pvin_EsAduana }, "UQ_Gral_tbProvincias_pvin_Codigo")
                     .IsUnique();
 
-                entity.HasIndex(e => new { e.pvin_Codigo, e.pvin_Nombre }, "UQ_tbProvincias_pvin_Nombre_pvin_Codigo")
+                entity.HasIndex(e => new { e.pais_Id, e.pvin_EsAduana, e.pvin_Nombre }, "UQ_tbProvincias_pvin_Nombre_pvin_Codigo")
                     .IsUnique();
 
                 entity.Property(e => e.pvin_Codigo)

@@ -9968,7 +9968,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Prod.UDP_OrdenCompra_Finalizado
+CREATE OR ALTER PROCEDURE Prod.UDP_OrdenCompra_Finalizado 
   @orco_Id                   INT
 AS
 BEGIN
@@ -9983,8 +9983,7 @@ BEGIN
  END CATCH
 END
 GO
-
-
+  
 /*Eliminar orden de compra solo si no tiene detalles*/
 CREATE OR ALTER PROCEDURE [Prod].[UDP_tbOrdenCompra_Eliminar]
 	@orco_Id		INT
@@ -10016,7 +10015,8 @@ CREATE OR ALTER PROCEDURE [Prod].UDP_OrdenCompra_Delete
   @orco_Id INT
 AS 
 BEGIN
-  DECLARE @code_Id INT;
+BEGIN TRY 
+ DECLARE @code_Id INT;
   DECLARE cur CURSOR FOR
     SELECT [code_Id] FROM [Prod].[tbOrdenCompraDetalles] WHERE orco_Id = @orco_Id;
 
@@ -10025,7 +10025,6 @@ BEGIN
 
   WHILE @@FETCH_STATUS = 0
   BEGIN
-    DELETE FROM [Prod].[tbOrdenCompraDetalles] WHERE [code_Id] = @code_Id;
 	DELETE FROM [Prod].[tbProcesoPorOrdenCompraDetalle] WHERE [code_Id] = @code_Id;
     DELETE FROM [Prod].[tbDocumentosOrdenCompraDetalles] WHERE [code_Id] = @code_Id;
 	DELETE FROM [Prod].[tbMaterialesBrindar] WHERE [code_Id] = @code_Id;
@@ -10036,9 +10035,15 @@ BEGIN
   DEALLOCATE cur;
 
   DELETE FROM [Prod].[tbOrdenCompraDetalles] WHERE orco_Id = @orco_Id;
+  DELETE FROM [Prod].[tbOrdenCompra] WHERE orco_Id = @orco_Id
 
+  SELECT 1
+END TRY 
+BEGIN CATCH
+		SELECT 'Error Message: 'ERROR_MESSAGE;
+END CATCH
 END;
-
+GO
 
 -----------------------------------------------/UDPS Para orden de compra---------------------------------------------
 

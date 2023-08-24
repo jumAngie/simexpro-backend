@@ -26,7 +26,7 @@ namespace SIMEXPRO.Entities.Entities
         public DateTime? poco_FechaModificacion { get; set; }
         public bool? code_Estado { get; set; }
 
-        
+        public virtual tbProcesos proc { get; set; }
         public virtual tbOrdenCompraDetalles code { get; set; }
         public virtual tbProcesos codeNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
