@@ -3432,10 +3432,10 @@ BEGIN
 END
 GO
 
-
 GO
 CREATE OR ALTER PROCEDURE Prod.UDP_tbDocumentosOrdenCompraDetalles_Insertar  
 @code_Id					 int,
+@dopo_NombreArchivo          NVARCHAR(MAX),
 @dopo_Archivo				 nvarchar(max),
 @dopo_TipoArchivo			 nvarchar(40),
 @usua_UsuarioCreacion		 int,
@@ -3446,12 +3446,14 @@ BEGIN TRY
  
 	INSERT INTO Prod.tbDocumentosOrdenCompraDetalles
 			   (code_Id
+			   ,dopo_NombreArchivo
 			   ,dopo_Archivo
 			   ,dopo_TipoArchivo
 			   ,usua_UsuarioCreacion
 			   ,dopo_FechaCreacion )
 		 VALUES
 			   (@code_Id
+			   ,@dopo_NombreArchivo
 			   ,@dopo_Archivo
 			   ,@dopo_TipoArchivo
 			   ,@usua_UsuarioCreacion
@@ -3462,8 +3464,10 @@ BEGIN TRY
 	   SELECT 0	
 	END CATCH    
 END
-
 GO
+
+
+
 CREATE OR ALTER PROCEDURE Prod.UDP_tbDocumentosOrdenCompraDetalles_Editar
 @dopo_Id					 INT,
 @code_Id					 INT,
@@ -3489,8 +3493,9 @@ BEGIN
 	   SELECT 0	
 	END CATCH    
 END
-
 GO
+
+
 CREATE OR ALTER PROCEDURE Prod.UDP_tbDocumentosOrdenCompraDetalles_Eliminar  
 @dopo_Id					 INT
 AS
@@ -9852,8 +9857,10 @@ BEGIN
 
 			,ordenCompra.orco_FechaEmision
 			,ordenCompra.orco_FechaLimite
-			,ordenCompra.orco_MetodoPago
 			,ordenCompra.orco_Materiales
+
+			,ordenCompra.orco_MetodoPago
+			,fomapago.fopa_Descripcion
 
 	--Informacion del Embalaje
 			,ordenCompra.orco_IdEmbalaje
@@ -9871,6 +9878,7 @@ BEGIN
 	  FROM  Prod.tbOrdenCompra							ordenCompra
 			INNER JOIN  Prod.tbClientes					cliente				ON ordenCompra.orco_IdCliente  = cliente.clie_Id
 			INNER JOIN  Prod.tbTipoEmbalaje				tipoEmbajale		ON ordenCompra.orco_IdEmbalaje = tipoEmbajale.tiem_Id
+			INNER JOIN	Adua.tbFormasdePago				fomapago			ON ordenCompra.orco_MetodoPago = fomapago.fopa_Id
 		    INNER JOIN  Acce.tbUsuarios					usuarioCreacion		ON ordenCompra.usua_UsuarioCreacion			= usuarioCreacion.usua_Id
 			LEFT  JOIN  Acce.tbUsuarios					usuarioModificacion ON ordenCompra.usua_UsuarioModificacion		= usuarioModificacion.usua_Id
 END
@@ -9958,7 +9966,22 @@ BEGIN
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
 	END CATCH
 END
+GO
 
+CREATE OR ALTER PROCEDURE Prod.UDP_OrdenCompra_Finalizado
+  @orco_Id                   INT
+AS
+BEGIN
+ BEGIN TRY
+     UPDATE [Prod].[tbOrdenCompra]
+	 SET    [orco_EstadoFinalizado] = 1
+	 WHERE  orco_Id = @orco_Id 
+	 SELECT 1
+ END TRY
+ BEGIN CATCH
+ 		SELECT 'Error Message: 'ERROR_MESSAGE;
+ END CATCH
+END
 GO
 
 
@@ -9987,8 +10010,35 @@ BEGIN
 		SELECT 'Error Message: 'ERROR_MESSAGE;
 	END CATCH
 END
-
 GO
+
+CREATE OR ALTER PROCEDURE [Prod].UDP_OrdenCompra_Delete 
+  @orco_Id INT
+AS 
+BEGIN
+  DECLARE @code_Id INT;
+  DECLARE cur CURSOR FOR
+    SELECT [code_Id] FROM [Prod].[tbOrdenCompraDetalles] WHERE orco_Id = @orco_Id;
+
+  OPEN cur;
+  FETCH NEXT FROM cur INTO @code_Id;
+
+  WHILE @@FETCH_STATUS = 0
+  BEGIN
+    DELETE FROM [Prod].[tbOrdenCompraDetalles] WHERE [code_Id] = @code_Id;
+	DELETE FROM [Prod].[tbProcesoPorOrdenCompraDetalle] WHERE [code_Id] = @code_Id;
+    DELETE FROM [Prod].[tbDocumentosOrdenCompraDetalles] WHERE [code_Id] = @code_Id;
+	DELETE FROM [Prod].[tbMaterialesBrindar] WHERE [code_Id] = @code_Id;
+    FETCH NEXT FROM cur INTO @code_Id;
+  END;
+
+  CLOSE cur;
+  DEALLOCATE cur;
+
+  DELETE FROM [Prod].[tbOrdenCompraDetalles] WHERE orco_Id = @orco_Id;
+
+END;
+
 
 -----------------------------------------------/UDPS Para orden de compra---------------------------------------------
 

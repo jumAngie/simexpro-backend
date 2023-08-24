@@ -1836,7 +1836,7 @@ CREATE TABLE Prod.tbOrdenCompra(
 	orco_IdEmbalaje 			INT NOT NULL,
 	orco_EstadoOrdenCompra		CHAR(1) NOT NULL,
 	orco_DireccionEntrega		NVARCHAR(250)NOT NULL,
-	
+	orco_EstadoFinalizado       BIT NOT NULL,
 	usua_UsuarioCreacion       	INT NOT NULL,
 	orco_FechaCreacion         	DATETIME NOT NULL,
 	usua_UsuarioModificacion   	INT DEFAULT NULL,
@@ -1943,6 +1943,7 @@ GO
 CREATE TABLE Prod.tbDocumentosOrdenCompraDetalles(
 	dopo_Id						INT IDENTITY(1,1),
 	code_Id						INT				 NOT NULL,
+	dopo_NombreArchivo          NVARCHAR(MAX)    NOT NULL,
 	dopo_Archivo				NVARCHAR(MAX)	 NOT NULL,
 	dopo_TipoArchivo			NVARCHAR(40)	 NOT NULL,
 												 

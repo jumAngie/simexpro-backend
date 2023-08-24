@@ -87,5 +87,17 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
            
             return db.Query<tbOrdenCompra>(ScriptsDataBase.ObtenerOrdenCompraPorIdParaLineaTiempo, parametros, commandType: CommandType.StoredProcedure);
         }
+
+
+        public RequestStatus FinalizarOrdenCompra(tbOrdenCompra item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@orco_Id", item.orco_Id, DbType.Int32, ParameterDirection.Input);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.FinalizarOrdenCompra, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
+        }
     }
 }

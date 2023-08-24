@@ -1925,6 +1925,21 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
+        public ServiceResult FinalizarOrden(tbOrdenCompra item)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _ordenCompraRepository.FinalizarOrdenCompra(item);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
+
         #endregion
 
         #region Proceso por Orden compra detalle
