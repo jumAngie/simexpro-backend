@@ -3512,12 +3512,17 @@ GO
 
 
 /* ELIMINAR ORDEN DE COMPRA DETALLES  */
-CREATE OR ALTER PROCEDURE Prod.UDP_tbOrdenCompraDetalles_Eliminar
+CREATE OR ALTER PROCEDURE [Prod].[UDP_tbOrdenCompraDetalles_Eliminar]
 	@code_Id	INT
 AS
 BEGIN
 BEGIN TRANSACTION
 	BEGIN TRY   
+		
+		DELETE FROM  [Prod].[tbDocumentosOrdenCompraDetalles] WHERE [code_Id] = @code_Id
+	
+	    DELETE FROM  [Prod].[tbProcesoPorOrdenCompraDetalle]WHERE [code_Id] = @code_Id
+	
 		DELETE FROM [Prod].[tbMaterialesBrindar] WHERE [code_Id] = @code_Id
 
 		DELETE FROM [Prod].[tbOrdenCompraDetalles] WHERE [code_Id] = @code_Id
@@ -3528,9 +3533,8 @@ BEGIN TRANSACTION
 	BEGIN CATCH 
 	ROLLBACK TRAN
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END CATCH 
+	END CATCH 
 END
-GO
 
 
 /******************************** Formas de pago*****************************************/
