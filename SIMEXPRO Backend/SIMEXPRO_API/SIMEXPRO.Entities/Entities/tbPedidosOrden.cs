@@ -46,6 +46,24 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string Detalles { get; set; }
 
+        [NotMapped]
+        public int pais_Id { get; set; }
+
+        [NotMapped]
+        public string pais_Codigo { get; set; }
+
+        [NotMapped]
+        public string pais_Nombre { get; set; }
+
+        [NotMapped]
+        public int pvin_Id { get; set; }
+
+        [NotMapped]
+        public string pvin_Codigo { get; set; }
+
+        [NotMapped]
+        public string pvin_Nombre { get; set; }
+
         public virtual tbCiudades ciud { get; set; }
         public virtual tbDuca peor_No_DucaNavigation { get; set; }
         public virtual tbProveedores prov { get; set; }
