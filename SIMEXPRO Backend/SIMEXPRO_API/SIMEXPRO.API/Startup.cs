@@ -41,6 +41,7 @@ namespace SIMEXPRO.API
                     builder.WithOrigins("http://localhost:3000", 
                                         "https://simexpro.onrender.com",
                                         "https://simexpro.vercel.app",
+                                        "https://simexpro-rho.vercel.app/",
                                         "https://simexpro.up.railway.app") //NOMBRE DEL SERVIDOR
                     .AllowAnyHeader()
                     .AllowAnyMethod()
