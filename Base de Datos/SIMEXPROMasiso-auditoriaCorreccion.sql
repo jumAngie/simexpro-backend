@@ -1415,6 +1415,7 @@ CREATE TABLE Prod.tbMateriales(
 	mate_Id   					INT IDENTITY(1,1),
 	mate_Descripcion			NVARCHAR(200),
 	subc_Id  					INT,
+	colr_Id                     INT,
 	--mate_Precio					DECIMAL (18,2),
 	mate_Imagen					NVARCHAR(MAX) NOT NULL,
 	usua_UsuarioCreacion		INT					NOT NULL,
@@ -1426,6 +1427,7 @@ CREATE TABLE Prod.tbMateriales(
 	mate_Estado 				BIT					NOT NULL DEFAULT 1, 
 
 	CONSTRAINT PK_Prod_tbMateriales_mate_Id PRIMARY KEY (mate_Id),
+	CONSTRAINT FK_Prod_tbMateriales_colr_Id_Prod_tbColores_colr_Id                                  FOREIGN KEY (colr_Id)                   REFERENCES Prod.tbColores(colr_Id),
 	CONSTRAINT FK_Prod_tbMateriales_subc_Id_Prod_tbSubcategoria_subc_Id								FOREIGN KEY (subc_Id) 					REFERENCES Prod.tbSubcategoria(subc_Id),
 	CONSTRAINT FK_Prod_tbMateriales_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id					FOREIGN KEY (usua_UsuarioCreacion)		REFERENCES Acce.tbUsuarios (usua_Id),
 	CONSTRAINT FK_Prod_tbMateriales_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id				FOREIGN KEY (usua_UsuarioModificacion)	REFERENCES Acce.tbUsuarios (usua_Id),

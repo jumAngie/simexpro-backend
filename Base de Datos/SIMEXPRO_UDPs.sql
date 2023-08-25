@@ -11940,7 +11940,8 @@ BEGIN
 	       subc.subc_Descripcion,
 		   cate.cate_Id,
 		   cate.cate_Descripcion,
-	       mate.mate_Precio,
+		   colo.colr_Id,
+		   colo.colr_Nombre,
 		   mate.mate_Imagen, 
 	       mate.usua_UsuarioCreacion, 
 	       usuaCrea.usua_Nombre							AS usuarioCreacionNombre,
@@ -11954,6 +11955,7 @@ BEGIN
 	       LEFT JOIN Acce.tbUsuarios usuaModifica		ON mate.usua_UsuarioModificacion = usuaModifica.usua_Id 
 	       LEFT JOIN Prod.tbSubcategoria subc			ON mate.subc_Id                  = subc.subc_Id
 		   LEFT JOIN Prod.tbCategoria  cate            ON cate.cate_Id                  = subc.cate_Id
+		   LEFT JOIN Prod.tbColores  colo               ON mate.colr_Id                  = colo.colr_Id   
 	 WHERE mate_Estado = 1
 END
 GO
@@ -11963,7 +11965,7 @@ GO
 CREATE OR ALTER PROCEDURE Prod.UDP_tbMateriales_Insertar
 	 @mate_Descripcion         NVARCHAR(200),
 	 @subc_Id                  INT,
-	 @mate_Precio              DECIMAL(18,2),
+	 @colr_Id                  INT,
 	 @mate_Imagen			   NVARCHAR(MAX),
 	 @usua_UsuarioCreacion     INT, 
 	 @mate_FechaCreacion       DATETIME
@@ -11971,8 +11973,8 @@ AS
 BEGIN
 	
 	BEGIN TRY
-		INSERT INTO Prod.tbMateriales (mate_Descripcion, subc_Id, mate_Precio, mate_Imagen, usua_UsuarioCreacion, mate_FechaCreacion)
-		VALUES(@mate_Descripcion, @subc_Id, @mate_Precio, @mate_Imagen, @usua_UsuarioCreacion, @mate_FechaCreacion)
+		INSERT INTO Prod.tbMateriales (mate_Descripcion, subc_Id, colr_Id,mate_Imagen, usua_UsuarioCreacion, mate_FechaCreacion)
+		VALUES(@mate_Descripcion, @subc_Id, @colr_Id, @mate_Imagen, @usua_UsuarioCreacion, @mate_FechaCreacion)
 		
 		SELECT 1
 	END TRY
@@ -11987,7 +11989,7 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbMateriales_Editar
 	@mate_Id                   INT,
 	@mate_Descripcion          NVARCHAR(200), 
 	@subc_Id                   INT, 
-	@mate_Precio               DECIMAL(18,2),
+	@colr_Id                  INT,
 	@mate_Imagen			   NVARCHAR(MAX), 
 	@usua_UsuarioModificacion  INT, 
 	@mate_FechaModificacion    DATETIME
@@ -11998,6 +12000,7 @@ BEGIN
 		SET		mate_Descripcion         = @mate_Descripcion,
 		        subc_Id                  = @subc_Id,
 				mate_Imagen				 = @mate_Imagen,
+				colr_Id                  = @colr_Id,
 				usua_UsuarioModificacion = @usua_UsuarioModificacion,
 				mate_FechaModificacion   = @mate_FechaModificacion
 		WHERE	mate_Id = @mate_Id

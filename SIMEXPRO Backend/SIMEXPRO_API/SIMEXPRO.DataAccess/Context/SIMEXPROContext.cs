@@ -3342,6 +3342,11 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.mate_Imagen).IsRequired();
 
+                entity.HasOne(d => d.colr)
+                    .WithMany(p => p.tbMateriales)
+                    .HasForeignKey(d => d.colr_Id)
+                    .HasConstraintName("FK_Prod_tbMateriales_colr_Id_Prod_tbColores_colr_Id");
+
                 entity.HasOne(d => d.subc)
                     .WithMany(p => p.tbMateriales)
                     .HasForeignKey(d => d.subc_Id)
