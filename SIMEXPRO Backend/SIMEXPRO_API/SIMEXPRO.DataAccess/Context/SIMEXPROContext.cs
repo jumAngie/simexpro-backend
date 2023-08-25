@@ -3765,6 +3765,8 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.orco_Estado).HasDefaultValueSql("((1))");
 
+                entity.Property(e => e.orco_EstadoFinalizado).HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.orco_EstadoOrdenCompra)
                     .IsRequired()
                     .HasMaxLength(1)
@@ -3985,6 +3987,8 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.Property(e => e.pant_FechaModificacion).HasColumnType("datetime");
 
                 entity.Property(e => e.pant_Icono).HasMaxLength(50);
+
+                entity.Property(e => e.pant_Identificador).HasMaxLength(50);
 
                 entity.Property(e => e.pant_Nombre).HasMaxLength(100);
 

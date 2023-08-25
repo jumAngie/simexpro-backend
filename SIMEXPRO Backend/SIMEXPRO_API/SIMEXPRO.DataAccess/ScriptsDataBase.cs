@@ -617,7 +617,7 @@ namespace SIMEXPRO.DataAccess
         public static string ListarOrdenCompra = "Prod.UDP_tbOrdenCompra_Listado";
         public static string InsertarOrdenCompra = "Prod.UDP_tbOrdenCompra_Insertar";
         public static string EditarOrdenCompra = "Prod.UDP_tbOrdenCompra_Editar";
-        public static string EliminarOrdenCompra = "Prod.UDP_tbOrdenCompra_Eliminar";
+        public static string EliminarOrdenCompra = "[Prod].UDP_OrdenCompra_Delete";
         public static string FinalizarOrdenCompra = "Prod.UDP_OrdenCompra_Finalizado";
         #endregion
 

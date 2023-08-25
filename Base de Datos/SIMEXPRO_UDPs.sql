@@ -3415,6 +3415,7 @@ AS
 BEGIN
  	SELECT	 dopo_Id
 			,code_Id
+			,dope_NombreArchivo
 			,dopo_Archivo
 			,dopo_TipoArchivo
 			,documentosOrdenCompraDetalle.usua_UsuarioCreacion
@@ -3435,7 +3436,7 @@ GO
 GO
 CREATE OR ALTER PROCEDURE Prod.UDP_tbDocumentosOrdenCompraDetalles_Insertar  
 @code_Id					 int,
-@dopo_NombreArchivo          NVARCHAR(MAX),
+@dope_NombreArchivo          NVARCHAR(MAX),
 @dopo_Archivo				 nvarchar(max),
 @dopo_TipoArchivo			 nvarchar(40),
 @usua_UsuarioCreacion		 int,
@@ -3443,17 +3444,16 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbDocumentosOrdenCompraDetalles_Insertar
 AS
 BEGIN
 BEGIN TRY 
- 
 	INSERT INTO Prod.tbDocumentosOrdenCompraDetalles
 			   (code_Id
-			   ,dopo_NombreArchivo
+			   ,dope_NombreArchivo
 			   ,dopo_Archivo
 			   ,dopo_TipoArchivo
 			   ,usua_UsuarioCreacion
 			   ,dopo_FechaCreacion )
 		 VALUES
 			   (@code_Id
-			   ,@dopo_NombreArchivo
+			   ,@dope_NombreArchivo
 			   ,@dopo_Archivo
 			   ,@dopo_TipoArchivo
 			   ,@usua_UsuarioCreacion

@@ -1881,15 +1881,15 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
-        public ServiceResult EliminarOrdenCompra(tbOrdenCompra item)
+        public ServiceResult EliminarOrdenCompra(int orco_Id)
         {
             var result = new ServiceResult();
             try
             {
-                if (item.orco_Id != 0)
+                if (orco_Id != 0)
                 {
-                    var map = _ordenCompraRepository.Delete(item);
-                    if (map.MessageStatus == "1" || map.MessageStatus == "2")
+                    var map = _ordenCompraRepository.Delete(orco_Id);
+                    if (map.MessageStatus == "1")
                     {
                         return result.Ok(map);
                     }
