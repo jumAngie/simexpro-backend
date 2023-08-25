@@ -29,7 +29,7 @@ namespace SIMEXPRO.Entities.Entities
         public string UsuarioCreacionNombre { get; set; }
 
         [NotMapped]
-        public string usuarioModificadorNombre { get; set; }
+        public string usuarioModificacionNombre { get; set; }
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioEliminacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }

@@ -19,7 +19,7 @@ namespace SIMEXPRO.API.Models
         public bool? escv_Estado { get; set; }
         public string UsuarioCreacionNombre { get; set; }
 
-        public string usuarioModificadorNombre { get; set; }
+        public string usuarioModificacionNombre { get; set; }
         
 
     }

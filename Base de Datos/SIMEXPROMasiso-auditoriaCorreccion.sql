@@ -1836,7 +1836,7 @@ CREATE TABLE Prod.tbOrdenCompra(
 	orco_IdEmbalaje 			INT NOT NULL,
 	orco_EstadoOrdenCompra		CHAR(1) NOT NULL,
 	orco_DireccionEntrega		NVARCHAR(250)NOT NULL,
-	orco_EstadoFinalizado       BIT NOT NULL,
+	orco_EstadoFinalizado       BIT DEFAULT 0 NOT NULL,
 	usua_UsuarioCreacion       	INT NOT NULL,
 	orco_FechaCreacion         	DATETIME NOT NULL,
 	usua_UsuarioModificacion   	INT DEFAULT NULL,

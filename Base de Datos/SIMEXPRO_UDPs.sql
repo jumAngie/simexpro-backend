@@ -207,7 +207,7 @@ BEGIN
 		   usua.usua_EsAdmin,
 		   usua.empl_Id,
 		   usua.usua_Image,
-		   (empl_Nombres + ' ' + empl_Apellidos) AS empleadoNombreCompleto, 
+		   (empl_Nombres + ' ' + empl_Apellidos) AS emplNombreCompleto, 
 		   empl_EsAduana,
 		   empl_CorreoElectronico,
 		   usua.usua_UsuarioCreacion, 
@@ -9854,7 +9854,7 @@ BEGIN
 			,cliente.clie_Numero_Contacto
 			,cliente.clie_Correo_Electronico
 			,cliente.clie_FAX
-
+			,ordenCompra.orco_EstadoFinalizado
 			,ordenCompra.orco_FechaEmision
 			,ordenCompra.orco_FechaLimite
 			,ordenCompra.orco_Materiales
@@ -13950,27 +13950,30 @@ INNER JOIN Acce.tbUsuarios Creacion
 END
 GO
 
-
-CREATE OR ALTER PROC Prod.UDP_tbPedidosProduccion_Eliminar
+CREATE OR ALTER  PROC [Prod].[UDP_tbPedidosProduccion_Eliminar]
 	@ppro_Id		INT
 AS
 BEGIN
 	BEGIN TRY
 		DECLARE @respuesta INT
-			EXEC dbo.UDP_ValidarReferencias 'ppro_Id', @ppro_Id, 'Prod.tbPedidosProduccion', @respuesta OUTPUT
-
-			IF(@respuesta) = 1
-					BEGIN
-				UPDATE [Prod].[tbPedidosProduccion]
-				SET	   [ppro_Estado] = 0
-				WHERE  [ppro_Id] = @ppro_Id
-
+			IF EXISTS (SELECT ppro_Id FROM Prod.tbOrde_Ensa_Acab_Etiq WHERE ppro_Id = @ppro_Id)
+				BEGIN 
+					SELECT 2
 				END
-			SELECT @respuesta AS Resultado
+			ELSE
+				BEGIN
+					DELETE FROM [Prod].[tbPedidosProduccionDetalles]
+					WHERE ppro_Id = @ppro_Id
+
+					DELETE FROM [Prod].[tbPedidosProduccion]
+					WHERE ppro_Id = @ppro_Id
+
+					SELECT 1
+				END		
 	END TRY	
 	BEGIN CATCH
 		SELECT 0
-	END CATCH
+	END CATCH
 END
 GO 
 
@@ -14124,31 +14127,84 @@ END
 
 
 GO
-CREATE OR ALTER PROC Prod.UDP_tbPedidosProduccionDetalle_Editar 
-(@ppde_Id					INT,
- @ppro_Id					INT,
- @lote_Id					INT,
- @ppde_Cantidad				INT,
- @usua_UsuarioModificacion	INT,
+CREATE OR ALTER  PROC [Prod].[UDP_tbPedidosProduccionDetalle_Editar] --158, 1,1, 8,1,'10-16-2004'
+(@ppde_Id                    INT,
+ @ppro_Id                    INT,
+ @lote_Id                    INT,
+ @ppde_Cantidad                INT,
+ @usua_UsuarioModificacion    INT,
  @ppde_FechaModificacion DATETIME)
 AS
 BEGIN
-	BEGIN TRY
+    BEGIN TRY
 
-		UPDATE [Prod].[tbPedidosProduccionDetalles]
-		SET [ppro_Id] = @ppro_Id, 
-			[lote_Id] = @lote_Id, 
-			[ppde_Cantidad] = @ppde_Cantidad , 
-			[usua_UsuarioModificacion] = @usua_UsuarioModificacion, 
-			[ppde_FechaCreacion] = @ppde_FechaModificacion
-		WHERE ppde_Id = @ppde_Id
+		DECLARE @CantidadAnterior INT = (SELECT ppde_Cantidad FROM Prod.tbPedidosProduccionDetalles WHERE ppde_Id = @ppde_Id)	
 
-		SELECT 1
-	END TRY
-	BEGIN CATCH
-			SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END CATCH
+		IF (@lote_Id = (SELECT lote_Id FROM Prod.tbPedidosProduccionDetalles WHERE ppde_Id = @ppde_Id))
+			BEGIN 
+				
+				IF (@ppde_Cantidad > (SELECT ppde_Cantidad FROM Prod.tbPedidosProduccionDetalles WHERE ppde_Id = @ppde_Id))
+					BEGIN
+
+						UPDATE Prod.tbLotes
+						SET
+							lote_Stock = lote_Stock - (@ppde_Cantidad - @CantidadAnterior)
+						WHERE lote_Id = @lote_Id
+					END
+				ELSE
+					BEGIN
+						UPDATE Prod.tbLotes
+						SET
+							lote_Stock = lote_Stock + (@CantidadAnterior - @ppde_Cantidad)
+						WHERE lote_Id = @lote_Id
+					END
+
+				UPDATE [Prod].[tbPedidosProduccionDetalles]
+				SET [ppro_Id] = @ppro_Id, 
+					[lote_Id] = @lote_Id, 
+					[ppde_Cantidad] = @ppde_Cantidad, 
+					[usua_UsuarioModificacion] = @usua_UsuarioModificacion, 
+					[ppde_FechaModificacion] = @ppde_FechaModificacion
+				WHERE ppde_Id = @ppde_Id
+				
+				SELECT 1
+			END
+		ELSE
+			BEGIN
+				
+				DECLARE @LoteAnterior INT = (SELECT lote_Id FROM Prod.tbPedidosProduccionDetalles WHERE ppde_Id = @ppde_Id)
+				
+
+				-- NUEVO STOCK DEL ANTIGUO LOTE
+				UPDATE Prod.tbLotes
+				SET lote_Stock = lote_Stock + @CantidadAnterior
+				WHERE lote_Id = @LoteAnterior
+
+
+				-- NUEVO STOCK DE NUEVO LOTE
+				UPDATE Prod.tbLotes
+				SET lote_Stock = lote_Stock - @ppde_Cantidad
+				WHERE lote_Id = @lote_Id
+
+
+				UPDATE [Prod].[tbPedidosProduccionDetalles]
+				SET [ppro_Id] = @ppro_Id, 
+					[lote_Id] = @lote_Id, 
+					[ppde_Cantidad] = @ppde_Cantidad , 
+					[usua_UsuarioModificacion] = @usua_UsuarioModificacion, 
+					[ppde_FechaModificacion] = @ppde_FechaModificacion
+				WHERE ppde_Id = @ppde_Id
+
+				SELECT 1
+			END
+
+
+    END TRY
+    BEGIN CATCH
+            SELECT 'Error Message: ' + ERROR_MESSAGE()
+    END CATCH
 END
+
 
 GO
 
@@ -14744,20 +14800,24 @@ GO
 
 --Producción
 /*Reducir stock de lotes*/
-CREATE OR ALTER TRIGGER Prod.TR_tbPedidosProduccionDetalles_InsertUpdate
-ON Prod.tbPedidosProduccionDetalles AFTER INSERT, UPDATE 
+CREATE OR ALTER TRIGGER [Prod].[TR_tbPedidosProduccionDetalles_InsertUpdate]
+ON [Prod].[tbPedidosProduccionDetalles] AFTER INSERT, DELETE
 AS
-
-	DECLARE @ppde_Cantidad DECIMAL(18,2) = (SELECT ppde_Cantidad FROM inserted)
+BEGIN
+    DECLARE @lote_Id INT
 	DECLARE @ppde_CantidadAnterior DECIMAL(18,2) = (SELECT ppde_Cantidad FROM deleted)
+	DECLARE @ppde_Cantidad DECIMAL(18,2) = (SELECT ppde_Cantidad FROM inserted)
 
-	DECLARE @lote_Id INT = (SELECT lote_Id FROM inserted)
+    -- Actualizar stock para filas insertadas
+    UPDATE L
+    SET lote_Stock = lote_Stock - I.ppde_Cantidad
+    FROM Prod.tbLotes L
+    INNER JOIN inserted I ON L.lote_Id = I.lote_Id
 
-	UPDATE Prod.tbLotes
-	SET lote_Stock =+ @ppde_CantidadAnterior
-	WHERE lote_Id = @lote_Id
+    -- Actualizar stock para filas eliminadas
+    UPDATE L
+    SET lote_Stock = lote_Stock + D.ppde_Cantidad 
+    FROM Prod.tbLotes L
+    INNER JOIN deleted D ON L.lote_Id = D.lote_Id
 
-	UPDATE Prod.tbLotes
-	SET lote_Stock =- @ppde_Cantidad
-	WHERE lote_Id = @lote_Id
-GO
+END;
