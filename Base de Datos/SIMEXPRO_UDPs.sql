@@ -9956,7 +9956,7 @@ BEGIN
 				orco_IdEmbalaje				= @orco_IdEmbalaje, 			
 				orco_EstadoOrdenCompra		= @orco_EstadoOrdenCompra,		
 				orco_DireccionEntrega		= @orco_DireccionEntrega,		
-				usua_UsuarioModificacion	= @orco_DireccionEntrega,       
+				usua_UsuarioModificacion	= @usua_UsuarioModificacion,       
 				orco_FechaModificacion		= @orco_FechaModificacion
 		  WHERE orco_Id = @orco_Id
 
