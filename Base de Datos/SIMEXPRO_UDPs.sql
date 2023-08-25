@@ -9854,7 +9854,7 @@ BEGIN
 			,cliente.clie_Numero_Contacto
 			,cliente.clie_Correo_Electronico
 			,cliente.clie_FAX
-
+			,ordenCompra.orco_EstadoFinalizado
 			,ordenCompra.orco_FechaEmision
 			,ordenCompra.orco_FechaLimite
 			,ordenCompra.orco_Materiales
