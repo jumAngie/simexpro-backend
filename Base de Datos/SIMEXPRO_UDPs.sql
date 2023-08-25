@@ -2264,7 +2264,7 @@ GO
 
 --************EMPLEADOS******************--
 /*Listar EMPLEADOS*/
-CREATE OR ALTER PROCEDURE Gral.UDP_tbEmpleados_Listar 1
+CREATE OR ALTER PROCEDURE Gral.UDP_tbEmpleados_Listar 
 	@empl_EsAduana		BIT
 AS
 BEGIN
@@ -3471,6 +3471,7 @@ GO
 CREATE OR ALTER PROCEDURE Prod.UDP_tbDocumentosOrdenCompraDetalles_Editar
 @dopo_Id					 INT,
 @code_Id					 INT,
+@dope_NombreArchivo          NVARCHAR(MAX),
 @dopo_Archivo				 NVARCHAR(max),
 @dopo_TipoArchivo			 NVARCHAR(40),
 @usua_UsuarioModificacion	 INT,
