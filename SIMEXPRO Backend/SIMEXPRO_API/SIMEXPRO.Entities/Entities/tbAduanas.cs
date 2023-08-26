@@ -21,7 +21,13 @@ namespace SIMEXPRO.Entities.Entities
         public string adua_Codigo { get; set; }
         public string adua_Nombre { get; set; }
         public string adua_Direccion_Exacta { get; set; }
+        [NotMapped]
+        public string pvin_Id { get; set; }
+        [NotMapped]
+        public string pvin_Nombre { get; set; }
         public int ciud_Id { get; set; }
+        [NotMapped]
+        public string ciud_Nombre { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         public DateTime adua_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }

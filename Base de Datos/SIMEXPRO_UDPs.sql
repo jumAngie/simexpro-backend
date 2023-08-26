@@ -3663,28 +3663,33 @@ GO
 CREATE OR ALTER PROCEDURE Adua.UDP_tbAduanas_Listar
 AS
 BEGIN
-SELECT	adu.adua_Id							,
-		adu.adua_Codigo						,
-		adu.adua_Nombre						,
-		adu.adua_Direccion_Exacta			,
-		usu.usua_Nombre						AS usarioCreacion,
-		adu.adua_FechaCreacion				,
-		usu2.usua_Nombre					AS usuarioModificacion,
-		adu.adua_FechaModificacion			,
-		adu.adua_Estado						
-FROM	Adua.tbAduanas adu 
-		INNER JOIN Acce.tbUsuarios usu		ON adu.usua_UsuarioCreacion = usu.usua_Id 
-		LEFT JOIN Acce.tbUsuarios usu2		ON usu2.usua_UsuarioModificacion = adu.usua_UsuarioModificacion 
-WHERE	adu.adua_Estado = 1
+SELECT    adu.adua_Id                            ,
+        adu.adua_Codigo                        ,
+        adu.adua_Nombre                        ,
+        adu.adua_Direccion_Exacta            ,
+        adu.ciud_Id,
+        ciud.ciud_Nombre                    ,
+        prov.pvin_Id                         ,
+        prov.pvin_Nombre                    ,
+        usu.usua_Nombre                        AS usarioCreacion,
+        adu.adua_FechaCreacion                ,
+        usu2.usua_Nombre                    AS usuarioModificacion,
+        adu.adua_FechaModificacion            ,
+        adu.adua_Estado
+FROM    Adua.tbAduanas adu 
+        INNER JOIN Acce.tbUsuarios usu        ON adu.usua_UsuarioCreacion = usu.usua_Id 
+        LEFT JOIN Acce.tbUsuarios usu2        ON usu2.usua_UsuarioModificacion = adu.usua_UsuarioModificacion 
+        LEFT JOIN Gral.tbCiudades ciud      ON ciud.ciud_Id = adu.ciud_Id
+        LEFT JOIN Gral.tbProvincias prov   ON prov.pvin_Id = ciud.pvin_Id
+ WHERE    adu.adua_Estado = 1
+END
 
-
-END 
-select GETDATE()
 /*Aduanas Crear */
 GO
 CREATE OR ALTER PROCEDURE Adua.UDP_tbAduanas_Insertar 
    @adua_Codigo				   char(4),
    @adua_Nombre                NVARCHAR(MAX),
+   @ciud_Id						INT,
    @adua_Direccion_Exacta      NVARCHAR(MAX), 
    @usua_UsuarioCreacion       INT,  
    @adua_FechaCreacion         DATETIME
@@ -3699,6 +3704,7 @@ BEGIN
 			   UPDATE Adua.tbAduanas
 			   SET    adua_Estado = 1,
 					  adua_Nombre = @adua_Nombre,
+					  ciud_Id = @ciud_Id,
 			          adua_Direccion_Exacta = @adua_Direccion_Exacta, 
 			          usua_UsuarioModificacion=@usua_UsuarioCreacion
 				WHERE @adua_Codigo = adua_Codigo
@@ -3710,6 +3716,7 @@ BEGIN
 		     INSERT INTO Adua.tbAduanas
 			 (adua_Nombre, 
 			  adua_Codigo,
+			  ciud_Id,
 			  adua_Direccion_Exacta, 
 			  usua_UsuarioCreacion, 
 			  adua_FechaCreacion			  
@@ -3717,7 +3724,8 @@ BEGIN
 			 VALUES 
 			 ( 
 			 @adua_Nombre,     
-			 @adua_Codigo,     
+			 @adua_Codigo,  
+			 @ciud_Id,
 			 @adua_Direccion_Exacta,
 			 @usua_UsuarioCreacion, 
 			 @adua_FechaCreacion   
@@ -3736,6 +3744,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbAduanas_Editar
 	@adua_Id                   INT,
 	@adua_Codigo				char(4), 
 	@adua_Nombre               NVARCHAR(MAX), 
+	@ciud_Id				   INT,
 	@adua_Direccion_Exacta     NVARCHAR(MAX),   
 	@usua_UsuarioModificacion  INT, 
 	@adua_FechaModificacion    DATETIME
@@ -3746,6 +3755,7 @@ BEGIN
 		UPDATE  Adua.tbAduanas 
 		SET    adua_Nombre = @adua_Nombre,
 			    adua_Codigo = @adua_Codigo,
+				ciud_Id = @ciud_Id,
 			    adua_Direccion_Exacta = @adua_Direccion_Exacta, 		   
 			    usua_UsuarioModificacion = @usua_UsuarioModificacion, 
 			    adua_FechaModificacion = @adua_FechaModificacion
