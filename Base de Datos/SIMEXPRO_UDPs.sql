@@ -3425,11 +3425,12 @@ GO
 
 
 GO
-CREATE OR ALTER PROCEDURE Prod.UDP_tbDocumentosOrdenCompraDetalles_Lista
+CREATE OR ALTER PROCEDURE [Prod].[UDP_tbDocumentosOrdenCompraDetalles_Listar]
 @code_Id	INT
 AS
 BEGIN
- 	SELECT	 dopo_Id
+ 
+	SELECT	 dopo_Id
 			,code_Id
 			,dope_NombreArchivo
 			,dopo_Archivo
@@ -3444,10 +3445,9 @@ BEGIN
 	  FROM	Prod.tbDocumentosOrdenCompraDetalles			documentosOrdenCompraDetalle
 			INNER JOIN Acce.tbUsuarios UsuarioCreacion			ON UsuarioCreacion.usua_Id			= documentosOrdenCompraDetalle.usua_UsuarioCreacion
 			LEFT  JOIN Acce.tbUsuarios UsuarioModificacion		ON UsuarioModificacion.usua_Id		= documentosOrdenCompraDetalle.usua_UsuarioModificacion
-	  WHERE code_Estado = 1 AND code_Id = @code_Id
+	  WHERE code_Estado = 1 AND code_Id = @code_Id
 
 END
-GO
 
 GO
 CREATE OR ALTER PROCEDURE Prod.UDP_tbDocumentosOrdenCompraDetalles_Insertar  
