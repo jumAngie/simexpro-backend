@@ -13726,7 +13726,6 @@ BEGIN
 END
 GO
 
-
 --SELECT RowNumber
 --		FROM (SELECT ROW_NUMBER() OVER (ORDER BY prod_Id) AS RowNumber,
 --					 prod_Id 
@@ -13746,6 +13745,7 @@ SELECT
 	   materiales.mate_Descripcion,
 	   lotes.unme_Id,
 	   UnidadesMedida.unme_Descripcion,
+	   lotes.lote_CodigoLote,
 	   lotes.lote_Observaciones,
 	   lote_Stock,
 	   lote_CantIngresada,
@@ -13822,11 +13822,13 @@ CREATE OR ALTER PROC Prod.UDP_tbLotes_Insertar
 	@lote_CantIngresada		INT,
 	@tipa_Id				INT,
 	@lote_Observaciones		NVARCHAR(MAX),
+	@lote_CodigoLote        NVARCHAR(150),
 	@usua_UsuarioCreacion	INT,
 	@lote_FechaCreacion		DATETIME
 AS BEGIN
 BEGIN TRY
 	INSERT INTO Prod.tbLotes(mate_Id, 
+	                         lote_CodigoLote,
 							 unme_Id,
 							 prod_Id,
 							 lote_CantIngresada, 
@@ -13835,7 +13837,8 @@ BEGIN TRY
 							 usua_UsuarioCreacion,
 							 lote_FechaCreacion)
 
-	VALUES					(@mate_Id,		
+	VALUES					(@mate_Id,
+	                         @lote_CodigoLote,
 							 @unme_Id,
 							 @prod_Id,			
 							 @lote_CantIngresada,	
@@ -13856,6 +13859,7 @@ GO
 CREATE OR ALTER PROC Prod.UDP_tbLotes_Editar
 @lote_Id				  INT,
 @mate_Id				  INT,
+@lote_CodigoLote          NVARCHAR(150),
 @unme_Id				  INT,
 @prod_Id				  INT,
 @lote_CantIngresada		  INT,
@@ -13867,6 +13871,7 @@ AS BEGIN
 BEGIN TRY
 	UPDATE Prod.tbLotes 
 	                    SET  mate_Id                   = @mate_Id, 
+						     lote_CodigoLote           = @lote_CodigoLote,
 						     unme_Id                   = @unme_Id,
 							 prod_Id				   = @prod_Id,
 							 lote_CantIngresada        = @lote_CantIngresada, 
