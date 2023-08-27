@@ -13922,13 +13922,14 @@ END
 GO
 
 /*Seleccionar lotes Material*/
-CREATE OR ALTER PROCEDURE Prod.UDP_tbLotes_Materiales 
+CREATE OR ALTER   PROCEDURE Prod.UDP_tbLotes_Materiales --'CW20230827'
 (
-	@lote_Id INT
+	@lote_CodigoLote NVARCHAR(40)
 )
 AS
 BEGIN
 	SELECT	lote_Id,
+			tblotes.lote_CodigoLote,
 			tblotes.mate_Id,
 			mate_Descripcion,
 			tblotes.lote_Stock,
@@ -13936,10 +13937,9 @@ BEGIN
 	FROM Prod.tbLotes tblotes			
 			INNER JOIN Prod.tbMateriales tbmats		ON tblotes.mate_Id = tbmats.mate_Id
 			INNER JOIN Prod.tbArea	tbarea			ON tblotes.tipa_Id = tbarea.tipa_Id
-	WHERE tblotes.lote_Id = @lote_Id
+	WHERE tblotes.lote_CodigoLote = @lote_CodigoLote
 END
 GO
-
 --**************************************************************************************************--
 
 
