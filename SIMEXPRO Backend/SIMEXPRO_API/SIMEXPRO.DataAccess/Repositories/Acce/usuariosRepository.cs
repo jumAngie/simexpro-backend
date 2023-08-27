@@ -88,6 +88,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Acce
             parametros.Add("@usua_Contrasenia", item.usua_Contrasenia, DbType.String, ParameterDirection.Input);
             //parametros.Add("@usua_Correo", item.usua_Correo, DbType.String, ParameterDirection.Input);
             parametros.Add("@empl_Id", item.empl_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@usua_esAduana", item.usua_esAduana, DbType.Boolean, ParameterDirection.Input);
             parametros.Add("@usua_Image", item.usua_Image, DbType.String, ParameterDirection.Input);
             parametros.Add("@role_Id", item.role_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@usua_EsAdmin", item.usua_EsAdmin, DbType.Boolean, ParameterDirection.Input);

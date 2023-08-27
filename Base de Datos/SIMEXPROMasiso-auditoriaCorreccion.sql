@@ -34,11 +34,11 @@ CREATE TABLE Acce.tbUsuarios(
 		usua_Contrasenia			NVARCHAR(MAX) 	NOT NULL,
 		--usua_Correo					NVARCHAR(200) 	NOT NULL,
 		empl_Id						INT 			NOT NULL,
+		usua_esAduana				BIT NOT NULL,
 		usua_Image					NVARCHAR(500) 	NULL,
 		role_Id						INT				NOT NULL,
 		usua_EsAdmin				BIT 			NOT NULL,
 		pant_subCategoria			NVARCHAR(150),
-
 		usua_UsuarioCreacion 		INT				NOT NULL,
 		usua_FechaCreacion 			DATETIME 		NOT NULL,
 		usua_UsuarioModificacion	INT				DEFAULT NULL,
@@ -49,9 +49,8 @@ CREATE TABLE Acce.tbUsuarios(
 		usua_FechaActivacion		DATETIME		NULL,
 		usua_Estado					BIT				DEFAULT 1,
 	CONSTRAINT PK_Acce_tbUsuarios_usua_Id 				 PRIMARY KEY (usua_Id),
-	CONSTRAINT UQ_acce_tbUsuarios_usua_Nombre			 UNIQUE(usua_Nombre),
+	CONSTRAINT UQ_acce_tbUsuarios_usua_Nombre_esAduana UNIQUE(usua_Nombre, usua_esAduana),
 	CONSTRAINT FK_Acce_tbUsuarios_usua_UsuarioActivacion FOREIGN KEY(usua_UsuarioActivacion) REFERENCES Acce.tbUsuarios(usua_Id),
-
 );
 GO
 
@@ -62,6 +61,7 @@ CREATE TABLE Acce.tbUsuariosHistorial(
 		usua_Contrasenia			NVARCHAR(MAX),
 		--usua_Correo					NVARCHAR(200),
 		empl_Id						INT,
+		usua_esAduana				BIT,
 		usua_Image					NVARCHAR(500),
 		role_Id						INT,
 		usua_EsAdmin				BIT 			NOT NULL,
@@ -71,6 +71,7 @@ CREATE TABLE Acce.tbUsuariosHistorial(
 		hist_Accion					NVARCHAR(100)
 );
 GO
+
 
 INSERT INTO Acce.tbUsuarios(usua_Nombre, usua_Contrasenia, empl_Id, usua_Image, role_Id, usua_EsAdmin, pant_subCategoria, usua_UsuarioCreacion, usua_FechaCreacion)
 VALUES						('prueba',		'123',				1, '.jpg',		1,			1,			1,					1,					GETDATE())

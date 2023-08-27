@@ -260,8 +260,10 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string emplNombreCompleto { get; set; }
 
-
         public int empl_Id { get; set; }
+
+        [NotMapped]
+        public bool usua_esAduana { get; set; }
         public string usua_Image { get; set; }
         public int role_Id { get; set; }
 

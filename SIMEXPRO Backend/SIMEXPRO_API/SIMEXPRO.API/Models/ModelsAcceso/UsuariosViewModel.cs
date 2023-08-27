@@ -15,6 +15,7 @@ namespace SIMEXPRO.API.Models.ModelsAcceso
         public string emplNombreCompleto { get; set; }
         public string role_Descripcion { get; set; }
         public bool empl_EsAduana { get; set; }
+        public bool usua_esAduana { get; set; }
         public int empl_Id { get; set; }
         public string usua_Image { get; set; }
         public int role_Id { get; set; }

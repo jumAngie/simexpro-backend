@@ -206,6 +206,7 @@ BEGIN
 		   rol.role_Descripcion, 
 		   usua.usua_EsAdmin,
 		   usua.empl_Id,
+		   usua.usua_esAduana,
 		   usua.usua_Image,
 		   (empl_Nombres + ' ' + empl_Apellidos) AS emplNombreCompleto, 
 		   empl_EsAduana,
@@ -259,14 +260,15 @@ OR	  @empl_EsAduana IS NULL)
 AND   (usua.usua_Id IS NULL AND empl.empl_Estado = 1)
 END
 
---EXEC acce.UDP_tbUsuarios_Insertar 'juan', '123', 1, 'https://www.dumpaday.com/wp-content/uploads/2019/04/the-random-pics-4.jpg', 1, 1, 1,'08-08-2023'
---EXEC acce.UDP_tbUsuarios_Insertar 'angie', '123', 2, 'https://i.pinimg.com/originals/10/b8/50/10b8509d551e5a264227dee8248fc1fa.jpg', 1, 1, 1,'08-08-2023'
+--EXEC acce.UDP_tbUsuarios_Insertar 'juan', '123', 1,1, 'https://www.dumpaday.com/wp-content/uploads/2019/04/the-random-pics-4.jpg', 1, 1, 1,'08-08-2023'
+--EXEC acce.UDP_tbUsuarios_Insertar 'angie', '123', 2,0, 'https://i.pinimg.com/originals/10/b8/50/10b8509d551e5a264227dee8248fc1fa.jpg', 1, 1, 1,'08-08-2023'
 /*Insertar Usuarios*/
 GO
 CREATE OR ALTER PROCEDURE acce.UDP_tbUsuarios_Insertar 
 	@usua_Nombre			NVARCHAR(150),
 	@usua_Contrasenia		NVARCHAR(MAX),
 	@empl_Id				INT,
+	@usua_esAduana			BIT,
 	@usua_Image				NVARCHAR(500),
 	@role_Id				INT, 
 	@usua_EsAdmin			BIT,
@@ -289,6 +291,7 @@ BEGIN
 			SET	   usua_Estado = 1,
 				   usua_Contrasenia = @password,
 				   empl_Id = @empl_Id,
+				   usua_esAduana = @usua_esAduana,
 				   usua_Image = @usua_Image,
 				   role_Id = @role_Id,
 				   usua_EsAdmin = @usua_EsAdmin
@@ -301,7 +304,8 @@ BEGIN
 			BEGIN
 				INSERT INTO acce.tbUsuarios (usua_Nombre, 
 											 usua_Contrasenia, 
-											 empl_Id, 
+											 empl_Id,	
+											 usua_esAduana,
 											 usua_Image, 
 											 role_Id, 
 											 usua_EsAdmin,
@@ -310,6 +314,7 @@ BEGIN
 			VALUES(@usua_Nombre,
 					@password,
 					@empl_Id,
+					@usua_esAduana,
 					@usua_Image,
 					@role_Id,
 					@usua_EsAdmin,
@@ -325,6 +330,7 @@ BEGIN
 												  usua_Nombre, 
 												  usua_Contrasenia, 
 												  empl_Id, 
+												  usua_esAduana,
 												  usua_Image, 
 												  role_Id, 
 												  usua_EsAdmin,
@@ -335,6 +341,7 @@ BEGIN
 					@usua_Nombre,
 					@password,
 					@empl_Id,
+					@usua_esAduana,
 					@usua_Image,
 					@role_Id,
 					@usua_EsAdmin,
