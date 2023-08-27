@@ -14,6 +14,7 @@ namespace SIMEXPRO.API.Models.ModelsAcceso
         public string pant_Icono { get; set; }
         public string pant_Esquema { get; set; }
         public string pant_Subcategoria { get; set; }
+        public string pant_Identificador { get; set; }
         public bool? pant_EsAduana { get; set; }
         public int? role_Id { get; set; }
         public string Asignada { get; set; }

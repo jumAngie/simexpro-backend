@@ -95,34 +95,36 @@ GO
 --		   ON usua.usua_UsuarioModificacion = usuaModifica.usua_Id LEFT JOIN acce.tbUsuarios usuaElimina
 --		   ON usua.usua_UsuarioEliminacion = usuaElimina.usua_Id
 		   
---GO
+GO
 
---/*Dibujar menu*/ ESTE ES EL PROCEDIMIENTO VIEJO 
---CREATE OR ALTER PROCEDURE Acce.UDP_RolesPorPantalla_DibujadoMenu 
---    @role_ID INT
---AS
---BEGIN
---    SELECT 
---        ropa_Id, 
---        pnt.pant_Id, 
---        pant_Nombre,
---        pant_URL,
---        pant_Icono,
---        pant_Esquema,
---		pant_Subcategoria,
---		pant_EsAduana,
---        CASE 
---            WHEN pnt.pant_Id = rxp.pant_Id THEN 'Asignada'
---            ELSE 'No asignada' 
---        END AS Asignada,
---        pnt.usua_UsuarioCreacion, 
---        ropa_FechaCreacion
---    FROM Acce.tbPantallas pnt
---    LEFT JOIN Acce.tbRolesXPantallas rxp 
---	ON pnt.pant_Id = rxp.pant_Id 
---	AND rxp.role_Id = @role_ID;
---END
---GO
+--/*Dibujar menu*/
+CREATE OR ALTER   PROCEDURE [Acce].[UDP_RolesPorPantalla_DibujadoMenu] 
+    @role_ID INT
+AS
+BEGIN
+    SELECT 
+        ropa_Id, 
+        pnt.pant_Id, 
+        pant_Nombre,
+        pant_URL,
+        pant_Icono,
+        pant_Esquema,
+		pant_Subcategoria,
+		pant_EsAduana,
+        CASE 
+            WHEN pnt.pant_Id = rxp.pant_Id THEN 'Asignada'
+            ELSE 'No asignada' 
+        END AS Asignada,
+        pnt.usua_UsuarioCreacion, 
+        ropa_FechaCreacion,
+		pant_Identificador
+    FROM Acce.tbPantallas pnt
+    LEFT JOIN Acce.tbRolesXPantallas rxp 
+	ON pnt.pant_Id = rxp.pant_Id 
+	AND rxp.role_Id = @role_ID;
+END
+
+GO
 
 --ESTE ES EL PROCEDIMIENTO QUE HIZO JAVIER SI ESTA MALO PATEENLO
 CREATE OR ALTER PROCEDURE [Acce].[UDP_RolesPorPantalla_DibujarMenu] 
@@ -136,8 +138,9 @@ BEGIN
 			pant.pant_Esquema, 
 			pant.pant_EsAduana, 
 			pant.pant_Subcategoria,
+			pant.pant_Identificador,
 			CASE
-    WHEN pant.pant_ID = 1 THEN (SELECT role_Descripcion FROM acce.tbRoles FOR JSON PATH)
+    WHEN pant.pant_Identificador = 'InicioGeneral' THEN (SELECT role_Descripcion FROM acce.tbRoles FOR JSON PATH)
     ELSE (select	innerrols.role_Descripcion 
 			from Acce.tbRolesXPantallas inerropa INNER JOIN Acce.tbPantallas innerpant  
 			ON inerropa.pant_Id = innerpant.pant_Id INNER JOIN Acce.tbRoles innerrols 
@@ -521,7 +524,8 @@ BEGIN
 		   usua_UsuarioModificacion,
 		   pant_FechaModificacion,
 		   usua_UsuarioEliminacion,
-		   pant_FechaEliminacion
+		   pant_FechaEliminacion,
+		   pant_Identificador
 	  FROM Acce.tbPantallas
 	 WHERE pant_Estado = 1
 	 AND (pant_EsAduana = @pant_EsAduana 
@@ -794,7 +798,7 @@ BEGIN
 				   AND usua_Contrasenia = @contrasenaEncriptada
 				   AND usua_Estado = 1)
 			BEGIN
-				SELECT usua_Id,
+			SELECT usua_Id,
 					   usua_Nombre,
 					   usua.empl_Id,
 					   CONCAT(empl.empl_Nombres, ' ', empl.empl_Apellidos) AS emplNombreCompleto,
@@ -803,11 +807,16 @@ BEGIN
 					   usua_Image,
 					   usua.role_Id,
 					   rol.role_Descripcion,
-					   usua_EsAdmin
-				FROM Acce.tbUsuarios usua
+					   usua_EsAdmin,
+			CASE
+				WHEN usua_EsAdmin = 1 
+					THEN (select TOP(1) pant_URL from acce.tbPantallas tpl WHERE tpl.pant_EsAduana = empl_EsAduana AND (tpl.pant_Identificador = 'InicioProduccion' OR tpl.pant_Identificador = 'InicioAduana'))
+				ELSE ISNULL((select TOP(1) pant_URL from acce.tbRolesXPantallas trp INNER JOIN acce.tbPantallas tpl ON tpl.pant_Id = trp.pant_Id WHERE trp.role_Id = usua.role_Id AND (tpl.pant_Identificador = 'InicioProduccion' OR tpl.pant_Identificador = 'InicioAduana')),'/inicio/Blank')
+			END as usua_URLInicial
+			FROM Acce.tbUsuarios usua
 				LEFT JOIN Acce.tbRoles rol				ON usua.role_Id = rol.role_Id
 				LEFT JOIN Gral.tbEmpleados empl			ON usua.empl_Id = empl.empl_Id
-				WHERE usua_Nombre = @usua_Nombre 
+			WHERE usua_Nombre = @usua_Nombre 
 				AND usua_Contrasenia = @contrasenaEncriptada
 			END
 		ELSE

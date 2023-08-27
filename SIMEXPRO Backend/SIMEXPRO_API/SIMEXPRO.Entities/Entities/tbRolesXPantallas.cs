@@ -26,6 +26,7 @@ namespace SIMEXPRO.Entities.Entities
         public int? role_Id { get; set; }
         [NotMapped]
         public string Asignada { get; set; }
+        public string pant_Identificador { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         public DateTime ropa_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }
