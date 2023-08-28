@@ -2606,6 +2606,7 @@ CREATE TABLE Prod.tbLotes(
 	lote_Estado 				BIT	DEFAULT 1, 
 
 	CONSTRAINT PK_Prod_tbLotes_lote_Id PRIMARY KEY (lote_Id),
+	CONSTRAINT UQ_Prod_tbLotes_lote_CodigoLote UNIQUE(lote_CodigoLote),
 	CONSTRAINT FK_Prod_tbLotes_mate_Id_Prod_tbMateriales_mate_Id	FOREIGN KEY (mate_Id) 					REFERENCES Prod.tbMateriales(mate_Id),
 	CONSTRAINT FK_Prod_tbLotes_unme_Id_Gral_tbUnidadMedidas_unme_Id	FOREIGN KEY (unme_Id) 					REFERENCES Gral.tbUnidadMedidas(unme_Id),
 	CONSTRAINT FK_Prod_tbLotes_Prod_tbPedidosOrdenDetalle_prod_Id	FOREIGN KEY (prod_Id) 					REFERENCES Prod.tbPedidosOrdenDetalle(prod_Id),
