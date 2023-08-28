@@ -14902,13 +14902,12 @@ GO
 
 --Producción
 /*Reducir stock de lotes*/
+GO
 CREATE OR ALTER TRIGGER [Prod].[TR_tbPedidosProduccionDetalles_InsertUpdate]
-ON [Prod].[tbPedidosProduccionDetalles] AFTER INSERT, DELETE
+ON [Prod].[tbPedidosProduccionDetalles] AFTER INSERT, DELETE 
 AS
 BEGIN
     DECLARE @lote_Id INT
-	DECLARE @ppde_CantidadAnterior DECIMAL(18,2) = (SELECT ppde_Cantidad FROM deleted)
-	DECLARE @ppde_Cantidad DECIMAL(18,2) = (SELECT ppde_Cantidad FROM inserted)
 
     -- Actualizar stock para filas insertadas
     UPDATE L
@@ -14916,10 +14915,10 @@ BEGIN
     FROM Prod.tbLotes L
     INNER JOIN inserted I ON L.lote_Id = I.lote_Id
 
+
     -- Actualizar stock para filas eliminadas
     UPDATE L
     SET lote_Stock = lote_Stock + D.ppde_Cantidad 
     FROM Prod.tbLotes L
     INNER JOIN deleted D ON L.lote_Id = D.lote_Id
-
 END;
