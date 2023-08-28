@@ -674,6 +674,17 @@ namespace SIMEXPRO.DataAccess
         public static string FiltrarProcesos = "Prod.UDP_tbProcesos_Filtrar_Modulos";
         #endregion
 
+        #region FacturasExportacion
+        public static string ListarFacturasExportacion = "Prod.UDP_tbFacturasExportacion_Listar";
+        public static string InsertarFacturasExportacion = "Prod.UDP_tbFacturasExportacion_Insertar";
+        public static string EditarFacturasExportacion = "Prod.UDP_tbFacturasExportacion_Editar";
+        #endregion
+
+        #region FacturasExportacionDetalles
+        public static string ListarFacturasExportacionDetalles = "Prod.UDP_tbFacturasExportacionDetalles_Listar";
+        public static string InsertarFacturasExportacionDetalles = "Prod.UDP_tbFacturasExportacionDetalles_Insertar";
+        public static string EditarFacturasExportacionDetalles = "Prod.UDP_tbFacturasExportacionDetalles_Editar";
+        #endregion
 
         #endregion
 

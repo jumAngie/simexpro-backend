@@ -356,7 +356,7 @@ AS
 		SELECT 
 				Modulo.modu_Nombre,
 				SUM(ReporteModulo.remo_TotalDia) AS TotalProduccionDia,
-				CONCAT(CONVERT( DECIMAL(18,2), (CONVERT(DECIMAL(18,2), SUM(ReporteModulo.remo_TotalDia) * 100)) / CONVERT(DECIMAL(18,2),(SELECT SUM(remo_TotalDia)FROM Prod.tbReporteModuloDia))), '%') AS PorcentajeProduccion
+				CONVERT( DECIMAL(18,2), (CONVERT(DECIMAL(18,2), SUM(ReporteModulo.remo_TotalDia) * 100)) / CONVERT(DECIMAL(18,2),(SELECT SUM(remo_TotalDia)FROM Prod.tbReporteModuloDia))) AS PorcentajeProduccion
 		FROM Prod.tbReporteModuloDia AS ReporteModulo
 		INNER JOIN Prod.tbModulos AS Modulo ON ReporteModulo.modu_Id = Modulo.modu_Id
 		GROUP BY Modulo.modu_Nombre

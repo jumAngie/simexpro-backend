@@ -115,6 +115,9 @@ namespace SIMEXPRO.API.Extentions
             CreateMap<tbPODetallePorPedidoOrdenDetalle, PODetallePorPedidoOrdenDetalleViewModel>().ReverseMap();
             CreateMap<tbProcesoPorOrdenCompraDetalle, ProcesoPorOrdenCompraDetalleViewModel>().ReverseMap();
 
+            CreateMap<tbFacturasExportacion, FacturasExportacionViewModel>().ReverseMap();
+            CreateMap<tbFacturasExportacionDetalles, FacturaExportacionDetallesViewModel>().ReverseMap();
+
             #endregion
 
             #region Acceso
