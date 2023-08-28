@@ -9,6 +9,7 @@ namespace SIMEXPRO.Entities.Entities
 {
     public partial class tbLotes
     {
+
         public tbLotes()
         {
             tbAsignacionesOrdenDetalle = new HashSet<tbAsignacionesOrdenDetalle>();
@@ -18,6 +19,7 @@ namespace SIMEXPRO.Entities.Entities
         public int lote_Id { get; set; }
         public string lote_CodigoLote { get; set; }
         public int mate_Id { get; set; }
+        public int colr_Id { get; set; }
         public int unme_Id { get; set; }
         public int? prod_Id { get; set; }
         public int lote_Stock { get; set; }
@@ -56,6 +58,7 @@ namespace SIMEXPRO.Entities.Entities
         public virtual tbPedidosOrdenDetalle prod { get; set; }
         public virtual tbMateriales mate { get; set; }
         public virtual tbArea tipa { get; set; }
+        public virtual tbColores colr { get; set; }
         public virtual tbUnidadMedidas unme { get; set; }
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioEliminacionNavigation { get; set; }
