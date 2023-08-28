@@ -19,6 +19,13 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public DateTime? faex_FechaModificacion { get; set; }
 
         [NotMapped]
+        public int faex_Estado { get; set; }
+
+        [NotMapped]
+        public int faex_Finalizado { get; set; }
+
+
+        [NotMapped]
         public string clie_Nombre_O_Razon_Social { get; set; }
 
         [NotMapped]
@@ -29,5 +36,10 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
 
         [NotMapped]
         public string Detalles { get; set; }
+
+        [NotMapped]
+        public string orco_Decripcion { get; set; }
+
+
     }
 }

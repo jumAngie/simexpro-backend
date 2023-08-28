@@ -675,12 +675,20 @@ namespace SIMEXPRO.DataAccess
         public static string ListarFacturasExportacion = "Prod.UDP_tbFacturasExportacion_Listar";
         public static string InsertarFacturasExportacion = "Prod.UDP_tbFacturasExportacion_Insertar";
         public static string EditarFacturasExportacion = "Prod.UDP_tbFacturasExportacion_Editar";
+        public static string EliminarFacturasExportacion = "Prod.UDP_tbFacturasExportacion_Eliminar";
+        public static string FinalizarFacturasExportacion = "Prod.UDP_tbFacturasExportacion_Finalizado";
+
+        public static string OrdenesCompraDDL = "Prod.UDP_OrdenesCompraDDL";
+        public static string DUCAsDDL = "Prod.UDP_DUCAsDDL";
         #endregion
 
         #region FacturasExportacionDetalles
         public static string ListarFacturasExportacionDetalles = "Prod.UDP_tbFacturasExportacionDetalles_Listar";
         public static string InsertarFacturasExportacionDetalles = "Prod.UDP_tbFacturasExportacionDetalles_Insertar";
         public static string EditarFacturasExportacionDetalles = "Prod.UDP_tbFacturasExportacionDetalles_Editar";
+        public static string EliminarFacturasExportacionDetalles = "Prod.UDP_tbFacturasExportacionDetalle_Eliminar";
+
+        public static string PODetallesDDL = "Prod.UDP_PODetallesByID";
         #endregion
 
         #endregion

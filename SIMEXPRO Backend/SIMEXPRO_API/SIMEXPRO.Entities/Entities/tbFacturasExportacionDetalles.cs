@@ -41,6 +41,8 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string code_EspecificacionEmbalaje { get; set;  }
 
+        [NotMapped]
+        public string code_Descripcion { get; set; }
 
 
         public virtual tbOrdenCompraDetalles code { get; set; }

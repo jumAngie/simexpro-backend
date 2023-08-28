@@ -26,6 +26,13 @@ namespace SIMEXPRO.Entities.Entities
         public DateTime? faex_FechaModificacion { get; set; }
 
         [NotMapped]
+        public int faex_Estado { get; set; }
+
+        [NotMapped]
+        public int faex_Finalizado { get; set; }
+
+
+        [NotMapped]
         public string clie_Nombre_O_Razon_Social { get; set; }
 
         [NotMapped]
@@ -36,6 +43,10 @@ namespace SIMEXPRO.Entities.Entities
 
         [NotMapped]
         public string Detalles { get; set; }
+
+        [NotMapped]
+        public string orco_Decripcion { get; set; }
+
 
         public virtual tbOrdenCompra orco { get; set; }
         public virtual tbDuca duca_No_DucaNavigation { get; set; }

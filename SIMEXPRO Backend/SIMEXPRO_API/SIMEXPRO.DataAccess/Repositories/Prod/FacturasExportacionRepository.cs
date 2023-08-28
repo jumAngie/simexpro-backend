@@ -14,7 +14,14 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
     {
         public RequestStatus Delete(tbFacturasExportacion item)
         {
-            throw new NotImplementedException();
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@faex_Id", item.faex_Id, DbType.Int32, ParameterDirection.Input);
+
+            var answer = db.QueryFirst<string>(ScriptsDataBase.EliminarFacturasExportacion, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
         }
 
         public tbFacturasExportacion Find(int? id)
@@ -62,6 +69,32 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
 
             var answer = db.QueryFirst<string>(ScriptsDataBase.EditarFacturasExportacion, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
+            return result;
+        }
+
+        public RequestStatus Finalizar(tbFacturasExportacion item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@faex_Id", item.faex_Id, DbType.Int32, ParameterDirection.Input);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.FinalizarFacturasExportacion, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
+        }
+
+
+        public IEnumerable<tbFacturasExportacion> OrdenesCompraDDL()
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var result = db.Query<tbFacturasExportacion>(ScriptsDataBase.OrdenesCompraDDL, null, commandType: CommandType.StoredProcedure);
+            return result;
+        }
+
+        public IEnumerable<tbFacturasExportacion> DUCAsDDL()
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var result = db.Query<tbFacturasExportacion>(ScriptsDataBase.DUCAsDDL, null, commandType: CommandType.StoredProcedure);
             return result;
         }
     }

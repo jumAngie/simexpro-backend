@@ -1,4 +1,8 @@
 
+SELECT * FROM Prod.tbFacturasExportacion
+GO
+
+-- FACTURA EXPORTACION 
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Listar
 AS
 	BEGIN
@@ -14,7 +18,8 @@ AS
 				FactExport.usua_UsuarioModificacion,
 				UserModifica.usua_Nombre AS usuarioModificacionNombre, 
 				FactExport.faex_FechaModificacion,
-		
+				FactExport.faex_Finalizado,
+				FactExport.faex_Estado,
 				(SELECT	FactExportDetails.fede_Id, 
 						FactExportDetails.faex_Id, 
 						FactExportDetails.code_Id, 
@@ -71,8 +76,6 @@ BEGIN
 END
 GO
 
-
-
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Editar
 @faex_Id					INT, 
 @duca_No_Duca				NVARCHAR(100), 
@@ -102,9 +105,47 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROC Prod.UDP_tbFacturasExportacion_Eliminar
+	@faex_Id  		INT
+AS
+BEGIN
+	BEGIN TRY
+		DECLARE @respuesta INT
+			EXEC dbo.UDP_ValidarReferencias 'faex_Id  ', @faex_Id  , 'Prod.tbFacturasExportacion', @respuesta OUTPUT
 
+			IF(@respuesta) = 1
+					BEGIN
+				UPDATE [Prod].[tbFacturasExportacion]
+				SET	   faex_Estado = 0
+				WHERE  faex_Id = @faex_Id  
 
+				END
+			SELECT @respuesta AS Resultado
+	END TRY	
+	BEGIN CATCH
+		SELECT 0
+	END CATCH
+END
+GO
 
+CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Finalizado
+	@faex_Id  	INT
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE [Prod].[tbFacturasExportacion]
+		SET	   faex_Finalizado = 1
+		WHERE  faex_Id  = @faex_Id  
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error:' + ERROR_MESSAGE()
+	END CATCH
+END
+GO
+
+-- FACTURA EXPORTACION DETALLES
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacionDetalles_Listar
 	@faex_Id INT
 AS
@@ -137,8 +178,6 @@ BEGIN
 END
 GO
 
-
-
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacionDetalles_Insertar 
 	@faex_Id				INT, 
 	@code_Id				INT, 
@@ -163,7 +202,6 @@ BEGIN
 	END CATCH
 END
 GO
-
 
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacionDetalles_Editar
 	@fede_Id						INT, 
@@ -197,3 +235,61 @@ BEGIN
 	END CATCH
 END
 GO
+
+CREATE OR ALTER PROC Prod.UDP_tbFacturasExportacionDetalle_Eliminar
+(@fede_Id  INT)
+AS
+BEGIN
+	BEGIN TRY
+
+		DELETE FROM [Prod].[tbFacturasExportacionDetalles]
+		WHERE fede_Id = @fede_Id 
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+			SELECT 'Error Message: ' + ERROR_MESSAGE()
+	END CATCH
+END
+GO
+
+CREATE OR ALTER PROCEDURE Prod.UDP_DUCAsDDL
+AS
+BEGIN
+	SELECT duca_No_Duca FROM Adua.tbDuca
+	WHERE duca_Estado = 1
+END
+GO
+
+CREATE OR ALTER PROCEDURE Prod.UDP_OrdenesCompraDDL
+AS
+BEGIN
+	SELECT PO.orco_Id, CONCAT('No. ', PO.orco_Id, ' - ', Clie.clie_Nombre_O_Razon_Social, ' - ', CONVERT(DATE, PO.orco_FechaEmision)) AS orco_Decripcion
+	FROM Prod.tbOrdenCompra AS PO
+	INNER JOIN Prod.tbClientes AS Clie ON PO.orco_IdCliente = Clie.clie_Id
+	WHERE PO.orco_Estado = 1
+END
+GO
+
+SELECT * FROM Prod.tbFacturasExportacion
+GO
+
+CREATE OR ALTER PROCEDURE Prod.UDP_PODetallesByID
+	@faex_Id INT
+AS
+BEGIN 
+	DECLARE @orco_Id INT = (SELECT orco_Id FROM Prod.tbFacturasExportacion WHERE faex_Id = 49)
+
+	SELECT code.code_Id ,CONCAT('#: ', code.code_CodigoDetalle, ' - ',esti.esti_Descripcion,' - ',tall.tall_Codigo,' - ',code.code_Sexo,' - ',colr.colr_Nombre) AS code_Descripcion 
+	FROM Prod.tbOrdenCompraDetalles code
+	INNER JOIN Prod.tbEstilos AS esti ON code.esti_Id = esti.esti_Id
+	INNER JOIN Prod.tbTallas AS tall ON code.tall_Id = tall.tall_Id
+	INNER JOIN Prod.tbColores AS colr ON code.colr_Id = colr.colr_Id
+
+	WHERE orco_Id = @orco_Id
+END
+GO
+
+SELECT * FROM Prod.tbColores
+SELECT * FROM Prod.tbTallas
+SELECT * FROM Prod.tbOrdenCompraDetalles

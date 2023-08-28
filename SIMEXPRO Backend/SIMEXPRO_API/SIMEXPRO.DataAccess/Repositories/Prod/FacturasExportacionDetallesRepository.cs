@@ -14,7 +14,14 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
     {
         public RequestStatus Delete(tbFacturasExportacionDetalles item)
         {
-            throw new NotImplementedException();
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@fede_Id", item.fede_Id, DbType.Int32, ParameterDirection.Input);
+
+            var answer = db.QueryFirst<string>(ScriptsDataBase.EliminarFacturasExportacionDetalles, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
         }
 
         public tbFacturasExportacionDetalles Find(int? id)
@@ -72,6 +79,16 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             parametros.Add("@fede_FechaModificacion", item.fede_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.EditarFacturasExportacionDetalles, parametros, commandType: System.Data.CommandType.StoredProcedure);
             result.MessageStatus = answer;
+            return result;
+        }
+
+        public IEnumerable<tbFacturasExportacionDetalles> POdetalles(int id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@faex_Id", id, DbType.Int32, ParameterDirection.Input);
+
+            var result = db.Query<tbFacturasExportacionDetalles>(ScriptsDataBase.PODetallesDDL, parametros, commandType: System.Data.CommandType.StoredProcedure);
             return result;
         }
     }
