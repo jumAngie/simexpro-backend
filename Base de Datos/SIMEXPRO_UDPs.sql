@@ -10170,6 +10170,7 @@ BEGIN
 			,usuarioModificacion.usua_Nombre AS usuarioModificacionNombre
 			,ordenCompraDetalle.code_FechaModificacion
 			,ordenCompraDetalle.code_Estado
+			,ordenCompraDetalle.code_CodigoDetalle
 	  FROM	Prod.tbOrdenCompraDetalles			    ordenCompraDetalle
 			INNER JOIN	Prod.tbEstilos				estilo						ON	ordenCompraDetalle.esti_Id						= estilo.esti_Id
 			INNER JOIN	Prod.tbTallas				talla						ON	ordenCompraDetalle.tall_Id						= talla.tall_Id
@@ -10183,13 +10184,14 @@ END
 GO
 
 
-CREATE OR ALTER PROCEDURE Prod.UDP_tbOrdenCompraDetalles_Find 
+CREATE OR ALTER PROCEDURE Prod.UDP_tbOrdenCompraDetalles_Find
 	@code_Id		INT
 AS
 BEGIN
 	SELECT	 ordenCompraDetalle.code_Id
 			,ordenCompraDetalle.orco_Id
 			,ordenCompraDetalle.esti_Id
+			,ordenCompraDetalle.code_CodigoDetalle
 			,estilo.esti_Descripcion
 			,ordenCompraDetalle.tall_Id
 			,CONCAT(talla.tall_Codigo, ' (', talla.tall_Nombre, ')') AS tall_Nombre
@@ -10224,7 +10226,8 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbOrdenCompraDetalles_Insertar
 	--@code_Descuento					DECIMAL(18,2),
 	@code_EspecificacionEmbalaje	NVARCHAR(200),
 	@usua_UsuarioCreacion       	INT,
-	@code_FechaCreacion         	DATETIME
+	@code_FechaCreacion         	DATETIME,
+	@code_CodigoDetalle				NVARCHAR(100)
 )
 AS
 BEGIN
@@ -10246,7 +10249,8 @@ BEGIN
 					--code_Descuento,					
 					code_EspecificacionEmbalaje,	
 					usua_UsuarioCreacion,       	
-					code_FechaCreacion)
+					code_FechaCreacion,
+					code_CodigoDetalle)
 			 VALUES (@orco_Id,						
 					@code_CantidadPrenda,			
 					@esti_Id,						
@@ -10263,7 +10267,8 @@ BEGIN
 					--@code_Descuento,					
 					@code_EspecificacionEmbalaje,	
 					@usua_UsuarioCreacion,       	
-					@code_FechaCreacion)
+					@code_FechaCreacion,
+					@code_CodigoDetalle)
 		
 		SELECT SCOPE_IDENTITY() AS Resultado
 	END TRY
