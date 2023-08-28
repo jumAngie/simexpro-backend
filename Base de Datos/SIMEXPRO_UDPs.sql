@@ -14132,30 +14132,39 @@ END
 
 GO
 
-CREATE OR ALTER PROC Prod.UDP_tbPedidosProduccionDetalle_Listar 
-	@ppro_Id INT
-AS 
+CREATE OR ALTER   PROCEDURE [Prod].[UDP_tbPedidosProduccionDetalle_Filtrar_Estado] --208
+(
+@ppro_Id INT
+)
+AS
 BEGIN
-	SELECT	ppde_Id,
-			ppro_Id,
-			tbdetalles.lote_Id,
+	BEGIN TRY
+		SELECT	PPD.ppde_Id, 
+		PPD.ppro_Id, 
+		PPD.ppde_Cantidad,
+		pp.[ppro_Estados],
+		PPD.lote_Id, 
+		lot.[lote_Stock],
+		lot.lote_CodigoLote,
+		mat.mate_Id,
+		mat.mate_Descripcion
 
-			ppde_Cantidad,
-			mate_Descripcion,
-			tblotes.lote_Stock,
-			tblotes.mate_Id,
-			mate_Descripcion,
-			tblotes.tipa_Id,
-			tbarea.tipa_area
-				  
-	FROM Prod.tbPedidosProduccionDetalles tbdetalles
-			INNER JOIN Prod.tbLotes tblotes			ON tbdetalles.lote_Id = tblotes.lote_Id
-			INNER JOIN Prod.tbMateriales tbmats		ON tblotes.mate_Id = tbmats.mate_Id
-			INNER JOIN Prod.tbArea	tbarea			ON tblotes.tipa_Id = tbarea.tipa_Id
-	WHERE tbdetalles.ppro_Id = @ppro_Id
+		FROM Prod.tbPedidosProduccionDetalles PPD
+			INNER JOIN Prod.tbPedidosProduccion pp 
+			ON ppd.ppro_Id = pp.ppro_Id
+			INNER JOIN Prod.tbLotes lot 
+			ON PPD.lote_Id = lot.lote_Id
+			INNER JOIN Prod.tbMateriales mat 
+			ON lot.mate_Id = mat.mate_Id
+			WHERE ppd.ppro_Id = @ppro_Id
+
+	END TRY
+	BEGIN CATCH
+			SELECT 'Error Message: ' + ERROR_MESSAGE()
+	END CATCH
 END
-GO
 
+GO
 
 CREATE OR ALTER PROC Prod.UDP_tbPedidosProduccionDetalle_Insertar 
 (@ppro_Id INT,
