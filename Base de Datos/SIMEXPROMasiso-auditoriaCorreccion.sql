@@ -34,11 +34,11 @@ CREATE TABLE Acce.tbUsuarios(
 		usua_Contrasenia			NVARCHAR(MAX) 	NOT NULL,
 		--usua_Correo					NVARCHAR(200) 	NOT NULL,
 		empl_Id						INT 			NOT NULL,
+		usua_esAduana				BIT NOT NULL,
 		usua_Image					NVARCHAR(500) 	NULL,
 		role_Id						INT				NOT NULL,
 		usua_EsAdmin				BIT 			NOT NULL,
 		pant_subCategoria			NVARCHAR(150),
-
 		usua_UsuarioCreacion 		INT				NOT NULL,
 		usua_FechaCreacion 			DATETIME 		NOT NULL,
 		usua_UsuarioModificacion	INT				DEFAULT NULL,
@@ -49,9 +49,8 @@ CREATE TABLE Acce.tbUsuarios(
 		usua_FechaActivacion		DATETIME		NULL,
 		usua_Estado					BIT				DEFAULT 1,
 	CONSTRAINT PK_Acce_tbUsuarios_usua_Id 				 PRIMARY KEY (usua_Id),
-	CONSTRAINT UQ_acce_tbUsuarios_usua_Nombre			 UNIQUE(usua_Nombre),
+	CONSTRAINT UQ_acce_tbUsuarios_usua_Nombre_esAduana UNIQUE(usua_Nombre, usua_esAduana),
 	CONSTRAINT FK_Acce_tbUsuarios_usua_UsuarioActivacion FOREIGN KEY(usua_UsuarioActivacion) REFERENCES Acce.tbUsuarios(usua_Id),
-
 );
 GO
 
@@ -62,6 +61,7 @@ CREATE TABLE Acce.tbUsuariosHistorial(
 		usua_Contrasenia			NVARCHAR(MAX),
 		--usua_Correo					NVARCHAR(200),
 		empl_Id						INT,
+		usua_esAduana				BIT,
 		usua_Image					NVARCHAR(500),
 		role_Id						INT,
 		usua_EsAdmin				BIT 			NOT NULL,
@@ -71,6 +71,7 @@ CREATE TABLE Acce.tbUsuariosHistorial(
 		hist_Accion					NVARCHAR(100)
 );
 GO
+
 
 INSERT INTO Acce.tbUsuarios(usua_Nombre, usua_Contrasenia, empl_Id, usua_Image, role_Id, usua_EsAdmin, pant_subCategoria, usua_UsuarioCreacion, usua_FechaCreacion)
 VALUES						('prueba',		'123',				1, '.jpg',		1,			1,			1,					1,					GETDATE())
@@ -1415,6 +1416,7 @@ CREATE TABLE Prod.tbMateriales(
 	mate_Id   					INT IDENTITY(1,1),
 	mate_Descripcion			NVARCHAR(200),
 	subc_Id  					INT,
+	colr_Id                     INT,
 	--mate_Precio					DECIMAL (18,2),
 	mate_Imagen					NVARCHAR(MAX) NOT NULL,
 	usua_UsuarioCreacion		INT					NOT NULL,
@@ -1426,6 +1428,7 @@ CREATE TABLE Prod.tbMateriales(
 	mate_Estado 				BIT					NOT NULL DEFAULT 1, 
 
 	CONSTRAINT PK_Prod_tbMateriales_mate_Id PRIMARY KEY (mate_Id),
+	CONSTRAINT FK_Prod_tbMateriales_colr_Id_Prod_tbColores_colr_Id                                  FOREIGN KEY (colr_Id)                   REFERENCES Prod.tbColores(colr_Id),
 	CONSTRAINT FK_Prod_tbMateriales_subc_Id_Prod_tbSubcategoria_subc_Id								FOREIGN KEY (subc_Id) 					REFERENCES Prod.tbSubcategoria(subc_Id),
 	CONSTRAINT FK_Prod_tbMateriales_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id					FOREIGN KEY (usua_UsuarioCreacion)		REFERENCES Acce.tbUsuarios (usua_Id),
 	CONSTRAINT FK_Prod_tbMateriales_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id				FOREIGN KEY (usua_UsuarioModificacion)	REFERENCES Acce.tbUsuarios (usua_Id),
@@ -1836,7 +1839,7 @@ CREATE TABLE Prod.tbOrdenCompra(
 	orco_IdEmbalaje 			INT NOT NULL,
 	orco_EstadoOrdenCompra		CHAR(1) NOT NULL,
 	orco_DireccionEntrega		NVARCHAR(250)NOT NULL,
-	
+	orco_EstadoFinalizado       BIT DEFAULT 0 NOT NULL,
 	usua_UsuarioCreacion       	INT NOT NULL,
 	orco_FechaCreacion         	DATETIME NOT NULL,
 	usua_UsuarioModificacion   	INT DEFAULT NULL,
@@ -1888,14 +1891,11 @@ CREATE TABLE Prod.tbOrdenCompraDetalles(
 	tall_Id						INT NOT NULL,
 	code_Sexo					CHAR(1) NOT NULL,
 	colr_Id						INT NOT NULL,
-	--code_Documento				NVARCHAR(MAX),
-	--code_Medidas				NVARCHAR(MAX) NOT NULL,
 	proc_IdComienza				INT NOT NULL,
 	proc_IdActual				INT NOT NULL,
 	code_Unidad					DECIMAL(18,2) NOT NULL,
 	code_Valor					DECIMAL(18,2) NOT NULL,
 	code_Impuesto				DECIMAL(18,2) NOT NULL,
-	--code_Descuento				DECIMAL(18,2) NOT NULL,
 	code_EspecificacionEmbalaje	NVARCHAR(200) NOT NULL,
 	
 	usua_UsuarioCreacion       	INT NOT NULL,
@@ -1943,6 +1943,7 @@ GO
 CREATE TABLE Prod.tbDocumentosOrdenCompraDetalles(
 	dopo_Id						INT IDENTITY(1,1),
 	code_Id						INT				 NOT NULL,
+	dopo_NombreArchivo          NVARCHAR(MAX)    NOT NULL,
 	dopo_Archivo				NVARCHAR(MAX)	 NOT NULL,
 	dopo_TipoArchivo			NVARCHAR(40)	 NOT NULL,
 												 
@@ -2515,9 +2516,9 @@ CREATE TABLE Prod.tbPedidosOrden(--No se podrá eliminar de ninguna manera
 	peor_DireccionExacta		NVARCHAR(500), 
 	peor_FechaEntrada			DATETIME,
 	peor_Obsevaciones			NVARCHAR(400),
+	peor_finalizacion			BIT NOT NULL default(0),
 	peor_DadoCliente			BIT,
 	peor_Est					BIT,
-
 	usua_UsuarioCreacion		INT NOT NULL,
 	peor_FechaCreacion			DATETIME NOT NULL,
 	usua_UsuarioModificacion 	INT DEFAULT NULL,
@@ -2534,7 +2535,7 @@ CREATE TABLE Prod.tbPedidosOrden(--No se podrá eliminar de ninguna manera
 	CONSTRAINT FK_Prod_tbPedidosOrden_tbDuca_peor_No_Duca							FOREIGN KEY(peor_No_Duca)				REFERENCES Adua.tbDuca(duca_No_Duca),
 	--CONSTRAINT FK_Prod_tbPedidosOrden__Acce_tbUsuarios_usua_UsuarioEliminacion_usua_Id  FOREIGN KEY (usua_UsuarioEliminacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id)
 );
-GO
+	GO
 
 
 CREATE TABLE Prod.tbPedidosOrdenDetalle(--No se podrá eliminar de ninguna manera
@@ -2587,6 +2588,7 @@ GO
 
 CREATE TABLE Prod.tbLotes(
 	lote_Id   					INT IDENTITY(1,1),
+	lote_CodigoLote             NVARCHAR(150) NOT NULL,
 	mate_Id						INT NOT NULL,
 	unme_Id						INT NOT NULL,
 	prod_Id						INT,

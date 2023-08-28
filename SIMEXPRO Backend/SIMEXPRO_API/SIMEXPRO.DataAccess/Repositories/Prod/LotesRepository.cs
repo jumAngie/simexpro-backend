@@ -73,12 +73,12 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             result.MessageStatus = answer;
             return result;
         }
-        public IEnumerable<tbLotes> LotesMateriales(int lote_Id)
+        public IEnumerable<tbLotes> LotesMateriales(string lote_CodigoLote)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             RequestStatus result = new();
             var parametros = new DynamicParameters();
-            parametros.Add("@lote_Id", lote_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@lote_CodigoLote", lote_CodigoLote, DbType.String, ParameterDirection.Input);
             return  db.Query<tbLotes>(ScriptsDataBase.LotesMateriales, parametros, commandType: CommandType.StoredProcedure);
         }
     }

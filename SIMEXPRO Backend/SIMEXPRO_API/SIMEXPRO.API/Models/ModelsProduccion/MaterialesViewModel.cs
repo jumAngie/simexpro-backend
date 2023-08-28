@@ -14,7 +14,9 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public string subc_Descripcion { get; set; }
         public int cate_Id { get; set; }
         public string cate_Descripcion { get; set; }
-     //   public decimal? mate_Precio { get; set; }
+        public int colr_Id { get; set; }
+        public string colr_Nombre { get; set; }
+        //   public decimal? mate_Precio { get; set; }
         public string mate_Imagen { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         public string usuarioCreacionNombre { get; set; }

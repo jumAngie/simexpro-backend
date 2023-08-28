@@ -35,7 +35,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             var parametros = new DynamicParameters();
             parametros.Add("@mate_Descripcion", item.mate_Descripcion, DbType.String, ParameterDirection.Input);
             parametros.Add("@subc_Id", item.subc_Id, DbType.Int32, ParameterDirection.Input);
-           // parametros.Add("@mate_Precio", item.mate_Precio, DbType.Decimal, ParameterDirection.Input);
+            parametros.Add("@colr_Id", item.colr_Id, DbType.Int32, ParameterDirection.Input);
+            // parametros.Add("@mate_Precio", item.mate_Precio, DbType.Decimal, ParameterDirection.Input);
             parametros.Add("@mate_Imagen", item.mate_Imagen, DbType.String, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@mate_FechaCreacion", item.mate_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
@@ -59,7 +60,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             parametros.Add("@mate_Id", item.mate_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@mate_Descripcion", item.mate_Descripcion, DbType.String, ParameterDirection.Input);
             parametros.Add("@subc_Id", item.subc_Id, DbType.Int32, ParameterDirection.Input);
-          //  parametros.Add("@mate_Precio", item.mate_Precio, DbType.Decimal, ParameterDirection.Input);
+            parametros.Add("@colr_Id", item.colr_Id, DbType.Int32, ParameterDirection.Input);
+            //  parametros.Add("@mate_Precio", item.mate_Precio, DbType.Decimal, ParameterDirection.Input);
             parametros.Add("@mate_Imagen", item.mate_Imagen, DbType.String, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@mate_FechaModificacion", item.mate_FechaModificacion, DbType.DateTime, ParameterDirection.Input);

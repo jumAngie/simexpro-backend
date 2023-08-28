@@ -9,6 +9,7 @@ namespace SIMEXPRO.Entities.Entities
 {
     public partial class tbPantallas
     {
+
         public tbPantallas()
         {
             tbRolesXPantallas = new HashSet<tbRolesXPantallas>();
@@ -19,7 +20,8 @@ namespace SIMEXPRO.Entities.Entities
         public string pant_URL { get; set; }
         public string pant_Icono { get; set; }
         public string pant_Esquema { get; set; }
-        public string pant_Subcategoria { get; set; }
+        public string pant_Identificador { get; set; }
+        public string pant_subCategoria { get; set; }
         [NotMapped]
         public string Detalles { get; set; }
         public bool? pant_EsAduana { get; set; }

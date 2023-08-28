@@ -41,6 +41,8 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
         private readonly DocumentosOrdenCompraDetallesRepository _documentosOrdenCompraDetallesRepository;
         private readonly GraficasRepository _graficasRepository;
         private readonly ProcesoPorOrdenCompraDetalleRepository _procesoPorOrdenCompraDetalleRepository;
+        private readonly FacturasExportacionRepository _facturasExportacionRepository;
+        private readonly FacturasExportacionDetallesRepository _facturasExportacionDetallesRepository;
 
         public ProduccionServices(AreasRepository areasRepository,
                                     AsignacionesOrdenDetalleRepository asignacionesOrdenDetalleRepository,
@@ -75,7 +77,9 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
                                     TipoEmbalajeRepository tipoEmbalajeRepository,
                                     DocumentosOrdenCompraDetallesRepository documentosOrdenCompraDetallesRepository,
                                     GraficasRepository graficasRepository,
-                                   ProcesoPorOrdenCompraDetalleRepository procesoPorOrdenCompraDetalleRepository
+                                    ProcesoPorOrdenCompraDetalleRepository procesoPorOrdenCompraDetalleRepository,
+                                    FacturasExportacionRepository facturasExportacionRepository,
+                                    FacturasExportacionDetallesRepository facturasExportacionDetallesRepository
 
             )
         {
@@ -115,7 +119,8 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             _documentosOrdenCompraDetallesRepository = documentosOrdenCompraDetallesRepository;
             _graficasRepository = graficasRepository;
             _procesoPorOrdenCompraDetalleRepository = procesoPorOrdenCompraDetalleRepository;
-
+            _facturasExportacionRepository = facturasExportacionRepository;
+            _facturasExportacionDetallesRepository = facturasExportacionDetallesRepository;
         }
 
 
@@ -924,12 +929,12 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
-        public ServiceResult LotesMateriales(int lote_Id)
+        public ServiceResult LotesMateriales(string lote_CodigoLote)
         {
             var result = new ServiceResult();
             try
             {
-                var list = _lotesRepository.LotesMateriales(lote_Id);
+                var list = _lotesRepository.LotesMateriales(lote_CodigoLote);
                 return result.Ok(list);
             }
             catch (Exception ex)
@@ -1888,8 +1893,8 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             {
                 if (item.orco_Id != 0)
                 {
-                    var map = _ordenCompraRepository.Delete(item);
-                    if (map.MessageStatus == "1" || map.MessageStatus == "2")
+                    var map = _ordenCompraRepository.EliminarOrdenCompra(item);
+                    if (map.MessageStatus == "1")
                     {
                         return result.Ok(map);
                     }
@@ -1922,6 +1927,21 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             catch (Exception ex)
             {
                 return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult FinalizarOrden(tbOrdenCompra item)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _ordenCompraRepository.FinalizarOrdenCompra(item);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
             }
         }
 
@@ -2222,6 +2242,21 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             catch (Exception ex)
             {
                 return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult FinalizapedidoOrden(tbPedidosOrden item)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _pedidosOrdenRepository.FinalizarpedidoOrden(item);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
             }
         }
         #endregion
@@ -3211,6 +3246,130 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
                 return result.Error(ex.Message);
             }
         }
+        #endregion
+
+        #region Facturas Exportacion
+        public ServiceResult ListarFacturasExportacion()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _facturasExportacionRepository.List();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarFacturasExportacion(tbFacturasExportacion item)
+        {
+            var result = new ServiceResult();
+            bool esInt;
+            try
+            {
+                var map = _facturasExportacionRepository.Insert(item);
+                esInt = int.TryParse(map.MessageStatus, out _);
+                if (esInt)
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult ActualizarFacturasExportacion(tbFacturasExportacion item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _facturasExportacionRepository.Update(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region Facturas Exportacion Detalles
+        public ServiceResult ListarFacturasExportacionDetalles(int faex_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _facturasExportacionDetallesRepository.ListByID(faex_Id);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarFacturasExportacionDetalles(tbFacturasExportacionDetalles item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _facturasExportacionDetallesRepository.Insert(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult ActualizarFacturasExportacionDetalles(tbFacturasExportacionDetalles item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _facturasExportacionDetallesRepository.Update(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+
         #endregion
 
         #region Graficas

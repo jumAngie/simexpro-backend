@@ -57,5 +57,13 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             var respuesta = _produccionServices.EliminarPedidosOrden(item);
             return Ok(respuesta);
         }
+
+        [HttpPost("FinalizarPedidoOrden")]
+        public IActionResult FinalizarPedidoOrden(PedidosOrdenViewModel pedidosOrdenViewModel)
+        {
+            var mapped = _mapper.Map<tbPedidosOrden>(pedidosOrdenViewModel);
+            var datos = _produccionServices.FinalizapedidoOrden(mapped);
+            return Ok(datos);
+        }
     }
 }

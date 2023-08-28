@@ -36,5 +36,7 @@ namespace SIMEXPRO.Entities.Entities
         public virtual tbUsuarios usua_UsuarioEliminacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }
         public virtual ICollection<tbOrdenCompraDetalles> tbOrdenCompraDetalles { get; set; }
+        public virtual ICollection<tbMateriales> tbMateriales { get; set; }
+
     }
 }

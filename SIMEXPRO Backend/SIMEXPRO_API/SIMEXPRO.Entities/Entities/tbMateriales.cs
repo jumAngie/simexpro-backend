@@ -27,6 +27,11 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string cate_Descripcion { get; set; }
 
+        [NotMapped]
+        public int colr_Id { get; set; }
+
+        [NotMapped]
+        public string colr_Nombre { get; set; }
         //public decimal? mate_Precio { get; set; }
         public string mate_Imagen { get; set; }
         public int usua_UsuarioCreacion { get; set; }
@@ -40,6 +45,7 @@ namespace SIMEXPRO.Entities.Entities
         public bool? mate_Estado { get; set; }
 
         public virtual tbSubcategoria subc { get; set; }
+        public virtual tbColores colr { get; set; }
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }
         public virtual ICollection<tbLotes> tbLotes { get; set; }

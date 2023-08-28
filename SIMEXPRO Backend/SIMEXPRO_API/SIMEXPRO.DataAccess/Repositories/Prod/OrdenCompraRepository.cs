@@ -12,7 +12,13 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
 {
     public class OrdenCompraRepository : IRepository<tbOrdenCompra>
     {
+
         public RequestStatus Delete(tbOrdenCompra item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public RequestStatus EliminarOrdenCompra(tbOrdenCompra item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             RequestStatus result = new RequestStatus();
@@ -86,6 +92,18 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             parametros.Add("@orco_Id", orco_Id, DbType.Int32, ParameterDirection.Input);
            
             return db.Query<tbOrdenCompra>(ScriptsDataBase.ObtenerOrdenCompraPorIdParaLineaTiempo, parametros, commandType: CommandType.StoredProcedure);
+        }
+
+
+        public RequestStatus FinalizarOrdenCompra(tbOrdenCompra item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@orco_Id", item.orco_Id, DbType.Int32, ParameterDirection.Input);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.FinalizarOrdenCompra, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
         }
     }
 }

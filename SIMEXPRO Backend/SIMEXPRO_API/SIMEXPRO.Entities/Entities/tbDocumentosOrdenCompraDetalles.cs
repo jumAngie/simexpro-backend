@@ -11,6 +11,7 @@ namespace SIMEXPRO.Entities.Entities
     {
         public int dopo_Id { get; set; }
         public int code_Id { get; set; }
+        public string dope_NombreArchivo { get; set; }
         public string dopo_Archivo { get; set; }
         public string dopo_TipoArchivo { get; set; }
         public int usua_UsuarioCreacion { get; set; }

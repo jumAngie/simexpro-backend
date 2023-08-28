@@ -12,6 +12,7 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public int ppro_Id { get; set; }
         public int lote_Id { get; set; }
         public string lote_Stock { get; set; }
+        public string lote_CodigoLote { get; set; }
         public int ppde_Cantidad { get; set; }
         public int mate_Id { get; set; }
         public string mate_Descripcion { get; set; }

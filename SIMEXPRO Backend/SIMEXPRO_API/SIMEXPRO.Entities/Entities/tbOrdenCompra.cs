@@ -25,6 +25,9 @@ namespace SIMEXPRO.Entities.Entities
         public int orco_IdEmbalaje { get; set; }
         public string orco_EstadoOrdenCompra { get; set; }
         public string orco_DireccionEntrega { get; set; }
+        public bool orco_EstadoFinalizado { get; set; }
+        [NotMapped]
+        public string fopa_Descripcion { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         public DateTime orco_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }
@@ -47,14 +50,8 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string clie_FAX { get; set; }
 
-
-        [NotMapped]
-        public string fopa_Descripcion { get; set; }
-
-
         [NotMapped]
         public string tiem_Descripcion { get; set; }
-
 
         [NotMapped]
         public string usuarioCreacionNombre { get; set; }

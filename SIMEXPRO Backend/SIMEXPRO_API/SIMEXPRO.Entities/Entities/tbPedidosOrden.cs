@@ -28,6 +28,8 @@ namespace SIMEXPRO.Entities.Entities
         public int? usua_UsuarioModificacion { get; set; }
         public DateTime? peor_FechaModificacion { get; set; }
         public bool? peor_Estado { get; set; }
+        [NotMapped]
+        public bool peor_finalizacion { get; set; }
 
         [NotMapped]
         public string prov_NombreCompania { get; set; }

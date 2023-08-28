@@ -71,5 +71,16 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             result.MessageStatus = answer;
             return result;
         }
+
+        public RequestStatus FinalizarpedidoOrden(tbPedidosOrden item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@peor_Id", item.peor_Id, DbType.Int32, ParameterDirection.Input);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.FinalizarPedidosOrden, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
+        }
     }
 }

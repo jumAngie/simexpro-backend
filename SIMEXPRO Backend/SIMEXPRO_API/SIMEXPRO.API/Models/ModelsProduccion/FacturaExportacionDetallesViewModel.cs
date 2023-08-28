@@ -1,13 +1,12 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
 
-#nullable disable
-
-namespace SIMEXPRO.Entities.Entities
+namespace SIMEXPRO.API.Models.ModelsProduccion
 {
-    public partial class tbFacturasExportacionDetalles
+    public class FacturaExportacionDetallesViewModel
     {
         public int fede_Id { get; set; }
         public int faex_Id { get; set; }
@@ -39,13 +38,6 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public decimal code_Impuesto { get; set; }
         [NotMapped]
-        public string code_EspecificacionEmbalaje { get; set;  }
-
-
-
-        public virtual tbOrdenCompraDetalles code { get; set; }
-        public virtual tbFacturasExportacion faex { get; set; }
-        public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
-        public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }
+        public string code_EspecificacionEmbalaje { get; set; }
     }
 }
