@@ -244,7 +244,7 @@ OR    @empl_EsAduana IS NULL
 END
 GO
 
-CREATE OR ALTER   PROCEDURE Gral.UDP_tbEmpleados_ListarNoTieneUsuario 
+CREATE OR ALTER   PROCEDURE Gral.UDP_tbEmpleados_ListarNoTieneUsuario
 	@empl_EsAduana		BIT
 AS
 BEGIN
@@ -258,8 +258,7 @@ SELECT		empl.empl_Id								,
 FROM		Gral.tbEmpleados	empl 
 FULL JOIN	Acce.tbUsuarios		usua
 ON			empl.empl_Id = usua.empl_Id
-WHERE (empl_EsAduana = @empl_EsAduana
-OR	  @empl_EsAduana IS NULL)
+WHERE (empl_EsAduana = @empl_EsAduana)
 AND   (usua.usua_Id IS NULL AND empl.empl_Estado = 1)
 END
 
@@ -2280,7 +2279,7 @@ GO
 
 --************EMPLEADOS******************--
 /*Listar EMPLEADOS*/
-CREATE OR ALTER PROCEDURE Gral.UDP_tbEmpleados_Listar 
+CREATE OR ALTER PROCEDURE Gral.UDP_tbEmpleados_Listar
 	@empl_EsAduana		BIT
 AS
 BEGIN
