@@ -36,8 +36,10 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             RequestStatus result = new();
             var parametros = new DynamicParameters();
             parametros.Add("@mate_Id", item.mate_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@unme_Id", item.unme_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@lote_CodigoLote", item.lote_CodigoLote, DbType.String, ParameterDirection.Input);
+            parametros.Add("@lote_Stock", item.lote_Stock, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@colr_Id", item.colr_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@unme_Id", item.unme_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@prod_Id", item.prod_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@lote_CantIngresada", item.lote_CantIngresada, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@tipa_Id", item.tipa_Id, DbType.Int32, ParameterDirection.Input);
@@ -63,10 +65,11 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             var parametros = new DynamicParameters();
             parametros.Add("@lote_Id", item.lote_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@lote_CodigoLote", item.lote_CodigoLote, DbType.String, ParameterDirection.Input);
+            parametros.Add("@lote_Stock", item.lote_Stock, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@colr_Id", item.colr_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@mate_Id", item.mate_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@unme_Id", item.unme_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@prod_Id", item.prod_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@lote_CantIngresada", item.lote_CantIngresada, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@tipa_Id", item.tipa_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@lote_Observcaciones", item.lote_Observaciones, DbType.String, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);

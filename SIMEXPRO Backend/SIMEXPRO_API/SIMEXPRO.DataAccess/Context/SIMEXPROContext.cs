@@ -2343,11 +2343,15 @@ namespace SIMEXPRO.DataAccess.Context
                     .IsRequired()
                     .HasMaxLength(100);
 
+                entity.Property(e => e.faex_Estado).HasDefaultValueSql("((1))");
+
                 entity.Property(e => e.faex_Fecha).HasColumnType("datetime");
 
                 entity.Property(e => e.faex_FechaCreacion).HasColumnType("datetime");
 
                 entity.Property(e => e.faex_FechaModificacion).HasColumnType("datetime");
+
+                entity.Property(e => e.faex_Finalizado).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.faex_Total).HasColumnType("decimal(18, 0)");
 
@@ -3049,6 +3053,9 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.ToTable("tbLotes", "Prod");
 
+                entity.HasIndex(e => e.lote_CodigoLote, "UQ_Prod_tbLotes_lote_CodigoLote")
+                    .IsUnique();
+
                 entity.Property(e => e.lote_CantIngresada).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.lote_CodigoLote).HasMaxLength(150);
@@ -3064,6 +3071,11 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.Property(e => e.lote_Observaciones).HasMaxLength(500);
 
                 entity.Property(e => e.lote_Stock).HasColumnType("decimal(18, 2)");
+
+                entity.HasOne(d => d.colr)
+                    .WithMany(p => p.tbLotes)
+                    .HasForeignKey(d => d.colr_Id)
+                    .HasConstraintName("FK_Prod_tbLotes_colr_Id_Prod_tbColores_colr_Id");
 
                 entity.HasOne(d => d.mate)
                     .WithMany(p => p.tbLotes)
@@ -3824,6 +3836,11 @@ namespace SIMEXPRO.DataAccess.Context
                     .HasName("PK_Prod_tbOrdenCompraDetalles_code_Id");
 
                 entity.ToTable("tbOrdenCompraDetalles", "Prod");
+
+                entity.HasIndex(e => e.code_CodigoDetalle, "UQ_Prod_tbOrdenCompraDetalles_code_CodigoDetalle")
+                    .IsUnique();
+
+                entity.Property(e => e.code_CodigoDetalle).HasMaxLength(100);
 
                 entity.Property(e => e.code_EspecificacionEmbalaje)
                     .IsRequired()

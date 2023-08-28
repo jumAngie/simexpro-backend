@@ -9,6 +9,7 @@ namespace SIMEXPRO.Entities.Entities
 {
     public partial class tbOrdenCompraDetalles
     {
+
         public tbOrdenCompraDetalles()
         {
             tbAsignacionesOrden = new HashSet<tbAsignacionesOrden>();
