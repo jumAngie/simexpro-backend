@@ -2,35 +2,35 @@
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Listar
 AS
 	BEGIN
-		SELECT	FactExport.[faex_Id], 
-				FactExport.[duca_No_Duca], 
-				FactExport.[faex_Fecha], 
-				FactExport.[orco_Id], 
-				FactExport.[faex_Total], 
+		SELECT	FactExport.faex_Id, 
+				FactExport.duca_No_Duca, 
+				FactExport.faex_Fecha, 
+				FactExport.orco_Id, 
+				FactExport.faex_Total, 
 				Clie.clie_Nombre_O_Razon_Social,
-				FactExport.[usua_UsuarioCreacion], 
+				FactExport.usua_UsuarioCreacion, 
 				UserCrea.usua_Nombre	AS usuarioCreacionNombre,
-				FactExport.[faex_FechaCreacion], 
-				FactExport.[usua_UsuarioModificacion],
+				FactExport.faex_FechaCreacion, 
+				FactExport.usua_UsuarioModificacion,
 				UserModifica.usua_Nombre AS usuarioModificacionNombre, 
-				FactExport.[faex_FechaModificacion],
+				FactExport.faex_FechaModificacion,
 		
-				(SELECT	FactExportDetails.[fede_Id], 
-						FactExportDetails.[faex_Id], 
-						FactExportDetails.[code_Id], 
-						PODetail.[code_CantidadPrenda], 
+				(SELECT	FactExportDetails.fede_Id, 
+						FactExportDetails.faex_Id, 
+						FactExportDetails.code_Id, 
+						PODetail.code_CantidadPrenda, 
 						Style.esti_Descripcion,
 						Talla.tall_Codigo,
-						PODetail.[code_Sexo], 
+						PODetail.code_Sexo, 
 						Color.colr_Nombre,
-						PODetail.[code_Unidad], 
-						PODetail.[code_Valor], 
-						PODetail.[code_Impuesto], 
-						PODetail.[code_EspecificacionEmbalaje],
-						FactExportDetails.[fede_Cajas], 
-						FactExportDetails.[fede_Cantidad], 
-						FactExportDetails.[fede_PrecioUnitario], 
-						FactExportDetails.[fede_TotalDetalle]
+						PODetail.code_Unidad, 
+						PODetail.code_Valor, 
+						PODetail.code_Impuesto, 
+						PODetail.code_EspecificacionEmbalaje,
+						FactExportDetails.fede_Cajas, 
+						FactExportDetails.fede_Cantidad, 
+						FactExportDetails.fede_PrecioUnitario, 
+						FactExportDetails.fede_TotalDetalle
 				FROM Prod.tbFacturasExportacionDetalles AS FactExportDetails
 				INNER JOIN Prod.tbOrdenCompraDetalles AS PODetail ON FactExportDetails.code_Id = PODetail.code_Id
 				INNER JOIN Prod.tbEstilos AS Style ON PODetail.esti_Id = Style.esti_Id
@@ -46,7 +46,6 @@ AS
 	END
 GO
 
-
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Insertar
 	@duca_No_Duca			NVARCHAR(100),
 	@faex_Fecha				DATETIME, 
@@ -57,8 +56,8 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Insertar
 AS
 BEGIN
 	BEGIN TRY
-		INSERT INTO Prod.tbFacturasExportacion([duca_No_Duca], [faex_Fecha], [orco_Id], 
-												[faex_Total], [usua_UsuarioCreacion], [faex_FechaCreacion])
+		INSERT INTO Prod.tbFacturasExportacion(duca_No_Duca, faex_Fecha, orco_Id, 
+												faex_Total, usua_UsuarioCreacion, faex_FechaCreacion)
 		VALUES(@duca_No_Duca, @faex_Fecha, @orco_Id, @faex_Total, @usua_UsuarioCreacion, @faex_FechaCreacion)
 
 		DECLARE @faex_Id INT = SCOPE_IDENTITY();
@@ -86,12 +85,12 @@ AS
 BEGIN 
 	BEGIN TRY
 		UPDATE Prod.tbFacturasExportacion
-		SET	[duca_No_Duca] = @duca_No_Duca, 
-			[faex_Fecha] = @faex_Fecha, 
-			[orco_Id] = @orco_Id, 
-			[faex_Total] = @faex_Total, 
-			[usua_UsuarioModificacion] = @usua_UsuarioModificacion, 
-			[faex_FechaModificacion] = @faex_FechaModificacion
+		SET	duca_No_Duca = @duca_No_Duca, 
+			faex_Fecha = @faex_Fecha, 
+			orco_Id = @orco_Id, 
+			faex_Total = @faex_Total, 
+			usua_UsuarioModificacion = @usua_UsuarioModificacion, 
+			faex_FechaModificacion = @faex_FechaModificacion
 		WHERE faex_Id = @faex_Id
 
 		SELECT 1
@@ -110,26 +109,26 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacionDetalles_Listar
 	@faex_Id INT
 AS
 BEGIN
-	SELECT	Detail.[fede_Id], 
-			Detail.[faex_Id], 
-			Detail.[code_Id],			
+	SELECT	Detail.fede_Id, 
+			Detail.faex_Id, 
+			Detail.code_Id,			
 
-			PODetail.[code_CantidadPrenda], 
+			PODetail.code_CantidadPrenda, 
 			Style.esti_Descripcion,
 
 			Talla.tall_Codigo,
 
-			PODetail.[code_Sexo], 
+			PODetail.code_Sexo, 
 
 			Color.colr_Nombre,
-			PODetail.[code_Unidad], 
-			PODetail.[code_Valor], 
-			PODetail.[code_Impuesto], 
-			PODetail.[code_EspecificacionEmbalaje],
-			Detail.[fede_Cajas], 
-			Detail.[fede_Cantidad], 
-			Detail.[fede_PrecioUnitario], 
-			Detail.[fede_TotalDetalle]
+			PODetail.code_Unidad, 
+			PODetail.code_Valor, 
+			PODetail.code_Impuesto, 
+			PODetail.code_EspecificacionEmbalaje,
+			Detail.fede_Cajas, 
+			Detail.fede_Cantidad, 
+			Detail.fede_PrecioUnitario, 
+			Detail.fede_TotalDetalle
 	FROM Prod.tbFacturasExportacionDetalles AS Detail
 	INNER JOIN Prod.tbOrdenCompraDetalles AS PODetail ON Detail.code_Id = PODetail.code_Id
 	INNER JOIN Prod.tbEstilos AS Style ON PODetail.esti_Id = Style.esti_Id
@@ -152,8 +151,8 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacionDetalles_Insertar
 AS
 BEGIN
 	BEGIN TRY
-		INSERT INTO Prod.tbFacturasExportacionDetalles([faex_Id], [code_Id], [fede_Cajas], 
-		[fede_Cantidad], [fede_PrecioUnitario], [fede_TotalDetalle], [usua_UsuarioCreacion], [fede_FechaCreacion])
+		INSERT INTO Prod.tbFacturasExportacionDetalles(faex_Id, code_Id, fede_Cajas, 
+		fede_Cantidad, fede_PrecioUnitario, fede_TotalDetalle, usua_UsuarioCreacion, fede_FechaCreacion)
 		VALUES(@faex_Id, @code_Id, @fede_Cajas, @fede_Cantidad, @fede_PrecioUnitario, @fede_TotalDetalle, @usua_UsuarioCreacion, @fede_FechaCreacion)
 		
 		SELECT 1
@@ -180,14 +179,14 @@ AS
 BEGIN
 	BEGIN TRY
 		UPDATE Prod.tbFacturasExportacionDetalles
-		SET [faex_Id] = @faex_Id, 
-			[code_Id] = @code_Id, 
-			[fede_Cajas] = @fede_Cajas, 
-			[fede_Cantidad] = @fede_Cantidad, 
-			[fede_PrecioUnitario] = @fede_PrecioUnitario, 
-			[fede_TotalDetalle] = @fede_TotalDetalle, 
-			[usua_UsuarioModificacion] = @usua_UsuarioModificacion, 
-			[fede_FechaModificacion] = @fede_FechaModificacion
+		SET faex_Id = @faex_Id, 
+			code_Id = @code_Id, 
+			fede_Cajas = @fede_Cajas, 
+			fede_Cantidad = @fede_Cantidad, 
+			fede_PrecioUnitario = @fede_PrecioUnitario, 
+			fede_TotalDetalle = @fede_TotalDetalle, 
+			usua_UsuarioModificacion = @usua_UsuarioModificacion, 
+			fede_FechaModificacion = @fede_FechaModificacion
 		WHERE fede_Id = @fede_Id
 
 		SELECT 1
