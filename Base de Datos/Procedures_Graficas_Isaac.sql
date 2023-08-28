@@ -363,3 +363,14 @@ AS
 	END
 GO
 
+-- Pasies de Origen de exportadores
+CREATE OR ALTER PROCEDURE Adua.UDP_ExportadoresPorPais_CantidadPorcentaje
+AS
+		BEGIN
+			SELECT		pais.pais_Nombre,
+						COUNT(duca.duca_Pais_Emision_Exportador) AS duca_Pais_Emision_Exportador,
+						CAST((SELECT CAST(COUNT(duca.duca_Pais_Emision_Exportador) AS DECIMAL(18,2)) / CAST((SELECT COUNT(duca_Pais_Emision_Exportador) FROM Adua.tbDuca) AS DECIMAL(18,2)) * 100) AS decimal(18,2)) as Porcentaje
+			FROM		Adua.tbDuca duca INNER JOIN Gral.tbPaises pais ON duca.duca_Pais_Emision_Exportador = pais.pais_Id
+			GROUP BY	duca_Pais_Emision_Exportador,pais.pais_Nombre
+	END
+GO

@@ -50,16 +50,48 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         private readonly TipoLiquidacionRepository _tipoLiquidacionRepository;
         private readonly TiposIdentificacionRepository _tiposIdentificacionRepository;
         private readonly TransporteRepository _transporteRepository;
+        private readonly AduanaGraficasRepository _aduanagraficasrepository;
 
-        public AduanaServices(AduanasRepository AduanasRepository, ArancelesRepository ArancelesRepository, BaseCalculosRepository BaseCalculosRepository, BoletinPagoRepository BoletinPagoRepository, BoletinPagoDetallesRepository BoletinPagoDetallesRepository,
-                                CodigoImpuestoRepository CodigoImpuestoRepository, ComercianteIndividualRepository ComercianteIndividualRepository, ConceptoPagoRepository ConceptoPagoRepository, CondicionesRepository CondicionesRepository,
-                                CondicionesComercialesRepository CondicionesComercialesRepository,Declaraciones_ValorHistorialRepository Declaraciones_ValorHistorialRepository, Declaraciones_ValorRepository Declaraciones_ValorRepository,
-                                DocumentosContratosRepository DocumentosContratosRepository, DocumentosdeSoporteRepository DocumentosdeSoporteRepository, DocumentosPDFRepository DocumentosPDFRepository, 
-                                DucaRepository DucaRepository, EstadoBoletinRepository EstadoBoletinRepository, EstadoMercanciasRepository EstadoMercanciasRepository, FacturasRepository FacturasRepository , FormasdePagoRepository FormasdePagoRepository, ImpuestosporAracelRepository ImpuestosporAracelRepository,
-                                ImpuestosRepository ImpuestosRepository, IncotermRepository IncotermRepository, IntermediarioRepository IntermediarioRepository, ItemsRepository ItemsRepository, LiquidacionGeneralRepository LiquidacionGeneralRepository,
-                                LiquidacionPorLineaRepository LiquidacionPorLineaRepository, LugaresEmbarqueRepository LugaresEmbarqueRepository, MarcasRepository MarcasRepository, ModoTransporteRepository ModoTransporteRepository,
-                                NivelesComercialesRepository NivelesComercialesRepository, PersonaJuridicaRepository PersonaJuridicaRepository, PersonaNaturalRepository PersonaNaturalRepository, PersonasRepository PersonasRepository,
-                                 TipoDocumentoRepository TipoDocumentoRepository, TipoIntermediarioRepository TipoIntermediarioRepository,TipoLiquidacionRepository TipoLiquidacionRepository, TiposIdentificacionRepository TiposIdentificacionRepository, TransporteRepository TransporteRepository)
+        public AduanaServices(  AduanasRepository AduanasRepository, 
+                                ArancelesRepository ArancelesRepository, 
+                                BaseCalculosRepository BaseCalculosRepository, 
+                                BoletinPagoRepository BoletinPagoRepository, 
+                                BoletinPagoDetallesRepository BoletinPagoDetallesRepository,
+                                CodigoImpuestoRepository CodigoImpuestoRepository, 
+                                ComercianteIndividualRepository ComercianteIndividualRepository, 
+                                ConceptoPagoRepository ConceptoPagoRepository, 
+                                CondicionesRepository CondicionesRepository,
+                                CondicionesComercialesRepository CondicionesComercialesRepository, 
+                                Declaraciones_ValorHistorialRepository Declaraciones_ValorHistorialRepository, 
+                                Declaraciones_ValorRepository Declaraciones_ValorRepository,
+                                DocumentosContratosRepository DocumentosContratosRepository, 
+                                DocumentosdeSoporteRepository DocumentosdeSoporteRepository, 
+                                DocumentosPDFRepository DocumentosPDFRepository,
+                                DucaRepository DucaRepository, 
+                                EstadoBoletinRepository EstadoBoletinRepository, 
+                                EstadoMercanciasRepository EstadoMercanciasRepository, 
+                                FacturasRepository FacturasRepository, 
+                                FormasdePagoRepository FormasdePagoRepository, 
+                                ImpuestosporAracelRepository ImpuestosporAracelRepository,
+                                ImpuestosRepository ImpuestosRepository, 
+                                IncotermRepository IncotermRepository, 
+                                IntermediarioRepository IntermediarioRepository, 
+                                ItemsRepository ItemsRepository, 
+                                LiquidacionGeneralRepository LiquidacionGeneralRepository,
+                                LiquidacionPorLineaRepository LiquidacionPorLineaRepository, 
+                                LugaresEmbarqueRepository LugaresEmbarqueRepository, 
+                                MarcasRepository MarcasRepository, 
+                                ModoTransporteRepository ModoTransporteRepository,
+                                NivelesComercialesRepository NivelesComercialesRepository, 
+                                PersonaJuridicaRepository PersonaJuridicaRepository, 
+                                PersonaNaturalRepository PersonaNaturalRepository, 
+                                PersonasRepository PersonasRepository,
+                                TipoDocumentoRepository TipoDocumentoRepository, 
+                                TipoIntermediarioRepository TipoIntermediarioRepository, 
+                                TipoLiquidacionRepository TipoLiquidacionRepository, 
+                                TiposIdentificacionRepository TiposIdentificacionRepository, 
+                                TransporteRepository TransporteRepository,
+                                AduanaGraficasRepository AduanaGraficasRepository)
         {
             _aduanasRepository = AduanasRepository;
             _arancelesRepository = ArancelesRepository;
@@ -100,6 +132,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             _tipoLiquidacionRepository = TipoLiquidacionRepository;
             _tiposIdentificacionRepository = TiposIdentificacionRepository;
             _transporteRepository = TransporteRepository;
+            _aduanagraficasrepository = AduanaGraficasRepository;
         }
         #region Aduanas
         public ServiceResult ListarAduanas()
@@ -272,7 +305,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -294,7 +327,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -433,16 +466,16 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             var result = new ServiceResult();
             try
             {
-                    var map = _codigoImpuestoRepository.Insert(item);
-                    if (map.MessageStatus == "1")
-                    {
-                        return result.Ok(map);
-                    }
-                    else
-                    {
-                        
-                        return result.Error(map);
-                    }
+                var map = _codigoImpuestoRepository.Insert(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+
+                    return result.Error(map);
+                }
             }
             catch (Exception ex)
             {
@@ -455,16 +488,16 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             var result = new ServiceResult();
             try
             {
-                    var map = _codigoImpuestoRepository.Update(item);
-                    if (map.MessageStatus == "1")
-                    {
-                        return result.Ok(map);
-                    }
-                    else
-                    {
-                        
-                        return result.Error(map);
-                    }
+                var map = _codigoImpuestoRepository.Update(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+
+                    return result.Error(map);
+                }
             }
             catch (Exception ex)
             {
@@ -477,16 +510,16 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             var result = new ServiceResult();
             try
             {
-                    var map = _codigoImpuestoRepository.Delete(item);
-                    if (map.MessageStatus == "1")
-                    {
-                        return result.Ok(map);
-                    }
-                    else
-                    {
-                        
-                        return result.Error(map);
-                    }
+                var map = _codigoImpuestoRepository.Delete(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+
+                    return result.Error(map);
+                }
             }
             catch (Exception ex)
             {
@@ -705,7 +738,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -727,7 +760,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -751,7 +784,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                     }
                     else
                     {
-                        
+
                         return result.Error(map);
                     }
                 }
@@ -802,7 +835,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var respuesta = _declaraciones_ValorRepository.InsertTab1(item, itemDecl, itemImp);
-                
+
                 if (respuesta.MessageStatus != "1")
                 {
                     return result.Ok(respuesta);
@@ -1035,10 +1068,10 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -1058,7 +1091,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -1080,7 +1113,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -1254,7 +1287,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             var result = new ServiceResult();
             try
             {
-                var respuesta = _ducaRepository.Update(item); 
+                var respuesta = _ducaRepository.Update(item);
                 if (respuesta.MessageStatus == "1")
                 {
                     return result.Ok(respuesta);
@@ -1298,7 +1331,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
-      
+
         #endregion
 
         #region EstadoBoletin
@@ -1361,7 +1394,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         #endregion
 
         #region EstadoMercancias
-     
+
         public ServiceResult ListarEstadoMercancias()
         {
             var result = new ServiceResult();
@@ -1388,7 +1421,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -1410,7 +1443,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -1471,7 +1504,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -1493,7 +1526,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -1515,7 +1548,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -1635,7 +1668,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -1657,7 +1690,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -1679,7 +1712,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -1716,7 +1749,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                     return result.Ok(map);
                 }
                 else
-                {                        
+                {
                     return result.Error(map);
                 }
             }
@@ -1737,7 +1770,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                     return result.Ok(map);
                 }
                 else
-                {                        
+                {
                     return result.Error(map);
                 }
             }
@@ -1758,7 +1791,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                     return result.Ok(map);
                 }
                 else
-                {                        
+                {
                     return result.Error(map);
                 }
             }
@@ -2036,7 +2069,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                    
+
                     return result.Error(map);
                 }
             }
@@ -2058,7 +2091,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                    
+
                     return result.Error(map);
                 }
             }
@@ -2096,7 +2129,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                    
+
                     return result.Error(map);
                 }
             }
@@ -2118,7 +2151,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                    
+
                     return result.Error(map);
                 }
             }
@@ -2133,16 +2166,16 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             var result = new ServiceResult();
             try
             {
-                    var map = _liquidacionPorLineaRepository.Delete(item);
-                    if (map.MessageStatus == "1")
-                    {
-                        return result.Ok(map);
-                    }
-                    else
-                    {
-                        
-                        return result.Error(map);
-                    }
+                var map = _liquidacionPorLineaRepository.Delete(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+
+                    return result.Error(map);
+                }
             }
             catch (Exception ex)
             {
@@ -2178,7 +2211,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                    
+
                     return result.Error(map);
                 }
             }
@@ -2200,7 +2233,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                    
+
                     return result.Error(map);
                 }
             }
@@ -2222,7 +2255,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -2260,7 +2293,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -2282,7 +2315,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -2304,7 +2337,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -2342,7 +2375,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -2364,7 +2397,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -2386,7 +2419,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -2424,7 +2457,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -2446,7 +2479,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -2468,7 +2501,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -2506,7 +2539,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -2528,7 +2561,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -2550,7 +2583,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -2796,7 +2829,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 else
                 {
                     return result.Error(map);
-                } 
+                }
             }
             catch (Exception ex)
             {
@@ -2928,7 +2961,8 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         {
             var result = new ServiceResult();
             try
-            {var map = _tipoLiquidacionRepository.Update(item);
+            {
+                var map = _tipoLiquidacionRepository.Update(item);
                 if (map.MessageStatus == "1")
                 {
                     return result.Ok(map);
@@ -2949,16 +2983,16 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             var result = new ServiceResult();
             try
             {
-                    var map = _tipoLiquidacionRepository.Delete(item);
-                    if (map.MessageStatus == "1")
-                    {
-                        return result.Ok(map);
-                    }
-                    else
-                    {
+                var map = _tipoLiquidacionRepository.Delete(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
 
-                        return result.Error(map);
-                    }
+                    return result.Error(map);
+                }
             }
             catch (Exception ex)
             {
@@ -3122,6 +3156,22 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
 
                     return result.Error(map);
                 }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        #endregion
+
+        #region Graficas
+        public ServiceResult ExportadoresPorPais_CantidadPorcentaje()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _aduanagraficasrepository.ExportadoresPorPais_CantidadPorcentaje();
+                return result.Ok(list);
             }
             catch (Exception ex)
             {

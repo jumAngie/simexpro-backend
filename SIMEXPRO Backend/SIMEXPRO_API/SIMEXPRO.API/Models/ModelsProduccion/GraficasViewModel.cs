@@ -54,5 +54,12 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
 
         // CLIENTES MAS PRODUCTIVOS
         public int CantidadIngresos { get; set; }
+
+       
+        // Pasies de Origen de exportadores
+
+        public string pais_Nombre { get; set; }
+        public int duca_Pais_Emision_Exportador { get; set; }
+        public string Porcentaje { get; set; }
     }
 }
