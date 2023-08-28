@@ -32,7 +32,10 @@ namespace SIMEXPRO.Entities.Entities
 
         [NotMapped]
         public string tall_Nombre { get; set; }
+
+        [NotMapped]
         public string code_CodigoDetalle { get; set; }
+
         public string code_Sexo { get; set; }
         public int colr_Id { get; set; }
         [NotMapped]
