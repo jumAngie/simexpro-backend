@@ -3051,6 +3051,8 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.lote_CantIngresada).HasColumnType("decimal(18, 2)");
 
+                entity.Property(e => e.lote_CodigoLote).HasMaxLength(150);
+
                 entity.Property(e => e.lote_Estado).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.lote_FechaCreacion).HasColumnType("datetime");
@@ -5239,7 +5241,7 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.ToTable("tbUsuarios", "Acce");
 
-                entity.HasIndex(e => e.usua_Nombre, "UQ_acce_tbUsuarios_usua_Nombre")
+                entity.HasIndex(e => new { e.usua_Nombre, e.usua_esAduana }, "UQ_acce_tbUsuarios_usua_Nombre_esAduana")
                     .IsUnique();
 
                 entity.Property(e => e.usua_Contrasenia).IsRequired();

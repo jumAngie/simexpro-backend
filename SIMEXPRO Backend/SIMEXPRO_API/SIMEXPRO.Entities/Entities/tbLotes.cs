@@ -16,6 +16,7 @@ namespace SIMEXPRO.Entities.Entities
         }
 
         public int lote_Id { get; set; }
+        public string lote_CodigoLote { get; set; }
         public int mate_Id { get; set; }
         public int unme_Id { get; set; }
         public int? prod_Id { get; set; }

@@ -2588,6 +2588,7 @@ GO
 
 CREATE TABLE Prod.tbLotes(
 	lote_Id   					INT IDENTITY(1,1),
+	lote_CodigoLote             NVARCHAR(150) NOT NULL,
 	mate_Id						INT NOT NULL,
 	unme_Id						INT NOT NULL,
 	prod_Id						INT,

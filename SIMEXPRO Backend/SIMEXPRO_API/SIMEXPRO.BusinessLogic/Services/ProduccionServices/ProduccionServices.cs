@@ -924,12 +924,12 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
-        public ServiceResult LotesMateriales(int lote_Id)
+        public ServiceResult LotesMateriales(string lote_CodigoLote)
         {
             var result = new ServiceResult();
             try
             {
-                var list = _lotesRepository.LotesMateriales(lote_Id);
+                var list = _lotesRepository.LotesMateriales(lote_CodigoLote);
                 return result.Ok(list);
             }
             catch (Exception ex)

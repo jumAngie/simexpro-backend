@@ -3424,11 +3424,12 @@ GO
 
 
 GO
-CREATE OR ALTER PROCEDURE Prod.UDP_tbDocumentosOrdenCompraDetalles_Lista
+CREATE OR ALTER PROCEDURE [Prod].[UDP_tbDocumentosOrdenCompraDetalles_Listar]
 @code_Id	INT
 AS
 BEGIN
- 	SELECT	 dopo_Id
+ 
+	SELECT	 dopo_Id
 			,code_Id
 			,dope_NombreArchivo
 			,dopo_Archivo
@@ -3443,10 +3444,9 @@ BEGIN
 	  FROM	Prod.tbDocumentosOrdenCompraDetalles			documentosOrdenCompraDetalle
 			INNER JOIN Acce.tbUsuarios UsuarioCreacion			ON UsuarioCreacion.usua_Id			= documentosOrdenCompraDetalle.usua_UsuarioCreacion
 			LEFT  JOIN Acce.tbUsuarios UsuarioModificacion		ON UsuarioModificacion.usua_Id		= documentosOrdenCompraDetalle.usua_UsuarioModificacion
-	  WHERE code_Estado = 1 AND code_Id = @code_Id
+	  WHERE code_Estado = 1 AND code_Id = @code_Id
 
 END
-GO
 
 GO
 CREATE OR ALTER PROCEDURE Prod.UDP_tbDocumentosOrdenCompraDetalles_Insertar  
@@ -13725,7 +13725,6 @@ BEGIN
 END
 GO
 
-
 --SELECT RowNumber
 --		FROM (SELECT ROW_NUMBER() OVER (ORDER BY prod_Id) AS RowNumber,
 --					 prod_Id 
@@ -13745,6 +13744,7 @@ SELECT
 	   materiales.mate_Descripcion,
 	   lotes.unme_Id,
 	   UnidadesMedida.unme_Descripcion,
+	   lotes.lote_CodigoLote,
 	   lotes.lote_Observaciones,
 	   lote_Stock,
 	   lote_CantIngresada,
@@ -13821,11 +13821,13 @@ CREATE OR ALTER PROC Prod.UDP_tbLotes_Insertar
 	@lote_CantIngresada		INT,
 	@tipa_Id				INT,
 	@lote_Observaciones		NVARCHAR(MAX),
+	@lote_CodigoLote        NVARCHAR(150),
 	@usua_UsuarioCreacion	INT,
 	@lote_FechaCreacion		DATETIME
 AS BEGIN
 BEGIN TRY
 	INSERT INTO Prod.tbLotes(mate_Id, 
+	                         lote_CodigoLote,
 							 unme_Id,
 							 prod_Id,
 							 lote_CantIngresada, 
@@ -13834,7 +13836,8 @@ BEGIN TRY
 							 usua_UsuarioCreacion,
 							 lote_FechaCreacion)
 
-	VALUES					(@mate_Id,		
+	VALUES					(@mate_Id,
+	                         @lote_CodigoLote,
 							 @unme_Id,
 							 @prod_Id,			
 							 @lote_CantIngresada,	
@@ -13855,6 +13858,7 @@ GO
 CREATE OR ALTER PROC Prod.UDP_tbLotes_Editar
 @lote_Id				  INT,
 @mate_Id				  INT,
+@lote_CodigoLote          NVARCHAR(150),
 @unme_Id				  INT,
 @prod_Id				  INT,
 @lote_CantIngresada		  INT,
@@ -13866,6 +13870,7 @@ AS BEGIN
 BEGIN TRY
 	UPDATE Prod.tbLotes 
 	                    SET  mate_Id                   = @mate_Id, 
+						     lote_CodigoLote           = @lote_CodigoLote,
 						     unme_Id                   = @unme_Id,
 							 prod_Id				   = @prod_Id,
 							 lote_CantIngresada        = @lote_CantIngresada, 
@@ -13916,13 +13921,14 @@ END
 GO
 
 /*Seleccionar lotes Material*/
-CREATE OR ALTER PROCEDURE Prod.UDP_tbLotes_Materiales 
+CREATE OR ALTER   PROCEDURE Prod.UDP_tbLotes_Materiales --'CW20230827'
 (
-	@lote_Id INT
+	@lote_CodigoLote NVARCHAR(40)
 )
 AS
 BEGIN
 	SELECT	lote_Id,
+			tblotes.lote_CodigoLote,
 			tblotes.mate_Id,
 			mate_Descripcion,
 			tblotes.lote_Stock,
@@ -13930,10 +13936,9 @@ BEGIN
 	FROM Prod.tbLotes tblotes			
 			INNER JOIN Prod.tbMateriales tbmats		ON tblotes.mate_Id = tbmats.mate_Id
 			INNER JOIN Prod.tbArea	tbarea			ON tblotes.tipa_Id = tbarea.tipa_Id
-	WHERE tblotes.lote_Id = @lote_Id
+	WHERE tblotes.lote_CodigoLote = @lote_CodigoLote
 END
 GO
-
 --**************************************************************************************************--
 
 
