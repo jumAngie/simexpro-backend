@@ -51,9 +51,10 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
         }
 
         [HttpPost("Eliminar")]
-        public IActionResult Delete(int orco_Id)
+        public IActionResult Delete(OrdenCompraViewModel ordenCompraViewModel)
         {
-            var respuesta = _produccionServices.EliminarOrdenCompra(orco_Id);
+            var item = _mapper.Map<tbOrdenCompra>(ordenCompraViewModel);
+            var respuesta = _produccionServices.EliminarOrdenCompra(item);
             return Ok(respuesta);
         }
 

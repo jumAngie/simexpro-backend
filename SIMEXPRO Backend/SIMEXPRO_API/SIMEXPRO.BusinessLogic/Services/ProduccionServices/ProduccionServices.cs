@@ -1886,14 +1886,14 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
-        public ServiceResult EliminarOrdenCompra(int orco_Id)
+        public ServiceResult EliminarOrdenCompra(tbOrdenCompra item)
         {
             var result = new ServiceResult();
             try
             {
-                if (orco_Id != 0)
+                if (item.orco_Id != 0)
                 {
-                    var map = _ordenCompraRepository.Delete(orco_Id);
+                    var map = _ordenCompraRepository.EliminarOrdenCompra(item);
                     if (map.MessageStatus == "1")
                     {
                         return result.Ok(map);
@@ -2242,6 +2242,21 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             catch (Exception ex)
             {
                 return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult FinalizapedidoOrden(tbPedidosOrden item)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _pedidosOrdenRepository.FinalizarpedidoOrden(item);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
             }
         }
         #endregion

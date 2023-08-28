@@ -2516,9 +2516,9 @@ CREATE TABLE Prod.tbPedidosOrden(--No se podrá eliminar de ninguna manera
 	peor_DireccionExacta		NVARCHAR(500), 
 	peor_FechaEntrada			DATETIME,
 	peor_Obsevaciones			NVARCHAR(400),
+	peor_finalizacion			BIT NOT NULL default(0),
 	peor_DadoCliente			BIT,
 	peor_Est					BIT,
-
 	usua_UsuarioCreacion		INT NOT NULL,
 	peor_FechaCreacion			DATETIME NOT NULL,
 	usua_UsuarioModificacion 	INT DEFAULT NULL,
@@ -2535,7 +2535,7 @@ CREATE TABLE Prod.tbPedidosOrden(--No se podrá eliminar de ninguna manera
 	CONSTRAINT FK_Prod_tbPedidosOrden_tbDuca_peor_No_Duca							FOREIGN KEY(peor_No_Duca)				REFERENCES Adua.tbDuca(duca_No_Duca),
 	--CONSTRAINT FK_Prod_tbPedidosOrden__Acce_tbUsuarios_usua_UsuarioEliminacion_usua_Id  FOREIGN KEY (usua_UsuarioEliminacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id)
 );
-GO
+	GO
 
 
 CREATE TABLE Prod.tbPedidosOrdenDetalle(--No se podrá eliminar de ninguna manera

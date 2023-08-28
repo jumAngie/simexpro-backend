@@ -8361,6 +8361,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbNivelesComerciales_Listar
 AS
 BEGIN
 SELECT	nico_Id								,
+		nico_Codigo							,
 		nico_Descripcion					,
 		nco.usua_UsuarioCreacion			,
 		usu1.usua_Nombre					AS UsuarioCreacionNombre,
@@ -12978,6 +12979,23 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE Prod.UDP_tbPedidosOrden_Finalizado
+	@peor_Id	INT
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE [Prod].[tbPedidosOrden]
+		SET	   [peor_finalizacion] = 1
+		WHERE  peor_Id = @peor_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error:' + ERROR_MESSAGE()
+	END CATCH
+END
+
+GO
 
 --*****ReporteModuloDia*****-
 --*****Listado*****--
