@@ -10353,7 +10353,22 @@ BEGIN
 			asor_FechaCreacion,			
 			asignacionesOrden.usua_UsuarioModificacion,
 			usuarioModificacion.usua_Nombre				AS usuarioModificacionNombre,
-			asor_FechaModificacion
+			asor_FechaModificacion,
+			(SELECT		adet_Id,						
+					   lote.lote_Id,
+					   adet_Cantidad,				
+					   AsignacionesOrdenDetalle.usua_UsuarioCreacion,
+					   usuarioCreacion.usua_Nombre							AS usuarioCreacionNombre,
+					   adet_FechaCreacion,			
+					   AsignacionesOrdenDetalle.usua_UsuarioModificacion,
+					   usuarioModificacion.usua_Nombre						AS usuarioModificacionNombre,
+					   adet_FechaModificacion
+			FROM Prod.tbAsignacionesOrdenDetalle		AS AsignacionesOrdenDetalle	
+			INNER JOIN Prod.tbLotes		lote				ON AsignacionesOrdenDetalle.lote_Id = lote.lote_Id
+			INNER JOIN Acce.tbUsuarios usuarioCreacion		ON AsignacionesOrdenDetalle.usua_UsuarioCreacion = usuarioCreacion.usua_Id
+			LEFT JOIN Acce.tbUsuarios usuarioModificacion	ON AsignacionesOrdenDetalle.usua_UsuarioModificacion = usuarioModificacion.usua_Id
+			WHERE 	AsignacionesOrdenDetalle.asor_Id = asignacionesOrden.asor_Id FOR JSON AUTO) AS Detalles
+
 	   FROM Prod.tbAsignacionesOrden					AS asignacionesOrden 
 	   INNER JOIN Prod.tbProcesos pro					ON asignacionesOrden.proc_Id = pro.proc_Id
 	   INNER JOIN Gral.tbEmpleados empl					ON asignacionesOrden.empl_Id = empl.empl_Id
@@ -10486,7 +10501,7 @@ BEGIN
 		   usuarioModificacion.usua_Nombre						AS usuarioModificacionNombre,
 		   adet_FechaModificacion
 	  FROM Prod.tbAsignacionesOrdenDetalle		AS AsignacionesOrdenDetalle
-INNER JOIN Prod.tbLote		lote				ON AsignacionesOrdenDetalle.lote_Id = lote.lote_Id
+INNER JOIN Prod.tbLotes		lote				ON AsignacionesOrdenDetalle.lote_Id = lote.lote_Id
 INNER JOIN Acce.tbUsuarios usuarioCreacion		ON AsignacionesOrdenDetalle.usua_UsuarioCreacion = usuarioCreacion.usua_Id
  LEFT JOIN Acce.tbUsuarios usuarioModificacion	ON AsignacionesOrdenDetalle.usua_UsuarioModificacion = usuarioModificacion.usua_Id
 
@@ -13347,6 +13362,7 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbReporteModuloDiaDetalle_Insertar
 AS
 BEGIN
 	BEGIN TRY
+
 		INSERT INTO Prod.tbReporteModuloDiaDetalle(	remo_Id, 
 													rdet_TotalDia, 
 													rdet_TotalDanado, 
@@ -13360,10 +13376,17 @@ BEGIN
 				@usua_UsuarioCreacion,
 				GETDATE())
 
+		UPDATE [Prod].[tbReporteModuloDia]
+		SET [remo_TotalDia] = (SELECT SUM(rdet_TotalDia) FROM Prod.tbReporteModuloDiaDetalle WHERE remo_Id = @remo_Id ),
+			[remo_TotalDanado] = (SELECT SUM(rdet_TotalDanado) FROM Prod.tbReporteModuloDiaDetalle WHERE remo_Id = @remo_Id )
+		WHERE [remo_Id] = @remo_Id
+
 		SELECT 1
+		COMMIT; 
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
+		ROLLBACK; 
 	END CATCH
 END
 GO
@@ -13380,6 +13403,8 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbReporteModuloDiaDetalle_Editar
 AS
 BEGIN
 	BEGIN TRY
+
+
 		UPDATE	Prod.tbReporteModuloDiaDetalle 
 		SET		remo_Id						=	@remo_Id, 
 				rdet_TotalDia				=	@rdet_TotalDia, 
@@ -13389,10 +13414,17 @@ BEGIN
 				rdet_FechaModificacion		=	GETDATE()
 		WHERE	rdet_Id						=	@rdet_Id
 
+		UPDATE [Prod].[tbReporteModuloDia]
+		SET [remo_TotalDia] = (SELECT SUM(rdet_TotalDia) FROM Prod.tbReporteModuloDiaDetalle WHERE remo_Id = @remo_Id ),
+			[remo_TotalDanado] = (SELECT SUM(rdet_TotalDanado) FROM Prod.tbReporteModuloDiaDetalle WHERE remo_Id = @remo_Id )
+		WHERE [remo_Id] = @remo_Id
+
 		SELECT 1
+		COMMIT;
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
+		ROLLBACK;
 	END CATCH
 END
 GO
@@ -13404,14 +13436,23 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbReporteModuloDiaDetalle_Eliminar
 AS
 BEGIN
 	BEGIN TRY 
-		UPDATE Prod.tbReporteModuloDiaDetalle
-		SET rdet_Estado = 0
+
+		DECLARE @remo_Id INT = (SELECT remo_Id FROM Prod.tbReporteModuloDiaDetalle WHERE rdet_Id = @rdet_Id)
+
+		DELETE FROM Prod.tbReporteModuloDiaDetalle
 		WHERE rdet_Id = @rdet_Id
 
+		UPDATE [Prod].[tbReporteModuloDia]
+		SET [remo_TotalDia] = (SELECT SUM(rdet_TotalDia) FROM Prod.tbReporteModuloDiaDetalle WHERE remo_Id = @remo_Id ),
+			[remo_TotalDanado] = (SELECT SUM(rdet_TotalDanado) FROM Prod.tbReporteModuloDiaDetalle WHERE remo_Id = @remo_Id )
+		WHERE [remo_Id] = @remo_Id
+
 		SELECT 1
+		COMMIT;
 	END TRY
 	BEGIN CATCH 
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
+		ROLLBACK;
 	END CATCH 
 END
 GO
@@ -13875,8 +13916,8 @@ AS BEGIN
 		   		   ppde_Cantidad,
 		   		   mate_Descripcion,
 				   tblotes.lote_Stock,
-				   tbarea.tipa_area
-				  
+				   tbarea.tipa_area,
+				   tblotes.lote_CodigoLote
 		   	  FROM Prod.tbPedidosProduccionDetalles tbdetalles
 					INNER JOIN Prod.tbLotes tblotes			ON tbdetalles.lote_Id = tblotes.lote_Id
 					INNER JOIN Prod.tbMateriales tbmats		ON tblotes.mate_Id = tbmats.mate_Id
