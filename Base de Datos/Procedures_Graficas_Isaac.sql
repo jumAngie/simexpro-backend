@@ -364,7 +364,7 @@ AS
 GO
 
 -- Pasies de Origen de exportadores
-CREATE OR ALTER PROCEDURE Adua.UDP_ExportadoresPorPais_CantidadPorcentaje
+CREATE OR ALTER PROCEDURE Adua.UDP_                                             
 AS
 		BEGIN
 			SELECT		pais.pais_Nombre,
