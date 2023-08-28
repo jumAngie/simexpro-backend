@@ -35,7 +35,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
             parametros.Add("@code_Id", item.code_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@dope_NombreArchivo", item.dope_NombreArchivo, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@dope_NombreArchivo", item.dope_NombreArchivo, DbType.String, ParameterDirection.Input);
             parametros.Add("@dopo_Archivo", item.dopo_Archivo, DbType.String, ParameterDirection.Input);
             parametros.Add("@dopo_TipoArchivo", item.dopo_TipoArchivo, DbType.String, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
