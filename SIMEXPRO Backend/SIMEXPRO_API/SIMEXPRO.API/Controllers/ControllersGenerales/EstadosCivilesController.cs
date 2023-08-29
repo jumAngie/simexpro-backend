@@ -27,9 +27,9 @@ namespace SIMEXPRO.API.Controllers
 
 
         [HttpGet("Listar")]
-        public IActionResult ListarEstadosCiviles()
+        public IActionResult ListarEstadosCiviles(bool? escv_EsAduana)
         {
-            var list = _generalesServices.ListarEstadosCiviles();
+            var list = _generalesServices.ListarEstadosCiviles(escv_EsAduana);
             list.Data = _mapper.Map<IEnumerable<EstadosCivilesViewModel>>(list.Data);
             return Ok(list);
         }

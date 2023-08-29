@@ -10,6 +10,7 @@ namespace SIMEXPRO.API.Models
     {
         public int escv_Id { get; set; }
         public string escv_Nombre { get; set; }
+        public bool? escv_EsAduana { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         public DateTime escv_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }
