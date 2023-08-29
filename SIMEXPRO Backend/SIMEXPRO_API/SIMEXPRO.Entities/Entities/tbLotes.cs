@@ -33,7 +33,8 @@ namespace SIMEXPRO.Entities.Entities
         public int? usua_UsuarioEliminacion { get; set; }
         public DateTime? lote_FechaEliminacion { get; set; }
         public bool? lote_Estado { get; set; }
-        
+        [NotMapped]
+        public string colr_Nombre { get; set; }
         [NotMapped]
         public string unme_Descripcion { get; set; }
         [NotMapped]

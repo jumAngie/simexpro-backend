@@ -13814,8 +13814,8 @@ SELECT
 	   lote_CantIngresada,
 	   areas.tipa_area,
 	   lotes.tipa_id,
-	   colr.colr_Id,
-	   colr.colr_Nombre,
+	   lotes.colr_Id,
+	   color.colr_Nombre,
 	   --PEDIDOS DE MATERIALES
 	   pedidos.peor_Id,
 	   pedidosDetalle.prod_Id,
@@ -13860,6 +13860,7 @@ SELECT
   FROM Prod.tbLotes lotes
 	   LEFT JOIN Prod.tbMateriales						AS materiales        ON lotes.mate_Id                  = materiales.mate_Id
 	   LEFT JOIN Prod.tbArea							AS areas             ON lotes.tipa_id                  = areas.tipa_id
+	   LEFT JOIN Prod.tbColores                         AS color             ON lotes.colr_Id                  = color.colr_Id
 	   LEFT JOIN Gral.tbUnidadMedidas					AS UnidadesMedida    ON lotes.unme_Id                  = UnidadesMedida.unme_Id
 	   LEFT JOIN Prod.tbPedidosOrdenDetalle				AS pedidosDetalle	 ON lotes.prod_Id				   = pedidosDetalle.prod_Id
 	   LEFT JOIN Prod.tbPedidosOrden					AS pedidos			 ON pedidosDetalle.pedi_Id		   = pedidos.peor_Id
@@ -13877,7 +13878,6 @@ SELECT
  WHERE lotes.lote_Estado                                                                     = 1
 END
 GO
-
 
 CREATE OR ALTER PROC Prod.UDP_tbLotes_Insertar
 	@mate_Id				INT,
