@@ -2795,7 +2795,7 @@ END
 GO
 
 --*************** UDPS Para Tabla Comersiante Individual ************--
-
+select*from  Adua.tbComercianteIndividual
 /*Listar Comersiante Individual*/CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Listar
 AS
 BEGIN
@@ -2845,6 +2845,7 @@ BEGIN
 	INNER JOIN Gral.tbEstadosCiviles		AS civi		ON pers.escv_Id =	civi.escv_Id
 	INNER JOIN Gral.tbOficinas				AS ofic		ON pers.ofic_Id =	ofic.ofic_Id
 	INNER JOIN Gral.tbOficio_Profesiones	AS ofpr		ON pers.ofpr_Id =	ofpr.ofpr_Id
+	LEFT  JOIN Gral.tbOficio_Profesiones	AS ofprR	ON pers.pers_OfprRepresentante = ofpr.ofpr_Id 
 	INNER JOIN Gral.tbColonias				AS colo		ON coin.colo_Id =	colo.colo_Id
 	LEFT JOIN Gral.tbCiudades				AS ciud		ON colo.ciud_Id =	ciud.ciud_Id
 	LEFT JOIN Gral.tbProvincias				AS pvin		ON ciud.pvin_Id =	pvin.pvin_Id
