@@ -875,6 +875,7 @@ GO
 
 /*Listar estados civiles*/
 CREATE OR ALTER PROCEDURE gral.UDP_tbEstadosCiviles_Listar
+	@escv_EsAduana		BIT
 AS
 BEGIN
 	SELECT escv_Id,
@@ -893,7 +894,7 @@ BEGIN
 	INNER JOIN Acce.tbUsuarios usuaCrea		ON esta.usua_UsuarioCreacion = usuaCrea.usua_Id 
 	LEFT JOIN Acce.tbUsuarios usuaModifica  ON esta.usua_UsuarioModificacion = usuaModifica.usua_Id 
 	LEFT JOIN Acce.tbUsuarios usuaElimina   ON esta.usua_UsuarioEliminacion = usuaElimina.usua_Id
-	WHERE escv_Estado = 1
+	WHERE escv_Estado = 1 AND escv_EsAduana = @escv_EsAduana
 END
 GO
 
@@ -901,6 +902,7 @@ GO
 
 CREATE OR ALTER PROCEDURE gral.UDP_tbEstadosCiviles_Insertar --'prueba1', 1, '2023-07-28 14:26:31.000'
 	@escv_Nombre			NVARCHAR(150),
+	@escv_EsAduana			BIT,
 	@usua_UsuarioCreacion	INT,
 	@escv_FechaCreacion     DATETIME
 AS 
@@ -909,7 +911,7 @@ BEGIN
 	BEGIN TRY
 	IF EXISTS (SELECT * FROM Gral.tbEstadosCiviles
 						WHERE escv_Nombre = @escv_Nombre
-						AND escv_Estado = 0)
+						AND escv_Estado = 0 AND escv_EsAduana = @escv_EsAduana)
 		BEGIN 
 		   UPDATE Gral.tbEstadosCiviles
 			SET	   escv_Estado = 1
@@ -920,9 +922,11 @@ BEGIN
 		ELSE
 		BEGIN
 		INSERT INTO Gral.tbEstadosCiviles(escv_Nombre,
+										  escv_EsAduana,
 		                                  usua_UsuarioCreacion, 
 										  escv_FechaCreacion)
 			  VALUES (@escv_Nombre,
+					  @escv_EsAduana,
 			          @usua_UsuarioCreacion, 
 					  @escv_FechaCreacion)
 			SELECT 1
@@ -9440,17 +9444,17 @@ GO
 CREATE OR ALTER PROCEDURE Adua.UDP_tbImpuestosPorArancel_Listar
 AS
 BEGIN
-	SELECT	imar.imar_Id          AS IdImpuestoPorArancel,
-		    impu.impu_Id          AS ArancelCodigo,
-		    aran.aran_Id          AS DescripcionImpuesto,
-		   		
-			usu.usua_Id             AS IDUsuarioCreacion,
-			usu.usua_Nombre         AS UsuarioCreacion ,
-			impu_FechaCreacion      AS FechaCreacion,
-
-			usu1.usua_Id            AS IDUsuarioModificacion,
-			usu1.usua_Nombre        AS UsuarioModificacion,
-			impu_FechaModificacion  AS FechaModificacion
+	SELECT	imar.imar_Id				 AS IdImpuestoPorArancel,
+		    impu.impu_Id				 AS ArancelCodigo,
+		    aran.aran_Id				 AS DescripcionImpuesto,
+		   	imar.imar_PorcentajeImpuesto AS CantidadPorPorcentajeImpuesto,	
+			usu.usua_Id					 AS IDUsuarioCreacion,
+			usu.usua_Nombre				 AS UsuarioCreacion ,
+			impu_FechaCreacion			 AS FechaCreacion,
+										 
+			usu1.usua_Id				 AS IDUsuarioModificacion,
+			usu1.usua_Nombre			 AS UsuarioModificacion,
+			impu_FechaModificacion		 AS FechaModificacion
  
   FROM	    Adua.tbImpuestosPorArancel imar
             INNER JOIN Adua.tbImpuestos impu ON imar.impu_Id = impu.impu_Id
@@ -9463,14 +9467,15 @@ GO
 
 --INSERTAR
 CREATE OR ALTER PROCEDURE Adua.UDP_tbImpuestosPorArancel_Insertar 
-	@impu_Id     		    INT,
-	@aran_Id                INT,
-	@usua_UsuarioCreacion	INT,
-	@imar_FechaCreacion     DATETIME
+	@impu_Id     				INT,
+	@aran_Id					INT,
+	@imar_PorcentajeImpuesto	DECIMAL(18,2),
+	@usua_UsuarioCreacion		INT,
+	@imar_FechaCreacion			DATETIME
 AS
 BEGIN
 	BEGIN TRY
-		IF EXISTS(SELECT imar_Id FROM Adua.tbImpuestosPorArancel WHERE impu_Id = @impu_Id AND aran_Id = @aran_Id AND imar_Estado = 0)
+		IF EXISTS(SELECT imar_Id FROM Adua.tbImpuestosPorArancel WHERE impu_Id = @impu_Id AND aran_Id = @aran_Id AND imar_Estado = 0 AND imar_PorcentajeImpuesto = @imar_PorcentajeImpuesto)
 			BEGIN
 				UPDATE Adua.tbImpuestosPorArancel
 				SET	   imar_Estado = 1
@@ -9481,10 +9486,12 @@ BEGIN
 			BEGIN 
 				INSERT INTO Adua.tbImpuestosPorArancel (impu_Id, 
 				                                            aran_Id,
+															imar_PorcentajeImpuesto,
 											                usua_UsuarioCreacion, 
 											                imar_FechaCreacion)
 			VALUES(@impu_Id,	
-			       @aran_Id,			
+			       @aran_Id,
+				   @imar_PorcentajeImpuesto,			
 				   @usua_UsuarioCreacion,
 				   @imar_FechaCreacion)
 				SELECT 1
@@ -9501,6 +9508,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbImpuestosPorArancel_Editar
     @imar_Id                    INT,
 	@impu_Id     		        INT,
 	@aran_Id                    INT,
+	@imar_PorcentajeImpuesto	DECIMAL(08,2),
 	@usua_UsuarioModificacion	INT,
 	@imar_FechaModificacion     DATETIME
 AS
@@ -9509,6 +9517,7 @@ BEGIN
 		UPDATE  Adua.tbImpuestosPorArancel
 		SET		impu_Id = @impu_Id,
 		        aran_Id = @aran_Id,
+				imar_PorcentajeImpuesto = @imar_PorcentajeImpuesto,
 				usua_UsuarioModificacion = @usua_UsuarioModificacion,
 				imar_FechaModificacion = @imar_FechaModificacion
 		WHERE	imar_Id = @imar_Id
@@ -9643,6 +9652,7 @@ AS
 BEGIN
 	SELECT	impu.impu_Id          ,--AS IdImpuesto,
 		    impu.impu_Descripcion ,--AS DescripcionImpuesto,
+		   		
 			impu.usua_UsuarioCreacion,
 			usu.usua_Nombre         AS UsuarioCreacion ,
 			impu_FechaCreacion      ,--AS FechaCreacion,
@@ -9660,31 +9670,27 @@ GO
  
 --INSERTAR
 CREATE OR ALTER PROCEDURE Adua.UDP_tbImpuestos_Insertar 
-	@aran_Codigo		    NVARCHAR(100),
 	@impu_Descripcion       NVARCHAR(150),
-	@impu_Impuesto          DECIMAL(18,2),
 	@usua_UsuarioCreacion	INT,
 	@impu_FechaCreacion     DATETIME
 AS
 BEGIN
 	BEGIN TRY
-		IF EXISTS(SELECT impu_Id FROM Adua.tbImpuestos WHERE aran_Codigo = @aran_Codigo AND impu_Descripcion = @impu_Descripcion AND impu_Impuesto = @impu_Impuesto AND impu_Estado = 0)
+		IF EXISTS(SELECT impu_Id FROM Adua.tbImpuestos WHERE impu_Descripcion = @impu_Descripcion AND impu_Estado = 0)
 			BEGIN
 				UPDATE Adua.tbImpuestos
 				SET	   impu_Estado = 1
-				WHERE  aran_Codigo = @aran_Codigo AND impu_Descripcion = @impu_Descripcion AND impu_Impuesto = @impu_Impuesto
+				WHERE  impu_Descripcion = @impu_Descripcion
 				SELECT 1
 			END
 		ELSE
 			BEGIN 
-				INSERT INTO Adua.tbImpuestos (aran_Codigo, 
+				INSERT INTO Adua.tbImpuestos (
 				                                  impu_Descripcion,
-												  impu_Impuesto,
 											      usua_UsuarioCreacion, 
 											      impu_FechaCreacion)
-			VALUES(@aran_Codigo,	
+			VALUES(
 			       @impu_Descripcion,
-				   @impu_Impuesto,
 				   @usua_UsuarioCreacion,
 				   @impu_FechaCreacion)
 				SELECT 1
@@ -9706,7 +9712,8 @@ AS
 BEGIN
 	BEGIN TRY
 		UPDATE  Adua.tbImpuestos
-		   SET	impu_Descripcion = @impu_Descripcion,
+		SET		
+		        impu_Descripcion = @impu_Descripcion,
 				usua_UsuarioModificacion = @usua_UsuarioModificacion,
 				impu_FechaModificacion = @impu_FechaModificacion
 		WHERE	impu_Id = @impu_Id
@@ -10172,7 +10179,7 @@ BEGIN
 			INNER JOIN  Prod.tbProcesos				procesoActual				ON	ordenCompraDetalle.proc_IdActual				= procesoActual.proc_Id
 			INNER JOIN  Acce.tbUsuarios				usuarioCreacion				ON  ordenCompraDetalle.usua_UsuarioCreacion			= usuarioCreacion.usua_Id
 			LEFT  JOIN  Acce.tbUsuarios				usuarioModificacion			ON  ordenCompraDetalle.usua_UsuarioModificacion		= usuarioModificacion.usua_Id
-			WHERE ordenCompraDetalle.orco_Id	=	@orco_Id
+			WHERE ordenCompraDetalle.orco_Id	=	@orco_Id OR @orco_Id = -1
 END
 GO
 
