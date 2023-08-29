@@ -65,7 +65,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@nico_Id", item.nico_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@nico_Codigo", item.nico_Codigo, DbType.String, ParameterDirection.Input);
             parametros.Add("@nico_Descripcion", item.nico_Descripcion, DbType.String, ParameterDirection.Input);
-            parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@nico_FechaModificacion", item.nico_FechaModificacion, DbType.String, ParameterDirection.Input);
 
             var answer = db.QueryFirst<string>(ScriptsDataBase.EditarNivelesComerciales, parametros, commandType: CommandType.StoredProcedure);
