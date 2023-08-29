@@ -484,15 +484,22 @@ VALUES ('Operario',					1, GETDATE(), 0),
 
 
 /*-------------------------------------------*/
---***** INSERT TABLA ESTADOS CIVILES --******--
+--***** INSERT TABLA ESTADOS CIVILES Aduanas --******--
 GO
-INSERT INTO [Gral].[tbEstadosCiviles] (escv_Nombre, usua_UsuarioCreacion, escv_FechaCreacion)
-VALUES ('Soltero(a)',		1, GETDATE()),
-	   ('Casado(a)',		1, GETDATE()),
-	   ('Divorciado(a)',	1, GETDATE()),
-	   ('Viudo(a)',			1, GETDATE()),
-	   ('Unión Libre',		1, GETDATE());
+INSERT INTO [Gral].[tbEstadosCiviles] ([escv_Nombre], [escv_EsAduana],[usua_UsuarioCreacion], [escv_FechaCreacion], [usua_UsuarioModificacion], [escv_FechaModificacion], [usua_UsuarioEliminacion], [escv_FechaEliminacion], [escv_Estado])
+VALUES ('Soltero(a)',		1,1, GETDATE(),NULL,NULL,NULL,NULL,1),
+	   ('Casado(a)',		1,1, GETDATE(),NULL,NULL,NULL,NULL,1),
+	   ('Divorciado(a)',	1,1, GETDATE(),NULL,NULL,NULL,NULL,1),
+	   ('Viudo(a)',			1,1, GETDATE(),NULL,NULL,NULL,NULL,1),
+	   ('Unión Libre',		1,1, GETDATE(),NULL,NULL,NULL,NULL,1);
 
+ --***** INSERT TABLA ESTADOS CIVILES Produccion --******--
+INSERT INTO [Gral].[tbEstadosCiviles] ([escv_Nombre], [escv_EsAduana],[usua_UsuarioCreacion], [escv_FechaCreacion], [usua_UsuarioModificacion], [escv_FechaModificacion], [usua_UsuarioEliminacion], [escv_FechaEliminacion], [escv_Estado])
+VALUES ('Soltero(a)',		0,1, GETDATE(),NULL,NULL,NULL,NULL,1),
+	   ('Casado(a)',		0,1, GETDATE(),NULL,NULL,NULL,NULL,1),
+	   ('Divorciado(a)',	0,1, GETDATE(),NULL,NULL,NULL,NULL,1),
+	   ('Viudo(a)',			0,1, GETDATE(),NULL,NULL,NULL,NULL,1),
+	   ('Unión Libre',		0,1, GETDATE(),NULL,NULL,NULL,NULL,1);
 
 /*------------------------------------*/
 --***** INSERT TABLA OFICINAS --******--

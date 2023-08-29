@@ -875,6 +875,7 @@ GO
 
 /*Listar estados civiles*/
 CREATE OR ALTER PROCEDURE gral.UDP_tbEstadosCiviles_Listar
+	@escv_EsAduana		BIT
 AS
 BEGIN
 	SELECT escv_Id,
@@ -893,7 +894,7 @@ BEGIN
 	INNER JOIN Acce.tbUsuarios usuaCrea		ON esta.usua_UsuarioCreacion = usuaCrea.usua_Id 
 	LEFT JOIN Acce.tbUsuarios usuaModifica  ON esta.usua_UsuarioModificacion = usuaModifica.usua_Id 
 	LEFT JOIN Acce.tbUsuarios usuaElimina   ON esta.usua_UsuarioEliminacion = usuaElimina.usua_Id
-	WHERE escv_Estado = 1
+	WHERE escv_Estado = 1 AND escv_EsAduana = @escv_EsAduana
 END
 GO
 
@@ -901,6 +902,7 @@ GO
 
 CREATE OR ALTER PROCEDURE gral.UDP_tbEstadosCiviles_Insertar --'prueba1', 1, '2023-07-28 14:26:31.000'
 	@escv_Nombre			NVARCHAR(150),
+	@escv_EsAduana			BIT,
 	@usua_UsuarioCreacion	INT,
 	@escv_FechaCreacion     DATETIME
 AS 
@@ -909,7 +911,7 @@ BEGIN
 	BEGIN TRY
 	IF EXISTS (SELECT * FROM Gral.tbEstadosCiviles
 						WHERE escv_Nombre = @escv_Nombre
-						AND escv_Estado = 0)
+						AND escv_Estado = 0 AND escv_EsAduana = @escv_EsAduana)
 		BEGIN 
 		   UPDATE Gral.tbEstadosCiviles
 			SET	   escv_Estado = 1
@@ -920,9 +922,11 @@ BEGIN
 		ELSE
 		BEGIN
 		INSERT INTO Gral.tbEstadosCiviles(escv_Nombre,
+										  escv_EsAduana,
 		                                  usua_UsuarioCreacion, 
 										  escv_FechaCreacion)
 			  VALUES (@escv_Nombre,
+					  @escv_EsAduana,
 			          @usua_UsuarioCreacion, 
 					  @escv_FechaCreacion)
 			SELECT 1

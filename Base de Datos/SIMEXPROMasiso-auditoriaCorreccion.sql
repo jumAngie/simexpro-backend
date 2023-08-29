@@ -353,7 +353,7 @@ GO
 CREATE TABLE Gral.tbEstadosCiviles(
 		escv_Id						   INT 				IDENTITY(1,1),
 		escv_Nombre 				   NVARCHAR(150) 		NOT NULL,
-	   
+		escv_EsAduana				   BIT NOT NULL,
 		usua_UsuarioCreacion 		   INT					NOT NULL,
 		escv_FechaCreacion 			   DATETIME 			NOT NULL,
 		usua_UsuarioModificacion	   INT					DEFAULT NULL,
@@ -363,13 +363,14 @@ CREATE TABLE Gral.tbEstadosCiviles(
 		escv_Estado					   BIT					DEFAULT 1,
 		
 	CONSTRAINT PK_Gral_tbEstadosCiviles_escv_Id PRIMARY KEY (escv_Id),
-	CONSTRAINT UQ_Gral_tbEstadosCiviles_escv_Nombre UNIQUE(escv_Nombre),
+	CONSTRAINT UQ_Gral_tbEstadosCiviles_escv_Nombre UNIQUE(escv_Nombre,escv_EsAduana),
 	CONSTRAINT FK_Gral_tbEstadosCiviles_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id 	 FOREIGN KEY(usua_UsuarioCreacion)     REFERENCES Acce.tbUsuarios (usua_Id),
 	CONSTRAINT FK_Gral_tbEstadosCiviles_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id FOREIGN KEY(usua_UsuarioModificacion) REFERENCES Acce.tbUsuarios (usua_Id),
 	CONSTRAINT FK_Gral_tbEstadosCiviles_usua_UsuarioEliminacion_Acce_tbUsuarios_usua_Id  FOREIGN KEY(usua_UsuarioEliminacion)  REFERENCES Acce.tbUsuarios (usua_Id)
 	
 );
 GO
+
 
 CREATE TABLE Gral.tbOficinas(
 		ofic_Id						    INT 				IDENTITY(1,1),

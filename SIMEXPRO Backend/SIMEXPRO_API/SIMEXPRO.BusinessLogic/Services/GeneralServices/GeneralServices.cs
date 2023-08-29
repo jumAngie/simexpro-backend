@@ -481,12 +481,12 @@ namespace SIMEXPRO.BussinessLogic.Services.GeneralServices
         #endregion
 
         #region EstadosCiviles
-        public ServiceResult ListarEstadosCiviles()
+        public ServiceResult ListarEstadosCiviles(bool? escv_EsAduana)
         {
             var result = new ServiceResult();
             try
             {
-                var list = _estadosCivilesRepository.List();
+                var list = _estadosCivilesRepository.ListarEstadosCiviles(escv_EsAduana);
                 return result.Ok(list);
             }
             catch (Exception ex)
