@@ -403,3 +403,5 @@ AS
 			GROUP BY adua.adua_Nombre
 	END
 GO
+
+-- 
