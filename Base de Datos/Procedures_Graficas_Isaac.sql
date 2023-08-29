@@ -387,3 +387,19 @@ AS
 		GROUP BY mercancias.merc_Descripcion
 	END
 GO
+
+-- Aduanas con mas importaciones 
+CREATE OR ALTER PROCEDURE Adua.UDP_AduanasIngreso_CantidadPorcentaje
+AS 
+	BEGIN
+		DECLARE @totaldevas INT = (SELECT COUNT(deva_AduanaIngresoId) FROM Adua.tbDeclaraciones_Valor )
+
+		SELECT
+			adua.adua_Nombre,
+			SUM(deva.deva_AduanaIngresoId) AS Cantidad,
+			(CAST(COUNT(deva.deva_AduanaIngresoId) AS decimal(18, 2)) / @totaldevas * 100) AS Porcentaje
+			FROM Adua.tbDeclaraciones_Valor deva
+			INNER JOIN Adua.tbAduanas adua ON deva.deva_AduanaIngresoId = adua.adua_Id
+			GROUP BY adua.adua_Nombre
+	END
+GO

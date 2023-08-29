@@ -29,5 +29,14 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             var answer = db.Query<tbGraficas>(ScriptsDataBase.Adua_UDP_EstadosMercancias_CantidadPorcentaje, null, commandType: CommandType.StoredProcedure);
             return answer;
         }
+
+        public IEnumerable<tbGraficas> AduanasIngreso_CantidadPorcentaje()
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+
+            var answer = db.Query<tbGraficas>(ScriptsDataBase.Adua_UDP_AduanasIngreso_CantidadPorcentaje, null, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
     }
 }

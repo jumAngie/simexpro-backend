@@ -39,5 +39,12 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(listado);
         }
 
+        [HttpGet("AduanasIngreso_CantidadPorcentaje")]
+        public IActionResult AduanasIngreso_CantidadPorcentaje()
+        {
+            var listado = _aduanaServices.AduanasIngreso_CantidadPorcentaje();
+            return Ok(listado);
+        }
+
     }
 }

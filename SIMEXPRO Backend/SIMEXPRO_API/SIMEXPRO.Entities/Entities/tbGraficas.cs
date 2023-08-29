@@ -64,7 +64,11 @@ namespace SIMEXPRO.Entities.Entities
 
         // Estados Mercancias Cantidad Porcentaje
 
-        public string merc_Descripcion {get;set;}
+        public string merc_Descripcion { get; set; }
         public int Cantidad { get; set; }
+
+        // Aduanas con mas importaciones
+
+        public string adua_Nombre {get;set;}
     }
 }

@@ -36,15 +36,7 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             var item = _mapper.Map<tbMarcas>(concepto);
 
             var respuesta = _aduanaServices.InsertarMarcas(item);
-
-            if (respuesta.Code == 200)
-            {
-                return Ok(respuesta);
-            }
-            else
-            {
-                return BadRequest(respuesta);
-            }
+            return Ok(respuesta);
         }
 
         [HttpPost("Editar")]
@@ -53,15 +45,7 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             var item = _mapper.Map<tbMarcas>(concepto);
 
             var respuesta = _aduanaServices.ActualizarMarcas(item);
-
-            if (respuesta.Code == 200)
-            {
                 return Ok(respuesta);
-            }
-            else
-            {
-                return BadRequest(respuesta);
-            }
         }
 
         [HttpPost("Eliminar")]
@@ -70,15 +54,7 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             var item = _mapper.Map<tbMarcas>(concepto);
 
             var respuesta = _aduanaServices.EliminarMarcas(item);
-
-            if (respuesta.Code == 200)
-            {
                 return Ok(respuesta);
-            }
-            else
-            {
-                return BadRequest(respuesta);
-            }
         }
     }
 }

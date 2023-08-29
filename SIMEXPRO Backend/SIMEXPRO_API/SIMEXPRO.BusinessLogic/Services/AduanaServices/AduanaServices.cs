@@ -2293,7 +2293,6 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-
                     return result.Error(map);
                 }
             }
@@ -3185,6 +3184,20 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var list = _aduanagraficasrepository.EstadosMercancias_CantidadPorcentaje();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult AduanasIngreso_CantidadPorcentaje()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _aduanagraficasrepository.AduanasIngreso_CantidadPorcentaje();
                 return result.Ok(list);
             }
             catch (Exception ex)
