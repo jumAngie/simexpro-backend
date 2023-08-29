@@ -9642,7 +9642,6 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbImpuestos_Listar
 AS
 BEGIN
 	SELECT	impu.impu_Id          ,--AS IdImpuesto,
-		    impu.aran_Codigo      ,--AS ArancelCodigo,
 		    impu.impu_Descripcion ,--AS DescripcionImpuesto,
 			impu.impu_Impuesto    ,--AS Impuesto,
 		   		
