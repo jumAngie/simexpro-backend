@@ -1460,9 +1460,7 @@ GO
 
 CREATE TABLE Adua.tbImpuestos(
 	impu_Id						INT IDENTITY(1,1),
-	aran_Codigo					NVARCHAR(100) NOT NULL,
 	impu_Descripcion			NVARCHAR(150) NOT NULL,
-	impu_Impuesto				DECIMAL(18,2) NOT NULL,
 	
 	usua_UsuarioCreacion		INT NOT NULL, 
 	impu_FechaCreacion			DATETIME NOT NULL ,
@@ -1471,7 +1469,6 @@ CREATE TABLE Adua.tbImpuestos(
 	--usua_UsuarioEliminacion 	INT	DEFAULT NULL, 
 	--impu_FechaEliminacion		DATETIME DEFAULT NULL, 
 	impu_Estado					BIT NOT NULL DEFAULT 1
-	
 	CONSTRAINT PK_Adua_tbImpuestos_impu_Id													PRIMARY KEY (impu_Id),
 	CONSTRAINT FK_Adua_tbImpuestos_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id				FOREIGN KEY (usua_UsuarioCreacion)		REFERENCES Acce.tbUsuarios (usua_Id),
 	CONSTRAINT FK_Adua_tbImpuestos_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id			FOREIGN KEY (usua_UsuarioModificacion)	REFERENCES Acce.tbUsuarios (usua_Id),
@@ -1483,7 +1480,7 @@ CREATE TABLE Adua.tbImpuestosPorArancel(
     imar_Id						INT IDENTITY(1,1),
 	impu_Id						INT NOT NULL,
 	aran_Id						INT NOT NULL,
-	
+	imar_PorcentajeImpuesto		DECIMAL(18,2),
 	usua_UsuarioCreacion		INT NOT NULL, 
 	imar_FechaCreacion			DATETIME NOT NULL ,
 	usua_UsuarioModificacion    INT,
