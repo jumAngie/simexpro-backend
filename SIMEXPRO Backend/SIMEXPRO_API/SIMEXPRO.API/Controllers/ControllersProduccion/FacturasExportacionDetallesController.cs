@@ -56,5 +56,13 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             var respuesta = _produccionServices.EliminarFacturasExportacionDetalles(mapped);
             return Ok(respuesta);
         }
+        
+        [HttpPost("PODetallesDDL")]
+        public IActionResult PODetallesDDL(FacturaExportacionDetallesViewModel id)
+        {
+            var listado = _produccionServices.PODetallesDDL(id.faex_Id);
+            listado.Data = _mapper.Map<IEnumerable<FacturaExportacionDetallesViewModel>>(listado.Data);
+            return Ok(listado);
+        }
     }
 }

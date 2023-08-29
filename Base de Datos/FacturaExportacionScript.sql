@@ -1,5 +1,4 @@
-
-SELECT * FROM Prod.tbFacturasExportacion
+USE SIMEXPRO
 GO
 
 -- FACTURA EXPORTACION 
@@ -35,7 +34,8 @@ AS
 						FactExportDetails.fede_Cajas, 
 						FactExportDetails.fede_Cantidad, 
 						FactExportDetails.fede_PrecioUnitario, 
-						FactExportDetails.fede_TotalDetalle
+						FactExportDetails.fede_TotalDetalle,
+						CONCAT('#: ', PODetail.code_CodigoDetalle, ' - ',Style.esti_Descripcion,' - ',Talla.tall_Codigo,' - ',PODetail.code_Sexo,' - ',Color.colr_Nombre) AS code_Descripcion 
 				FROM Prod.tbFacturasExportacionDetalles AS FactExportDetails
 				INNER JOIN Prod.tbOrdenCompraDetalles AS PODetail ON FactExportDetails.code_Id = PODetail.code_Id
 				INNER JOIN Prod.tbEstilos AS Style ON PODetail.esti_Id = Style.esti_Id
@@ -48,6 +48,7 @@ AS
 		INNER JOIN Prod.tbClientes			AS Clie			ON PO.orco_IdCliente = Clie.clie_Id
 		INNER JOIN Acce.tbUsuarios			AS UserCrea		ON FactExport.usua_UsuarioCreacion = UserCrea.usua_Id
 		LEFT JOIN Acce.tbUsuarios			AS UserModifica ON FactExport.usua_UsuarioModificacion = UserModifica.usua_Id
+		WHERE FactExport.faex_Estado = 1
 	END
 GO
 
@@ -169,12 +170,14 @@ BEGIN
 			Detail.fede_Cajas, 
 			Detail.fede_Cantidad, 
 			Detail.fede_PrecioUnitario, 
-			Detail.fede_TotalDetalle
+			Detail.fede_TotalDetalle,
+			CONCAT('#: ', PODetail.code_CodigoDetalle, ' - ',Style.esti_Descripcion,' - ',Talla.tall_Codigo,' - ',PODetail.code_Sexo,' - ',Color.colr_Nombre) AS code_Descripcion 
 	FROM Prod.tbFacturasExportacionDetalles AS Detail
 	INNER JOIN Prod.tbOrdenCompraDetalles AS PODetail ON Detail.code_Id = PODetail.code_Id
 	INNER JOIN Prod.tbEstilos AS Style ON PODetail.esti_Id = Style.esti_Id
 	INNER JOIN Prod.tbTallas AS Talla ON PODetail.tall_Id = Talla.tall_Id
 	INNER JOIN Prod.tbColores AS Color ON PODetail.colr_Id = Color.colr_Id
+	WHERE Detail.faex_Id = @faex_Id
 END
 GO
 
@@ -271,25 +274,27 @@ BEGIN
 END
 GO
 
-SELECT * FROM Prod.tbFacturasExportacion
-GO
-
-CREATE OR ALTER PROCEDURE Prod.UDP_PODetallesByID
+ 
+CREATE OR ALTER PROCEDURE Prod.UDP_PODetallesByID 
 	@faex_Id INT
 AS
 BEGIN 
-	DECLARE @orco_Id INT = (SELECT orco_Id FROM Prod.tbFacturasExportacion WHERE faex_Id = 49)
+	DECLARE @orco_Id INT = (SELECT orco_Id FROM Prod.tbFacturasExportacion WHERE faex_Id = @faex_Id)
 
 	SELECT code.code_Id ,CONCAT('#: ', code.code_CodigoDetalle, ' - ',esti.esti_Descripcion,' - ',tall.tall_Codigo,' - ',code.code_Sexo,' - ',colr.colr_Nombre) AS code_Descripcion 
 	FROM Prod.tbOrdenCompraDetalles code
 	INNER JOIN Prod.tbEstilos AS esti ON code.esti_Id = esti.esti_Id
 	INNER JOIN Prod.tbTallas AS tall ON code.tall_Id = tall.tall_Id
 	INNER JOIN Prod.tbColores AS colr ON code.colr_Id = colr.colr_Id
-
-	WHERE orco_Id = @orco_Id
+	WHERE orco_Id = @orco_Id AND code.code_Estado = 1
 END
 GO
 
 SELECT * FROM Prod.tbColores
 SELECT * FROM Prod.tbTallas
-SELECT * FROM Prod.tbOrdenCompraDetalles
+SELECT * FROM Prod.tbOrdenCompraDetalles WHERE orco_Id = 57
+SELECT * FROM Prod.tbOrdenCompra
+SELECT * FROM Prod.tbFacturasExportacion
+
+SELECT * FROM Prod.tbFacturasExportacionDetalles WHERE faex_Id = 85
+SELECT * FROM Prod.tbFacturasExportacionDetalles
