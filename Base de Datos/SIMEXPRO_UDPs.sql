@@ -9643,8 +9643,6 @@ AS
 BEGIN
 	SELECT	impu.impu_Id          ,--AS IdImpuesto,
 		    impu.impu_Descripcion ,--AS DescripcionImpuesto,
-			impu.impu_Impuesto    ,--AS Impuesto,
-		   		
 			impu.usua_UsuarioCreacion,
 			usu.usua_Nombre         AS UsuarioCreacion ,
 			impu_FechaCreacion      ,--AS FechaCreacion,
