@@ -61,5 +61,10 @@ namespace SIMEXPRO.Entities.Entities
         public string pais_Nombre { get; set; }
         public int duca_Pais_Emision_Exportador { get; set; }
         public string Porcentaje { get; set; }
+
+        // Estados Mercancias Cantidad Porcentaje
+
+        public string merc_Descripcion {get;set;}
+        public int Cantidad { get; set; }
     }
 }

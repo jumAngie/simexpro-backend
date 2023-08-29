@@ -707,7 +707,7 @@ namespace SIMEXPRO.DataAccess
         public static string GR_ClientesProductivos = "Prod.UDP_ClientesMasProductivos";
         public static string GR_ProductividadModulos = "Prod.UDP_ProduccionModulo_CantidadPorcentaje";
         public static string Adua_UDP_ExportadoresPorPais_CantidadPorcentaje = "Adua.UDP_ExportadoresPorPais_CantidadPorcentaje";
-
+        public static string Adua_UDP_EstadosMercancias_CantidadPorcentaje = "Adua.UDP_EstadosMercancias_CantidadPorcentaje";
         #endregion
     }
 }

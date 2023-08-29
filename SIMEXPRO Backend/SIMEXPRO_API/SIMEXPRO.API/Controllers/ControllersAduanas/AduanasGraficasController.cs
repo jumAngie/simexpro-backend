@@ -31,6 +31,13 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             var listado = _aduanaServices.ExportadoresPorPais_CantidadPorcentaje();
             return Ok(listado);
         }
-    
+
+        [HttpGet("EstadosMercancias_CantidadPorcentaje")]
+        public IActionResult EstadosMercancias_CantidadPorcentaje()
+        {
+            var listado = _aduanaServices.EstadosMercancias_CantidadPorcentaje();
+            return Ok(listado);
+        }
+
     }
 }
