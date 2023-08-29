@@ -9653,7 +9653,7 @@ BEGIN
  
   FROM	    Adua.tbImpuestos impu
 			INNER JOIN Acce.tbUsuarios usu ON usu.usua_Id = impu.usua_UsuarioCreacion 
-			LEFT JOIN Acce.tbUsuarios usu1 ON usu1.usua_UsuarioModificacion = impu.usua_UsuarioModificacion
+			LEFT JOIN Acce.tbUsuarios usu1 ON usu1.usua_Id = impu.usua_UsuarioModificacion
 			WHERE impu.impu_Estado = 1
 END
 GO
@@ -9699,18 +9699,14 @@ GO
 --EDITAR
 CREATE OR ALTER PROCEDURE Adua.UDP_tbImpuestos_Editar 
     @impu_Id                    INT,
-	@aran_Codigo		        NVARCHAR(100),
 	@impu_Descripcion           NVARCHAR(150),
-	@impu_Impuesto              DECIMAL(18,2),
 	@usua_UsuarioModificacion	INT,
 	@impu_FechaModificacion     DATETIME
 AS
 BEGIN
 	BEGIN TRY
 		UPDATE  Adua.tbImpuestos
-		SET		aran_Codigo = @aran_Codigo,
-		        impu_Descripcion = @impu_Descripcion,
-				impu_Impuesto = @impu_Impuesto,
+		   SET	impu_Descripcion = @impu_Descripcion,
 				usua_UsuarioModificacion = @usua_UsuarioModificacion,
 				impu_FechaModificacion = @impu_FechaModificacion
 		WHERE	impu_Id = @impu_Id

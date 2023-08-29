@@ -37,15 +37,7 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             var item = _mapper.Map<tbModoTransporte>(concepto);
 
             var respuesta = _aduanaServices.InsertarModoTransporte(item);
-
-            if (respuesta.Code == 200)
-            {
                 return Ok(respuesta);
-            }
-            else
-            {
-                return BadRequest(respuesta);
-            }
         }
 
         [HttpPost("Editar")]
@@ -54,15 +46,7 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             var item = _mapper.Map<tbModoTransporte>(concepto);
 
             var respuesta = _aduanaServices.ActualizarModoTransporte(item);
-
-            if (respuesta.Code == 200)
-            {
                 return Ok(respuesta);
-            }
-            else
-            {
-                return BadRequest(respuesta);
-            }
         }
 
         //[HttpPost("Eliminar")]
