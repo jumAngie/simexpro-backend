@@ -69,6 +69,15 @@ namespace SIMEXPRO.Entities.Entities
         public DateTime? coin_FechaModificacion { get; set; }
         public bool? coin_Estado { get; set; }
 
+        [NotMapped]
+        public string formaRepresentacionDesc { get; set; }
+        [NotMapped]
+        public string estadoCivilRepresentante { get; set; }
+        [NotMapped]
+        public string pers_escvRepresentante  {get; set; }
+        [NotMapped]
+        public string pers_OfprRepresentante  {get; set; }
+
         public virtual tbColonias coin_ColoniaRepresentanteNavigation { get; set; }
         public virtual tbColonias colo { get; set; }
         public virtual tbPersonas pers { get; set; }
