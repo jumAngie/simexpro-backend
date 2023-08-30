@@ -2854,8 +2854,6 @@ BEGIN
 			coin.coin_CorreoElectronico, 
 			coin.coin_CorreoElectronicoAlternativo, 
 
-
-			coin.coin_NumeroLocalReprentante, 
 			coin.coin_PuntoReferenciaReprentante, 
 
 
