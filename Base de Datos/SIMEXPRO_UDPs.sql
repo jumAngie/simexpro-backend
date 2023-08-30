@@ -2799,8 +2799,7 @@ END
 GO
 
 --*************** UDPS Para Tabla Comersiante Individual ************--
-select*from  Adua.tbComercianteIndividual
-select*from [Adua].[tbPersonas]
+
 /*Listar Comersiante Individual*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Listar
 AS
@@ -2818,7 +2817,11 @@ BEGIN
 			pers.pers_escvRepresentante, -- nuevo
 			civiR.escv_Nombre		AS estadoCivilRepresentante,  -- nuevo
 			pers.pers_OfprRepresentante,  -- nuevo
-			ofprR.ofpr_Nombre		AS oficioProfesRepresentante,  -- nuevo
+		--	ofprR.ofpr_Nombre		AS oficioProfesRepresentante,  -- nuevo
+			CASE 
+			WHEN coin.pers_FormaRepresentacion = 'True' THEN 'Representante Legal'
+			ELSE 'Condicion Propia'
+			END											AS formaRepresentacionDesc, -- nuevo
 
 			coin.pers_FormaRepresentacion, 
 
@@ -2852,14 +2855,14 @@ BEGIN
 			coin.coin_FechaModificacion, 
 			coin.coin_Estado
 	FROM Adua.tbComercianteIndividual		AS coin
-	INNER JOIN Adua.tbPersonas				AS pers		ON coin.pers_Id =	pers.pers_Id
-	INNER JOIN Gral.tbEstadosCiviles		AS civi		ON pers.escv_Id =	civi.escv_Id
+	LEFT  JOIN Adua.tbPersonas				AS pers		ON coin.pers_Id =	pers.pers_Id
+	LEFT  JOIN Gral.tbEstadosCiviles		AS civi		ON pers.escv_Id =	civi.escv_Id
 	LEFT  JOIN Gral.tbEstadosCiviles		AS civiR	ON pers.pers_escvRepresentante = civiR.escv_Id
-	INNER JOIN Gral.tbOficinas				AS ofic		ON pers.ofic_Id =	ofic.ofic_Id
-	INNER JOIN Gral.tbOficio_Profesiones	AS ofpr		ON pers.ofpr_Id =	ofpr.ofpr_Id
-	LEFT  JOIN Gral.tbOficio_Profesiones	AS ofprR	ON pers.pers_OfprRepresentante = ofpr.ofpr_Id 
-
-	INNER JOIN Gral.tbColonias				AS colo		ON coin.colo_Id =	colo.colo_Id
+	LEFT  JOIN Gral.tbOficinas				AS ofic		ON pers.ofic_Id =	ofic.ofic_Id
+	LEFT  JOIN Gral.tbOficio_Profesiones	AS ofpr		ON pers.ofpr_Id =	ofpr.ofpr_Id
+	LEFT  JOIN Gral.tbOficio_Profesiones	AS ofprR	ON pers.pers_OfprRepresentante = ofprR.ofpr_Id 
+	 
+	LEFT  JOIN Gral.tbColonias				AS colo		ON coin.colo_Id =	colo.colo_Id
 	LEFT JOIN Gral.tbCiudades				AS ciud		ON colo.ciud_Id =	ciud.ciud_Id
 	LEFT JOIN Gral.tbProvincias				AS pvin		ON ciud.pvin_Id =	pvin.pvin_Id
 	LEFT JOIN Gral.tbPaises					AS pais		ON pvin.pais_Id =	pais.pais_Id
