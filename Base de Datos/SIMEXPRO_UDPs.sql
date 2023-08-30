@@ -2800,7 +2800,6 @@ GO
 
 --*************** UDPS Para Tabla Comersiante Individual ************--
 
-/*Listar Comersiante Individual*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Listar
 AS
 BEGIN
@@ -2842,6 +2841,10 @@ BEGIN
 			pvinR.pvin_Codigo  AS pvin_CodigoRepresentante,--nuevo
 			pvinR.pvin_Nombre	AS pvin_NombreRepresentante, --nuevo
 
+			coin.colo_Id, --nuevo
+			colo.colo_Nombre, --nuevo
+			coin.coin_coloniaIdRepresentante, --nuevo
+			colo2.colo_Nombre		AS coloniaNombreRepresentante, --nuevo
 
 
 			pvin.pais_Id,
@@ -2854,8 +2857,9 @@ BEGIN
 			coin.coin_CorreoElectronico, 
 			coin.coin_CorreoElectronicoAlternativo, 
 
+			coin.coin_NumeroLocalApart, --nuevo
+			coin.coin_NumeroLocaDepartRepresentante,  --nuevo
 			coin.coin_PuntoReferenciaReprentante, 
-
 
 			coin.usua_UsuarioCreacion, 
 			crea.usua_Nombre				AS usuarioCreacionNombre,
@@ -2878,6 +2882,8 @@ BEGIN
 	LEFT  JOIN Gral.tbAldeas				AS aldeR	ON coin.coin_AldeaRepresentante =	aldeR.alde_Id 
 	LEFT  JOIN  Gral.tbCiudades				AS ciudR	ON coin.coin_CiudadRepresentante =	ciudR.ciud_Id
 
+	LEFT JOIN Gral.tbColonias				AS colo		ON coin.colo_Id = colo.colo_Id
+	LEFT JOIN Gral.tbColonias				AS colo2	ON coin.coin_coloniaIdRepresentante = colo2.colo_Id
 
 	LEFT JOIN Gral.tbProvincias				AS pvin		ON ciud.pvin_Id =	pvin.pvin_Id
 	LEFT JOIN Gral.tbProvincias				AS pvinR	ON ciudR.pvin_Id =	pvinR.pvin_Id
@@ -2888,6 +2894,8 @@ BEGIN
 	WHERE coin.coin_Estado = 1
 END
 GO
+
+
 /*Insertar Comersiante Individual*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap1 --'1548-1458-145789', 2, 1, 2,0,null,null,1, '2023-08-30 10:26:59.900'
 (
@@ -3371,7 +3379,7 @@ GO
 --**********LUGARES EMBARQUE**********--
 /*Listar lugares embarque*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbLugaresEmbarque_Listar 
-@emba_Codigo	CHAR(5)
+
 AS
 BEGIN
 	--SELECT @emba_Codigo = SUBSTRING(@emba_Codigo ,1,2)
@@ -3392,9 +3400,7 @@ BEGIN
 	       INNER JOIN Acce.tbUsuarios usuaCrea			ON lugar.usua_UsuarioCreacion     = usuaCrea.usua_Id 
 		   LEFT JOIN  Acce.tbUsuarios usuaModifica		ON lugar.usua_UsuarioModificacion = usuaModifica.usua_Id 
 		   LEFT JOIN  Acce.tbUsuarios usuaElimi		    ON lugar.usua_UsuarioEliminacion  = usuaElimi.usua_Id 
-	 WHERE SUBSTRING(lugar.emba_Codigo,1,2) = @emba_Codigo 
-	 OR @emba_Codigo IS NULL
-	 AND emba_Estado = 1
+	 WHERE emba_Estado = 1
 END
 GO
 
