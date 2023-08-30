@@ -1692,7 +1692,7 @@ CREATE TABLE Adua.tbComercianteIndividual (
 	coin_CiudadRepresentante			INT, -- nuevo
 	coin_AldeaRepresentante		  		INT, -- nuevo
 
-  	coin_NumeroLocalReprentante	    	NVARCHAR(200),
+  	coin_NumeroLocalReprentante	    	NVARCHAR(200),          
   	coin_PuntoReferenciaReprentante   	NVARCHAR(200),
   	coin_TelefonoCelular			    NVARCHAR(20),
   	coin_TelefonoFijo				    NVARCHAR(20),

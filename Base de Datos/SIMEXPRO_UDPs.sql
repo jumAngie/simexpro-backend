@@ -2814,27 +2814,40 @@ BEGIN
 			ofic.ofic_Nombre,
 			pers.ofpr_Id,
 			ofpr.ofpr_Nombre,
-			pers.pers_escvRepresentante, -- nuevo
-			civiR.escv_Nombre		AS estadoCivilRepresentante,  -- nuevo
-			pers.pers_OfprRepresentante,  -- nuevo
-			ofprR.ofpr_Nombre		AS oficioProfesRepresentante,  -- nuevo
+			pers.pers_escvRepresentante,
+			civiR.escv_Nombre		AS estadoCivilRepresentante, 
+			pers.pers_OfprRepresentante, 
+			ofprR.ofpr_Nombre		AS oficioProfesRepresentante,  
 			coin.pers_FormaRepresentacion, 
 			CASE 
 			WHEN coin.pers_FormaRepresentacion = 'True' THEN 'Representante Legal'
 			ELSE 'Condicion Propia'
-			END											AS formaRepresentacionDesc, -- nuevo
+			END											AS formaRepresentacionDesc,
 
 
-			coin.colo_Id,
-			colo.colo_Nombre,
+			coin.alde_Id, --nuevo
+			alde.alde_Nombre, --nuevo
 			ciud.ciud_Id,
 			ciud.ciud_Nombre,
 			ciud.pvin_Id,
 			pvin.pvin_Codigo,
 			pvin.pvin_Nombre,
+
+
+			coin.coin_AldeaRepresentante, --nuevo
+			aldeR.alde_Nombre,--nuevo
+			coin.coin_CiudadRepresentante, --nuevo
+			ciudR.ciud_Nombre	AS ciudadNrepresentante, --nuevo
+			ciudR.pvin_Id	AS pvin_IdRepresentante,  --nuevo
+			pvinR.pvin_Codigo  AS pvin_CodigoRepresentante,--nuevo
+			pvinR.pvin_Nombre	AS pvin_NombreRepresentante, --nuevo
+
+
+
 			pvin.pais_Id,
 			pais.pais_Codigo,
 			pais.pais_Nombre,
+
 			coin.coin_PuntoReferencia,
 			coin.coin_TelefonoCelular, 
 			coin.coin_TelefonoFijo, 
@@ -2842,7 +2855,6 @@ BEGIN
 			coin.coin_CorreoElectronicoAlternativo, 
 
 
-			coin.coin_ColoniaRepresentante, 
 			coin.coin_NumeroLocalReprentante, 
 			coin.coin_PuntoReferenciaReprentante, 
 
@@ -2862,16 +2874,22 @@ BEGIN
 	LEFT  JOIN Gral.tbOficio_Profesiones	AS ofpr		ON pers.ofpr_Id =	ofpr.ofpr_Id
 	LEFT  JOIN Gral.tbOficio_Profesiones	AS ofprR	ON pers.pers_OfprRepresentante = ofprR.ofpr_Id 
 	 
-	LEFT  JOIN Gral.tbColonias				AS colo		ON coin.colo_Id =	colo.colo_Id
-	LEFT JOIN Gral.tbCiudades				AS ciud		ON colo.ciud_Id =	ciud.ciud_Id
+	LEFT  JOIN Gral.tbAldeas				AS alde		ON coin.alde_Id =	alde.alde_Id 
+	LEFT JOIN  Gral.tbCiudades				AS ciud		ON coin.ciud_Id =	ciud.ciud_Id
+		 
+	LEFT  JOIN Gral.tbAldeas				AS aldeR	ON coin.coin_AldeaRepresentante =	aldeR.alde_Id 
+	LEFT  JOIN  Gral.tbCiudades				AS ciudR	ON coin.coin_CiudadRepresentante =	ciudR.ciud_Id
+
+
 	LEFT JOIN Gral.tbProvincias				AS pvin		ON ciud.pvin_Id =	pvin.pvin_Id
+	LEFT JOIN Gral.tbProvincias				AS pvinR	ON ciudR.pvin_Id =	pvinR.pvin_Id
+
 	LEFT JOIN Gral.tbPaises					AS pais		ON pvin.pais_Id =	pais.pais_Id
 	LEFT JOIN Acce.tbUsuarios				AS crea		ON coin.usua_UsuarioCreacion = crea.usua_Id
 	LEFT JOIN Acce.tbUsuarios				AS modi		ON coin.usua_UsuarioModificacion = modi.usua_Id
 	WHERE coin.coin_Estado = 1
 END
 GO
-
 /*Insertar Comersiante Individual*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap1 --'1548-1458-145789', 2, 1, 2,0,null,null,1, '2023-08-30 10:26:59.900'
 (
