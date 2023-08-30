@@ -2949,6 +2949,47 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap2
+	@coin_Id			  INT,
+	@ciud_Id			  INT,
+	@alde_Id			  INT,
+	@coin_PuntoReferencia NVARCHAR(200)
+
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE Adua.tbComercianteIndividual
+		SET ciud_Id = @ciud_Id, alde_Id = @alde_Id, coin_PuntoReferencia = @coin_PuntoReferencia
+		WHERE coin_Id = @coin_Id
+		SELECT 1
+END TRY
+BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+END CATCH
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap3
+	@coin_Id						 INT,
+	@coin_CiudadRepresentante		 INT,
+	@coin_AldeaRepresentante		 INT,
+	@coin_PuntoReferenciaReprentante NVARCHAR(200)
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE Adua.tbComercianteIndividual
+		SET coin_CiudadRepresentante = @coin_CiudadRepresentante, 
+		coin_AldeaRepresentante = @coin_AldeaRepresentante,
+		coin_PuntoReferenciaReprentante = @coin_PuntoReferenciaReprentante
+		WHERE coin_Id = @coin_Id
+		SELECT 1
+END TRY
+BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+END CATCH
+END
+GO
+
 
 /*Editar Comersiante Individual*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Editar
