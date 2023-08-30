@@ -324,6 +324,7 @@ namespace SIMEXPRO.DataAccess
         public static string ListarImpuestosPorArancel = "Adua.UDP_tbImpuestosPorArancel_Listar";
         public static string InsertarImpuestosPorArancel = "Adua.UDP_tbImpuestosPorArancel_Insertar";
         public static string EditarImpuestosPorArancel = "Adua.UDP_tbImpuestosPorArancel_Editar";
+        public static string CategoriaAranceles = "Adua.UDP_tbArancelesBuscarCategoria";
         #endregion
 
         #region Incoterm

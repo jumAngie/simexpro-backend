@@ -49,6 +49,13 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(datos);
         }
 
+        [HttpGet("Categorias")]
+        public IActionResult Categorias(string aran_Codigo)
+        {
+            var datos = _aduanaServices.BuscarCategoriaArancel(aran_Codigo);
+            return Ok(datos);
+        }
+
         //[HttpPost("Eliminar")]
         //public IActionResult Eliminar(ArancelesViewModel aranceles)
         //{

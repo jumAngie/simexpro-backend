@@ -246,6 +246,21 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult BuscarCategoriaArancel(string aran_Codigo)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _arancelesRepository.Categoria(aran_Codigo);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+
         #endregion
 
         #region BaseCalculos

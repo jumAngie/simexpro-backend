@@ -57,5 +57,15 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             result.MessageStatus = answer;
             return result;
         }
+
+        public IEnumerable<tbAranceles> Categoria(string id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@aran_Codigo", id, DbType.String, ParameterDirection.Input);
+            return db.Query<tbAranceles>(ScriptsDataBase.CategoriaAranceles, parametros, commandType: CommandType.StoredProcedure);
+        }
+
+
     }
 }
