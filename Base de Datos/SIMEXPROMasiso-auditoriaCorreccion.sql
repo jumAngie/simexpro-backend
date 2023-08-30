@@ -1684,15 +1684,17 @@ CREATE TABLE Adua.tbComercianteIndividual (
   	coin_Id                           	INT IDENTITY(1,1),
   	pers_Id                           	INT NOT NULL,
   	pers_FormaRepresentacion 			BIT NOT NULL,
-  	--colo_Id                           	INT , -- eliminado
 	ciud_Id								INT, --nuevo
 	alde_Id								INT,  --nuevo
+	colo_Id								INT, -- nuevo
+	coin_NumeroLocalApart				NVARCHAR(150), --nuevo
+	coin_coloniaIdRepresentante			INT, --nuevo
+	coin_NumeroLocaDepartRepresentante	NVARCHAR(150),-- nuevo
+
   	coin_PuntoReferencia			  	NVARCHAR(200),
-  	--coin_ColoniaRepresentante		  	INT, -- eliminado
 	coin_CiudadRepresentante			INT, -- nuevo
 	coin_AldeaRepresentante		  		INT, -- nuevo
 
-  	coin_NumeroLocalReprentante	    	NVARCHAR(200),          
   	coin_PuntoReferenciaReprentante   	NVARCHAR(200),
   	coin_TelefonoCelular			    NVARCHAR(20),
   	coin_TelefonoFijo				    NVARCHAR(20),
@@ -1711,7 +1713,8 @@ CREATE TABLE Adua.tbComercianteIndividual (
   	CONSTRAINT FK_ComercianteIndividual_pers_Id_Adua_Personas_pers_Id                           FOREIGN KEY (pers_Id) REFERENCES Adua.tbPersonas(pers_Id),
 	CONSTRAINT FK_ComercianteIndividual_alde_Id_Gral_tbAldeas		                            FOREIGN KEY (alde_Id) REFERENCES Gral.tbAldeas(alde_Id),--nuevo
 	CONSTRAINT FK_ComercianteIndividual_coin_AldeaRepresentante_Gral_tbAldeas		            FOREIGN KEY (coin_AldeaRepresentante) REFERENCES Gral.tbAldeas(alde_Id), -- nuevo
-
+	CONSTRAINT FK_ComercianteIndividual_colo_Id_Gral_tbColonia									FOREIGN KEY (colo_Id) REFERENCES Gral.tbColonias(colo_Id), --nuevo
+	CONSTRAINT FK_ComercianteIndividual_coin_coloniaIdRepresentante_Gral_tbColonias				FOREIGN KEY (coin_coloniaIdRepresentante) REFERENCES Gral.tbColonias(colo_Id), --nuevo
     CONSTRAINT FK_ComercianteIndividual_ciud_Id_Gral_tbCiudades	                                FOREIGN KEY (ciud_Id) REFERENCES Gral.tbCiudades(ciud_Id), -- nuevo
 	CONSTRAINT FK_ComercianteIndividual_coin_CiudadRepresentante_Gral_tbCiudades				FOREIGN KEY (coin_CiudadRepresentante) REFERENCES Gral.tbCiudades(ciud_Id), --nuevo
 
@@ -2511,6 +2514,27 @@ CREATE TABLE Adua.tbDucaHistorial(
 	hduc_Accion						NVARCHAR(100)
 );
 GO
+
+CREATE TABLE Adua.tbRegimenesAduaneros(
+		regi_Id 					INT IDENTITY(1,1),
+		regi_Codigo					VARCHAR(10),
+		regi_Descripcion			NVARCHAR(500),
+
+		usua_UsuarioCreacion 		INT			NOT NULL,
+		regi_FechaCreacion 			DATETIME 	NOT NULL,
+		usua_UsuarioModificacion	INT			DEFAULT NULL,
+		regi_FechaModificacion		DATETIME 	DEFAULT NULL,
+		usua_UsuarioEliminacion		INT			DEFAULT NULL,
+		regi_FechaEliminacion		DATETIME 	DEFAULT NULL,
+		regi_Estado					BIT 		NOT NULL DEFAULT 1,
+
+	CONSTRAINT PK_Adua_tbRegimenesAduaneros_regi_Id 											PRIMARY KEY (regi_Id),
+	CONSTRAINT UQ_Adua_tbRegimenesAduaneros_regi_Codigo  										UNIQUE (regi_Codigo),
+	CONSTRAINT UQ_Adua_tbRegimenesAduaneros_regi_Descripcion  									UNIQUE (regi_Descripcion),
+	CONSTRAINT FK_Adua_tbRegimenesAduaneros_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id 		FOREIGN KEY(usua_UsuarioCreacion)     REFERENCES Acce.tbUsuarios (usua_Id),
+	CONSTRAINT FK_Adua_tbRegimenesAduaneros_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id  	FOREIGN KEY(usua_UsuarioModificacion) REFERENCES Acce.tbUsuarios (usua_Id),
+	CONSTRAINT FK_Adua_tbRegimenesAduaneros_usua_UsuarioEliminacion_Acce_tbUsuarios_usua_Id   	FOREIGN KEY(usua_UsuarioEliminacion)  REFERENCES Acce.tbUsuarios (usua_Id)
+);
 
 
 CREATE TABLE Prod.tbPedidosOrden(--No se podrá eliminar de ninguna manera
