@@ -3230,6 +3230,7 @@ GO
 --*************** UDPS Para Tabla Persona Juridica ************--
 
 /*Listar Persona Juridica*/
+/Listar Persona Juridica/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_Listar
 AS
 BEGIN
@@ -3248,12 +3249,10 @@ BEGIN
 			,personas.pers_OfprRepresentante
 			,oficioProfesionRepresentante.ofpr_Nombre AS ofpr_RepresentanteNombre
 			,provicionciasRepresentante.pais_Id AS pais_RepresentanteId
-			,paisesRepresentante.pais_Nombre AS pais_RepresentanteNombre
 			,personaJuridica.peju_EstadoRepresentante
 			,provicionciasRepresentante.pvin_Nombre AS pvin_RepresentanteNombre
 			,provincias.pais_Id 
-			,paises.pais_Codigo
-			,paises.pais_Nombre
+
 			,provincias.pvin_Id
 			,provincias.pvin_Nombre
 			,aldea.ciud_Id
@@ -3278,30 +3277,27 @@ BEGIN
 			,usuarioModificacion.usua_Nombre			as usuarioModificaNombre
 			,personaJuridica.peju_FechaModificacion
 			,personaJuridica.peju_Estado
-			FROM	Adua.tbPersonaJuridica					personaJuridica
-			INNER JOIN	Adua.tbPersonas					personas								ON personaJuridica.pers_Id						= personas.pers_Id
-			INNER JOIN	Gral.tbOficinas					oficina									ON personas.ofic_Id								= oficina.ofic_Id
-			INNER JOIN	Gral.tbEstadosCiviles			estadoCivil								ON personas.escv_Id								= estadoCivil.escv_Id
-			INNER JOIN	Gral.tbOficio_Profesiones		oficioProfesion							ON personas.ofpr_Id								= oficioProfesion.ofpr_Id
-			INNER JOIN	Gral.tbEstadosCiviles			estadoCivilRepresentante				ON personas.pers_escvRepresentante				= estadoCivilRepresentante.escv_Id
-			INNER JOIN	Gral.tbOficio_Profesiones		oficioProfesionRepresentante			ON personas.pers_OfprRepresentante				= oficioProfesionRepresentante.ofpr_Id
+			FROM	    Adua.tbPersonaJuridica			personaJuridica
+			LEFT JOIN	Adua.tbPersonas					personas								ON personaJuridica.pers_Id						= personas.pers_Id
+			LEFT JOIN	Gral.tbOficinas					oficina									ON personas.ofic_Id								= oficina.ofic_Id
+			LEFT JOIN	Gral.tbEstadosCiviles			estadoCivil								ON personas.escv_Id								= estadoCivil.escv_Id
+			LEFT JOIN	Gral.tbOficio_Profesiones		oficioProfesion							ON personas.ofpr_Id								= oficioProfesion.ofpr_Id
+			LEFT JOIN	Gral.tbEstadosCiviles			estadoCivilRepresentante				ON personas.pers_escvRepresentante				= estadoCivilRepresentante.escv_Id
+			LEFT JOIN	Gral.tbOficio_Profesiones		oficioProfesionRepresentante			ON personas.pers_OfprRepresentante				= oficioProfesionRepresentante.ofpr_Id
 
-			INNER JOIN  Gral.tbColonias					coloniaRepresentante					ON personaJuridica.peju_ColoniaRepresentante	= coloniaRepresentante.colo_Id
-			INNER JOIN  gral.tbAldeas					aldeaRepresentante						ON coloniaRepresentante.alde_Id					= aldeaRepresentante.alde_Id
-			INNER JOIN	Gral.tbCiudades					ciudadesReprentante						ON aldeaRepresentante.ciud_Id					= ciudadesReprentante.ciud_Id
-			INNER JOIN	Gral.tbProvincias				provicionciasRepresentante				ON personaJuridica.peju_EstadoRepresentante		= provicionciasRepresentante.pvin_Id
-			INNER JOIN	Gral.tbPaises					paisesRepresentante						ON paisesRepresentante.pais_Id							= paisesRepresentante.pais_Id
+			LEFT JOIN   Gral.tbColonias					coloniaRepresentante					ON personaJuridica.peju_ColoniaRepresentante	= coloniaRepresentante.colo_Id
+			LEFT JOIN  gral.tbAldeas					aldeaRepresentante						ON coloniaRepresentante.alde_Id					= aldeaRepresentante.alde_Id
+			LEFT JOIN	Gral.tbCiudades					ciudadesReprentante						ON aldeaRepresentante.ciud_Id					= ciudadesReprentante.ciud_Id
+			LEFT JOIN	Gral.tbProvincias				provicionciasRepresentante				ON personaJuridica.peju_EstadoRepresentante		= provicionciasRepresentante.pvin_Id
 
-
-			INNER JOIN  Gral.tbColonias					colonia									ON personaJuridica.colo_Id						= colonia.colo_Id
-			INNER JOIN  gral.tbAldeas					aldea									ON colonia.alde_Id								= aldea.alde_Id
-			INNER JOIN	Gral.tbCiudades					ciudades								ON aldea.ciud_Id								= ciudades.ciud_Id
-			INNER JOIN	GraL.tbProvincias				provincias								ON ciudades.pvin_Id								= provincias.pvin_Id
-			INNER JOIN	Gral.tbPaises					paises									ON provincias.pais_Id						= paises.pais_Id
+			LEFT JOIN  Gral.tbColonias					colonia									ON personaJuridica.colo_Id						= colonia.colo_Id
+			LEFT JOIN  gral.tbAldeas					aldea									ON colonia.alde_Id								= aldea.alde_Id
+			LEFT JOIN	Gral.tbCiudades					ciudades								ON aldea.ciud_Id								= ciudades.ciud_Id
+			LEFT JOIN	GraL.tbProvincias				provincias								ON ciudades.pvin_Id								= provincias.pvin_Id
 
 			LEFT JOIN  Acce.tbUsuarios					usuarioCreacion							ON personaJuridica.usua_UsuarioCreacion			= usuarioCreacion.usua_Id
 			LEFT JOIN  Acce.tbUsuarios					usuarioModificacion						ON personaJuridica.usua_UsuarioModificacion		= usuarioModificacion.usua_Id
-
+			WHERE [peju_Estado] = 1
 END
 GO
 
