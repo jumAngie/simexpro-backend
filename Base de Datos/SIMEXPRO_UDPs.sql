@@ -2909,7 +2909,6 @@ BEGIN
 		@pers_OfprRepresentante,
 		@usua_UsuarioCreacion,
 		@pers_FechaCreacion )
-		SELECT SCOPE_IDENTITY() AS insertopersona
 		SET  @pers_Id = SCOPE_IDENTITY() 
 
 
