@@ -25,16 +25,10 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
         [HttpGet("Listar")]
         public IActionResult Index()
         {
-            var respuesta = _aduanaServices.ListarPersonaJuridica();
-
-            if (respuesta.Code == 200)
-            {
-                return Ok(respuesta);
-            }
-            else
-            {
-                return BadRequest(respuesta);
-            }
+            var listado = _aduanaServices.ListarPersonaJuridica();
+            listado.Data = _mapper.Map<IEnumerable<PersonaJuridicaViewModel>>(listado.Data);
+            return Ok(listado);
+           
         }
 
         [HttpPost("Insertar")]

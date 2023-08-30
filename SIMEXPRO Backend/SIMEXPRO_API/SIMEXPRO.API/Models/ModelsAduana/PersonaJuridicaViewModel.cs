@@ -12,7 +12,6 @@ namespace SIMEXPRO.API.Models.ModelsAduana
          public string pers_RTN { get; set; }
          public int ofic_Id { get; set; }
          public string pais_RepresentanteNombre { get; set; }
-
         public int peju_EstadoRepresentante { get; set; }
         public int colo_Id { get; set; }
         public string peju_PuntoReferencia { get; set; }
