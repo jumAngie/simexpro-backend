@@ -2957,17 +2957,20 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap2
-	@coin_Id			  INT,
-	@ciud_Id			  INT,
-	@alde_Id			  INT,
-	@coin_PuntoReferencia NVARCHAR(200)
+CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap2  --6,63,1,'por ahi'
+	@coin_Id					INT,
+	@ciud_Id					INT,
+	@alde_Id					INT,
+	@colo_Id					INT,
+	@coin_NumeroLocalApart		NVARCHAR(150),
+	@coin_PuntoReferencia		NVARCHAR(200)
 
 AS
 BEGIN
 	BEGIN TRY
 		UPDATE Adua.tbComercianteIndividual
-		SET ciud_Id = @ciud_Id, alde_Id = @alde_Id, coin_PuntoReferencia = @coin_PuntoReferencia
+		SET ciud_Id = @ciud_Id, alde_Id = @alde_Id, coin_PuntoReferencia = @coin_PuntoReferencia,
+		    colo_Id = @colo_Id, coin_NumeroLocalApart = @coin_NumeroLocalApart
 		WHERE coin_Id = @coin_Id
 		SELECT 1
 END TRY
@@ -2977,18 +2980,24 @@ END CATCH
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap3
-	@coin_Id						 INT,
-	@coin_CiudadRepresentante		 INT,
-	@coin_AldeaRepresentante		 INT,
-	@coin_PuntoReferenciaReprentante NVARCHAR(200)
+
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap3 
+	@coin_Id							INT,
+	@coin_CiudadRepresentante			INT,
+	@coin_AldeaRepresentante			INT,
+	@coin_coloniaIdRepresentante		INT,
+	@coin_NumeroLocaDepartRepresentante NVARCHAR(150),
+	@coin_PuntoReferenciaReprentante	NVARCHAR(200)
 AS
 BEGIN
 	BEGIN TRY
 		UPDATE Adua.tbComercianteIndividual
 		SET coin_CiudadRepresentante = @coin_CiudadRepresentante, 
 		coin_AldeaRepresentante = @coin_AldeaRepresentante,
-		coin_PuntoReferenciaReprentante = @coin_PuntoReferenciaReprentante
+		coin_PuntoReferenciaReprentante = @coin_PuntoReferenciaReprentante,
+		coin_coloniaIdRepresentante = @coin_coloniaIdRepresentante,
+		coin_NumeroLocaDepartRepresentante = @coin_NumeroLocaDepartRepresentante
 		WHERE coin_Id = @coin_Id
 		SELECT 1
 END TRY
@@ -2997,6 +3006,33 @@ BEGIN CATCH
 END CATCH
 END
 GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap4
+	@coin_Id							INT,
+	@coin_TelefonoCelular				NVARCHAR(20),
+	@coin_TelefonoFijo					NVARCHAR(20),
+	@coin_CorreoElectronico				NVARCHAR(30),
+	@coin_CorreoElectronicoAlternativo  NVARCHAR(30)
+AS
+	BEGIN
+	BEGIN TRY
+		UPDATE Adua.tbComercianteIndividual
+		SET coin_TelefonoCelular = @coin_TelefonoCelular,
+			coin_TelefonoFijo = @coin_TelefonoFijo,
+			coin_CorreoElectronico = @coin_CorreoElectronico,
+			coin_CorreoElectronicoAlternativo = @coin_CorreoElectronicoAlternativo
+		WHERE coin_Id = @coin_Id
+	END TRY
+
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+	END CATCH
+END
+GO
+
+
+
+
 
 
 /*Editar Comersiante Individual*/
@@ -3378,8 +3414,8 @@ GO
 
 --**********LUGARES EMBARQUE**********--
 /*Listar lugares embarque*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbLugaresEmbarque_Listar 
-
+CREATE OR ALTER  PROCEDURE [Adua].[UDP_tbLugaresEmbarque_Listar] 
+@emba_Codigo	CHAR(5)
 AS
 BEGIN
 	--SELECT @emba_Codigo = SUBSTRING(@emba_Codigo ,1,2)
@@ -3400,7 +3436,9 @@ BEGIN
 	       INNER JOIN Acce.tbUsuarios usuaCrea			ON lugar.usua_UsuarioCreacion     = usuaCrea.usua_Id 
 		   LEFT JOIN  Acce.tbUsuarios usuaModifica		ON lugar.usua_UsuarioModificacion = usuaModifica.usua_Id 
 		   LEFT JOIN  Acce.tbUsuarios usuaElimi		    ON lugar.usua_UsuarioEliminacion  = usuaElimi.usua_Id 
-	 WHERE emba_Estado = 1
+	 WHERE SUBSTRING(lugar.emba_Codigo,1,2) = @emba_Codigo 
+	 OR @emba_Codigo IS NULL
+	 AND emba_Estado = 1
 END
 GO
 
