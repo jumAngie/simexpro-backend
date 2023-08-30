@@ -7918,6 +7918,7 @@ AS
 BEGIN
 	SELECT	aran_Id,
 			aran_Codigo,
+			DATALENGTH(aran_Codigo) AS tamaño, 
 			CASE 
 				WHEN DATALENGTH(aran_Codigo) = 10 THEN 'Categoria'
 				WHEN DATALENGTH(aran_Codigo) = 12 THEN 'Subcategoria'
@@ -7939,6 +7940,7 @@ BEGIN
    INNER JOIN Acce.tbUsuarios usu ON ara.usua_UsuarioCreacion = usu.usua_Id
    LEFT JOIN Acce.tbUsuarios usu1 ON usu1.usua_Id = ara.usua_UsuarioModificacion 
    WHERE aram_Estado = 1
+   ORDER BY DATALENGTH(aran_Codigo) 
 
 END
 GO
@@ -8020,6 +8022,7 @@ BEGIN
 
 END
 GO
+
 
 
 /*Buscar la categoria del arancel con un codigo de 4 digitos*/
