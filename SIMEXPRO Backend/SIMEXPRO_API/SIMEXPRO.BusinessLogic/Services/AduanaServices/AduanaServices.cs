@@ -803,7 +803,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             {
                 var respuesta = _declaraciones_ValorRepository.InsertTab1(item, itemDecl, itemImp);
                 
-                if (respuesta.MessageStatus != "1")
+                if (respuesta.MessageStatus != "0")
                 {
                     return result.Ok(respuesta);
                 }
