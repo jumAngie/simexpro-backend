@@ -7856,12 +7856,17 @@ GO
 
 
 --************ARCELES******************--
-/*Listar Aranceles*/
+/*Listar Aranceles Todos*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbAranceles_Listar
 AS
 BEGIN
 	SELECT	aran_Id,
 			aran_Codigo,
+			CASE 
+				WHEN DATALENGTH(aran_Codigo) = 10 THEN 'Categoria'
+				WHEN DATALENGTH(aran_Codigo) = 12 THEN 'Subcategoria'
+				ELSE 'Arancel' 
+			END AS aran_Tipo,
 			aran_Descripcion,
 		
 			ara.usua_UsuarioCreacion,
@@ -7881,6 +7886,96 @@ BEGIN
 
 END
 GO
+
+/*Listar Aranceles Categoria*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbAranceles_ListarCategoria
+AS
+BEGIN
+	SELECT	aran_Id,
+			aran_Codigo,
+			aran_Descripcion,
+		
+			ara.usua_UsuarioCreacion,
+			usu.usua_Nombre           AS UsuarioCreacion,		
+			ara.aran_FechaCreacion, 
+		
+		
+		ara.usua_UsuarioModificacion,
+		usu1.usua_Nombre              AS UsuarioModificacion,
+		ara.aran_FechaModificacion	
+		
+ 
+   FROM	Adua.tbAranceles ara
+   INNER JOIN Acce.tbUsuarios usu ON ara.usua_UsuarioCreacion = usu.usua_Id
+   LEFT JOIN Acce.tbUsuarios usu1 ON usu1.usua_Id = ara.usua_UsuarioModificacion 
+   WHERE DATALENGTH(aran_Codigo) = 10 AND aram_Estado = 1
+
+END
+GO
+
+/*Listar Aranceles Subcategoria*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbAranceles_ListarSubcategoria
+AS
+BEGIN
+	SELECT	aran_Id,
+			aran_Codigo,
+			aran_Descripcion,
+		
+			ara.usua_UsuarioCreacion,
+			usu.usua_Nombre           AS UsuarioCreacion,		
+			ara.aran_FechaCreacion, 
+		
+		
+		ara.usua_UsuarioModificacion,
+		usu1.usua_Nombre              AS UsuarioModificacion,
+		ara.aran_FechaModificacion	
+		
+ 
+   FROM	Adua.tbAranceles ara
+   INNER JOIN Acce.tbUsuarios usu ON ara.usua_UsuarioCreacion = usu.usua_Id
+   LEFT JOIN Acce.tbUsuarios usu1 ON usu1.usua_Id = ara.usua_UsuarioModificacion 
+   WHERE DATALENGTH(aran_Codigo) = 12  AND aram_Estado = 1
+
+END
+GO
+/*Listar Aranceles Solo Aranceles*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbAranceles_ListarAranceles
+AS
+BEGIN
+	SELECT	aran_Id,
+			aran_Codigo,
+			aran_Descripcion,
+			DATALENGTH(aran_Codigo)  AS lenght,
+		
+			ara.usua_UsuarioCreacion,
+			usu.usua_Nombre           AS UsuarioCreacion,		
+			ara.aran_FechaCreacion, 
+		
+		
+		ara.usua_UsuarioModificacion,
+		usu1.usua_Nombre              AS UsuarioModificacion,
+		ara.aran_FechaModificacion	
+		
+ 
+   FROM	Adua.tbAranceles ara
+   INNER JOIN Acce.tbUsuarios usu ON ara.usua_UsuarioCreacion = usu.usua_Id
+   LEFT JOIN Acce.tbUsuarios usu1 ON usu1.usua_Id = ara.usua_UsuarioModificacion 
+   WHERE aram_Estado = 1 AND DATALENGTH(aran_Codigo) > 15
+
+END
+GO
+
+
+/*Buscar la categoria del arancel con un codigo de 4 digitos*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbArancelesBuscarCategoria 
+@aran_Codigo NVARCHAR(4)
+AS
+BEGIN
+SELECT aran_Codigo, [aran_Descripcion] FROM Adua.tbAranceles
+WHERE REPLACE(aran_Codigo, '.', '') = @aran_Codigo
+END
+GO
+
 
 /*Insertar Aranceles*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbAranceles_Insertar 
