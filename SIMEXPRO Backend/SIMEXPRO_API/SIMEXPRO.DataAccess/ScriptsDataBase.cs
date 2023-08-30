@@ -680,6 +680,7 @@ namespace SIMEXPRO.DataAccess
 
         public static string OrdenesCompraDDL = "Prod.UDP_OrdenesCompraDDL";
         public static string DUCAsDDL = "Prod.UDP_DUCAsDDL";
+        public static string ComprobarNoDUCA = "Prod.UDP_ComprobarNoDUCA";
         #endregion
 
         #region FacturasExportacionDetalles

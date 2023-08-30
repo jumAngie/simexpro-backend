@@ -15,7 +15,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
         public RequestStatus Delete(tbFacturasExportacion item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
-            RequestStatus result = new RequestStatus();
+            RequestStatus result = new();
             var parametros = new DynamicParameters();
             parametros.Add("@faex_Id", item.faex_Id, DbType.Int32, ParameterDirection.Input);
 
@@ -32,7 +32,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
         public RequestStatus Insert(tbFacturasExportacion item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
-            RequestStatus result = new RequestStatus();
+            RequestStatus result = new();
             var parametros = new DynamicParameters();
             parametros.Add("@duca_No_Duca", item.duca_No_Duca, DbType.String, ParameterDirection.Input);
             parametros.Add("@faex_Fecha", item.faex_Fecha, DbType.DateTime, ParameterDirection.Input);
@@ -56,7 +56,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
         public RequestStatus Update(tbFacturasExportacion item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
-            RequestStatus result = new RequestStatus();
+            RequestStatus result = new();
             var parametros = new DynamicParameters();
 
             parametros.Add("@faex_Id", item.faex_Id, DbType.String, ParameterDirection.Input);
@@ -75,7 +75,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
         public RequestStatus Finalizar(tbFacturasExportacion item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
-            RequestStatus result = new RequestStatus();
+            RequestStatus result = new();
             var parametros = new DynamicParameters();
             parametros.Add("@faex_Id", item.faex_Id, DbType.Int32, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.FinalizarFacturasExportacion, parametros, commandType: CommandType.StoredProcedure);
@@ -95,6 +95,17 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             var result = db.Query<tbFacturasExportacion>(ScriptsDataBase.DUCAsDDL, null, commandType: CommandType.StoredProcedure);
+            return result;
+        }
+
+        public RequestStatus ComprobarNoDUCA(tbFacturasExportacion item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new();
+            var parametros = new DynamicParameters();
+            parametros.Add("@duca_No_Duca", item.duca_No_Duca, DbType.String, ParameterDirection.Input);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.ComprobarNoDUCA, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
             return result;
         }
     }

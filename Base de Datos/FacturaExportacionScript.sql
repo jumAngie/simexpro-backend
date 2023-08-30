@@ -88,16 +88,36 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Editar
 AS
 BEGIN 
 	BEGIN TRY
-		UPDATE Prod.tbFacturasExportacion
-		SET	duca_No_Duca = @duca_No_Duca, 
-			faex_Fecha = @faex_Fecha, 
-			orco_Id = @orco_Id, 
-			faex_Total = @faex_Total, 
-			usua_UsuarioModificacion = @usua_UsuarioModificacion, 
-			faex_FechaModificacion = @faex_FechaModificacion
-		WHERE faex_Id = @faex_Id
+		IF (SELECT orco_Id FROM Prod.tbFacturasExportacion) != @orco_Id
+			BEGIN 
+				DELETE FROM Prod.tbFacturasExportacionDetalles
+				WHERE faex_Id = @faex_Id
 
-		SELECT 1
+				UPDATE Prod.tbFacturasExportacion
+				SET	duca_No_Duca = @duca_No_Duca, 
+					faex_Fecha = @faex_Fecha, 
+					orco_Id = @orco_Id, 
+					faex_Total = @faex_Total, 
+					usua_UsuarioModificacion = @usua_UsuarioModificacion, 
+					faex_FechaModificacion = @faex_FechaModificacion
+				WHERE faex_Id = @faex_Id
+
+				SELECT 1
+			END
+		ELSE
+			BEGIN
+				UPDATE Prod.tbFacturasExportacion
+				SET	duca_No_Duca = @duca_No_Duca, 
+					faex_Fecha = @faex_Fecha, 
+					orco_Id = @orco_Id, 
+					faex_Total = @faex_Total, 
+					usua_UsuarioModificacion = @usua_UsuarioModificacion, 
+					faex_FechaModificacion = @faex_FechaModificacion
+				WHERE faex_Id = @faex_Id
+
+				SELECT 1
+			END
+
 	END TRY
 
 	BEGIN CATCH 
@@ -290,11 +310,33 @@ BEGIN
 END
 GO
 
+
+CREATE OR ALTER PROCEDURE Prod.UDP_ComprobarNoDUCA
+	@duca_No_Duca NVARCHAR(100)
+AS
+BEGIN
+	BEGIN TRY
+		IF EXISTS (SELECT * FROM Adua.tbDuca WHERE duca_No_Duca = @duca_No_Duca)
+			BEGIN 
+				SELECT duca_No_Duca FROM Adua.tbDuca WHERE duca_No_Duca = @duca_No_Duca
+			END
+		ELSE
+			BEGIN
+				SELECT 0
+			END
+	END TRY
+	BEGIN CATCH
+			SELECT 'Error Message: ' + ERROR_MESSAGE()
+	END CATCH
+END
+GO
+
+
 SELECT * FROM Prod.tbColores
 SELECT * FROM Prod.tbTallas
 SELECT * FROM Prod.tbOrdenCompraDetalles WHERE orco_Id = 57
 SELECT * FROM Prod.tbOrdenCompra
-SELECT * FROM Prod.tbFacturasExportacion
+SELECT * FROM Prod.tbFacturasExportacion 
 
-SELECT * FROM Prod.tbFacturasExportacionDetalles WHERE faex_Id = 85
-SELECT * FROM Prod.tbFacturasExportacionDetalles
+SELECT * FROM Prod.tbFacturasExportacion WHERE faex_Id = 123
+SELECT * FROM Prod.tbFacturasExportacionDetalles WHERE faex_Id = 123

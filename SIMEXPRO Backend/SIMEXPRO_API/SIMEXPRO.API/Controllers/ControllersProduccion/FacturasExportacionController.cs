@@ -80,5 +80,13 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             listado.Data = _mapper.Map<IEnumerable<FacturasExportacionViewModel>>(listado.Data);
             return Ok(listado);
         }
+
+        [HttpPost("ComprobarNoDUCA")]
+        public IActionResult ComprobarNoDUCA(FacturasExportacionViewModel item)
+        {
+            var mapped = _mapper.Map<tbFacturasExportacion>(item);
+            var respuesta = _produccionServices.ComprobarNoDUCA(mapped);
+            return Ok(respuesta);
+        }
     }
 }
