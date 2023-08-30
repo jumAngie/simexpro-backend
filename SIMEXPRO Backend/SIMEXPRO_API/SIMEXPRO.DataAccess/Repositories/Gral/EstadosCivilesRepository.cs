@@ -39,6 +39,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Gral
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
             parametros.Add("@escv_Nombre", item.escv_Nombre, DbType.String, ParameterDirection.Input);
+            parametros.Add("@escv_EsAduana", item.escv_EsAduana, DbType.Boolean, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@escv_FechaCreacion", item.escv_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.InsertarEstadosCiviles, parametros, commandType: CommandType.StoredProcedure);
@@ -46,13 +47,17 @@ namespace SIMEXPRO.DataAccess.Repositories.Gral
             return result;
         }
 
-        public IEnumerable<tbEstadosCiviles> List()
+        public IEnumerable<tbEstadosCiviles> ListarEstadosCiviles(bool? escv_EsAduana)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@escv_EsAduana", escv_EsAduana, DbType.Boolean, ParameterDirection.Input);
+            return db.Query<tbEstadosCiviles>(ScriptsDataBase.ListarEstadosCiviles, parametros, commandType: CommandType.StoredProcedure);        
+        }
 
-            var result = db.Query<tbEstadosCiviles>(ScriptsDataBase.ListarEstadosCiviles, null, commandType: CommandType.StoredProcedure);
-
-            return result;
+        public IEnumerable<tbEstadosCiviles> List()
+        {
+            throw new NotImplementedException();
         }
 
         public RequestStatus Update(tbEstadosCiviles item)

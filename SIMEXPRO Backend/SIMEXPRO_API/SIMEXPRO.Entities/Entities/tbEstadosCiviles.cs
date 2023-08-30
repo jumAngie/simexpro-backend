@@ -26,6 +26,8 @@ namespace SIMEXPRO.Entities.Entities
         public DateTime? escv_FechaEliminacion { get; set; }
         public bool? escv_Estado { get; set; }
         [NotMapped]
+        public bool? escv_EsAduana { get; set; }
+        [NotMapped]
         public string UsuarioCreacionNombre { get; set; }
 
         [NotMapped]

@@ -353,7 +353,7 @@ GO
 CREATE TABLE Gral.tbEstadosCiviles(
 		escv_Id						   INT 				IDENTITY(1,1),
 		escv_Nombre 				   NVARCHAR(150) 		NOT NULL,
-	   
+		escv_EsAduana				   BIT NOT NULL,
 		usua_UsuarioCreacion 		   INT					NOT NULL,
 		escv_FechaCreacion 			   DATETIME 			NOT NULL,
 		usua_UsuarioModificacion	   INT					DEFAULT NULL,
@@ -363,13 +363,14 @@ CREATE TABLE Gral.tbEstadosCiviles(
 		escv_Estado					   BIT					DEFAULT 1,
 		
 	CONSTRAINT PK_Gral_tbEstadosCiviles_escv_Id PRIMARY KEY (escv_Id),
-	CONSTRAINT UQ_Gral_tbEstadosCiviles_escv_Nombre UNIQUE(escv_Nombre),
+	CONSTRAINT UQ_Gral_tbEstadosCiviles_escv_Nombre UNIQUE(escv_Nombre,escv_EsAduana),
 	CONSTRAINT FK_Gral_tbEstadosCiviles_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id 	 FOREIGN KEY(usua_UsuarioCreacion)     REFERENCES Acce.tbUsuarios (usua_Id),
 	CONSTRAINT FK_Gral_tbEstadosCiviles_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id FOREIGN KEY(usua_UsuarioModificacion) REFERENCES Acce.tbUsuarios (usua_Id),
 	CONSTRAINT FK_Gral_tbEstadosCiviles_usua_UsuarioEliminacion_Acce_tbUsuarios_usua_Id  FOREIGN KEY(usua_UsuarioEliminacion)  REFERENCES Acce.tbUsuarios (usua_Id)
 	
 );
 GO
+
 
 CREATE TABLE Gral.tbOficinas(
 		ofic_Id						    INT 				IDENTITY(1,1),
@@ -1460,9 +1461,7 @@ GO
 
 CREATE TABLE Adua.tbImpuestos(
 	impu_Id						INT IDENTITY(1,1),
-	aran_Codigo					NVARCHAR(100) NOT NULL,
 	impu_Descripcion			NVARCHAR(150) NOT NULL,
-	impu_Impuesto				DECIMAL(18,2) NOT NULL,
 	
 	usua_UsuarioCreacion		INT NOT NULL, 
 	impu_FechaCreacion			DATETIME NOT NULL ,
@@ -1471,7 +1470,6 @@ CREATE TABLE Adua.tbImpuestos(
 	--usua_UsuarioEliminacion 	INT	DEFAULT NULL, 
 	--impu_FechaEliminacion		DATETIME DEFAULT NULL, 
 	impu_Estado					BIT NOT NULL DEFAULT 1
-	
 	CONSTRAINT PK_Adua_tbImpuestos_impu_Id													PRIMARY KEY (impu_Id),
 	CONSTRAINT FK_Adua_tbImpuestos_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id				FOREIGN KEY (usua_UsuarioCreacion)		REFERENCES Acce.tbUsuarios (usua_Id),
 	CONSTRAINT FK_Adua_tbImpuestos_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id			FOREIGN KEY (usua_UsuarioModificacion)	REFERENCES Acce.tbUsuarios (usua_Id),
@@ -1483,7 +1481,7 @@ CREATE TABLE Adua.tbImpuestosPorArancel(
     imar_Id						INT IDENTITY(1,1),
 	impu_Id						INT NOT NULL,
 	aran_Id						INT NOT NULL,
-	
+	imar_PorcentajeImpuesto		DECIMAL(18,2),
 	usua_UsuarioCreacion		INT NOT NULL, 
 	imar_FechaCreacion			DATETIME NOT NULL ,
 	usua_UsuarioModificacion    INT,
@@ -2596,7 +2594,7 @@ CREATE TABLE Prod.tbLotes(
 	lote_CantIngresada			DECIMAL(18,2) NOT NULL,
 	lote_Observaciones			NVARCHAR(500),
 	tipa_Id						INT NOT NULL,
-
+	colr_Id                     INT NOT NULL,
 	usua_UsuarioCreacion		INT NOT NULL,
 	lote_FechaCreacion			DATETIME NOT NULL,
 	usua_UsuarioModificacion 	INT DEFAULT NULL,
@@ -2606,6 +2604,8 @@ CREATE TABLE Prod.tbLotes(
 	lote_Estado 				BIT	DEFAULT 1, 
 
 	CONSTRAINT PK_Prod_tbLotes_lote_Id PRIMARY KEY (lote_Id),
+	CONSTRAINT UQ_Prod_tbLotes_lote_CodigoLote UNIQUE(lote_CodigoLote),
+	CONSTRAINT FK_Prod_tbLotes_colr_Id_Prod_tbColores_colr_Id       FOREIGN KEY (colr_Id)                   REFERENCES Prod.tbColores(colr_Id),
 	CONSTRAINT FK_Prod_tbLotes_mate_Id_Prod_tbMateriales_mate_Id	FOREIGN KEY (mate_Id) 					REFERENCES Prod.tbMateriales(mate_Id),
 	CONSTRAINT FK_Prod_tbLotes_unme_Id_Gral_tbUnidadMedidas_unme_Id	FOREIGN KEY (unme_Id) 					REFERENCES Gral.tbUnidadMedidas(unme_Id),
 	CONSTRAINT FK_Prod_tbLotes_Prod_tbPedidosOrdenDetalle_prod_Id	FOREIGN KEY (prod_Id) 					REFERENCES Prod.tbPedidosOrdenDetalle(prod_Id),

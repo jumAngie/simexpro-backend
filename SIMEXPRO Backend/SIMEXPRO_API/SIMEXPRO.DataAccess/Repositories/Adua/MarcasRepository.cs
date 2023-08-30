@@ -41,7 +41,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
             parametros.Add("@marc_Descripcion", item.marc_Descripcion, DbType.String, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@marc_FechaCreacion", item.marc_FechaCreacion, DbType.String, ParameterDirection.Input);
+            parametros.Add("@marc_FechaCreacion", item.marc_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
 
             var answer = db.QueryFirst<string>(ScriptsDataBase.InsertarMarcas, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;

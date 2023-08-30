@@ -21,6 +21,8 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string Validacion { get; set; }
         [NotMapped]
+        public string Detalles { get; set; }
+        [NotMapped]
         public string clie_Nombre_O_Razon_Social { get; set; }
         public DateTime asor_FechaInicio { get; set; }
         public DateTime asor_FechaLimite { get; set; }

@@ -363,3 +363,45 @@ AS
 	END
 GO
 
+-- Pasies de Origen de exportadores
+CREATE OR ALTER PROCEDURE Adua.UDP_ExportadoresPorPais_CantidadPorcentaje                                           
+AS
+		BEGIN
+			SELECT		pais.pais_Nombre,
+						COUNT(duca.duca_Pais_Emision_Exportador) AS duca_Pais_Emision_Exportador,
+						CAST((SELECT CAST(COUNT(duca.duca_Pais_Emision_Exportador) AS DECIMAL(18,2)) / CAST((SELECT COUNT(duca_Pais_Emision_Exportador) FROM Adua.tbDuca) AS DECIMAL(18,2)) * 100) AS decimal(18,2)) as Porcentaje
+			FROM		Adua.tbDuca duca INNER JOIN Gral.tbPaises pais ON duca.duca_Pais_Emision_Exportador = pais.pais_Id
+			GROUP BY	duca_Pais_Emision_Exportador,pais.pais_Nombre
+	END
+GO
+
+-- Estados Mercancias mas Frecuentes
+CREATE OR ALTER PROCEDURE Adua.UDP_EstadosMercancias_CantidadPorcentaje
+AS
+	BEGIN
+		SELECT   mercancias.merc_Descripcion,
+		SUM(item_Cantidad) AS Cantidad,
+		((CAST(SUM(item_Cantidad) AS DECIMAL(18,2)) / CAST((SELECT SUM(item_Cantidad) FROM Adua.tbItems) AS DECIMAL(18,2))) * 100) AS Porcentaje
+		FROM Adua.tbItems items INNER JOIN Adua.tbEstadoMercancias mercancias
+		ON items.merc_Id = mercancias.merc_Id
+		GROUP BY mercancias.merc_Descripcion
+	END
+GO
+
+-- Aduanas con mas importaciones 
+CREATE OR ALTER PROCEDURE Adua.UDP_AduanasIngreso_CantidadPorcentaje
+AS 
+	BEGIN
+		DECLARE @totaldevas INT = (SELECT COUNT(deva_AduanaIngresoId) FROM Adua.tbDeclaraciones_Valor )
+
+		SELECT
+			adua.adua_Nombre,
+			SUM(deva.deva_AduanaIngresoId) AS Cantidad,
+			(CAST(COUNT(deva.deva_AduanaIngresoId) AS decimal(18, 2)) / @totaldevas * 100) AS Porcentaje
+			FROM Adua.tbDeclaraciones_Valor deva
+			INNER JOIN Adua.tbAduanas adua ON deva.deva_AduanaIngresoId = adua.adua_Id
+			GROUP BY adua.adua_Nombre
+	END
+GO
+
+-- 
