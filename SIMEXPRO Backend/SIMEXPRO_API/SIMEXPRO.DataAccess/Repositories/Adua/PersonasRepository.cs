@@ -32,7 +32,6 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@ofic_Id", item.ofic_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@escv_Id", item.escv_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@ofpr_Id", item.ofpr_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@pers_FormaRepresentacion", item.pers_FormaRepresentacion, DbType.Boolean, ParameterDirection.Input);
             parametros.Add("@pers_escvRepresentante", item.pers_escvRepresentante, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@pers_OfprRepresentante", item.pers_OfprRepresentante, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
@@ -60,7 +59,6 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@ofic_Id", item.ofic_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@escv_Id", item.escv_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@ofpr_Id", item.ofpr_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@pers_FormaRepresentacion", item.pers_FormaRepresentacion, DbType.Boolean, ParameterDirection.Input);
             parametros.Add("@pers_escvRepresentante", item.pers_escvRepresentante, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@pers_OfprRepresentante", item.pers_OfprRepresentante, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
