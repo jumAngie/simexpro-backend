@@ -3624,7 +3624,7 @@ END
 
 GO
 /********************Editar Formas de pago************************/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbFormasdePago_Editar 
+CREATE OR ALTER PROCEDURE [Adua].[UDP_tbFormasdePago_Editar] 
    @fopa_id    INT,
    @fopa_Descripcion  NVARCHAR(350),  
    @usua_UsuarioModificacion INT, 
@@ -3641,7 +3641,7 @@ BEGIN
 		  SELECT 1
 	   END TRY 
 	   BEGIN CATCH 
-	       SELECT 0
+		SELECT 'Error Messagee: ' + ERROR_MESSAGE()
 	   END CATCH
 END 
 
@@ -4449,7 +4449,7 @@ END
 GO
 
 /*Insertar Marcas*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbMarcas_Insertar 
+CREATE OR ALTER PROCEDURE [Adua].[UDP_tbMarcas_Insertar] 
 	@marc_Descripcion		NVARCHAR(20),
 	@usua_UsuarioCreacion	INT,
 	@marc_FechaCreacion     DATETIME
@@ -4457,10 +4457,29 @@ AS
 BEGIN
 	
 	BEGIN TRY
-		INSERT INTO Adua.tbMarcas (marc_Descripcion, usua_UsuarioCreacion, marc_FechaCreacion)
-		VALUES(@marc_Descripcion, @usua_UsuarioCreacion, @marc_FechaCreacion)
+		
+		IF EXISTS (SELECT marc_Id FROM Adua.tbMarcas WHERE marc_Descripcion = @marc_Descripcion AND marc_Estado = 0)
+			BEGIN
+				UPDATE Adua.tbMarcas
+				SET marc_Descripcion = @marc_Descripcion,
+					usua_UsuarioCreacion = @usua_UsuarioCreacion,
+					marc_FechaCreacion = @marc_FechaCreacion,
+					usua_UsuarioModificacion = NULL,
+					marc_FechaModificacion =NULL,
+					marc_Estado = 1
+				WHERE marc_Descripcion = @marc_Descripcion
 
-		SELECT 1
+				SELECT 1
+			END
+		ELSE
+		 BEGIN
+
+			INSERT INTO Adua.tbMarcas (marc_Descripcion, usua_UsuarioCreacion, marc_FechaCreacion)
+			VALUES(@marc_Descripcion, @usua_UsuarioCreacion, @marc_FechaCreacion)
+
+			SELECT 1
+
+		END
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Messagee: ' + ERROR_MESSAGE()
@@ -4469,7 +4488,7 @@ END
 GO
 
 /*Editar Marcas*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbMarcas_Editar 
+CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbMarcas_Editar] 
 	@marc_Id					INT,
 	@marc_Descripcion			NVARCHAR(20),
 	@usua_UsuarioModificacion	INT,
@@ -4477,16 +4496,36 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbMarcas_Editar
 AS
 BEGIN
 	BEGIN TRY
-		UPDATE  Adua.tbMarcas
-		SET		marc_Descripcion = @marc_Descripcion,
-			    usua_UsuarioModificacion = @usua_UsuarioModificacion,
-				marc_FechaModificacion = @marc_FechaModificacion
-		WHERE	marc_Id = @marc_Id
 
-		SELECT 1
+		IF EXISTS (SELECT marc_Id FROM Adua.tbMarcas WHERE @marc_Descripcion = marc_Descripcion AND marc_Id != @marc_Id AND marc_Estado = 0)
+			BEGIN
+				DELETE FROM Adua.tbMarcas 
+				WHERE marc_Descripcion = @marc_Descripcion AND marc_Estado = 0	
+
+				UPDATE  Adua.tbMarcas
+				SET		marc_Descripcion = @marc_Descripcion,
+						usua_UsuarioModificacion = @usua_UsuarioModificacion,
+						marc_FechaModificacion = @marc_FechaModificacion
+				WHERE	marc_Id = @marc_Id
+
+				SELECT 1
+			END
+		ELSE
+			BEGIN
+
+				UPDATE  Adua.tbMarcas
+				SET		marc_Descripcion = @marc_Descripcion,
+						usua_UsuarioModificacion = @usua_UsuarioModificacion,
+						marc_FechaModificacion = @marc_FechaModificacion
+				WHERE	marc_Id = @marc_Id
+
+				SELECT 1
+			END
+
+		
 	END TRY
 	BEGIN CATCH
-		SELECT 'Error Message: ' + ERROR_MESSAGE()
+		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
 	END CATCH
 END
 GO
