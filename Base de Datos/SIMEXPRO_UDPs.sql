@@ -2817,13 +2817,13 @@ BEGIN
 			pers.pers_escvRepresentante, -- nuevo
 			civiR.escv_Nombre		AS estadoCivilRepresentante,  -- nuevo
 			pers.pers_OfprRepresentante,  -- nuevo
-		--	ofprR.ofpr_Nombre		AS oficioProfesRepresentante,  -- nuevo
+			ofprR.ofpr_Nombre		AS oficioProfesRepresentante,  -- nuevo
+			coin.pers_FormaRepresentacion, 
 			CASE 
 			WHEN coin.pers_FormaRepresentacion = 'True' THEN 'Representante Legal'
 			ELSE 'Condicion Propia'
 			END											AS formaRepresentacionDesc, -- nuevo
 
-			coin.pers_FormaRepresentacion, 
 
 			coin.colo_Id,
 			colo.colo_Nombre,

@@ -46,6 +46,7 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public string estadoCivilRepresentante { get; set; }
         public string pers_escvRepresentante { get; set; }
         public string pers_OfprRepresentante { get; set; }
+        public string oficioProfesRepresentante { get; set; }
         public string coin_PuntoReferencia { get; set; }
         public int coin_ColoniaRepresentante { get; set; }
         public string coin_NumeroLocalReprentante { get; set; }

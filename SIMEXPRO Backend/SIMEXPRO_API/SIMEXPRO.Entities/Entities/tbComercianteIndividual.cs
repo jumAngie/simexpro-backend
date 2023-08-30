@@ -77,6 +77,8 @@ namespace SIMEXPRO.Entities.Entities
         public string pers_escvRepresentante  {get; set; }
         [NotMapped]
         public string pers_OfprRepresentante  {get; set; }
+        [NotMapped]      
+        public string oficioProfesRepresentante { get; set; }
 
         public virtual tbColonias coin_ColoniaRepresentanteNavigation { get; set; }
         public virtual tbColonias colo { get; set; }

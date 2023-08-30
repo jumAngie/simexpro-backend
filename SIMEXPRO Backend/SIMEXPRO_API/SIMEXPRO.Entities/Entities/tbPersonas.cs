@@ -28,7 +28,6 @@ namespace SIMEXPRO.Entities.Entities
         public int ofpr_Id { get; set; }
         [NotMapped]
         public string ofpr_Nombre { get; set; }
-        public bool pers_FormaRepresentacion { get; set; }
         public int pers_escvRepresentante { get; set; }
         [NotMapped]
         public string EstadoCivilRepresentante { get; set; }
