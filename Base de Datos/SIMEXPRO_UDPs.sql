@@ -2873,60 +2873,67 @@ END
 GO
 
 /*Insertar Comersiante Individual*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Insertar --1, 1, 1, "Frente a farmacia Kielsa", 1, "A777", "Frente a supermercado La Colonia", "99997788", "22004545", "esUnaPrueba@prueba.com", '' ,1, '8/7/2023'
+CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap1 --'1548-1458-145789', 2, 1, 2,0,null,null,1, '2023-08-30 10:26:59.900'
 (
-  	@pers_Id                           	INT,
-  	@fopr_Id                           	BIT,
-  	@colo_Id                           	INT,
-  	@coin_PuntoReferencia			  	NVARCHAR(200),
-  	@coin_ColoniaRepresentante		  	INT,
-  	@coin_NumeroLocalReprentante	    NVARCHAR(200),
-  	@coin_PuntoReferenciaReprentante   	NVARCHAR(200),
-  	@coin_TelefonoCelular			    NVARCHAR(20),
-  	@coin_TelefonoFijo				    NVARCHAR(20),
-  	@coin_CorreoElectronico		    	NVARCHAR(30),
-  	@coin_CorreoElectronicoAlternativo 	NVARCHAR(30),
+	@pers_RTN							NVARCHAR(40),
+	@ofic_Id							INT,
+	@escv_Id							INT,
+	@ofpr_Id							INT,
+	@pers_FormaRepresentacion			BIT,
+	@pers_escvRepresentante				INT,
+	@pers_OfprRepresentante				INT,
   	@usua_UsuarioCreacion       		INT,
-  	@coin_FechaCreacion         		DATETIME 
+	@coin_FechaCreacion         		DATETIME 
 )
 AS
 BEGIN
 	BEGIN TRY
+	BEGIN TRANSACTION
+		DECLARE @pers_FechaCreacion DATETIME = @coin_FechaCreacion;
+		DECLARE @pers_Id INT;
+		DECLARE @coin_Id INT;
+
+		INSERT INTO Adua.tbPersonas ([pers_RTN], 
+									 [ofic_Id],
+									 [escv_Id],
+									 [ofpr_Id],
+									 [pers_escvRepresentante],
+									 [pers_OfprRepresentante],
+									 [usua_UsuarioCreacion], 
+									 [pers_FechaCreacion])
+		VALUES(@pers_RTN,
+		@ofic_Id,
+		@escv_Id,
+		@ofpr_Id,
+		@pers_escvRepresentante,
+		@pers_OfprRepresentante,
+		@usua_UsuarioCreacion,
+		@pers_FechaCreacion )
+		SELECT SCOPE_IDENTITY() AS insertopersona
+		SET  @pers_Id = SCOPE_IDENTITY() 
+
+
 		INSERT INTO Adua.tbComercianteIndividual 
-					(pers_Id,                           	
-					pers_FormaRepresentacion,                           	
-					colo_Id,                           	
-					coin_PuntoReferencia,			  	
-					coin_ColoniaRepresentante,		  	
-					coin_NumeroLocalReprentante,	    
-					coin_PuntoReferenciaReprentante,   	
-					coin_TelefonoCelular,			    
-					coin_TelefonoFijo,				    
-					coin_CorreoElectronico,		    	
-					coin_CorreoElectronicoAlternativo, 	
-					usua_UsuarioCreacion,       		
-					coin_FechaCreacion)
+					(  pers_Id,                           	
+					   pers_FormaRepresentacion,
+					   usua_UsuarioCreacion,
+					   coin_FechaCreacion)
 			 VALUES (@pers_Id,                           	
-					 @fopr_Id,                           	
-					 @colo_Id,                           	
-					 @coin_PuntoReferencia,			  	
-					 @coin_ColoniaRepresentante,		  	
-					 @coin_NumeroLocalReprentante,	    
-					 @coin_PuntoReferenciaReprentante,   	
-					 @coin_TelefonoCelular,			    
-					 @coin_TelefonoFijo,				    
-					 @coin_CorreoElectronico,		    	
-					 @coin_CorreoElectronicoAlternativo, 	
+					 @pers_FormaRepresentacion, 	
 					 @usua_UsuarioCreacion,       		
 					 @coin_FechaCreacion)
+			SET @coin_Id =  SCOPE_IDENTITY()
 
-		SELECT SCOPE_IDENTITY() AS Resultado
+		SELECT  @coin_Id AS coin_Id
+	COMMIT TRAN
 	END TRY
 	BEGIN CATCH
+	ROLLBACK TRAN
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
 	END CATCH
 END
 GO
+
 
 /*Editar Comersiante Individual*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Editar
