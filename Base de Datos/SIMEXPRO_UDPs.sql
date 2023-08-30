@@ -2800,7 +2800,9 @@ GO
 
 --*************** UDPS Para Tabla Comersiante Individual ************--
 select*from  Adua.tbComercianteIndividual
-/*Listar Comersiante Individual*/CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Listar
+select*from [Adua].[tbPersonas]
+/*Listar Comersiante Individual*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Listar
 AS
 BEGIN
 	SELECT	
@@ -2813,6 +2815,11 @@ BEGIN
 			ofic.ofic_Nombre,
 			pers.ofpr_Id,
 			ofpr.ofpr_Nombre,
+			pers.pers_escvRepresentante, -- nuevo
+			civiR.escv_Nombre		AS estadoCivilRepresentante,  -- nuevo
+			pers.pers_OfprRepresentante,  -- nuevo
+			ofprR.ofpr_Nombre		AS oficioProfesRepresentante,  -- nuevo
+
 			coin.pers_FormaRepresentacion, 
 
 			coin.colo_Id,
@@ -2847,9 +2854,11 @@ BEGIN
 	FROM Adua.tbComercianteIndividual		AS coin
 	INNER JOIN Adua.tbPersonas				AS pers		ON coin.pers_Id =	pers.pers_Id
 	INNER JOIN Gral.tbEstadosCiviles		AS civi		ON pers.escv_Id =	civi.escv_Id
+	LEFT  JOIN Gral.tbEstadosCiviles		AS civiR	ON pers.pers_escvRepresentante = civiR.escv_Id
 	INNER JOIN Gral.tbOficinas				AS ofic		ON pers.ofic_Id =	ofic.ofic_Id
 	INNER JOIN Gral.tbOficio_Profesiones	AS ofpr		ON pers.ofpr_Id =	ofpr.ofpr_Id
 	LEFT  JOIN Gral.tbOficio_Profesiones	AS ofprR	ON pers.pers_OfprRepresentante = ofpr.ofpr_Id 
+
 	INNER JOIN Gral.tbColonias				AS colo		ON coin.colo_Id =	colo.colo_Id
 	LEFT JOIN Gral.tbCiudades				AS ciud		ON colo.ciud_Id =	ciud.ciud_Id
 	LEFT JOIN Gral.tbProvincias				AS pvin		ON ciud.pvin_Id =	pvin.pvin_Id
