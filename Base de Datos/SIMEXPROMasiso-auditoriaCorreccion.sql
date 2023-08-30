@@ -1654,9 +1654,8 @@ CREATE TABLE Adua.tbPersonas (
 	ofic_Id 					INT NOT NULL,
 	escv_Id 					INT NOT NULL,
 	ofpr_Id 					INT NOT NULL,
-	pers_FormaRepresentacion 	BIT NOT NULL,
-	pers_escvRepresentante 		INT NOT NULL,
-	pers_OfprRepresentante 		INT NOT NULL,
+	pers_escvRepresentante 		INT,
+	pers_OfprRepresentante 		INT ,
  
 	usua_UsuarioCreacion      	INT NOT NULL,
 	pers_FechaCreacion        	DATETIME NOT NULL,
