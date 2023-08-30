@@ -6239,14 +6239,14 @@ END
 --		ROLLBACK TRAN
 --	END CATCH
 --END
-
 GO
-CREATE OR ALTER PROCEDURE Adua.UDP_tbFacturas_Listar
+CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbFacturas_Listar] 
 	@deva_Id				INT
 AS
 BEGIN
 	SELECT fact_Id, 
-		   deva_Id, 
+		   deva_Id,
+		   fact_Numero,
 		   fact_Fecha, 
 		   fact.usua_UsuarioCreacion, 
 		   usuaCrea.usua_Nombre					AS usuarioCreacionNombre,
