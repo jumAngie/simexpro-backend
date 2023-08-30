@@ -46,5 +46,25 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(listado);
         }
 
+        [HttpGet("Importaciones_Contador_Anio")]
+        public IActionResult Importaciones_Contador_Anio()
+        {
+            var listado = _aduanaServices.Importaciones_Contador_Anio();
+            return Ok(listado);
+        }
+
+        [HttpGet("Importaciones_Contador_Mes")]
+        public IActionResult Importaciones_Contador_Mes()
+        {
+            var listado = _aduanaServices.Importaciones_Contador_Mes(); 
+            return Ok(listado);
+        }
+
+        [HttpGet("Importaciones_Contador_Semana")]
+        public IActionResult Importaciones_Contador_Semana()
+        {
+            var listado = _aduanaServices.Importaciones_Contador_Semana();
+            return Ok(listado);
+        }
     }
 }
