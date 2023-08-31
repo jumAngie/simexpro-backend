@@ -2253,6 +2253,7 @@ GO
 ---- DUCA ----
 CREATE TABLE Adua.tbTransporte( 
 	tran_Id							INT IDENTITY(1,1),
+	tran_IdUnidadTransporte			INT NOT NULL,
 	pais_Id							INT,
 	tran_Chasis						NVARCHAR(100) NOT NULL,
 	marca_Id						INT NOT NULL,
@@ -2260,6 +2261,7 @@ CREATE TABLE Adua.tbTransporte(
 	tran_CantCarga					INT NOT NULL,
 	tran_NumDispositivoSeguridad	INT NULL,
 	tran_Equipamiento				NVARCHAR(200) NULL,
+	tran_TamanioEquipamiento		VARCHAR(50) NOT NULL,
 	tran_TipoCarga					NVARCHAR(200) NOT NULL,
 	tran_IdContenedor				NVARCHAR(100) NOT NULL,
 
@@ -2279,6 +2281,7 @@ CREATE TABLE Adua.tbTransporte(
 	CONSTRAINT PK_Adua_tbTransporte_Acce_tbUsuarios_usua_UsuarioEliminacion_usua_Id  FOREIGN KEY (usua_UsuarioEliminacion) 	REFERENCES Acce.tbUsuarios 	(usua_Id)
 );
 GO
+
 
 CREATE TABLE Adua.tbConductor(
 	cont_Id							INT IDENTITY(1,1),

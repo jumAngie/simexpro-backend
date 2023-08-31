@@ -7700,7 +7700,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_InsertarTab2
+CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbDuca_InsertarTab2]
 	@duca_No_Duca						NVARCHAR(100),
 	@duca_Codigo_Declarante				NVARCHAR(200),
 	@duca_Numero_Id_Declarante			NVARCHAR(200),
@@ -7716,11 +7716,13 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_InsertarTab2
 	@cont_Apellido						NVARCHAR(200),
 	@pais_Id							INT,
 	@marca_Id							INT,
+	@tran_IdUnidadTransporte			INT,
 	@tran_Chasis						NVARCHAR(100),
 	@tran_Remolque						NVARCHAR(50),
 	@tran_CantCarga						INT,
 	@tran_NumDispositivoSeguridad		INT,
 	@tran_Equipamiento					NVARCHAR(200),
+	@tran_TamanioEquipamiento			NVARCHAR(50),
 	@tran_TipoCarga						NVARCHAR(200),
 	@tran_IdContenedor					NVARCHAR(100),
 	@usua_UsuarioCreacio				INT,
@@ -7731,8 +7733,8 @@ BEGIN
 	SET @tran_FechaCreacion = GETDATE();
 	BEGIN TRY
 		BEGIN TRAN 
-			INSERT INTO Adua.tbTransporte (pais_Id, tran_Chasis, marca_Id, tran_Remolque, tran_CantCarga, tran_NumDispositivoSeguridad, tran_Equipamiento, tran_TipoCarga, tran_IdContenedor, usua_UsuarioCreacio, tran_FechaCreacion, usua_UsuarioModificacion, tran_FechaModificacion, usua_UsuarioEliminacion, trant_FechaEliminacion, tran_Estado)
-			VALUES(@pais_Id,@tran_Chasis,@marca_Id,@tran_Remolque,@tran_CantCarga,@tran_NumDispositivoSeguridad,@tran_Equipamiento,@tran_TipoCarga,@tran_IdContenedor,@usua_UsuarioCreacio,@tran_FechaCreacion,NULL,NULL,NULL,NULL,1);
+			INSERT INTO Adua.tbTransporte (pais_Id, tran_Chasis, marca_Id, tran_Remolque, tran_CantCarga, tran_NumDispositivoSeguridad, tran_Equipamiento, tran_TipoCarga, tran_IdContenedor, usua_UsuarioCreacio, tran_FechaCreacion, usua_UsuarioModificacion, tran_FechaModificacion, usua_UsuarioEliminacion, trant_FechaEliminacion, tran_Estado,tran_IdUnidadTransporte,@tran_TamanioEquipamiento)
+			VALUES(@pais_Id,@tran_Chasis,@marca_Id,@tran_Remolque,@tran_CantCarga,@tran_NumDispositivoSeguridad,@tran_Equipamiento,@tran_TipoCarga,@tran_IdContenedor,@usua_UsuarioCreacio,@tran_FechaCreacion,NULL,NULL,NULL,NULL,1,@tran_IdUnidadTransporte,@tran_TamanioEquipamiento);
 
 			DECLARE @Transporte_Id INT = (SELECT TOP 1 tran_Id FROM Adua.tbTransporte ORDER BY tran_Id DESC);
 			
@@ -7836,7 +7838,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_EditarTab2
+CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbDuca_EditarTab2]
 	@duca_No_Duca						NVARCHAR(100),
 	@duca_Codigo_Declarante				NVARCHAR(200),
 	@duca_Numero_Id_Declarante			NVARCHAR(200),
@@ -7852,11 +7854,13 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_EditarTab2
 	@cont_Apellido						NVARCHAR(200),
 	@pais_Id							INT,
 	@marca_Id							INT,
+	@tran_IdUnidadTransporte			INT,
 	@tran_Chasis						NVARCHAR(100),
 	@tran_Remolque						NVARCHAR(50),
 	@tran_CantCarga						INT,
 	@tran_NumDispositivoSeguridad		INT,
 	@tran_Equipamiento					NVARCHAR(200),
+	@tran_TamanioEquipamiento			NVARCHAR(50),
 	@tran_TipoCarga						NVARCHAR(200),
 	@tran_IdContenedor					NVARCHAR(100),
 	@usua_UsuarioModificacion			INT,
@@ -7879,7 +7883,9 @@ BEGIN
 			   tran_TipoCarga = @tran_TipoCarga, 
 			   tran_IdContenedor = @tran_IdContenedor, 
 			   usua_UsuarioModificacion = @usua_UsuarioModificacion, 
-			   tran_FechaModificacion = @duca_FechaModificacion
+			   tran_FechaModificacion = @duca_FechaModificacion,
+			   tran_IdUnidadTransporte = @tran_IdUnidadTransporte,
+			   tran_TamanioEquipamiento = @tran_TamanioEquipamiento
 		WHERE  tran_Id = @Transporte_Id
 		
 		DECLARE @ducaConductor INT = (SELECT TOP 1 cont_Id FROM Adua.tbConductor ORDER BY cont_Id DESC);
