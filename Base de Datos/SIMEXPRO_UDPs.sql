@@ -15080,6 +15080,119 @@ AS BEGIN
 END
 GO
 
+--************REGIMENES ADUANEROS******************--
+/*Listar REGIMENES ADUANEROS*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbRegimenesAduaneros_Listar
+AS
+BEGIN
+SELECT	regi_Id 																	,
+		regi_Codigo																	,
+		regi_Descripcion															,
+		regimen.usua_UsuarioCreacion												,
+		usuarioCreacion.usua_Nombre						AS usuarioCreacionNombre	,
+		regi_FechaCreacion 															,
+		regimen.usua_UsuarioModificacion											,
+		usuarioModificacion.usua_Nombre					AS usuarioModificacionNombre,
+		regi_FechaModificacion														,
+		regimen.usua_UsuarioEliminacion												,
+		usuarioEliminacion.usua_Nombre					AS usuarioEliminacionNombre	,
+		regi_FechaEliminacion														,
+		regi_Estado										
+FROM	Adua.tbRegimenesAduaneros regimen
+		INNER JOIN	Acce.tbUsuarios usuarioCreacion		ON regimen.usua_UsuarioCreacion =		usuarioCreacion.usua_Id
+		LEFT JOIN	Acce.tbUsuarios usuarioModificacion	ON regimen.usua_UsuarioModificacion =	usuarioModificacion.usua_Id
+		LEFT JOIN	Acce.tbUsuarios usuarioEliminacion	ON regimen.usua_UsuarioEliminacion =	usuarioEliminacion.usua_Id
+WHERE	regi_Estado = 1
+END
+GO
+
+/*Insertar REGIMEN ADUANERO*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbRegimenesAduaneros_Insertar 
+(   @regi_Codigo					VARCHAR(10),
+	@regi_Descripcion				NVARCHAR(500),
+	@usua_UsuarioCreacion 			INT,
+	@regi_FechaCreacion 			DATETIME
+)
+AS
+BEGIN
+	BEGIN TRY	
+			BEGIN
+				INSERT INTO Adua.tbRegimenesAduaneros ( regi_Codigo, 
+														regi_Descripcion, 
+														usua_UsuarioCreacion, 
+														regi_FechaCreacion)
+				     VALUES (@regi_Codigo,
+					         @regi_Descripcion,
+							 @usua_UsuarioCreacion,
+							 @regi_FechaCreacion)
+				     SELECT  1
+			END
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+	END CATCH
+END
+GO
+
+
+/*Editar REGIMEN ADUANERO*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbRegimenesAduaneros_Editar
+(
+	@regi_Id						INT,
+	@regi_Codigo					VARCHAR(10),
+	@regi_Descripcion				NVARCHAR(500),
+	@usua_UsuarioModificacion		INT,
+	@regi_FechaModificacion			DATETIME
+)
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE Adua.tbRegimenesAduaneros
+		   SET regi_Codigo = @regi_Codigo,
+		       regi_Descripcion = @regi_Descripcion,
+			   usua_UsuarioModificacion = @usua_UsuarioModificacion,
+			   regi_FechaModificacion = @regi_FechaModificacion
+		 WHERE regi_Id = @regi_Id
+		   AND regi_Estado = 1
+
+		SELECT 1 AS Resultado
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+	END CATCH
+END
+GO
+/*Eliminar REGIMEN ADUANERO*/
+CREATE OR ALTER PROCEDURE Adua.tbRegimenesAduaneros_Eliminar
+(
+	@regi_Id					INT,
+	@usua_UsuarioEliminacion	INT,
+	@regi_FechaEliminacion		DATETIME
+)
+AS
+BEGIN
+	BEGIN TRY
+		DECLARE @respuesta INT
+		EXEC dbo.UDP_ValidarReferencias 'regi_Id', @regi_Id, 'Adua.tbRegimenesAduaneros', @respuesta OUTPUT
+		
+		IF(@respuesta) = 1
+		BEGIN
+			UPDATE Adua.tbRegimenesAduaneros
+			   SET regi_Estado = 0,
+				   usua_UsuarioEliminacion = @usua_UsuarioEliminacion,
+				   regi_FechaEliminacion = @regi_FechaEliminacion
+			 WHERE regi_Id = @regi_Id
+		END
+
+		SELECT @respuesta AS Resultado
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+	END CATCH
+END
+GO
+--*********************************************************************--
+
 -------****************** FILTRADO  DE DATOS ***************----------
 
 
