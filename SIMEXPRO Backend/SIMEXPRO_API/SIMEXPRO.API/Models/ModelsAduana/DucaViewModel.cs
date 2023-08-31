@@ -8,12 +8,11 @@ namespace SIMEXPRO.API.Models.ModelsAduana
 {
     public class DucaViewModel
     {
-
         public string duca_No_Duca { get; set; }
         public string duca_No_Correlativo_Referencia { get; set; }
         public int deva_Id { get; set; }
         public int duca_AduanaRegistro { get; set; }
-        public int duca_AduanaSalida { get; set; }
+        public int duca_AduanaDestino { get; set; }
         public string duca_DomicilioFiscal_Exportador { get; set; }
         public int duca_Tipo_Iden_Exportador { get; set; }
         public int duca_Pais_Emision_Exportador { get; set; }
@@ -31,8 +30,7 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public int duca_Pais_Exportacion { get; set; }
         public int duca_Pais_Destino { get; set; }
         public string duca_Deposito_Aduanero { get; set; }
-        public string duca_Lugar_Embarque { get; set; }
-        public string duca_Lugar_Desembarque { get; set; }
+        public int? duca_Lugar_Desembarque { get; set; }
         public string duca_Manifiesto { get; set; }
         public string duca_Titulo { get; set; }
         public string duca_Codigo_Transportista { get; set; }
@@ -106,7 +104,8 @@ namespace SIMEXPRO.API.Models.ModelsAduana
        
         public string Nombre_pais_conductor { get; set; }
 
-       
+        public string cont_NoIdentificacion { get; set; }
+
         public string cont_Nombre { get; set; }
 
        

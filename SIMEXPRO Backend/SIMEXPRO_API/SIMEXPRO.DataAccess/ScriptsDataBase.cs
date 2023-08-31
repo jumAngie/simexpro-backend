@@ -284,6 +284,7 @@ namespace SIMEXPRO.DataAccess
 
         public static string InsertarDucaTAP1 = "Adua.UDP_tbDuca_InsertarTab1";
         public static string EditarDucaTAP1 = "Adua.UDP_tbDuca_EditarTab1";
+        public static string ListarPorNumeroDuca = "Adua.UDP_tbDuca_ListarPorNumeroDuca";
 
         public static string InsertarDucaTAP2 = "Adua.UDP_tbDuca_InsertarTab2";
         public static string EditarDucaTAP2 = "Adua.UDP_tbDuca_EditarTab2";
@@ -439,7 +440,7 @@ namespace SIMEXPRO.DataAccess
         #endregion
 
         #endregion
-
+        
         #region Produccion
 
         #region Procesos

@@ -527,6 +527,7 @@ CREATE TABLE Adua.tbNivelesComerciales(
 		nico_Estado						BIT 			NOT NULL DEFAULT 1,
 
    CONSTRAINT PK_Adua_tbNivelesComerciales_nico_Id 			PRIMARY KEY (nico_Id),
+   CONSTRAINT UK_Adua_tbNivelesComerciales_nico_Codigo		UNIQUE(nico_Codigo),
    constraint UQ_Adua_tbNivelesComerciales_nico_Descripcion UNIQUE(nico_Descripcion),
    CONSTRAINT FK_Acce_tbUsuarios_Adua_tbNivelesComerciales_nico_UsuarioCreacion 		 FOREIGN KEY (usua_UsuarioCreacion)     REFERENCES Acce.tbUsuarios(usua_Id),
    CONSTRAINT FK_Acce_tbUsuarios_Adua_tbNivelesComerciales_nico_usua_UsuarioModificacion FOREIGN KEY (usua_UsuarioModificacion) REFERENCES Acce.tbUsuarios(usua_Id),
@@ -2292,6 +2293,7 @@ GO
 
 CREATE TABLE Adua.tbConductor(
 	cont_Id							INT IDENTITY(1,1),
+	cont_NoIdentificacion			VARCHAR(50) NOT NULL,
 	cont_Nombre						NVARCHAR(200) NOT NULL,
 	cont_Apellido					NVARCHAR(200) NOT NULL,
 	cont_Licencia					NVARCHAR(50) NOT NULL,
@@ -2435,7 +2437,7 @@ CREATE TABLE Adua.tbDuca(
 	duca_No_Correlativo_Referencia	NVARCHAR(MAX),
 	deva_Id							INT,
 	duca_AduanaRegistro				INT,
-	duca_AduanaSalida				INT,
+	duca_AduanaDestino				INT,
 	duca_DomicilioFiscal_Exportador NVARCHAR(MAX) ,
 	duca_Tipo_Iden_Exportador		INT ,
 	duca_Pais_Emision_Exportador	INT ,
@@ -2486,8 +2488,8 @@ CREATE TABLE Adua.tbDuca(
 	CONSTRAINT FK_Adua_tbDuca_tbUsuarios_duca_UsuCrea			               		FOREIGN KEY (usua_UsuarioCreacion)     			REFERENCES Acce.tbUsuarios 	(usua_Id),
 	CONSTRAINT FK_Prod_tbDuca_tbUsuarios_duca_UsuModifica		               		FOREIGN KEY (usua_UsuarioModificacion) 			REFERENCES Acce.tbUsuarios 	(usua_Id),
 	CONSTRAINT FK_Adua_tbDuca_motr_id_tbModoTransporte_motr_Id						FOREIGN KEY (motr_id)							REFERENCES Adua.tbModoTransporte(motr_id),
-	CONSTRAINT FK_Adua_tbDuca_duca_AduanaRegistro_tbAduana_adua_Id					FOREIGN KEY (duca_AduanaRegistro)               REFERENCES Adua.tbAduanas(adua_Id),
-	CONSTRAINT FK_Adua_tbDuca_duca_AduanaSalida_tbAduana_adua_Id					FOREIGN KEY (duca_AduanaSalida)                 REFERENCES Adua.tbAduanas(adua_Id),
+	CONSTRAINT FK_Adua_tbDuca_duca_AduanaRegistro_tbAduana_adua_Id					FOREIGN KEY (duca_AduanaRegistro)               REFERENCES Adua.tbAduanas (adua_Id),
+	CONSTRAINT FK_Adua_tbDuca_duca_AduanaDestino_tbAduana_adua_Id					FOREIGN KEY (duca_AduanaDestino)				REFERENCES Adua.tbAduanas (adua_Id),
 	CONSTRAINT FK_Adua_tbDuca_duca_Tipo_Iden_Exportador_tbTiposIdentificacion		FOREIGN KEY (duca_Tipo_Iden_Exportador)			REFERENCES Adua.tbTiposIdentificacion(iden_Id),
 	CONSTRAINT FK_Adua_tbDuca_duca_Regimen_Aduanero_tbRegimenesAduaneros_regi_Id	FOREIGN KEY (duca_Regimen_Aduanero)				REFERENCES Adua.tbRegimenesAduaneros(regi_Id),
 	CONSTRAINT FK_Adua_tbDuca_duca_Lugar_Desembarque_tbLugaresEmbarque_emba_Id		FOREIGN KEY (duca_Lugar_Desembarque)			REFERENCES Adua.tbLugaresEmbarque(emba_Id)

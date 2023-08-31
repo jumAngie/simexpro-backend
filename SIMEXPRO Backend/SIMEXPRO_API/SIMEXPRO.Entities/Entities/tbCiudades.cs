@@ -19,6 +19,8 @@ namespace SIMEXPRO.Entities.Entities
             tbProveedores = new HashSet<tbProveedores>();
             tbPedidosOrden = new HashSet<tbPedidosOrden>();
             tbAduanas = new HashSet<tbAduanas>();
+            tbPersonaJuridicaciud = new HashSet<tbPersonaJuridica>();
+            tbPersonaJuridicapeju_CiudadIdRepresentanteNavigation = new HashSet<tbPersonaJuridica>();
         }
 
         public int ciud_Id { get; set; }
@@ -67,5 +69,7 @@ namespace SIMEXPRO.Entities.Entities
         public virtual ICollection<tbProveedores> tbProveedores { get; set; }
         public virtual ICollection<tbPedidosOrden> tbPedidosOrden { get; set; }
         public virtual ICollection<tbAduanas> tbAduanas { get; set; }
+        public virtual ICollection<tbPersonaJuridica> tbPersonaJuridicapeju_CiudadIdRepresentanteNavigation { get; set; }
+        public virtual ICollection<tbPersonaJuridica> tbPersonaJuridicaciud { get; set; }
     }
 }

@@ -1289,6 +1289,20 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+        public ServiceResult VerificarExistencia(string duca_No_Duca)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _ducaRepository.VerificarExistencia(duca_No_Duca);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
 
         public ServiceResult InsertarDucaTap1(tbDuca item)
         {

@@ -15,7 +15,7 @@ namespace SIMEXPRO.Entities.Entities
             tbDeclaraciones_Valordeva_AduanaDespacho = new HashSet<tbDeclaraciones_Valor>();
             tbDeclaraciones_Valordeva_AduanaIngreso = new HashSet<tbDeclaraciones_Valor>();
             tbDucaduca_AduanaRegistroNavigation = new HashSet<tbDuca>();
-            tbDucaduca_AduanaSalidaNavigation = new HashSet<tbDuca>();
+            tbDucaduca_AduanaDestinoNavigation = new HashSet<tbDuca>();
         }
 
         public int adua_Id { get; set; }

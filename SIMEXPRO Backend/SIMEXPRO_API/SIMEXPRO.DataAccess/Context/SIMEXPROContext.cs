@@ -1403,6 +1403,10 @@ namespace SIMEXPRO.DataAccess.Context
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.Property(e => e.cont_NoIdentificacion)
+                   .IsRequired()
+                   .HasMaxLength(50);
+
                 entity.Property(e => e.cont_Nombre)
                     .IsRequired()
                     .HasMaxLength(200);

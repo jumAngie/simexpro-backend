@@ -14,6 +14,7 @@ namespace SIMEXPRO.Entities.Entities
         public int imar_Id { get; set; }
         public int impu_Id { get; set; }
         public int aran_Id { get; set; }
+        public decimal imar_PorcentajeImpuesto { get; set; }
         [NotMapped]
         public string DescripcionArancel { get; set; }
         public int usua_UsuarioCreacion { get; set; }

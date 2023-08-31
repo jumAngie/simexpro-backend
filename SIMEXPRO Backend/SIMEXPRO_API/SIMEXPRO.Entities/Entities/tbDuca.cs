@@ -15,7 +15,7 @@ namespace SIMEXPRO.Entities.Entities
         public string duca_No_Correlativo_Referencia { get; set; }
         public int? deva_Id { get; set; }
         public int? duca_AduanaRegistro { get; set; }
-        public int? duca_AduanaSalida { get; set; }
+        public int? duca_AduanaDestino { get; set; }
         public string duca_DomicilioFiscal_Exportador { get; set; }
         public int? duca_Tipo_Iden_Exportador { get; set; }
         public int? duca_Pais_Emision_Exportador { get; set; }
@@ -71,7 +71,7 @@ namespace SIMEXPRO.Entities.Entities
         public string Nombre_Aduana_Registro { get; set; }
 
         [NotMapped]
-        public string Nombre_Aduana_Salida { get; set; }
+        public string Nombre_Aduana_Destino { get; set; }
 
         [NotMapped]
         public int deva_AduanaIngresoId { get; set; }
@@ -108,6 +108,8 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string Nombre_pais_conductor { get; set; }
 
+        [NotMapped]
+        public string cont_NoIdentificacion { get; set; }
         [NotMapped]
         public string cont_Nombre { get; set; }
 
@@ -185,7 +187,7 @@ namespace SIMEXPRO.Entities.Entities
         public virtual tbRegimenesAduaneros duca_Regimen_AduaneroNavigation { get; set; }
         public virtual tbDeclaraciones_Valor deva { get; set; }
         public virtual tbAduanas duca_AduanaRegistroNavigation { get; set; }
-        public virtual tbAduanas duca_AduanaSalidaNavigation { get; set; }
+        public virtual tbAduanas duca_AduanaDestinoNavigation { get; set; }
         public virtual tbConductor duca_Conductor { get; set; }
         public virtual tbPaises duca_Pais_DestinoNavigation { get; set; }
         public virtual tbAduanas duca_AduanaDestinoNavigation { get; set; }
