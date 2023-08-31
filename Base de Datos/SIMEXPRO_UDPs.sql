@@ -2676,6 +2676,7 @@ GO
 
 --*************** UDPS Para Tabla Personas ************--
 
+
 /*Listar Personas*/
 CREATE OR ALTER PROC Adua.UDP_tbPersonas_Listar
 AS
@@ -2689,7 +2690,6 @@ BEGIN
 				Personas.ofpr_Id, 
 				Profesion.ofpr_Nombre,
 
-				Personas.pers_FormaRepresentacion, 
 				Personas.pers_escvRepresentante,
 				Civil2.escv_Nombre					AS EstadoCivilRepresentante,
 				Personas.pers_OfprRepresentante,
@@ -2724,7 +2724,6 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonas_Insertar
 	@ofic_Id					INT,
 	@escv_Id					INT,
 	@ofpr_Id					INT,
-	@pers_FormaRepresentacion	BIT,
 	@pers_escvRepresentante		INT,
 	@pers_OfprRepresentante		INT,
 	@usua_UsuarioCreacion		INT,
@@ -2738,7 +2737,6 @@ BEGIN
 					ofic_Id, 
 					escv_Id, 
 					ofpr_Id, 
-					pers_FormaRepresentacion, 
 					pers_escvRepresentante, 
 					pers_OfprRepresentante, 
 					usua_UsuarioCreacion, 
@@ -2747,7 +2745,6 @@ BEGIN
 					@ofic_Id,
 					@escv_Id,
 					@ofpr_Id,
-					@pers_FormaRepresentacion,
 					@pers_escvRepresentante,
 					@pers_OfprRepresentante,
 					@usua_UsuarioCreacion,
@@ -2769,7 +2766,6 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonas_Editar
 	@ofic_Id					INT,
 	@escv_Id					INT,
 	@ofpr_Id					INT,
-	@pers_FormaRepresentacion	BIT,
 	@pers_escvRepresentante		INT,
 	@pers_OfprRepresentante		INT,
 	@usua_UsuarioCreacion		INT,
@@ -2783,7 +2779,6 @@ BEGIN
 				   ofic_Id					= @ofic_Id, 					
 				   escv_Id					= @escv_Id, 					
 				   ofpr_Id					= @ofpr_Id, 					
-				   pers_FormaRepresentacion	= @pers_FormaRepresentacion, 					
 				   pers_escvRepresentante	= @pers_escvRepresentante, 		
 				   pers_OfprRepresentante	= @pers_OfprRepresentante, 		
 				   usua_UsuarioCreacion		= @usua_UsuarioCreacion,      	
@@ -2959,7 +2954,6 @@ BEGIN
 	END CATCH
 END
 GO
-Adua.UDP_tbComercianteIndividual_Listar
 
 CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap2  --6,63,1,'por ahi'
 	@coin_Id					INT,
@@ -7806,27 +7800,42 @@ BEGIN
 	BEGIN TRANSACTION 
 	SET @tran_FechaCreacion = GETDATE();
 	BEGIN TRY
-		BEGIN TRAN 
-			INSERT INTO Adua.tbTransporte (pais_Id, tran_Chasis, marca_Id, tran_Remolque, tran_CantCarga, tran_NumDispositivoSeguridad, tran_Equipamiento, tran_TipoCarga, tran_IdContenedor, usua_UsuarioCreacio, tran_FechaCreacion, usua_UsuarioModificacion, tran_FechaModificacion, usua_UsuarioEliminacion, trant_FechaEliminacion, tran_Estado,tran_IdUnidadTransporte,@tran_TamanioEquipamiento)
-			VALUES(@pais_Id,@tran_Chasis,@marca_Id,@tran_Remolque,@tran_CantCarga,@tran_NumDispositivoSeguridad,@tran_Equipamiento,@tran_TipoCarga,@tran_IdContenedor,@usua_UsuarioCreacio,@tran_FechaCreacion,NULL,NULL,NULL,NULL,1,@tran_IdUnidadTransporte,@tran_TamanioEquipamiento);
+		BEGIN TRAN
+			IF @pais_Id IS NOT NULL
+				BEGIN
+					INSERT INTO Adua.tbTransporte (pais_Id, tran_Chasis, marca_Id, tran_Remolque, tran_CantCarga, tran_NumDispositivoSeguridad, tran_Equipamiento, tran_TipoCarga, tran_IdContenedor, usua_UsuarioCreacio, tran_FechaCreacion, usua_UsuarioModificacion, tran_FechaModificacion, usua_UsuarioEliminacion, trant_FechaEliminacion, tran_Estado,tran_IdUnidadTransporte, tran_TamanioEquipamiento)
+					VALUES(@pais_Id,@tran_Chasis,@marca_Id,@tran_Remolque,@tran_CantCarga,@tran_NumDispositivoSeguridad,@tran_Equipamiento,@tran_TipoCarga,@tran_IdContenedor,@usua_UsuarioCreacio,@tran_FechaCreacion,NULL,NULL,NULL,NULL,1,@tran_IdUnidadTransporte,@tran_TamanioEquipamiento);
 
-			DECLARE @Transporte_Id INT = (SELECT TOP 1 tran_Id FROM Adua.tbTransporte ORDER BY tran_Id DESC);
+					DECLARE @Transporte_Id INT = (SELECT TOP 1 tran_Id FROM Adua.tbTransporte ORDER BY tran_Id DESC);
 			
-			INSERT INTO Adua.tbConductor (cont_NoIdentificacion, cont_Nombre, cont_Apellido, cont_Licencia, pais_IdExpedicion, tran_Id, usua_UsuarioCreacion, cont_FechaCreacion, usua_UsuarioModificacion, cont_FechaModificacion, usua_UsuarioEliminacion, cont_FechaEliminacion, cont_Estado)
-			VALUES(@cont_NoIdentificacion, @cont_Nombre,@cont_Apellido,@cont_Licencia,@pais_IdExpedicion,@Transporte_Id,@usua_UsuarioCreacio,@tran_FechaCreacion,NULL,NULL,NULL,NULL,1);
+					INSERT INTO Adua.tbConductor (cont_NoIdentificacion, cont_Nombre, cont_Apellido, cont_Licencia, pais_IdExpedicion, tran_Id, usua_UsuarioCreacion, cont_FechaCreacion, usua_UsuarioModificacion, cont_FechaModificacion, usua_UsuarioEliminacion, cont_FechaEliminacion, cont_Estado)
+					VALUES(@cont_NoIdentificacion, @cont_Nombre,@cont_Apellido,@cont_Licencia,@pais_IdExpedicion,@Transporte_Id,@usua_UsuarioCreacio,@tran_FechaCreacion,NULL,NULL,NULL,NULL,1);
 
-			DECLARE @ducaConductor INT = (SELECT TOP 1 cont_Id FROM Adua.tbConductor ORDER BY cont_Id DESC);
+					DECLARE @ducaConductor INT = (SELECT TOP 1 cont_Id FROM Adua.tbConductor ORDER BY cont_Id DESC);
 
-			UPDATE Adua.tbDuca
-			   SET duca_Codigo_Declarante = @duca_Codigo_Declarante
-				  ,duca_Numero_Id_Declarante = @duca_Numero_Id_Declarante
-				  ,duca_NombreSocial_Declarante = @duca_NombreSocial_Declarante
-				  ,duca_DomicilioFiscal_Declarante = @duca_DomicilioFiscal_Declarante
-				  ,duca_Codigo_Transportista = @duca_Codigo_Transportista 
-				  ,motr_id = @motr_Id
-				  ,duca_Transportista_Nombre = @duca_Transportista_Nombre
-				  ,duca_Conductor_Id = @ducaConductor      
-			 WHERE duca_No_Duca = @duca_No_Duca
+					UPDATE Adua.tbDuca
+					   SET duca_Codigo_Declarante = @duca_Codigo_Declarante
+						  ,duca_Numero_Id_Declarante = @duca_Numero_Id_Declarante
+						  ,duca_NombreSocial_Declarante = @duca_NombreSocial_Declarante
+						  ,duca_DomicilioFiscal_Declarante = @duca_DomicilioFiscal_Declarante
+						  ,duca_Codigo_Transportista = @duca_Codigo_Transportista 
+						  ,motr_id = @motr_Id
+						  ,duca_Transportista_Nombre = @duca_Transportista_Nombre
+						  ,duca_Conductor_Id = @ducaConductor      
+					 WHERE duca_No_Duca = @duca_No_Duca
+				END
+		     ELSE
+				BEGIN
+					UPDATE Adua.tbDuca
+					   SET duca_Codigo_Declarante = @duca_Codigo_Declarante
+						  ,duca_Numero_Id_Declarante = @duca_Numero_Id_Declarante
+						  ,duca_NombreSocial_Declarante = @duca_NombreSocial_Declarante
+						  ,duca_DomicilioFiscal_Declarante = @duca_DomicilioFiscal_Declarante
+						  ,duca_Codigo_Transportista = @duca_Codigo_Transportista 
+						  ,motr_id = @motr_Id
+						  ,duca_Transportista_Nombre = @duca_Transportista_Nombre     
+					 WHERE duca_No_Duca = @duca_No_Duca
+				END
 		COMMIT 
 		SELECT 1
 	END TRY
