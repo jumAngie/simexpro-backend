@@ -53,8 +53,33 @@ namespace SIMEXPRO.Entities.Entities
         public string usuarioModificaNombre { get; set; }
         public DateTime? peju_FechaModificacion { get; set; }
         public bool? peju_Estado { get; set; }
+        [NotMapped]
+        public int escv_Id { get; set; }
+        [NotMapped]
+        public string escv_Nombre { get; set; }
+        [NotMapped]
+        public string ofic_Nombre { get; set; }
+        [NotMapped]
+        public int ofpr_Id { get; set; }
+        [NotMapped]
+        public string ofpr_Nombre { get; set; }
+        [NotMapped]
+        public string colo_Nombre { get; set; }
 
-     
+        [NotMapped]
+        public string ciud_Nombre { get; set; }
+        [NotMapped]
+        public int pvin_Id { get; set; }
+        [NotMapped]
+        public string pvin_Codigo { get; set; }
+        [NotMapped]
+        public string pvin_Nombre { get; set; }
+        [NotMapped]
+        public int pais_Id { get; set; }
+        [NotMapped]
+        public string pais_Codigo { get; set; }
+        [NotMapped]
+        public string pais_Nombre { get; set; }
         public virtual tbCiudades ciud { get; set; }
         public virtual tbAldeas alde { get; set; }
         public virtual tbColonias colo { get; set; }

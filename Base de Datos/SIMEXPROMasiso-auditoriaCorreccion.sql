@@ -1779,23 +1779,23 @@ CREATE TABLE Adua.tbPersonaJuridica (
 	peju_DNIRepresentante                           NVARCHAR(20), --nuevo
 	peju_EscrituraPublica                           NVARCHAR(200), 
 
-	colo_Id							  				INT NOT NULL,
-	ciud_Id                                         INT NOT NULL,   -- nuevo
+	colo_Id							  				INT ,
+	ciud_Id                                         INT,   -- nuevo
 	alde_Id								            INT,            --nuevo
 	peju_PuntoReferencia							NVARCHAR(200),
 	peju_NumeroLocalApart				            NVARCHAR(150),  --nuevo
 
     peju_CiudadIdRepresentante                      INT,            --nuevo
-	peju_ColoniaRepresentante						INT NOT NULL,   --nuevo
+	peju_ColoniaRepresentante						INT ,   --nuevo
 	peju_AldeaIdRepresentante                       INT,            --nuevo
-	peju_NumeroLocalRepresentante		  			NVARCHAR(200) NOT NULL,
-	peju_PuntoReferenciaRepresentante	  			NVARCHAR(200) NOT NULL,
+	peju_NumeroLocalRepresentante		  			NVARCHAR(200),
+	peju_PuntoReferenciaRepresentante	  			NVARCHAR(200) ,
 
-	peju_TelefonoEmpresa							NVARCHAR(200) NOT NULL,
-	peju_TelefonoFijoRepresentanteLegal 			NVARCHAR(200) NOT NULL,
-	peju_TelefonoRepresentanteLegal	  				NVARCHAR(200) NOT NULL,
-	peju_CorreoElectronico              			NVARCHAR(200) NOT NULL,
-	peju_CorreoElectronicoAlternativo   			NVARCHAR(200) NOT NULL,
+	peju_TelefonoEmpresa							NVARCHAR(200) ,
+	peju_TelefonoFijoRepresentanteLegal 			NVARCHAR(200) ,
+	peju_TelefonoRepresentanteLegal	  				NVARCHAR(200) ,
+	peju_CorreoElectronico              			NVARCHAR(200),
+	peju_CorreoElectronicoAlternativo   			NVARCHAR(200) ,
   
 	usua_UsuarioCreacion       						INT NOT NULL,
 	peju_FechaCreacion         						DATETIME NOT NULL,
@@ -1818,7 +1818,6 @@ CREATE TABLE Adua.tbPersonaJuridica (
 	--CONSTRAINT FK_Adua_PersonaJuridica_peju_Acce_tbUsuarios_usua_UsuarioEliminacion_usua_Id  FOREIGN KEY (usua_UsuarioEliminacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id)
 );
 GO
-
 --Se identificarán los tipos de documentos según acortaciones
 --RTN-CI:  REGISTRO TRIBUTARIO NACIONAL (RTN) DEL COMERCIANTE INDIVIDUAL
 --DNI-CI:  DOCUMENTO O TARJETA DE IDENTIDAD DEL COMERCIANTE INDIVIDUAL

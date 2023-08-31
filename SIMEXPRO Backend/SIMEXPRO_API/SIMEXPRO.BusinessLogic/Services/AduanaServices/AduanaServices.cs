@@ -2612,7 +2612,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
-        public ServiceResult InsertarPersonaJuridica(tbPersonas item)
+        public ServiceResult InsertarPersonaJuridica(tbPersonaJuridica item)
         {
             var result = new ServiceResult();
             try

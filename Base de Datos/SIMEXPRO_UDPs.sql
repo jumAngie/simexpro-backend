@@ -3329,25 +3329,42 @@ END
 GO
 
 /*Insertar Persona Juridica*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab1
-(
-  @pers_RTN                         NVARCHAR(40),
-  @ofic_Id							INT,
-  @escv_Id							INT,
-  @ofpr_Id							INT,
-  @usua_UsuarioCreacion             INT,
-  @fecha_UsuarioCreacion            DATETIME
-)
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab1 
+
+  @pers_RTN                 NVARCHAR(40),
+  @ofic_Id                  INT,
+  @escv_Id                  INT,
+  @ofpr_Id                  INT,
+  @usua_UsuarioCreacion     INT,
+  @peju_FechaCreacion       DATETIME
 AS
 BEGIN
-	BEGIN TRY
-	   INSERT INTO [Adua].[tbPersonas]([pers_RTN], [ofic_Id], [escv_Id], [ofpr_Id], [pers_escvRepresentante],[pers_OfprRepresentante], [usua_UsuarioCreacion],  [pers_FechaCreacion])
-	   VALUES (@pers_RTN, @ofic_Id, @escv_Id, @ofpr_Id, null, null, @usua_UsuarioCreacion, @fecha_UsuarioCreacion)
-	   SELECT 1
-	END TRY
-	BEGIN CATCH
-		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
-	END CATCH
+    DECLARE @pers_FechaCreacion DATETIME = @peju_FechaCreacion;
+    DECLARE @pers_Id INT;
+    DECLARE @peju_Id INT;
+
+    BEGIN TRY
+        BEGIN TRANSACTION
+        
+        INSERT INTO [Adua].[tbPersonas]([pers_RTN], [ofic_Id], [escv_Id], [ofpr_Id], [pers_escvRepresentante], [pers_OfprRepresentante], [usua_UsuarioCreacion], [pers_FechaCreacion])
+        VALUES (@pers_RTN, @ofic_Id, @escv_Id, @ofpr_Id, null, null, @usua_UsuarioCreacion, @pers_FechaCreacion);
+        
+        SET @pers_Id = SCOPE_IDENTITY();
+        
+        INSERT INTO Adua.tbPersonaJuridica(pers_Id,usua_UsuarioCreacion, peju_FechaCreacion)
+        VALUES (@pers_Id, @usua_UsuarioCreacion, @peju_FechaCreacion);
+        
+        SET @peju_Id = SCOPE_IDENTITY();
+        
+        SELECT @peju_Id AS peju_Id;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        SELECT 'Mensaje de error: ' + ERROR_MESSAGE() AS Resultado;
+    END CATCH
 END
 GO
 
