@@ -7807,7 +7807,7 @@ BEGIN
 	SET @tran_FechaCreacion = GETDATE();
 	BEGIN TRY
 		BEGIN TRAN 
-			INSERT INTO Adua.tbTransporte (pais_Id, tran_Chasis, marca_Id, tran_Remolque, tran_CantCarga, tran_NumDispositivoSeguridad, tran_Equipamiento, tran_TipoCarga, tran_IdContenedor, usua_UsuarioCreacio, tran_FechaCreacion, usua_UsuarioModificacion, tran_FechaModificacion, usua_UsuarioEliminacion, trant_FechaEliminacion, tran_Estado,tran_IdUnidadTransporte,@tran_TamanioEquipamiento)
+			INSERT INTO Adua.tbTransporte (pais_Id, tran_Chasis, marca_Id, tran_Remolque, tran_CantCarga, tran_NumDispositivoSeguridad, tran_Equipamiento, tran_TipoCarga, tran_IdContenedor, usua_UsuarioCreacio, tran_FechaCreacion, usua_UsuarioModificacion, tran_FechaModificacion, usua_UsuarioEliminacion, trant_FechaEliminacion, tran_Estado,tran_IdUnidadTransporte, tran_TamanioEquipamiento)
 			VALUES(@pais_Id,@tran_Chasis,@marca_Id,@tran_Remolque,@tran_CantCarga,@tran_NumDispositivoSeguridad,@tran_Equipamiento,@tran_TipoCarga,@tran_IdContenedor,@usua_UsuarioCreacio,@tran_FechaCreacion,NULL,NULL,NULL,NULL,1,@tran_IdUnidadTransporte,@tran_TamanioEquipamiento);
 
 			DECLARE @Transporte_Id INT = (SELECT TOP 1 tran_Id FROM Adua.tbTransporte ORDER BY tran_Id DESC);
