@@ -2676,6 +2676,7 @@ GO
 
 --*************** UDPS Para Tabla Personas ************--
 
+
 /*Listar Personas*/
 CREATE OR ALTER PROC Adua.UDP_tbPersonas_Listar
 AS
@@ -2689,7 +2690,6 @@ BEGIN
 				Personas.ofpr_Id, 
 				Profesion.ofpr_Nombre,
 
-				Personas.pers_FormaRepresentacion, 
 				Personas.pers_escvRepresentante,
 				Civil2.escv_Nombre					AS EstadoCivilRepresentante,
 				Personas.pers_OfprRepresentante,
@@ -2724,7 +2724,6 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonas_Insertar
 	@ofic_Id					INT,
 	@escv_Id					INT,
 	@ofpr_Id					INT,
-	--@pers_FormaRepresentacion	BIT,
 	@pers_escvRepresentante		INT,
 	@pers_OfprRepresentante		INT,
 	@usua_UsuarioCreacion		INT,
@@ -2738,7 +2737,6 @@ BEGIN
 					ofic_Id, 
 					escv_Id, 
 					ofpr_Id, 
-					--pers_FormaRepresentacion, 
 					pers_escvRepresentante, 
 					pers_OfprRepresentante, 
 					usua_UsuarioCreacion, 
@@ -2747,7 +2745,6 @@ BEGIN
 					@ofic_Id,
 					@escv_Id,
 					@ofpr_Id,
-					--@pers_FormaRepresentacion,
 					@pers_escvRepresentante,
 					@pers_OfprRepresentante,
 					@usua_UsuarioCreacion,
@@ -2769,7 +2766,6 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonas_Editar
 	@ofic_Id					INT,
 	@escv_Id					INT,
 	@ofpr_Id					INT,
-	--@pers_FormaRepresentacion	BIT,
 	@pers_escvRepresentante		INT,
 	@pers_OfprRepresentante		INT,
 	@usua_UsuarioCreacion		INT,
@@ -2783,7 +2779,6 @@ BEGIN
 				   ofic_Id					= @ofic_Id, 					
 				   escv_Id					= @escv_Id, 					
 				   ofpr_Id					= @ofpr_Id, 					
-				   --pers_FormaRepresentacion	= @pers_FormaRepresentacion, 					
 				   pers_escvRepresentante	= @pers_escvRepresentante, 		
 				   pers_OfprRepresentante	= @pers_OfprRepresentante, 		
 				   usua_UsuarioCreacion		= @usua_UsuarioCreacion,      	
@@ -2959,7 +2954,6 @@ BEGIN
 	END CATCH
 END
 GO
-Adua.UDP_tbComercianteIndividual_Listar
 
 CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap2  --6,63,1,'por ahi'
 	@coin_Id					INT,
