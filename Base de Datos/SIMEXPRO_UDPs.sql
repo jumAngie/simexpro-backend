@@ -2823,6 +2823,9 @@ BEGIN
 			ELSE 'Condicion Propia'
 			END											AS formaRepresentacionDesc,
 
+			coin.coin_DNI,
+			coin.coin_DNIrepresentante,
+			coin.coin_DeclaracionComerciante,
 
 			coin.alde_Id, --nuevo
 			alde.alde_Nombre, --nuevo
@@ -3022,6 +3025,7 @@ AS
 			coin_CorreoElectronico = @coin_CorreoElectronico,
 			coin_CorreoElectronicoAlternativo = @coin_CorreoElectronicoAlternativo
 		WHERE coin_Id = @coin_Id
+		SELECT 1
 	END TRY
 
 	BEGIN CATCH
@@ -3030,6 +3034,28 @@ AS
 END
 GO
 
+CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap5
+	@coin_Id							INT,
+	@coin_DNI							NVARCHAR(20),
+	@coin_DNIrepresentante				NVARCHAR(20),
+	@coin_DeclaracionComerciante		VARCHAR(50)
+AS
+BEGIN
+	BEGIN TRY
+			UPDATE Adua.tbComercianteIndividual
+		SET coin_DNI = @coin_DNI,
+			coin_DNIrepresentante = @coin_DNIrepresentante,
+			coin_DeclaracionComerciante = @coin_DeclaracionComerciante
+		 WHERE coin_Id = @coin_Id
+		 SELECT 1
+	END TRY
+
+BEGIN CATCH
+	SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+END CATCH
+
+END
+GO
 
 
 
