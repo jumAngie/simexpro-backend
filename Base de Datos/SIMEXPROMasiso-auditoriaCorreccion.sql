@@ -509,6 +509,10 @@ CONSTRAINT FK_Adua_tbAduanas_tbUsuarios_adua_usua_UsuarioEliminacion				FOREIGN 
 CONSTRAINT FK_Adua_tbAduanas_Gral_tbCiudades_Adua_ciud_Id FOREIGN KEY (ciud_Id) REFERENCES Gral.tbCiudades (ciud_Id)
 );
 
+ALTER TABLE Adua.tbAduanas
+ADD CONSTRAINT UQ_Adua_tbAduanas_adua_Codigo1 UNIQUE (adua_Codigo)
+
+
 
 /*Factura Detalles*/
 GO
