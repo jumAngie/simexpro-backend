@@ -49,7 +49,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
 
-            parametros.Add("@peju_Id ", item.peju_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@peju_Id", item.peju_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@peju_CiudadIdRepresentante", item.peju_CiudadIdRepresentante, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@peju_AldeaIdRepresentante", item.peju_AldeaIdRepresentante, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@peju_ColoniaRepresentante", item.peju_ColoniaRepresentante, DbType.Int32, ParameterDirection.Input);
