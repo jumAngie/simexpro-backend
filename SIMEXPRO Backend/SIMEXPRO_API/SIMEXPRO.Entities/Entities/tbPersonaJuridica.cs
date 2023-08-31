@@ -54,27 +54,17 @@ namespace SIMEXPRO.Entities.Entities
         public DateTime? peju_FechaModificacion { get; set; }
         public bool? peju_Estado { get; set; }
 
-        public string peju_DNI { get; set; }
-        public string peju_DNIRepresentante { get; set; }
-        public string peju_EscrituraPublica { get; set; }
-        public string peju_NumeroLocalApart { get; set; }
-        public int alde_Id { get; set; }
-        public int ciud_Id { get; set; }
-        public int peju_AldeaIdRepresentante { get; set; }
-        public int peju_CiudadIdRepresentante { get; set; }
-
+     
         public virtual tbCiudades ciud { get; set; }
         public virtual tbAldeas alde { get; set; }
         public virtual tbColonias colo { get; set; }
         public virtual tbAldeas peju_AldeaIdRepresentanteNavigation { get; set; }
         public virtual tbColonias peju_ColoniaRepresentanteNavigation { get; set; }
-        public virtual tbAldeas peju_AldeaIdRepresentanteNavigation { get; set; }
 
         public virtual tbCiudades peju_CiudadIdRepresentanteNavigation { get; set; }
 
 
         public virtual tbProvincias peju_EstadoRepresentanteNavigation { get; set; }
-        public virtual tbCiudades peju_CiudadIdRepresentanteNavigation { get; set; }
         public virtual tbPersonas pers { get; set; }
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }
