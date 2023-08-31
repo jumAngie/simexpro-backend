@@ -1310,10 +1310,15 @@ CREATE TABLE Adua.tbEstadoMercancias(
 
 	CONSTRAINT PK_Adua_tbEstadoMercancias_merc_Id											PRIMARY KEY (merc_Id),
 	CONSTRAINT UQ_Adua_tbEstadoMercancias_merc_Codigo										UNIQUE(merc_Codigo),
+	CONSTRAINT UQ_Adua_tbEstadoMercancias_merc_Descripcion									UNIQUE(merc_Descripcion),
 	CONSTRAINT FK_Adua_tbEstadoMercancias_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id		FOREIGN KEY (usua_UsuarioCreacion)		REFERENCES Acce.tbUsuarios(usua_Id),
 	CONSTRAINT FK_Adua_tbEstadoMercancias_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id	FOREIGN KEY (usua_UsuarioModificacion)	REFERENCES Acce.tbUsuarios(usua_Id),
 	CONSTRAINT FK_Adua_tbEstadoMercancias_usua_UsuarioEliminacion_Acce_tbUsuarios_usua_Id	FOREIGN KEY (usua_UsuarioEliminacion)	REFERENCES Acce.tbUsuarios(usua_Id)
 );
+GO
+ALTER TABLE Adua.tbEstadoMercancias
+ADD CONSTRAINT UQ_Adua_tbEstadoMercancias_merc_Descripcion      UNIQUE(merc_Descripcion)
+GO
 
 CREATE TABLE Adua.tbItems(
 	item_Id                                   INT IDENTITY(1,1),
