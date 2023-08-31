@@ -2959,6 +2959,7 @@ BEGIN
 	END CATCH
 END
 GO
+Adua.UDP_tbComercianteIndividual_Listar
 
 CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap2  --6,63,1,'por ahi'
 	@coin_Id					INT,
@@ -3256,7 +3257,7 @@ GO
 --*************** UDPS Para Tabla Persona Juridica ************--
 
 /*Listar Persona Juridica*/
-/Listar Persona Juridica/
+
 CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_Listar
 AS
 BEGIN
@@ -7976,6 +7977,19 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_ListarPorNumeroDuca  
+@duca_No_Duca NVARCHAR(100)
+AS BEGIN
+    DECLARE @resultado INT
+
+    IF EXISTS (SELECT 1 FROM Adua.tbDuca WHERE duca_No_Duca = @duca_No_Duca)
+        SET @resultado = 1
+    ELSE
+        SET @resultado = 0
+
+    SELECT @resultado AS Resultado
+END
+GO
 
 --************ARCELES******************--
 /*Listar Aranceles Todos*/

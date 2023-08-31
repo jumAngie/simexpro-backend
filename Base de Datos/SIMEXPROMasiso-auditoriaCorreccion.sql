@@ -527,6 +527,7 @@ CREATE TABLE Adua.tbNivelesComerciales(
 		nico_Estado						BIT 			NOT NULL DEFAULT 1,
 
    CONSTRAINT PK_Adua_tbNivelesComerciales_nico_Id 			PRIMARY KEY (nico_Id),
+   CONSTRAINT UK_Adua_tbNivelesComerciales_nico_Codigo		UNIQUE(nico_Codigo),
    constraint UQ_Adua_tbNivelesComerciales_nico_Descripcion UNIQUE(nico_Descripcion),
    CONSTRAINT FK_Acce_tbUsuarios_Adua_tbNivelesComerciales_nico_UsuarioCreacion 		 FOREIGN KEY (usua_UsuarioCreacion)     REFERENCES Acce.tbUsuarios(usua_Id),
    CONSTRAINT FK_Acce_tbUsuarios_Adua_tbNivelesComerciales_nico_usua_UsuarioModificacion FOREIGN KEY (usua_UsuarioModificacion) REFERENCES Acce.tbUsuarios(usua_Id),
