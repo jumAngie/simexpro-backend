@@ -15163,7 +15163,7 @@ BEGIN
 END
 GO
 /*Eliminar REGIMEN ADUANERO*/
-CREATE OR ALTER PROCEDURE Adua.tbRegimenesAduaneros_Eliminar
+CREATE OR ALTER PROCEDURE Adua.UDP_tbRegimenesAduaneros_Eliminar
 (
 	@regi_Id					INT,
 	@usua_UsuarioEliminacion	INT,
