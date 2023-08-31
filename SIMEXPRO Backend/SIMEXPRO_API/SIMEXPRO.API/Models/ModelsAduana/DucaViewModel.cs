@@ -31,8 +31,7 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public int duca_Pais_Exportacion { get; set; }
         public int duca_Pais_Destino { get; set; }
         public string duca_Deposito_Aduanero { get; set; }
-        public string duca_Lugar_Embarque { get; set; }
-        public string duca_Lugar_Desembarque { get; set; }
+        public int? duca_Lugar_Desembarque { get; set; }
         public string duca_Manifiesto { get; set; }
         public string duca_Titulo { get; set; }
         public string duca_Codigo_Transportista { get; set; }
