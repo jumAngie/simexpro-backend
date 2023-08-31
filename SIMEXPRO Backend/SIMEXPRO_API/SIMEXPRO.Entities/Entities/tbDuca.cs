@@ -55,7 +55,7 @@ namespace SIMEXPRO.Entities.Entities
         public int tran_IdUnidadTransporte { get; set; }
 
         [NotMapped]
-        public int tran_TamanioEquipamiento { get; set; }
+        public string tran_TamanioEquipamiento { get; set; }
 
         [NotMapped]
         public DateTime deva_FechaAceptacion { get; set; }

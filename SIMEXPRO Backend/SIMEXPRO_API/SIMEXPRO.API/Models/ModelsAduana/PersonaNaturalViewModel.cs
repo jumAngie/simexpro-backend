@@ -12,7 +12,19 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public string pena_DireccionExacta { get; set; }
         public int ciud_Id { get; set; }
 
-         public string ciud_Nombre { get; set; }
+
+        public int escv_Id { get; set; }
+
+        public string escv_Nombre { get; set; }
+
+        public int ofic_Id { get; set; }
+
+        public string ofic_Nombre { get; set; }
+
+        public int ofpr_Id { get; set; }
+
+        public string ofpr_Nombre { get; set; }
+        public string ciud_Nombre { get; set; }
         public string pena_TelefonoFijo { get; set; }
         public string pena_TelefonoCelular { get; set; }
         public string pena_CorreoElectronico { get; set; }
