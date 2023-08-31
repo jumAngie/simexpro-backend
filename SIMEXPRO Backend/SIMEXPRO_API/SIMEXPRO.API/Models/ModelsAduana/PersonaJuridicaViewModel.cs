@@ -13,12 +13,15 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public string peju_DNIRepresentante { get; set; }
         public string peju_EscrituraPublica { get; set; }
         public int ciud_Id { get; set; }
+        public int ofpr_Id { get; set; }
+        public int ofic_Id { get; set; }
+
+        public int escv_Id { get; set; }
         public int alde_Id { get; set; }
         public string peju_NumeroLocalApart { get; set; }
         public string pers_RTN { get; set; }
         public int peju_CiudadIdRepresentante { get; set; }
         public int peju_AldeaIdRepresentante { get; set; }
-        public int ofic_Id { get; set; }
         public string pais_RepresentanteNombre { get; set; }
         public int peju_EstadoRepresentante { get; set; }
         public int colo_Id { get; set; }

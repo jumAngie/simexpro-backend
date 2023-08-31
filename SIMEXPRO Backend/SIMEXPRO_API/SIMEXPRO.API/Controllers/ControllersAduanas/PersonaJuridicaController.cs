@@ -22,19 +22,19 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             _aduanaServices = AduanaServices;
             _mapper = mapper;
         }
+
         [HttpGet("Listar")]
         public IActionResult Index()
         {
             var listado = _aduanaServices.ListarPersonaJuridica();
             listado.Data = _mapper.Map<IEnumerable<PersonaJuridicaViewModel>>(listado.Data);
             return Ok(listado);
-           
         }
 
         [HttpPost("Insertar")]
-        public IActionResult Insertar(PersonasViewModel personaJuridica)
+        public IActionResult Insertar(PersonaJuridicaViewModel personaJuridica)
         {
-            var mapped = _mapper.Map<tbPersonas>(personaJuridica);
+            var mapped = _mapper.Map<tbPersonaJuridica>(personaJuridica);
             var datos = _aduanaServices.InsertarPersonaJuridica(mapped);
             return Ok(datos);
         }
