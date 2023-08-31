@@ -34,7 +34,7 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
         }
 
         [HttpPost("Insertar")]
-        public IActionResult Insertar(AracelesViewModel aranceles)
+        public IActionResult Insertar(ArancelesViewModel aranceles)
         {
             var mapped = _mapper.Map<tbAranceles>(aranceles);
             var datos = _aduanaServices.InsertarAranceles(mapped);
@@ -42,7 +42,7 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
         }
 
         [HttpPost("Editar")]
-        public IActionResult Editar(AracelesViewModel aranceles)
+        public IActionResult Editar(ArancelesViewModel aranceles)
         {
             var mapped = _mapper.Map<tbAranceles>(aranceles);
             var datos = _aduanaServices.ActualizarAranceles(mapped);
