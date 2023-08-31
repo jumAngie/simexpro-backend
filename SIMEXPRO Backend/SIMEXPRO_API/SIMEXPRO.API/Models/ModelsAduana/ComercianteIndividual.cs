@@ -64,5 +64,23 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public string usuarioModificacionNombre { get; set; }
         public DateTime? coin_FechaModificacion { get; set; }
         public bool? coin_Estado { get; set; }
+
+      
+        public string aldeaNombreRepresentante { get; set; }
+      
+        public string ciudadNrepresentante { get; set; }
+
+      
+        public int pvin_IdRepresentante { get; set; }
+
+      
+        public string pvin_CodigoRepresentante { get; set; }
+
+      
+        public string pvin_NombreRepresentante { get; set; }
+
+
+      
+        public string coloniaNombreRepresentante { get; set; }
     }
 }

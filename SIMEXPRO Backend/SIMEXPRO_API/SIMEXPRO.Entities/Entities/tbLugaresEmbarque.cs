@@ -12,6 +12,7 @@ namespace SIMEXPRO.Entities.Entities
         public tbLugaresEmbarque()
         {
             tbDeclaraciones_Valor = new HashSet<tbDeclaraciones_Valor>();
+            tbDuca = new HashSet<tbDuca>();
         }
 
         public int emba_Id { get; set; }
@@ -39,5 +40,7 @@ namespace SIMEXPRO.Entities.Entities
         public virtual tbUsuarios usua_UsuarioEliminacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }
         public virtual ICollection<tbDeclaraciones_Valor> tbDeclaraciones_Valor { get; set; }
+        public virtual ICollection<tbDuca> tbDuca { get; set; }
+
     }
 }

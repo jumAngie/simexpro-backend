@@ -43,7 +43,6 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parameters.Add("@duca_Pais_Exportacion", item.duca_Pais_Exportacion, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@duca_Pais_Destino", item.duca_Pais_Destino, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@duca_Deposito_Aduanero", item.duca_Deposito_Aduanero, DbType.String, ParameterDirection.Input);
-            parameters.Add("@duca_Lugar_Embarque", item.duca_Lugar_Embarque, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Lugar_Desembarque", item.duca_Lugar_Desembarque, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Manifiesto", item.duca_Manifiesto, DbType.String, ParameterDirection.Input);
             parameters.Add("@iden_Id_ex", item.duca_Tipo_Iden_Exportador, DbType.Int32, ParameterDirection.Input);
@@ -155,7 +154,6 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parameters.Add("@duca_Pais_Exportacion", item.duca_Pais_Exportacion, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@duca_Pais_Destino", item.duca_Pais_Destino, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@duca_Deposito_Aduanero", item.duca_Deposito_Aduanero, DbType.String, ParameterDirection.Input);
-            parameters.Add("@duca_Lugar_Embarque", item.duca_Lugar_Embarque, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Lugar_Desembarque", item.duca_Lugar_Desembarque, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Manifiesto", item.duca_Manifiesto, DbType.String, ParameterDirection.Input);
             parameters.Add("@iden_Id_ex", item.duca_Tipo_Iden_Exportador, DbType.Int32, ParameterDirection.Input);

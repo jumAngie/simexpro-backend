@@ -2837,7 +2837,7 @@ BEGIN
 
 
 			coin.coin_AldeaRepresentante, --nuevo
-			aldeR.alde_Nombre,--nuevo
+			aldeR.alde_Nombre	AS aldeaNombreRepresentante,--nuevo
 			coin.coin_CiudadRepresentante, --nuevo
 			ciudR.ciud_Nombre	AS ciudadNrepresentante, --nuevo
 			ciudR.pvin_Id	AS pvin_IdRepresentante,  --nuevo

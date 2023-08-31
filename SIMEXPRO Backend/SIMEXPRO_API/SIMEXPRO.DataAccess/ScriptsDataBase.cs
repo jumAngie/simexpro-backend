@@ -200,7 +200,12 @@ namespace SIMEXPRO.DataAccess
 
         #region Comerciante Individual
         public static string ListarComercianteIndividual = "Adua.UDP_tbComercianteIndividual_Listar";
-        public static string InsertarComercianteIndividual = "Adua.UDP_tbComercianteIndividual_Insertar";
+        public static string InsertarComercianteIndividual = "Adua.UDP_tbComercianteIndividual_InsertarTap1";
+        public static string InsertarComercianteIndividualTap2 = "Adua.UDP_tbComercianteIndividual_InsertarTap2";
+        public static string InsertarComercianteIndividualTap3 = "Adua.UDP_tbComercianteIndividual_InsertarTap3";
+        public static string InsertarComercianteIndividualTap4 = "Adua.UDP_tbComercianteIndividual_InsertarTap4";
+        public static string InsertarComercianteIndividualTap5= "Adua.UDP_tbComercianteIndividual_InsertarTap5";
+
         public static string EditarComercianteIndividual = "Adua.UDP_tbComercianteIndividual_Editar";
         #endregion
 

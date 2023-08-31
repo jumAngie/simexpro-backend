@@ -18,6 +18,8 @@ namespace SIMEXPRO.Entities.Entities
         public DateTime imar_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }
         public DateTime? imar_FechaModificacion { get; set; }
+
+
         [NotMapped]
         public string UsuarioCreacionNombre { get; set; }
 
