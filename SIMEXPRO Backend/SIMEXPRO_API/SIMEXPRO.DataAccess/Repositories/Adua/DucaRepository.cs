@@ -134,6 +134,19 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return db.Query<tbDuca>(ScriptsDataBase.ListarDuca, null, commandType: System.Data.CommandType.StoredProcedure);
         }
 
+        public RequestStatus VerificarExistencia(tbDuca item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parameters = new DynamicParameters();
+            parameters.Add("@duca_No_Duca", item.duca_No_Duca, DbType.String, ParameterDirection.Input);
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.ListarPorNumeroDuca, parameters, commandType: System.Data.CommandType.StoredProcedure);
+            result.MessageStatus = respuesta;
+            return result;
+
+
+        }
+
         public RequestStatus Update(tbDuca item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
