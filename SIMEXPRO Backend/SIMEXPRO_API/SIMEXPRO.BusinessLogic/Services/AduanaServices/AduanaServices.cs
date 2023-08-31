@@ -536,7 +536,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _comercianteIndividualRepository.Insert(item);
-                if (map.MessageStatus != "1")
+                if (map.MessageStatus != "0")
                 {
                     return result.Ok(map);
                 }
@@ -550,6 +550,92 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+
+        public ServiceResult InsertarComercianteIndividualTap2(tbComercianteIndividual item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _comercianteIndividualRepository.InsertTap2(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarComercianteIndividualTap3(tbComercianteIndividual item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _comercianteIndividualRepository.InsertTap3(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarComercianteIndividualTap4(tbComercianteIndividual item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _comercianteIndividualRepository.InsertTap4(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarComercianteIndividualTap5(tbComercianteIndividual item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _comercianteIndividualRepository.InsertTap5(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+
 
         public ServiceResult ActualizarComercianteIndividual(tbComercianteIndividual item)
         {

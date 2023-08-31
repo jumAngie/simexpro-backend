@@ -77,9 +77,9 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string estadoCivilRepresentante { get; set; }
         [NotMapped]
-        public string pers_escvRepresentante { get; set; }
+        public int pers_escvRepresentante { get; set; }
         [NotMapped]
-        public string pers_OfprRepresentante { get; set; }
+        public int pers_OfprRepresentante { get; set; }
         [NotMapped]
         public string oficioProfesRepresentante { get; set; }
 

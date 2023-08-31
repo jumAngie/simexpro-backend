@@ -56,8 +56,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@ciud_Id", item.ciud, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@alde_Id", item.alde_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@colo_Id", item.colo_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@coin_NumeroLocalApart", item.pers_FormaRepresentacion, DbType.String, ParameterDirection.Input);
-            parametros.Add("@coin_PuntoReferencia", item.pers_escvRepresentante, DbType.String, ParameterDirection.Input);
+            parametros.Add("@coin_NumeroLocalApart", item.coin_NumeroLocalApart, DbType.String, ParameterDirection.Input);
+            parametros.Add("@coin_PuntoReferencia", item.coin_PuntoReferencia, DbType.String, ParameterDirection.Input);
 
             var respuesta = db.QueryFirst<string>(ScriptsDataBase.InsertarComercianteIndividualTap2, parametros, commandType: CommandType.StoredProcedure);
             return new RequestStatus()
@@ -66,6 +66,67 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             };
 
         }
+
+        public RequestStatus InsertTap3(tbComercianteIndividual item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@coin_Id", item.coin_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@coin_CiudadRepresentante", item.coin_CiudadRepresentante, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@coin_AldeaRepresentante", item.coin_AldeaRepresentante, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@coin_coloniaIdRepresentante", item.coin_coloniaIdRepresentante, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@coin_NumeroLocaDepartRepresentante", item.coin_NumeroLocaDepartRepresentante, DbType.String, ParameterDirection.Input);
+            parametros.Add("@coin_PuntoReferenciaReprentante", item.coin_PuntoReferenciaReprentante, DbType.String, ParameterDirection.Input);
+
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.InsertarComercianteIndividualTap3, parametros, commandType: CommandType.StoredProcedure);
+            return new RequestStatus()
+            {
+                MessageStatus = respuesta
+            };
+
+        }
+
+        public RequestStatus InsertTap4(tbComercianteIndividual item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@coin_Id", item.coin_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@coin_TelefonoCelular", item.coin_TelefonoCelular, DbType.String, ParameterDirection.Input);
+            parametros.Add("@coin_TelefonoFijo", item.coin_TelefonoFijo, DbType.String, ParameterDirection.Input);
+            parametros.Add("@coin_CorreoElectronico", item.coin_CorreoElectronico, DbType.String, ParameterDirection.Input);
+            parametros.Add("@coin_CorreoElectronicoAlternativo", item.coin_CorreoElectronicoAlternativo, DbType.String, ParameterDirection.Input);
+
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.InsertarComercianteIndividualTap4, parametros, commandType: CommandType.StoredProcedure);
+            return new RequestStatus()
+            {
+                MessageStatus = respuesta
+            };
+
+        }
+
+        public RequestStatus InsertTap5(tbComercianteIndividual item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@coin_Id", item.coin_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@coin_DNI", item.coin_DNI, DbType.String, ParameterDirection.Input);
+            parametros.Add("@coin_DNIrepresentante", item.coin_DNIrepresentante, DbType.String, ParameterDirection.Input);
+            parametros.Add("@coin_DeclaracionComerciante", item.coin_DeclaracionComerciante, DbType.String, ParameterDirection.Input);
+
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.InsertarComercianteIndividualTap5, parametros, commandType: CommandType.StoredProcedure);
+            return new RequestStatus()
+            {
+                MessageStatus = respuesta
+            };
+
+        }
+
 
 
         public IEnumerable<tbComercianteIndividual> List()

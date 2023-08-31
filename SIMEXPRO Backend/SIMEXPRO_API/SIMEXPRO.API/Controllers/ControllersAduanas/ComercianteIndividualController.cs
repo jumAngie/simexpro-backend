@@ -40,6 +40,39 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(datos);
         }
 
+        [HttpPost("InsertarTap2")]
+        public IActionResult InsertarTap2(ComercianteIndividual comercianteIndividual)
+        {
+            var mapped = _mapper.Map<tbComercianteIndividual>(comercianteIndividual);
+            var datos = _aduanaServices.InsertarComercianteIndividualTap2(mapped);
+            return Ok(datos);
+        }
+
+        [HttpPost("InsertarTap3")]
+        public IActionResult InsertarTap3(ComercianteIndividual comercianteIndividual)
+        {
+            var mapped = _mapper.Map<tbComercianteIndividual>(comercianteIndividual);
+            var datos = _aduanaServices.InsertarComercianteIndividualTap3(mapped);
+            return Ok(datos);
+        }
+
+        [HttpPost("InsertarTap4")]
+        public IActionResult InsertarTap4(ComercianteIndividual comercianteIndividual)
+        {
+            var mapped = _mapper.Map<tbComercianteIndividual>(comercianteIndividual);
+            var datos = _aduanaServices.InsertarComercianteIndividualTap4(mapped);
+            return Ok(datos);
+        }
+
+        [HttpPost("InsertarTap5")]
+        public IActionResult InsertarTap5(ComercianteIndividual comercianteIndividual)
+        {
+            var mapped = _mapper.Map<tbComercianteIndividual>(comercianteIndividual);
+            var datos = _aduanaServices.InsertarComercianteIndividualTap5(mapped);
+            return Ok(datos);
+        }
+
+
         [HttpPost("Editar")]
         public IActionResult Editar(ComercianteIndividual comercianteIndividual)
         {
