@@ -1780,23 +1780,23 @@ CREATE TABLE Adua.tbPersonaJuridica (
 	peju_DNIRepresentante                           NVARCHAR(20), --nuevo
 	peju_EscrituraPublica                           NVARCHAR(200), 
 
-	colo_Id							  				INT NOT NULL,
-	ciud_Id                                         INT NOT NULL,   -- nuevo
+	colo_Id							  				INT ,
+	ciud_Id                                         INT,   -- nuevo
 	alde_Id								            INT,            --nuevo
 	peju_PuntoReferencia							NVARCHAR(200),
 	peju_NumeroLocalApart				            NVARCHAR(150),  --nuevo
 
     peju_CiudadIdRepresentante                      INT,            --nuevo
-	peju_ColoniaRepresentante						INT NOT NULL,   --nuevo
+	peju_ColoniaRepresentante						INT ,   --nuevo
 	peju_AldeaIdRepresentante                       INT,            --nuevo
-	peju_NumeroLocalRepresentante		  			NVARCHAR(200) NOT NULL,
-	peju_PuntoReferenciaRepresentante	  			NVARCHAR(200) NOT NULL,
+	peju_NumeroLocalRepresentante		  			NVARCHAR(200),
+	peju_PuntoReferenciaRepresentante	  			NVARCHAR(200) ,
 
-	peju_TelefonoEmpresa							NVARCHAR(200) NOT NULL,
-	peju_TelefonoFijoRepresentanteLegal 			NVARCHAR(200) NOT NULL,
-	peju_TelefonoRepresentanteLegal	  				NVARCHAR(200) NOT NULL,
-	peju_CorreoElectronico              			NVARCHAR(200) NOT NULL,
-	peju_CorreoElectronicoAlternativo   			NVARCHAR(200) NOT NULL,
+	peju_TelefonoEmpresa							NVARCHAR(200) ,
+	peju_TelefonoFijoRepresentanteLegal 			NVARCHAR(200) ,
+	peju_TelefonoRepresentanteLegal	  				NVARCHAR(200) ,
+	peju_CorreoElectronico              			NVARCHAR(200),
+	peju_CorreoElectronicoAlternativo   			NVARCHAR(200) ,
   
 	usua_UsuarioCreacion       						INT NOT NULL,
 	peju_FechaCreacion         						DATETIME NOT NULL,
@@ -1819,7 +1819,6 @@ CREATE TABLE Adua.tbPersonaJuridica (
 	--CONSTRAINT FK_Adua_PersonaJuridica_peju_Acce_tbUsuarios_usua_UsuarioEliminacion_usua_Id  FOREIGN KEY (usua_UsuarioEliminacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id)
 );
 GO
-
 --Se identificarán los tipos de documentos según acortaciones
 --RTN-CI:  REGISTRO TRIBUTARIO NACIONAL (RTN) DEL COMERCIANTE INDIVIDUAL
 --DNI-CI:  DOCUMENTO O TARJETA DE IDENTIDAD DEL COMERCIANTE INDIVIDUAL
@@ -2265,6 +2264,7 @@ GO
 ---- DUCA ----
 CREATE TABLE Adua.tbTransporte( 
 	tran_Id							INT IDENTITY(1,1),
+	tran_IdUnidadTransporte			INT NOT NULL,
 	pais_Id							INT,
 	tran_Chasis						NVARCHAR(100) NOT NULL,
 	marca_Id						INT NOT NULL,
@@ -2272,6 +2272,7 @@ CREATE TABLE Adua.tbTransporte(
 	tran_CantCarga					INT NOT NULL,
 	tran_NumDispositivoSeguridad	INT NULL,
 	tran_Equipamiento				NVARCHAR(200) NULL,
+	tran_TamanioEquipamiento		VARCHAR(50) NOT NULL,
 	tran_TipoCarga					NVARCHAR(200) NOT NULL,
 	tran_IdContenedor				NVARCHAR(100) NOT NULL,
 
@@ -2291,6 +2292,7 @@ CREATE TABLE Adua.tbTransporte(
 	CONSTRAINT PK_Adua_tbTransporte_Acce_tbUsuarios_usua_UsuarioEliminacion_usua_Id  FOREIGN KEY (usua_UsuarioEliminacion) 	REFERENCES Acce.tbUsuarios 	(usua_Id)
 );
 GO
+
 
 CREATE TABLE Adua.tbConductor(
 	cont_Id							INT IDENTITY(1,1),

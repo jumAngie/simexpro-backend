@@ -80,11 +80,13 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parameters.Add("@cont_Apellido", item.cont_Apellido, DbType.String, ParameterDirection.Input);
             parameters.Add("@pais_Id", item.Id_pais_transporte, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@marca_Id", item.Transporte_marca_Id, DbType.Int32, ParameterDirection.Input);
+            parameters.Add("@tran_IdUnidadTransporte", item.tran_IdUnidadTransporte, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@tran_Chasis", item.tran_Chasis, DbType.String, ParameterDirection.Input);
             parameters.Add("@tran_Remolque", item.tran_Remolque, DbType.String, ParameterDirection.Input);
             parameters.Add("@tran_CantCarga", item.tran_CantCarga, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@tran_NumDispositivoSeguridad", item.tran_NumDispositivoSeguridad, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@tran_Equipamiento", item.tran_Equipamiento, DbType.String, ParameterDirection.Input);
+            parameters.Add("@tran_TamanioEquipamiento", item.tran_TamanioEquipamiento, DbType.String, ParameterDirection.Input);
             parameters.Add("@tran_TipoCarga", item.tran_TipoCarga, DbType.String, ParameterDirection.Input);
             parameters.Add("@tran_IdContenedor", item.tran_IdContenedor, DbType.String, ParameterDirection.Input);
             parameters.Add("@usua_UsuarioCreacio", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
@@ -199,11 +201,13 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parameters.Add("@cont_Apellido", item.cont_Apellido, DbType.String, ParameterDirection.Input);
             parameters.Add("@pais_Id", item.Id_pais_transporte, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@marca_Id", item.Transporte_marca_Id, DbType.Int32, ParameterDirection.Input);
+            parameters.Add("@tran_IdUnidadTransporte", item.tran_IdUnidadTransporte, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@tran_Chasis", item.tran_Chasis, DbType.String, ParameterDirection.Input);
             parameters.Add("@tran_Remolque", item.tran_Remolque, DbType.String, ParameterDirection.Input);
             parameters.Add("@tran_CantCarga", item.tran_CantCarga, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@tran_NumDispositivoSeguridad", item.tran_NumDispositivoSeguridad, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@tran_Equipamiento", item.tran_Equipamiento, DbType.String, ParameterDirection.Input);
+            parameters.Add("@tran_TamanioEquipamiento", item.tran_TamanioEquipamiento, DbType.String, ParameterDirection.Input);
             parameters.Add("@tran_TipoCarga", item.tran_TipoCarga, DbType.String, ParameterDirection.Input);
             parameters.Add("@tran_IdContenedor", item.tran_IdContenedor, DbType.String, ParameterDirection.Input);
             parameters.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);

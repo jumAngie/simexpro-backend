@@ -52,6 +52,12 @@ namespace SIMEXPRO.Entities.Entities
         public bool? duca_Estado { get; set; }
 
         [NotMapped]
+        public int tran_IdUnidadTransporte { get; set; }
+
+        [NotMapped]
+        public string tran_TamanioEquipamiento { get; set; }
+
+        [NotMapped]
         public DateTime deva_FechaAceptacion { get; set; }
 
         [NotMapped]

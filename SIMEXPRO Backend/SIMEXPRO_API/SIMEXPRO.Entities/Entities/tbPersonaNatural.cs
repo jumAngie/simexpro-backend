@@ -38,6 +38,21 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string usuarioModificacion { get; set; }
 
+
+        [NotMapped]
+        public int escv_Id { get; set; }
+        [NotMapped]
+        public string escv_Nombre { get; set; }
+        [NotMapped]
+        public int ofic_Id { get; set; }
+        [NotMapped]
+        public string ofic_Nombre { get; set; }
+        [NotMapped]
+        public int ofpr_Id { get; set; }
+        [NotMapped]
+
+        public string ofpr_Nombre { get; set; }
+
         public virtual tbCiudades ciud { get; set; }
         public virtual tbPersonas pers { get; set; }
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }

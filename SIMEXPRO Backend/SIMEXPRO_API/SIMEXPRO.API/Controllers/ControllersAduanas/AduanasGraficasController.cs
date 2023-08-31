@@ -87,5 +87,12 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             var listado = _aduanaServices.Importaciones_Anio();
             return Ok(listado);
         }
+
+        [HttpGet("RegimenesAduaneros_CantidadPorcentaje")]
+        public IActionResult RegimenesAduaneros_CantidadPorcentaje()
+        {
+            var listado = _aduanaServices.RegimenesAduaneros_CantidadPorcentaje();
+            return Ok(listado);
+        }
     }
 }

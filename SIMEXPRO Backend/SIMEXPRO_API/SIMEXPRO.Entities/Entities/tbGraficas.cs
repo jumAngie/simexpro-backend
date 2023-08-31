@@ -67,6 +67,7 @@ namespace SIMEXPRO.Entities.Entities
 
         public string merc_Descripcion { get; set; }
         public int Cantidad { get; set; }
+        public string label { get; set; }
 
         // Aduanas con mas importaciones
 

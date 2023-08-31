@@ -104,7 +104,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
         }
 
-        public RequestStatus Insert(tbPersonas item)
+        public RequestStatus Insert(tbPersonaJuridica item)
         {
             RequestStatus result = new();
 
@@ -116,7 +116,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@escv_Id", item.escv_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@ofpr_Id", item.ofpr_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@fecha_UsuarioCreacion", item.pers_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
+            parametros.Add("@peju_FechaCreacion", item.peju_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
 
             var answer = db.QueryFirst<string>(ScriptsDataBase.InsertarPersonaJuridica, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
@@ -156,9 +156,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return result;
         }
 
-        public RequestStatus Insert(tbPersonaJuridica item)
-        {
-            throw new NotImplementedException();
-        }
+    
+
     }
 }

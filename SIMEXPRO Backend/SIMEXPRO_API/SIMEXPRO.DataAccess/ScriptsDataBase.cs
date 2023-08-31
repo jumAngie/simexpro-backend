@@ -733,7 +733,7 @@ namespace SIMEXPRO.DataAccess
         public static string Importaciones_Semana = "Adua.UDP_Importaciones_Semana";
         public static string Importaciones_Mes = "Adua.UDP_Importaciones_Mes";
         public static string Importaciones_Anio = "Adua.UDP_Importaciones_Anio";
-
+        public static string RegimenesAduaneros_CantidadPorcentaje = "Adua.UDP_RegimenesAduaneros_CantidadPorcentaje";
         #endregion
     }
 }

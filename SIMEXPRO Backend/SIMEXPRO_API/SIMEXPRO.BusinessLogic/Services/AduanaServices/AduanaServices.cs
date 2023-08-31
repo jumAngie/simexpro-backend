@@ -2615,7 +2615,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
-        public ServiceResult InsertarPersonaJuridica(tbPersonas item)
+        public ServiceResult InsertarPersonaJuridica(tbPersonaJuridica item)
         {
             var result = new ServiceResult();
             try
@@ -3454,6 +3454,19 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var list = _aduanagraficasrepository.Importaciones_Anio();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult RegimenesAduaneros_CantidadPorcentaje()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _aduanagraficasrepository.RegimenesAduaneros_CantidadPorcentaje();
                 return result.Ok(list);
             }
             catch (Exception ex)
