@@ -387,7 +387,11 @@ namespace SIMEXPRO.DataAccess
 
         #region Persona Juridica
         public static string ListarPersonaJuridica = "Adua.UDP_tbPersonaJuridica_Listar";
-        public static string InsertarPersonaJuridica = "Adua.UDP_tbPersonaJuridica_Insertar";
+        public static string InsertarPersonaJuridica = "Adua.UDP_tbPersonaJuridica_InsertarTab1";
+        public static string InsertarPersonaJuridicaTap2 = "Adua.UDP_tbPersonaJuridica_InsertarTab2";
+        public static string InsertarPersonaJuridicaTap3 = "Adua.UDP_tbPersonaJuridica_InsertarTab3";
+        public static string InsertarPersonaJuridicaTap4 = "Adua.UDP_tbPersonaJuridica_InsertarTab4";
+        public static string InsertarPersonaJuridicaTap5 = "Adua.UDP_tbPersonaJuridica_InsertarTab5";
         public static string EditarPersonaJuridica = "Adua.UDP_tbPersonaJuridica_Editar";
         #endregion
 

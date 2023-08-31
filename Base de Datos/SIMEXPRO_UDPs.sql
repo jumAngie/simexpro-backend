@@ -3329,57 +3329,21 @@ END
 GO
 
 /*Insertar Persona Juridica*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_Insertar
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab1
 (
-	@pers_Id							  	INT,
-	@peju_EstadoRepresentante				INT,
-	@colo_Id							  	INT,
-	@peju_PuntoReferencia					NVARCHAR(200),
-	@peju_ColoniaRepresentante				INT,
-	@peju_NumeroLocalRepresentante		  	NVARCHAR(200),
-	@peju_PuntoReferenciaRepresentante	  	NVARCHAR(200),
-	@peju_TelefonoEmpresa					NVARCHAR(200),
-	@peju_TelefonoFijoRepresentanteLegal 	NVARCHAR(200),
-	@peju_TelefonoRepresentanteLegal	  	NVARCHAR(200),
-	@peju_CorreoElectronico              	NVARCHAR(200),
-	@peju_CorreoElectronicoAlternativo   	NVARCHAR(200),
-	@usua_UsuarioCreacion       			INT,
-	@peju_FechaCreacion         			DATETIME
+  @pers_RTN                         NVARCHAR(40),
+  @ofic_Id							INT,
+  @escv_Id							INT,
+  @ofpr_Id							INT,
+  @usua_UsuarioCreacion             INT,
+  @fecha_UsuarioCreacion            DATETIME
 )
 AS
 BEGIN
 	BEGIN TRY
-		INSERT INTO Adua.tbPersonaJuridica 
-					(pers_Id,							  	
-					peju_EstadoRepresentante,				
-					colo_Id,							  	
-					peju_PuntoReferencia,					
-					peju_ColoniaRepresentante,				
-					peju_NumeroLocalRepresentante,		  	
-					peju_PuntoReferenciaRepresentante,	  	
-					peju_TelefonoEmpresa,					
-					peju_TelefonoFijoRepresentanteLegal, 	
-					peju_TelefonoRepresentanteLegal,	  	
-					peju_CorreoElectronico,              	
-					peju_CorreoElectronicoAlternativo,   	
-					usua_UsuarioCreacion,       			
-					peju_FechaCreacion)
-			VALUES (@pers_Id,							  	
-					@peju_EstadoRepresentante,				
-					@colo_Id,							  	
-					@peju_PuntoReferencia,					
-					@peju_ColoniaRepresentante,				
-					@peju_NumeroLocalRepresentante,		  	
-					@peju_PuntoReferenciaRepresentante,	  	
-					@peju_TelefonoEmpresa,					
-					@peju_TelefonoFijoRepresentanteLegal, 	
-					@peju_TelefonoRepresentanteLegal,	  	
-					@peju_CorreoElectronico,                 	
-					@peju_CorreoElectronicoAlternativo,   	
-					@usua_UsuarioCreacion,       			
-					@peju_FechaCreacion)
-
-		SELECT SCOPE_IDENTITY() AS Resultado
+	   INSERT INTO [Adua].[tbPersonas]([pers_RTN], [ofic_Id], [escv_Id], [ofpr_Id], [pers_escvRepresentante],[pers_OfprRepresentante], [usua_UsuarioCreacion],  [pers_FechaCreacion])
+	   VALUES (@pers_RTN, @ofic_Id, @escv_Id, @ofpr_Id, null, null, @usua_UsuarioCreacion, @fecha_UsuarioCreacion)
+	   SELECT 1
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
@@ -3387,6 +3351,99 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab2
+(
+  @peju_Id                          INT,
+  @ciud_Id					        INT,
+  @alde_Id				        	INT,
+  @colo_Id				    	    INT,
+  @peju_NumeroLocalApart            NVARCHAR(150),
+  @peju_PuntoReferencia             NVARCHAR(150)
+)
+AS
+BEGIN
+	BEGIN TRY
+	  UPDATE [Adua].[tbPersonaJuridica]
+	     SET  ciud_Id = @ciud_Id, alde_Id = @alde_Id, peju_PuntoReferencia = @peju_PuntoReferencia,
+		    colo_Id = @colo_Id, peju_NumeroLocalApart = @peju_NumeroLocalApart 
+      WHERE peju_Id =  @peju_Id
+	   SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+	END CATCH
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab3
+(
+  @peju_Id                            INT,
+  @peju_CiudadIdRepresentante	      INT,
+  @peju_AldeaIdRepresentante          INT,
+  @peju_ColoniaRepresentante		  INT,
+  @peju_NumeroLocalRepresentante      NVARCHAR(150),
+  @peju_PuntoReferenciaRepresentante  NVARCHAR(150)
+)
+AS
+BEGIN
+	BEGIN TRY
+	  UPDATE [Adua].[tbPersonaJuridica]
+	     SET  peju_CiudadIdRepresentante = @peju_CiudadIdRepresentante, peju_AldeaIdRepresentante = @peju_AldeaIdRepresentante, peju_PuntoReferenciaRepresentante = @peju_PuntoReferenciaRepresentante,
+		    peju_ColoniaRepresentante = @peju_ColoniaRepresentante, peju_NumeroLocalRepresentante = @peju_NumeroLocalRepresentante 
+      WHERE peju_Id =  @peju_Id
+	   SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+	END CATCH
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab4
+( 
+  @peju_Id                                INT,
+  @peju_TelefonoEmpresa                   NVARCHAR(200),
+  @peju_TelefonoFijoRepresentanteLegal    NVARCHAR(200),
+  @peju_TelefonoRepresentanteLegal        NVARCHAR(200),
+  @peju_CorreoElectronico                 NVARCHAR(200),
+  @peju_CorreoEletronicoAlternativo       NVARCHAR(200)
+)
+AS
+BEGIN
+	BEGIN TRY
+	  UPDATE [Adua].[tbPersonaJuridica]
+	     SET  [peju_TelefonoEmpresa] = @peju_TelefonoEmpresa , [peju_TelefonoFijoRepresentanteLegal] = @peju_TelefonoFijoRepresentanteLegal, [peju_TelefonoRepresentanteLegal] = @peju_TelefonoRepresentanteLegal,
+		    peju_CorreoElectronico  = @peju_CorreoElectronico, [peju_CorreoElectronicoAlternativo] = @peju_CorreoEletronicoAlternativo 
+      WHERE peju_Id =  @peju_Id
+	   SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+	END CATCH
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab5
+( 
+  @peju_Id                                INT,
+  @peju_DNI                               NVARCHAR(20),
+  @peju_DNIRepresentante                  NVARCHAR(20),
+  @peju_EscrituraPublica                  NVARCHAR(20)
+)
+AS
+BEGIN
+	BEGIN TRY
+	  UPDATE [Adua].[tbPersonaJuridica]
+	     SET  [peju_DNI] = @peju_DNI , peju_DNIRepresentante = @peju_DNIRepresentante,
+		     [peju_EscrituraPublica] = @peju_EscrituraPublica
+      WHERE peju_Id =  @peju_Id
+	   SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+	END CATCH
+END
+GO
 /*Editar Persona Juridica*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_Editar
 (
@@ -9739,7 +9796,7 @@ BEGIN
 			WHERE imar.imar_Estado = 1
 END
 GO
-
+	
 --INSERTAR
 CREATE OR ALTER PROCEDURE Adua.UDP_tbImpuestosPorArancel_Insertar 
 	@impu_Id     				INT,

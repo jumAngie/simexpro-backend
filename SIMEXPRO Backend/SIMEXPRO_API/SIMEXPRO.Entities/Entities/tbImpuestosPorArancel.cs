@@ -9,6 +9,8 @@ namespace SIMEXPRO.Entities.Entities
 {
     public partial class tbImpuestosPorArancel
     {
+        public int imar_PorcentajeImpuesto { get; set; }
+
         public int imar_Id { get; set; }
         public int impu_Id { get; set; }
         public int aran_Id { get; set; }

@@ -9,6 +9,7 @@ namespace SIMEXPRO.Entities.Entities
 {
     public partial class tbDuca
     {
+
         public string duca_No_Duca { get; set; }
         public string duca_No_Correlativo_Referencia { get; set; }
         public int? deva_Id { get; set; }

@@ -9,6 +9,7 @@ namespace SIMEXPRO.Entities.Entities
 {
     public partial class tbAduanas
     {
+
         public tbAduanas()
         {
             tbDeclaraciones_Valordeva_AduanaDespacho = new HashSet<tbDeclaraciones_Valor>();
@@ -48,6 +49,8 @@ namespace SIMEXPRO.Entities.Entities
         public virtual ICollection<tbDeclaraciones_Valor> tbDeclaraciones_Valordeva_AduanaDespacho { get; set; }
         public virtual ICollection<tbDeclaraciones_Valor> tbDeclaraciones_Valordeva_AduanaIngreso { get; set; }
         public virtual ICollection<tbDuca> tbDucaduca_AduanaRegistroNavigation { get; set; }
+        public virtual ICollection<tbDuca> tbDucaduca_AduanaSalidaNavigation { get; set; }
         public virtual ICollection<tbDuca> tbDucaduca_AduanaDestinoNavigation { get; set; }
+
     }
 }
