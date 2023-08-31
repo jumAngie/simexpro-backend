@@ -1289,13 +1289,13 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
-        public ServiceResult VerificarExistencia(tbDuca item)
+        public ServiceResult VerificarExistencia(string duca_No_Duca)
         {
             var resultado = new ServiceResult();
 
             try
             {
-                var list = _ducaRepository.VerificarExistencia(item);
+                var list = _ducaRepository.VerificarExistencia(duca_No_Duca);
                 return resultado.Ok(list);
             }
             catch (Exception ex)

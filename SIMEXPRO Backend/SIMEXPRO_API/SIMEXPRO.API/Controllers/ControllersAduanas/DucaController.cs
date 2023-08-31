@@ -34,11 +34,10 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(list);
         }
 
-        [HttpPost("VerificarExistencia")]
-        public IActionResult VerificarExistencia(DucaViewModel ducaViewModel)
+        [HttpGet("VerificarExistencia")]
+        public IActionResult VerificarExistencia(string duca_No_Duca)
         {
-            var mapped = _mapper.Map<tbDuca>(ducaViewModel);
-            var datos = _aduanaServices.VerificarExistencia(mapped);
+            var datos = _aduanaServices.VerificarExistencia(duca_No_Duca);
             return Ok(datos);
         }
     

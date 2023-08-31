@@ -1304,6 +1304,12 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.ToTable("tbCondicionesComerciales", "Adua");
 
+                entity.HasIndex(e => e.coco_Codigo, "UQ_Adua_tbCondicionesComerciales_coco_Codigo")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.coco_Descripcion, "UQ_Adua_tbCondicionesComerciales_coco_Descripcion")
+                    .IsUnique();
+
                 entity.Property(e => e.coco_Codigo)
                     .IsRequired()
                     .HasMaxLength(2)
@@ -1396,6 +1402,10 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.Property(e => e.cont_Licencia)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.cont_NoIdentificacion)
+                   .IsRequired()
+                   .HasMaxLength(50);
 
                 entity.Property(e => e.cont_Nombre)
                     .IsRequired()
@@ -1936,15 +1946,15 @@ namespace SIMEXPRO.DataAccess.Context
                     .HasForeignKey(d => d.deva_Id)
                     .HasConstraintName("FK_Adua_tbDeclaraciones_Valor_deva_Id_Adua_tbDuca_deva_Id");
 
+                entity.HasOne(d => d.duca_AduanaDestinoNavigation)
+                    .WithMany(p => p.tbDucaduca_AduanaDestinoNavigation)
+                    .HasForeignKey(d => d.duca_AduanaDestino)
+                    .HasConstraintName("FK_Adua_tbDuca_duca_AduanaDestino_tbAduana_adua_Id");
+
                 entity.HasOne(d => d.duca_AduanaRegistroNavigation)
                     .WithMany(p => p.tbDucaduca_AduanaRegistroNavigation)
                     .HasForeignKey(d => d.duca_AduanaRegistro)
                     .HasConstraintName("FK_Adua_tbDuca_duca_AduanaRegistro_tbAduana_adua_Id");
-
-                entity.HasOne(d => d.duca_AduanaSalidaNavigation)
-                    .WithMany(p => p.tbDucaduca_AduanaSalidaNavigation)
-                    .HasForeignKey(d => d.duca_AduanaSalida)
-                    .HasConstraintName("FK_Adua_tbDuca_duca_AduanaSalida_tbAduana_adua_Id");
 
                 entity.HasOne(d => d.duca_Conductor)
                     .WithMany(p => p.tbDuca)
@@ -2206,6 +2216,9 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.ToTable("tbEstadoMercancias", "Adua");
 
                 entity.HasIndex(e => e.merc_Codigo, "UQ_Adua_tbEstadoMercancias_merc_Codigo")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.merc_Descripcion, "UQ_Adua_tbEstadoMercancias_merc_Descripcion")
                     .IsUnique();
 
                 entity.Property(e => e.merc_Codigo)
@@ -2723,6 +2736,8 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.Property(e => e.imar_FechaCreacion).HasColumnType("datetime");
 
                 entity.Property(e => e.imar_FechaModificacion).HasColumnType("datetime");
+
+                entity.Property(e => e.imar_PorcentajeImpuesto).HasColumnType("decimal(18, 2)");
 
                 entity.HasOne(d => d.aran)
                     .WithMany(p => p.tbImpuestosPorArancel)
@@ -3629,6 +3644,9 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.ToTable("tbNivelesComerciales", "Adua");
 
+                entity.HasIndex(e => e.nico_Codigo, "UK_Adua_tbNivelesComerciales_nico_Codigo")
+                    .IsUnique();
+
                 entity.HasIndex(e => e.nico_Descripcion, "UQ_Adua_tbNivelesComerciales_nico_Descripcion")
                     .IsUnique();
 
@@ -4227,11 +4245,19 @@ namespace SIMEXPRO.DataAccess.Context
                     .IsRequired()
                     .HasMaxLength(200);
 
+                entity.Property(e => e.peju_DNI).HasMaxLength(20);
+
+                entity.Property(e => e.peju_DNIRepresentante).HasMaxLength(20);
+
+                entity.Property(e => e.peju_EscrituraPublica).HasMaxLength(200);
+
                 entity.Property(e => e.peju_Estado).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.peju_FechaCreacion).HasColumnType("datetime");
 
                 entity.Property(e => e.peju_FechaModificacion).HasColumnType("datetime");
+
+                entity.Property(e => e.peju_NumeroLocalApart).HasMaxLength(150);
 
                 entity.Property(e => e.peju_NumeroLocalRepresentante)
                     .IsRequired()
@@ -4257,23 +4283,37 @@ namespace SIMEXPRO.DataAccess.Context
                     .IsRequired()
                     .HasMaxLength(200);
 
+                entity.HasOne(d => d.alde)
+                    .WithMany(p => p.tbPersonaJuridicaalde)
+                    .HasForeignKey(d => d.alde_Id)
+                    .HasConstraintName("FK_Adua_tbPersonaJuridica_alde_Id_tbAldeas");
+
+                entity.HasOne(d => d.ciud)
+                    .WithMany(p => p.tbPersonaJuridicaciud)
+                    .HasForeignKey(d => d.ciud_Id)
+                    .HasConstraintName("FK_Adua_tbPersonaJuridica_Ciudad_Id_tbCiudad");
+
                 entity.HasOne(d => d.colo)
                     .WithMany(p => p.tbPersonaJuridicacolo)
                     .HasForeignKey(d => d.colo_Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Adua_tbPersonaJuridica_colo_Id_Gral_tbColonias_colo_Id");
 
+                entity.HasOne(d => d.peju_AldeaIdRepresentanteNavigation)
+                    .WithMany(p => p.tbPersonaJuridicapeju_AldeaIdRepresentanteNavigation)
+                    .HasForeignKey(d => d.peju_AldeaIdRepresentante)
+                    .HasConstraintName("FK_Adua_tbPersonaJuridica_AldeaIdRepresentante_tbAldea");
+
+                entity.HasOne(d => d.peju_CiudadIdRepresentanteNavigation)
+                    .WithMany(p => p.tbPersonaJuridicapeju_CiudadIdRepresentanteNavigation)
+                    .HasForeignKey(d => d.peju_CiudadIdRepresentante)
+                    .HasConstraintName("FK_Adua_tbPersonaJuridica_CiudadIdRepresentante_tbCiudad");
+
                 entity.HasOne(d => d.peju_ColoniaRepresentanteNavigation)
                     .WithMany(p => p.tbPersonaJuridicapeju_ColoniaRepresentanteNavigation)
                     .HasForeignKey(d => d.peju_ColoniaRepresentante)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Adua_tbPersonaJuridica_peju_ColoniaRepresentante_Gral_ColoniaRepresentante_colo_Id");
-
-                entity.HasOne(d => d.peju_EstadoRepresentanteNavigation)
-                    .WithMany(p => p.tbPersonaJuridica)
-                    .HasForeignKey(d => d.peju_EstadoRepresentante)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Adua_tbPersonaJuridica_peju_EstadoRepresentante_Gral_tbProvincias_pvin_Id");
 
                 entity.HasOne(d => d.pers)
                     .WithMany(p => p.tbPersonaJuridica)

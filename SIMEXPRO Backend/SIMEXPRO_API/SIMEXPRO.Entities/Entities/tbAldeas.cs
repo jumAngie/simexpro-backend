@@ -12,6 +12,8 @@ namespace SIMEXPRO.Entities.Entities
         public tbAldeas()
         {
             tbColonias = new HashSet<tbColonias>();
+            tbPersonaJuridicaalde = new HashSet<tbPersonaJuridica>();
+            tbPersonaJuridicapeju_AldeaIdRepresentanteNavigation = new HashSet<tbPersonaJuridica>();
         }
 
         public int alde_Id { get; set; }
@@ -49,7 +51,8 @@ namespace SIMEXPRO.Entities.Entities
         public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }
         public virtual ICollection<tbColonias> tbColonias { get; set; }
         public virtual ICollection<tbComercianteIndividual> tbComercianteIndividualcoin_AldeaRepresentanteNavigation { get; set; }
-
+        public virtual ICollection<tbPersonaJuridica> tbPersonaJuridicaalde { get; set; }
+        public virtual ICollection<tbPersonaJuridica> tbPersonaJuridicapeju_AldeaIdRepresentanteNavigation { get; set; }
         public virtual ICollection<tbComercianteIndividual> tbComercianteIndividualalde { get; set; }
 
 

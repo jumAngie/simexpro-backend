@@ -9,6 +9,7 @@ namespace SIMEXPRO.API.Models.ModelsAduana
     public class ConductorViewModel
     {
         public int cont_Id { get; set; }
+        public string cont_NoIdentificacion { get; set; }
         public string cont_Nombre { get; set; }
         public string cont_Apellido { get; set; }
         public string cont_Licencia { get; set; }

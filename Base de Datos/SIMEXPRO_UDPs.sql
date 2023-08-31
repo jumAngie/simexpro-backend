@@ -7549,8 +7549,8 @@ BEGIN
 		  --Identificación de la Declaración parte II --
 		  duca.duca_AduanaRegistro,
 		  adua1.adua_Nombre						AS 'Nombre_Aduana_Registro',			
-		  duca.duca_AduanaSalida,
-		  adua2.adua_Nombre						AS 'Nombre_Aduana_Salida',
+		  duca.duca_AduanaDestino,
+		  adua2.adua_Nombre						AS 'Nombre_Aduana_Destino',
 		  deva.deva_AduanaIngresoId,
 		  adua3.adua_Nombre						AS 'Nombre_Aduana_Ingreso',
 		  deva.deva_AduanaDespachoId,
@@ -7576,7 +7576,6 @@ BEGIN
 		  duca_Pais_Destino,
 		  paisD.pais_Nombre						AS 'Nombre_pais_destino', 
 		  duca_Deposito_Aduanero,
-		  duca_Lugar_Embarque,
 		  duca_Lugar_Desembarque, 
 		  duca_Manifiesto, 
 		  duca_Titulo, 
@@ -7656,7 +7655,7 @@ LEFT JOIN Gral.tbPaises					AS paisE	ON duca.duca_Pais_Exportacion = paisE.pais_
 LEFT JOIN Gral.tbPaises					AS paisP	ON duca.duca_Pais_Procedencia = paisP.pais_Id
 LEFT JOIN Adua.tbModoTransporte			AS modoT	ON duca.motr_id = modoT.motr_Id
 LEFT JOIN Adua.tbAduanas				AS adua1	ON duca.duca_AduanaRegistro = adua1.adua_Id
-LEFT JOIN Adua.tbAduanas				AS adua2	ON duca.duca_AduanaSalida = adua2.adua_Id
+LEFT JOIN Adua.tbAduanas				AS adua2	ON duca.duca_AduanaDestino = adua2.adua_Id
 LEFT JOIN Adua.tbAduanas				AS adua3	ON deva.deva_AduanaIngresoId = adua3.adua_Id
 LEFT JOIN Adua.tbAduanas				AS adua4	ON deva.deva_AduanaDespachoId = adua4.adua_Id
 LEFT JOIN Adua.tbProveedoresDeclaracion AS prode	ON deva.pvde_Id = Prode.pvde_Id
@@ -7674,38 +7673,26 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_InsertarTab1
 	@deva_Id							INT,
 	@duca_No_Correlativo_Referencia		NVARCHAR(MAX),
 	@duca_AduanaRegistro				INT,
-	@duca_AduanaSalida					INT,
-	@duca_Regimen_Aduanero				NVARCHAR(MAX),
+	@duca_AduanaDestino					INT,
+	@duca_Regimen_Aduanero				INT,
 	@duca_Modalidad						NVARCHAR(MAX),
 	@duca_Clase							NVARCHAR(MAX),
 	@duca_FechaVencimiento				DATETIME,
 	@duca_Pais_Procedencia				INT,
-	@duca_Pais_Exportacion				INT,
 	@duca_Pais_Destino					INT,
 	@duca_Deposito_Aduanero				NVARCHAR(MAX),
-	@duca_Lugar_Embarque				NVARCHAR(MAX),
 	@duca_Lugar_Desembarque				NVARCHAR(MAX),
-	@duca_Manifiesto					NVARCHAR(MAX),
-	@iden_Id_ex							INT,
-	@pais_ex							INT,
-	@domicilio_Fiscal_ex				NVARCHAR(MAX),	
-	@NoIdentificacion_im				NVARCHAR(15),
-	@pais_im							INT,
-	@domicilio_Fiscal_im				NVARCHAR(MAX),
-	@usua_UsuarioCreacio				INT,
+	@duca_Manifiesto					NVARCHAR(150),
+	@duca_Titulo						NVARCHAR(150),
+	@usua_UsuarioCreacion				INT,
 	@duca_FechaCreacion					DATETIME
 AS
 BEGIN
 	BEGIN TRY
-		DECLARE @Duca_Id AS NVARCHAR(100)
+		INSERT INTO Adua.tbDuca (duca_No_Duca, duca_No_Correlativo_Referencia, deva_Id, duca_AduanaRegistro, duca_AduanaDestino, duca_Regimen_Aduanero, duca_Modalidad,duca_Clase, duca_FechaVencimiento,duca_Pais_Procedencia,duca_Pais_Destino ,duca_Deposito_Aduanero, duca_Lugar_Desembarque,duca_Manifiesto,duca_Titulo)
+		VALUES (@duca_No_Duca, @duca_No_Correlativo_Referencia, @deva_Id, @duca_AduanaRegistro,@duca_AduanaDestino, @duca_Regimen_Aduanero, @duca_Modalidad,@duca_Clase,@duca_FechaVencimiento,@duca_Pais_Procedencia,@duca_Pais_Destino,@duca_Deposito_Aduanero,@duca_Lugar_Desembarque,@duca_Manifiesto,@duca_Titulo)
 
-		INSERT INTO Adua.tbDuca (duca_No_Duca, duca_No_Correlativo_Referencia, deva_Id, duca_AduanaRegistro, duca_AduanaSalida, duca_Regimen_Aduanero, duca_Modalidad,duca_Clase, duca_FechaVencimiento,duca_Pais_Procedencia,duca_Pais_Exportacion,duca_Pais_Destino ,duca_Deposito_Aduanero ,duca_Lugar_Embarque, duca_Lugar_Desembarque,duca_Manifiesto,duca_DomicilioFiscal_Exportador, duca_Tipo_Iden_Exportador, duca_Pais_Emision_Exportador, duca_Numero_Id_Importador, duca_Pais_Emision_Importador, duca_DomicilioFiscal_Importador)
-		VALUES (@duca_No_Duca, @duca_No_Correlativo_Referencia, @deva_Id, @duca_AduanaRegistro,@duca_AduanaSalida, @duca_Regimen_Aduanero, @duca_Modalidad,@duca_Clase,@duca_FechaVencimiento,@duca_Pais_Procedencia,@duca_Pais_Exportacion,@duca_Pais_Destino,@duca_Deposito_Aduanero,@duca_Lugar_Embarque,@duca_Lugar_Desembarque,@duca_Manifiesto,@domicilio_Fiscal_ex,@iden_Id_ex,@pais_ex,@NoIdentificacion_im,@pais_im,@domicilio_Fiscal_im)
-		
-		--SET @Duca_Id = (SELECT duca_No_Duca FROM Adua.tbDuca WHERE duca_No_Correlativo_Referencia = @duca_No_Correlativo_Referencia);
-		SET @Duca_Id = @duca_No_Duca
-
-		SELECT @Duca_Id
+		SELECT 1
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error: ' + ERROR_MESSAGE();
@@ -7714,7 +7701,7 @@ END
 GO
 
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_InsertarTab2
-	@duca_No_Duca							NVARCHAR(100),
+	@duca_No_Duca						NVARCHAR(100),
 	@duca_Codigo_Declarante				NVARCHAR(200),
 	@duca_Numero_Id_Declarante			NVARCHAR(200),
 	@duca_NombreSocial_Declarante		NVARCHAR(MAX),
@@ -7722,6 +7709,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_InsertarTab2
 	@duca_Codigo_Transportista			NVARCHAR(200),
 	@duca_Transportista_Nombre			NVARCHAR(MAX),
 	@motr_Id							INT,
+	@cont_NoIdentificacion				VARCHAR(50),
 	@cont_Licencia						NVARCHAR(200),
 	@pais_IdExpedicion					INT,
 	@cont_Nombre						NVARCHAR(200),
@@ -7748,8 +7736,8 @@ BEGIN
 
 			DECLARE @Transporte_Id INT = (SELECT TOP 1 tran_Id FROM Adua.tbTransporte ORDER BY tran_Id DESC);
 			
-			INSERT INTO Adua.tbConductor (cont_Nombre, cont_Apellido, cont_Licencia, pais_IdExpedicion, tran_Id, usua_UsuarioCreacion, cont_FechaCreacion, usua_UsuarioModificacion, cont_FechaModificacion, usua_UsuarioEliminacion, cont_FechaEliminacion, cont_Estado)
-			VALUES(@cont_Nombre,@cont_Apellido,@cont_Licencia,@pais_IdExpedicion,@Transporte_Id,@usua_UsuarioCreacio,@tran_FechaCreacion,NULL,NULL,NULL,NULL,1);
+			INSERT INTO Adua.tbConductor (cont_NoIdentificacion, cont_Nombre, cont_Apellido, cont_Licencia, pais_IdExpedicion, tran_Id, usua_UsuarioCreacion, cont_FechaCreacion, usua_UsuarioModificacion, cont_FechaModificacion, usua_UsuarioEliminacion, cont_FechaEliminacion, cont_Estado)
+			VALUES(@cont_NoIdentificacion, @cont_Nombre,@cont_Apellido,@cont_Licencia,@pais_IdExpedicion,@Transporte_Id,@usua_UsuarioCreacio,@tran_FechaCreacion,NULL,NULL,NULL,NULL,1);
 
 			DECLARE @ducaConductor INT = (SELECT TOP 1 cont_Id FROM Adua.tbConductor ORDER BY cont_Id DESC);
 
@@ -7805,24 +7793,17 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_EditarTab1
 	@deva_Id							INT,
 	@duca_No_Correlativo_Referencia		NVARCHAR(MAX),
 	@duca_AduanaRegistro				INT,
-	@duca_AduanaSalida					INT,
-	@duca_Regimen_Aduanero				NVARCHAR(MAX),
+	@duca_AduanaDestino					INT,
+	@duca_Regimen_Aduanero				INT,
 	@duca_Modalidad						NVARCHAR(MAX),
 	@duca_Clase							NVARCHAR(MAX),
 	@duca_FechaVencimiento				DATETIME,
 	@duca_Pais_Procedencia				INT,
-	@duca_Pais_Exportacion				INT,
 	@duca_Pais_Destino					INT,
 	@duca_Deposito_Aduanero				NVARCHAR(MAX),
-	@duca_Lugar_Embarque				NVARCHAR(MAX),
 	@duca_Lugar_Desembarque				NVARCHAR(MAX),
-	@duca_Manifiesto					NVARCHAR(MAX),
-	@iden_Id_ex							INT,
-	@pais_ex							INT,
-	@domicilio_Fiscal_ex				NVARCHAR(MAX),	
-	@NoIdentificacion_im				NVARCHAR(15),
-	@pais_im							INT,
-	@domicilio_Fiscal_im				NVARCHAR(MAX),
+	@duca_Manifiesto					NVARCHAR(150),
+	@duca_Titulo						NVARCHAR(150),
 	@usua_UsuarioModificacion			INT,
 	@duca_FechaModificacion				DATETIME
 AS
@@ -7832,24 +7813,17 @@ BEGIN
 			 SET deva_Id = @deva_Id,
 				 duca_No_Correlativo_Referencia = @duca_No_Correlativo_Referencia,
 			     duca_AduanaRegistro = @duca_AduanaRegistro, 
-				 duca_AduanaSalida = @duca_AduanaSalida,
+				 duca_AduanaDestino = @duca_AduanaDestino,
 				 duca_Regimen_Aduanero = @duca_Regimen_Aduanero,
 				 duca_Modalidad = @duca_Modalidad,
 				 duca_Clase = @duca_Clase,
 				 duca_FechaVencimiento = @duca_FechaVencimiento,
 				 duca_Pais_Procedencia = @duca_Pais_Procedencia ,
-				 duca_Pais_Exportacion = @duca_Pais_Exportacion,
 				 duca_Pais_Destino = @duca_Pais_Destino,
 				 duca_Deposito_Aduanero = @duca_Deposito_Aduanero,
-				 duca_Lugar_Embarque = @duca_Lugar_Embarque, 
 				 duca_Lugar_Desembarque = @duca_Lugar_Desembarque,
 				 duca_Manifiesto = @duca_Manifiesto,
-				 duca_Tipo_Iden_Exportador = @iden_Id_ex, 
-				 duca_Pais_Emision_Exportador = @pais_ex,
-				 duca_DomicilioFiscal_Exportador = @domicilio_Fiscal_ex, 
-				 duca_Numero_Id_Importador = @NoIdentificacion_im, 
-				 duca_Pais_Emision_Importador = @pais_im, 
-				 duca_DomicilioFiscal_Importador = @domicilio_Fiscal_im,
+				 duca_Titulo = @duca_Titulo,
 				 usua_UsuarioModificacion = @usua_UsuarioModificacion,
 				 duca_FechaModificacion = @duca_FechaModificacion
 		   WHERE duca_No_Duca = @duca_No_Duca  
@@ -7871,6 +7845,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_EditarTab2
 	@duca_Codigo_Transportista			NVARCHAR(200),
 	@duca_Transportista_Nombre			NVARCHAR(MAX),
 	@motr_Id							INT,
+	@cont_NoIdentificacion				VARCHAR(50),
 	@cont_Licencia						NVARCHAR(200),
 	@pais_IdExpedicion					INT,
 	@cont_Nombre						NVARCHAR(200),
@@ -7909,7 +7884,8 @@ BEGIN
 		
 		DECLARE @ducaConductor INT = (SELECT TOP 1 cont_Id FROM Adua.tbConductor ORDER BY cont_Id DESC);
 		UPDATE Adua.tbConductor
-		SET    cont_Nombre = @cont_Nombre,
+		SET    cont_NoIdentificacion = @cont_NoIdentificacion,
+			   cont_Nombre = @cont_Nombre,
 		       cont_Apellido = @cont_Apellido,
 			   cont_Licencia = @cont_Licencia,
 			   pais_IdExpedicion = @pais_IdExpedicion,
