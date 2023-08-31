@@ -439,8 +439,15 @@ namespace SIMEXPRO.DataAccess
         public static string EditarTransporte = "Adua.UDP_tbTransporte_Editar";
         #endregion
 
+        #region Regimenes Aduaneros
+        public static string ListarRegimenesAduaneros = "Adua.UDP_tbRegimenesAduaneros_Listar";
+        public static string InsertarRegimenesAduaneros = "Adua.UDP_tbRegimenesAduaneros_Insertar";
+        public static string EditarRegimenesAduaneros = "Adua.UDP_tbRegimenesAduaneros_Editar";
+        public static string EliminarRegimenesAduaneros = "Adua.UDP_tbRegimenesAduaneros_Eliminar";
         #endregion
-        
+
+        #endregion
+
         #region Produccion
 
         #region Procesos
