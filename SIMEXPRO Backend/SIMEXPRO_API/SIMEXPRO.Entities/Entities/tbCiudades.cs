@@ -59,8 +59,6 @@ namespace SIMEXPRO.Entities.Entities
 
         public virtual ICollection<tbComercianteIndividual> tbComercianteIndividualcoin_CiudadRepresentanteNavigation { get; set; }
         public virtual ICollection<tbComercianteIndividual> tbComercianteIndividualciud { get; set; }
-        public virtual ICollection<tbPersonaJuridica> TbPersonaJuridicaciud { get; set; }
-        public virtual ICollection<tbPersonaJuridica> TbPersonaJuridicapeju_CiudadIdRepresentanteNavigation { get; set; }
 
         public virtual ICollection<tbAldeas> tbAldeas { get; set; }
         public virtual ICollection<tbColonias> tbColonias { get; set; }
