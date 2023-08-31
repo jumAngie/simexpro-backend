@@ -45,7 +45,7 @@ namespace SIMEXPRO.Entities.Entities
         public string Detalles { get; set; }
 
         [NotMapped]
-        public string orco_Decripcion { get; set; }
+        public string orco_Descripcion { get; set; }
 
 
         public virtual tbOrdenCompra orco { get; set; }

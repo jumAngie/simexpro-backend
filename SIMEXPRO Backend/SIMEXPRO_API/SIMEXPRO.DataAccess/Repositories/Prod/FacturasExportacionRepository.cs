@@ -37,7 +37,6 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             parametros.Add("@duca_No_Duca", item.duca_No_Duca, DbType.String, ParameterDirection.Input);
             parametros.Add("@faex_Fecha", item.faex_Fecha, DbType.DateTime, ParameterDirection.Input);
             parametros.Add("@orco_Id", item.orco_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@faex_Total", item.faex_Total, DbType.String, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@faex_FechaCreacion", item.faex_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
 
@@ -63,7 +62,6 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             parametros.Add("@duca_No_Duca", item.duca_No_Duca, DbType.String, ParameterDirection.Input);
             parametros.Add("@faex_Fecha", item.faex_Fecha, DbType.DateTime, ParameterDirection.Input);
             parametros.Add("@orco_Id", item.orco_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@faex_Total", item.faex_Total, DbType.String, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@faex_FechaModificacion", item.faex_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
 

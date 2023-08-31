@@ -38,7 +38,7 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public string Detalles { get; set; }
 
         [NotMapped]
-        public string orco_Decripcion { get; set; }
+        public string orco_Descripcion { get; set; }
 
 
     }

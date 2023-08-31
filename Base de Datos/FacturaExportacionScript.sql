@@ -1,7 +1,10 @@
 USE SIMEXPRO
 GO
 
--- FACTURA EXPORTACION 
+
+/* PROCEDIMIENTOS tb.FacturasExportacion*/
+
+ -- PROCEDIMIENTO PARA LISTAR LAS FACTURAS EXPORTACION
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Listar
 AS
 	BEGIN
@@ -9,6 +12,8 @@ AS
 				FactExport.duca_No_Duca, 
 				FactExport.faex_Fecha, 
 				FactExport.orco_Id, 
+				CONCAT('No. ', PO.orco_Id, ' - ', Clie.clie_Nombre_O_Razon_Social, ' - ', CONVERT(DATE, PO.orco_FechaEmision)) AS orco_Descripcion,
+				
 				FactExport.faex_Total, 
 				Clie.clie_Nombre_O_Razon_Social,
 				FactExport.usua_UsuarioCreacion, 
@@ -44,7 +49,7 @@ AS
 				WHERE FactExportDetails.faex_Id = FactExport.faex_Id
 				FOR JSON PATH) AS Detalles
 		FROM	Prod.tbFacturasExportacion		AS FactExport
-		INNER JOIN Prod.tbOrdenCompra		AS PO			ON FactExport.orco_Id = po.orco_Id
+		INNER JOIN Prod.tbOrdenCompra		AS PO			ON FactExport.orco_Id = PO.orco_Id
 		INNER JOIN Prod.tbClientes			AS Clie			ON PO.orco_IdCliente = Clie.clie_Id
 		INNER JOIN Acce.tbUsuarios			AS UserCrea		ON FactExport.usua_UsuarioCreacion = UserCrea.usua_Id
 		LEFT JOIN Acce.tbUsuarios			AS UserModifica ON FactExport.usua_UsuarioModificacion = UserModifica.usua_Id
@@ -52,11 +57,11 @@ AS
 	END
 GO
 
-CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Insertar
+-- PROCEDIMIENTO PARA INSERTAR LAS FACTURAS EXPORTACION (ENCABEZADO)
+CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Insertar --'12345678696', '08/31/2023', 2, 3, '08/31/2023'
 	@duca_No_Duca			NVARCHAR(100),
 	@faex_Fecha				DATETIME, 
 	@orco_Id				INT, 
-	@faex_Total				DECIMAL(18,0), 
 	@usua_UsuarioCreacion	INT, 
 	@faex_FechaCreacion		DATETIME
 AS
@@ -64,7 +69,7 @@ BEGIN
 	BEGIN TRY
 		INSERT INTO Prod.tbFacturasExportacion(duca_No_Duca, faex_Fecha, orco_Id, 
 												faex_Total, usua_UsuarioCreacion, faex_FechaCreacion)
-		VALUES(@duca_No_Duca, @faex_Fecha, @orco_Id, @faex_Total, @usua_UsuarioCreacion, @faex_FechaCreacion)
+		VALUES(@duca_No_Duca, @faex_Fecha, @orco_Id, 0, @usua_UsuarioCreacion, @faex_FechaCreacion)
 
 		DECLARE @faex_Id INT = SCOPE_IDENTITY();
 
@@ -77,27 +82,34 @@ BEGIN
 END
 GO
 
+
+-- PROCEDIMIENTO PARA EDITAR LAS FACTURAS EXPORTACION (ENCABEZADO)
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Editar
-@faex_Id					INT, 
-@duca_No_Duca				NVARCHAR(100), 
-@faex_Fecha					DATETIME, 
-@orco_Id					INT, 
-@faex_Total					DECIMAL(18,0),  
-@usua_UsuarioModificacion	INT, 
-@faex_FechaModificacion		DATETIME
+	@faex_Id					INT, 
+	@duca_No_Duca				NVARCHAR(100), 
+	@faex_Fecha					DATETIME, 
+	@orco_Id					INT,   
+	@usua_UsuarioModificacion	INT, 
+	@faex_FechaModificacion		DATETIME
 AS
 BEGIN 
 	BEGIN TRY
-		IF (SELECT orco_Id FROM Prod.tbFacturasExportacion) != @orco_Id
-			BEGIN 
+		
+		DECLARE @prev_orco_Id INT =	(SELECT orco_Id FROM Prod.tbFacturasExportacion WHERE faex_Id = @faex_Id)
+		
+		IF @prev_orco_Id != @orco_Id
+			BEGIN
+
+				/* Debido a que el usuario cambio de órden de compra en el encabezado,
+				los items añadidos con la orden de compra previa serán eliminados */
 				DELETE FROM Prod.tbFacturasExportacionDetalles
 				WHERE faex_Id = @faex_Id
+
 
 				UPDATE Prod.tbFacturasExportacion
 				SET	duca_No_Duca = @duca_No_Duca, 
 					faex_Fecha = @faex_Fecha, 
 					orco_Id = @orco_Id, 
-					faex_Total = @faex_Total, 
 					usua_UsuarioModificacion = @usua_UsuarioModificacion, 
 					faex_FechaModificacion = @faex_FechaModificacion
 				WHERE faex_Id = @faex_Id
@@ -110,14 +122,12 @@ BEGIN
 				SET	duca_No_Duca = @duca_No_Duca, 
 					faex_Fecha = @faex_Fecha, 
 					orco_Id = @orco_Id, 
-					faex_Total = @faex_Total, 
 					usua_UsuarioModificacion = @usua_UsuarioModificacion, 
 					faex_FechaModificacion = @faex_FechaModificacion
 				WHERE faex_Id = @faex_Id
 
 				SELECT 1
 			END
-
 	END TRY
 
 	BEGIN CATCH 
@@ -126,6 +136,8 @@ BEGIN
 END
 GO
 
+
+-- PROCEDIMIENTO PARA ESTABLECER EL ESTADO DE LAS FACTURAS EXPORTACION A 0 (DESHABILITADO)
 CREATE OR ALTER PROC Prod.UDP_tbFacturasExportacion_Eliminar
 	@faex_Id  		INT
 AS
@@ -149,6 +161,8 @@ BEGIN
 END
 GO
 
+
+-- PROCEDIMIENTO PARA FINALIZAR LAS FACTURAS EXPORTACION (faex_Finalizado = 1)
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Finalizado
 	@faex_Id  	INT
 AS
@@ -166,7 +180,13 @@ BEGIN
 END
 GO
 
--- FACTURA EXPORTACION DETALLES
+
+
+
+
+/* PROCEDIMIENTOS tb.FacturasExportacionDetalles*/
+
+-- PROCEDIMIENTO PARA LISTAR LAS FACTURAS EXPORTACION DETALLES
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacionDetalles_Listar
 	@faex_Id INT
 AS
@@ -201,7 +221,9 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacionDetalles_Insertar 
+
+-- PROCEDIMIENTO PARA INSERTAR LAS FACTURAS EXPORTACION DETALLES (ITEMS)
+CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacionDetalles_Insertar --141, 8, 34, 110, 35, 23232,3, '2023-08-29 15:07:45.000'
 	@faex_Id				INT, 
 	@code_Id				INT, 
 	@fede_Cajas				INT, 
@@ -213,10 +235,18 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacionDetalles_Insertar
 AS
 BEGIN
 	BEGIN TRY
+		
 		INSERT INTO Prod.tbFacturasExportacionDetalles(faex_Id, code_Id, fede_Cajas, 
 		fede_Cantidad, fede_PrecioUnitario, fede_TotalDetalle, usua_UsuarioCreacion, fede_FechaCreacion)
 		VALUES(@faex_Id, @code_Id, @fede_Cajas, @fede_Cantidad, @fede_PrecioUnitario, @fede_TotalDetalle, @usua_UsuarioCreacion, @fede_FechaCreacion)
 		
+
+		DECLARE @faex_Total DECIMAL(18,2) = (SELECT SUM(fede_TotalDetalle) FROM Prod.tbFacturasExportacionDetalles WHERE faex_Id = @faex_Id)
+
+		UPDATE Prod.tbFacturasExportacion 
+		SET faex_Total = @faex_Total
+		WHERE faex_Id = @faex_Id
+
 		SELECT 1
 	END TRY
 
@@ -226,7 +256,9 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacionDetalles_Editar
+
+-- PROCEDIMIENTO PARA LISTAR LAS FACTURAS EXPORTACION DETALLES (ITEMS)
+CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacionDetalles_Editar --37, 141, 8, 34, 110, 35, 2000, 3, '2023-08-29 15:07:45.000'
 	@fede_Id						INT, 
 	@faex_Id						INT, 
 	@code_Id						INT, 
@@ -239,6 +271,7 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacionDetalles_Editar
 AS
 BEGIN
 	BEGIN TRY
+
 		UPDATE Prod.tbFacturasExportacionDetalles
 		SET faex_Id = @faex_Id, 
 			code_Id = @code_Id, 
@@ -250,6 +283,12 @@ BEGIN
 			fede_FechaModificacion = @fede_FechaModificacion
 		WHERE fede_Id = @fede_Id
 
+		DECLARE @faex_Total DECIMAL(18,2) = (SELECT SUM(fede_TotalDetalle) FROM Prod.tbFacturasExportacionDetalles WHERE faex_Id = @faex_Id)
+
+		UPDATE Prod.tbFacturasExportacion 
+		SET faex_Total = @faex_Total
+		WHERE faex_Id = @faex_Id
+
 		SELECT 1
 	END TRY
 
@@ -259,14 +298,28 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROC Prod.UDP_tbFacturasExportacionDetalle_Eliminar
+
+-- PROCEDIMIENTO PARA BORRAR LAS FACTURAS EXPORTACION DETALLES (ITEMS)
+CREATE OR ALTER PROC Prod.UDP_tbFacturasExportacionDetalle_Eliminar --31
 (@fede_Id  INT)
 AS
 BEGIN
 	BEGIN TRY
+		
+		-- Primero Extraer el ID del encabezado de factura correspondiente (faex_Id)
+		DECLARE @faex_Id INT = (SELECT faex_Id FROM Prod.tbFacturasExportacionDetalles WHERE fede_Id = @fede_Id)
 
+		-- Borrar el registro por completo
 		DELETE FROM [Prod].[tbFacturasExportacionDetalles]
 		WHERE fede_Id = @fede_Id 
+
+		-- Hacer la nueva sumatoria con los items que le quedan a esa factura
+		DECLARE @faex_Total DECIMAL(18,2) = (SELECT SUM(fede_TotalDetalle) FROM Prod.tbFacturasExportacionDetalles WHERE faex_Id = @faex_Id)
+
+		-- Actualizar el total del encabezado de factura
+		UPDATE Prod.tbFacturasExportacion 
+		SET faex_Total = @faex_Total
+		WHERE faex_Id = @faex_Id
 
 		SELECT 1
 	END TRY
@@ -276,6 +329,9 @@ BEGIN
 END
 GO
 
+
+
+-- PROCEDIMIENTO PARA LISTAR LAS DUCAS 
 CREATE OR ALTER PROCEDURE Prod.UDP_DUCAsDDL
 AS
 BEGIN
@@ -284,17 +340,21 @@ BEGIN
 END
 GO
 
+
+-- PROCEDIMIENTO PARA LISTAR LAS ORDENES DE COMPRA QUE SI POSEEN ITEMS
 CREATE OR ALTER PROCEDURE Prod.UDP_OrdenesCompraDDL
 AS
 BEGIN
-	SELECT PO.orco_Id, CONCAT('No. ', PO.orco_Id, ' - ', Clie.clie_Nombre_O_Razon_Social, ' - ', CONVERT(DATE, PO.orco_FechaEmision)) AS orco_Decripcion
+	SELECT DISTINCT(PO.orco_Id), CONCAT('No. ', PO.orco_Id, ' - ', Clie.clie_Nombre_O_Razon_Social, ' - ', CONVERT(DATE, PO.orco_FechaEmision)) AS orco_Descripcion 
 	FROM Prod.tbOrdenCompra AS PO
 	INNER JOIN Prod.tbClientes AS Clie ON PO.orco_IdCliente = Clie.clie_Id
+	INNER JOIN Prod.tbOrdenCompraDetalles AS POdetail ON PO.orco_Id = POdetail.orco_Id
 	WHERE PO.orco_Estado = 1
 END
 GO
 
- 
+
+-- PROCEDIMIENTO PARA LISTAR LOS DETALLES (ITEMS) DE LA ORDEN DE COMPRA SELECCIONADA EN EL ENCABEZADO DE LA FACTURA EXPORTACION
 CREATE OR ALTER PROCEDURE Prod.UDP_PODetallesByID 
 	@faex_Id INT
 AS
@@ -311,6 +371,7 @@ END
 GO
 
 
+-- PROCEDIMIENTO PARA COMPROBAR SI EL NUMERO DE DUCA EXISTE
 CREATE OR ALTER PROCEDURE Prod.UDP_ComprobarNoDUCA
 	@duca_No_Duca NVARCHAR(100)
 AS
@@ -334,9 +395,10 @@ GO
 
 SELECT * FROM Prod.tbColores
 SELECT * FROM Prod.tbTallas
-SELECT * FROM Prod.tbOrdenCompraDetalles WHERE orco_Id = 57
+SELECT * FROM Prod.tbOrdenCompraDetalles WHERE orco_Id = 1
 SELECT * FROM Prod.tbOrdenCompra
 SELECT * FROM Prod.tbFacturasExportacion 
 
-SELECT * FROM Prod.tbFacturasExportacion WHERE faex_Id = 123
-SELECT * FROM Prod.tbFacturasExportacionDetalles WHERE faex_Id = 123
+SELECT * FROM Prod.tbFacturasExportacion WHERE faex_Id = 162
+SELECT * FROM Prod.tbFacturasExportacionDetalles WHERE faex_Id = 162
+GO
