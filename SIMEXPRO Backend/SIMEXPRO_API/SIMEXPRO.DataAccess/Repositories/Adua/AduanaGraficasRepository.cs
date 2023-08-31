@@ -38,5 +38,57 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             var answer = db.Query<tbGraficas>(ScriptsDataBase.Adua_UDP_AduanasIngreso_CantidadPorcentaje, null, commandType: CommandType.StoredProcedure);
             return answer;
         }
+        public IEnumerable<tbGraficas> Importaciones_Contador_Anio()
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+
+            var answer = db.Query<tbGraficas>(ScriptsDataBase.Adua_UDP_Importaciones_Contador_Anio, null, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
+
+        public IEnumerable<tbGraficas> Importaciones_Contador_Mes()
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+
+            var answer = db.Query<tbGraficas>(ScriptsDataBase.Adua_UDP_Importaciones_Contador_Mes, null, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
+        public IEnumerable<tbGraficas> Importaciones_Contador_Semana()
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+
+            var answer = db.Query<tbGraficas>(ScriptsDataBase.Adua_UDP_Importaciones_Contador_Semana, null, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
+
+        public IEnumerable<tbGraficas> Importaciones_Semana()
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+
+            var answer = db.Query<tbGraficas>(ScriptsDataBase.Importaciones_Semana, null, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
+
+        public IEnumerable<tbGraficas> Importaciones_Mes()
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+
+            var answer = db.Query<tbGraficas>(ScriptsDataBase.Importaciones_Mes, null, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
+
+        public IEnumerable<tbGraficas> Importaciones_Anio()
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+
+            var answer = db.Query<tbGraficas>(ScriptsDataBase.Importaciones_Anio, null, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
     }
 }
