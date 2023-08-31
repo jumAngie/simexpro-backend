@@ -70,6 +70,7 @@ namespace SIMEXPRO.BussinessLogic
             services.AddScoped<TiposIdentificacionRepository>();
             services.AddScoped<TransporteRepository>();
             services.AddScoped<AduanaGraficasRepository>();
+            services.AddScoped<RegimenesAduanerosRepository>();
 
             //General
             services.AddScoped<AldeasRepository>();

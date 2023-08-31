@@ -51,6 +51,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         private readonly TiposIdentificacionRepository _tiposIdentificacionRepository;
         private readonly TransporteRepository _transporteRepository;
         private readonly AduanaGraficasRepository _aduanagraficasrepository;
+        private readonly RegimenesAduanerosRepository _regimenesAduanerosRepository;
 
         public AduanaServices(AduanasRepository AduanasRepository, ArancelesRepository ArancelesRepository, BaseCalculosRepository BaseCalculosRepository, BoletinPagoRepository BoletinPagoRepository, BoletinPagoDetallesRepository BoletinPagoDetallesRepository,
                                 CodigoImpuestoRepository CodigoImpuestoRepository, ComercianteIndividualRepository ComercianteIndividualRepository, ConceptoPagoRepository ConceptoPagoRepository, CondicionesRepository CondicionesRepository,
@@ -61,7 +62,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                                 LiquidacionPorLineaRepository LiquidacionPorLineaRepository, LugaresEmbarqueRepository LugaresEmbarqueRepository, MarcasRepository MarcasRepository, ModoTransporteRepository ModoTransporteRepository,
                                 NivelesComercialesRepository NivelesComercialesRepository, PersonaJuridicaRepository PersonaJuridicaRepository, PersonaNaturalRepository PersonaNaturalRepository, PersonasRepository PersonasRepository,
                                  TipoDocumentoRepository TipoDocumentoRepository, TipoIntermediarioRepository TipoIntermediarioRepository,TipoLiquidacionRepository TipoLiquidacionRepository, TiposIdentificacionRepository TiposIdentificacionRepository, TransporteRepository TransporteRepository,
-                                AduanaGraficasRepository AduanaGraficasRepository)
+                                AduanaGraficasRepository AduanaGraficasRepository, RegimenesAduanerosRepository regimenesAduanerosRepository)
         {
             _aduanasRepository = AduanasRepository;
             _arancelesRepository = ArancelesRepository;
@@ -103,7 +104,9 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             _tiposIdentificacionRepository = TiposIdentificacionRepository;
             _transporteRepository = TransporteRepository;
             _aduanagraficasrepository = AduanaGraficasRepository;
+            _regimenesAduanerosRepository = regimenesAduanerosRepository;
         }
+
         #region Aduanas
         public ServiceResult ListarAduanas()
         {
@@ -3458,6 +3461,88 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+        #endregion
+
+
+        #region Regimenes Aduaneros
+
+        public ServiceResult ListarRegimenesAduaneros()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _regimenesAduanerosRepository.List();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarRegimenesAduaneros(tbRegimenesAduaneros item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _regimenesAduanerosRepository.Insert(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult ActualizarRegimenesAduaneros(tbRegimenesAduaneros item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _regimenesAduanerosRepository.Update(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult EliminarRegimenesAduaneros(tbRegimenesAduaneros item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _regimenesAduanerosRepository.Delete(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
         #endregion
     }
 }
