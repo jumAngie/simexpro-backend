@@ -246,6 +246,21 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult BuscarCategoriaArancel(string aran_Codigo)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _arancelesRepository.Categoria(aran_Codigo);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+
         #endregion
 
         #region BaseCalculos
@@ -3168,6 +3183,48 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var list = _aduanagraficasrepository.AduanasIngreso_CantidadPorcentaje();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult Importaciones_Contador_Anio()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _aduanagraficasrepository.Importaciones_Contador_Anio();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult Importaciones_Contador_Mes()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _aduanagraficasrepository.Importaciones_Contador_Mes();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult Importaciones_Contador_Semana()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _aduanagraficasrepository.Importaciones_Contador_Semana();
                 return result.Ok(list);
             }
             catch (Exception ex)

@@ -324,6 +324,7 @@ namespace SIMEXPRO.DataAccess
         public static string ListarImpuestosPorArancel = "Adua.UDP_tbImpuestosPorArancel_Listar";
         public static string InsertarImpuestosPorArancel = "Adua.UDP_tbImpuestosPorArancel_Insertar";
         public static string EditarImpuestosPorArancel = "Adua.UDP_tbImpuestosPorArancel_Editar";
+        public static string CategoriaAranceles = "Adua.UDP_tbArancelesBuscarCategoria";
         #endregion
 
         #region Incoterm
@@ -709,6 +710,13 @@ namespace SIMEXPRO.DataAccess
         public static string Adua_UDP_ExportadoresPorPais_CantidadPorcentaje = "Adua.UDP_ExportadoresPorPais_CantidadPorcentaje";
         public static string Adua_UDP_EstadosMercancias_CantidadPorcentaje = "Adua.UDP_EstadosMercancias_CantidadPorcentaje";
         public static string Adua_UDP_AduanasIngreso_CantidadPorcentaje = "Adua.UDP_AduanasIngreso_CantidadPorcentaje";
+        public static string Adua_UDP_Importaciones_Contador_Anio = "Adua.UDP_Importaciones_Contador_Anio";
+        public static string Adua_UDP_Importaciones_Contador_Mes = "Adua.UDP_Importaciones_Contador_Mes";
+        public static string Adua_UDP_Importaciones_Contador_Semana = "Adua.UDP_Importaciones_Contador_Semana";
+        public static string Importaciones_Semana = "Adua.UDP_Importaciones_Semana";
+        public static string Importaciones_Mes = "Adua.UDP_Importaciones_Mes";
+        public static string Importaciones_Anio = "Adua.UDP_Importaciones_Anio";
+
         #endregion
     }
 }
