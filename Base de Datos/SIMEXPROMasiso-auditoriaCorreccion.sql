@@ -1774,12 +1774,22 @@ GO
 CREATE TABLE Adua.tbPersonaJuridica (
 	peju_Id							  				INT IDENTITY(1,1) ,
 	pers_Id							  				INT NOT NULL,
-	peju_EstadoRepresentante						INT NOT NULL,
+	peju_DNI                                        NVARCHAR(20), --nuevo 
+	peju_DNIRepresentante                           NVARCHAR(20), --nuevo
+	peju_EscrituraPublica                           NVARCHAR(200), 
+
 	colo_Id							  				INT NOT NULL,
-	peju_PuntoReferencia							NVARCHAR(200) NOT NULL,
-	peju_ColoniaRepresentante						INT NOT NULL,
-	peju_NumeroLocalRepresentante		  				NVARCHAR(200) NOT NULL,
-	peju_PuntoReferenciaRepresentante	  				NVARCHAR(200) NOT NULL,
+	ciud_Id                                         INT NOT NULL,   -- nuevo
+	alde_Id								            INT,            --nuevo
+	peju_PuntoReferencia							NVARCHAR(200),
+	peju_NumeroLocalApart				            NVARCHAR(150),  --nuevo
+
+    peju_CiudadIdRepresentante                      INT,            --nuevo
+	peju_ColoniaRepresentante						INT NOT NULL,   --nuevo
+	peju_AldeaIdRepresentante                       INT,            --nuevo
+	peju_NumeroLocalRepresentante		  			NVARCHAR(200) NOT NULL,
+	peju_PuntoReferenciaRepresentante	  			NVARCHAR(200) NOT NULL,
+
 	peju_TelefonoEmpresa							NVARCHAR(200) NOT NULL,
 	peju_TelefonoFijoRepresentanteLegal 			NVARCHAR(200) NOT NULL,
 	peju_TelefonoRepresentanteLegal	  				NVARCHAR(200) NOT NULL,
@@ -1795,16 +1805,17 @@ CREATE TABLE Adua.tbPersonaJuridica (
 	peju_Estado                						BIT DEFAULT 1,
 
 	CONSTRAINT PK_Adua_tbPersonaJuridica_peju_Id PRIMARY KEY (peju_Id),
-	CONSTRAINT FK_Adua_tbPersonaJuridica_pers_Id_Adua_Personas_pers_Id                               FOREIGN KEY (pers_Id) REFERENCES Adua.tbPersonas(pers_Id),
-	CONSTRAINT FK_Adua_tbPersonaJuridica_peju_EstadoRepresentante_Gral_tbProvincias_pvin_Id          FOREIGN KEY (peju_EstadoRepresentante) REFERENCES Gral.tbProvincias(pvin_Id),
-	CONSTRAINT FK_Adua_tbPersonaJuridica_colo_Id_Gral_tbColonias_colo_Id                                FOREIGN KEY (colo_Id) REFERENCES Gral.tbColonias(colo_Id),
-	CONSTRAINT FK_Adua_tbPersonaJuridica_peju_ColoniaRepresentante_Gral_ColoniaRepresentante_colo_Id FOREIGN KEY (peju_ColoniaRepresentante) REFERENCES Gral.tbColonias(colo_Id),
-  
-	CONSTRAINT FK_Adua_PersonaJuridica_peju_UsuarioCreacion_Acce_tbUsuarios_usua_Id			  	 FOREIGN KEY (usua_UsuarioCreacion)     REFERENCES Acce.tbUsuarios (usua_Id),
-	CONSTRAINT FK_Adua_PersonaJuridica_peju_UsuarioModificacion_Acce_tbUsuarios_usua_Id		     FOREIGN KEY (usua_UsuarioModificacion) REFERENCES Acce.tbUsuarios (usua_Id),
+	CONSTRAINT FK_Adua_tbPersonaJuridica_pers_Id_Adua_Personas_pers_Id                               FOREIGN KEY (pers_Id)                    REFERENCES Adua.tbPersonas(pers_Id),
+	CONSTRAINT FK_Adua_tbPersonaJuridica_colo_Id_Gral_tbColonias_colo_Id                             FOREIGN KEY (colo_Id)                    REFERENCES Gral.tbColonias(colo_Id),
+	CONSTRAINT FK_Adua_tbPersonaJuridica_peju_ColoniaRepresentante_Gral_ColoniaRepresentante_colo_Id FOREIGN KEY (peju_ColoniaRepresentante)  REFERENCES Gral.tbColonias(colo_Id),
+	CONSTRAINT FK_Adua_tbPersonaJuridica_alde_Id_tbAldeas                                            FOREIGN KEY (alde_Id)                    REFERENCES Gral.tbAldeas(alde_Id),
+	CONSTRAINT FK_Adua_tbPersonaJuridica_AldeaIdRepresentante_tbAldea                                FOREIGN KEY (peju_AldeaIdRepresentante)  REFERENCES Gral.tbAldeas(alde_Id),
+	CONSTRAINT FK_Adua_tbPersonaJuridica_Ciudad_Id_tbCiudad                                          FOREIGN KEY (ciud_Id)                    REFERENCES Gral.tbCiudades(ciud_Id),
+	CONSTRAINT FK_Adua_tbPersonaJuridica_CiudadIdRepresentante_tbCiudad                              FOREIGN KEY (peju_CiudadIdRepresentante) REFERENCES Gral.tbCiudades(ciud_Id),
+	CONSTRAINT FK_Adua_PersonaJuridica_peju_UsuarioCreacion_Acce_tbUsuarios_usua_Id			  	     FOREIGN KEY (usua_UsuarioCreacion)       REFERENCES Acce.tbUsuarios (usua_Id),
+	CONSTRAINT FK_Adua_PersonaJuridica_peju_UsuarioModificacion_Acce_tbUsuarios_usua_Id		         FOREIGN KEY (usua_UsuarioModificacion)   REFERENCES Acce.tbUsuarios (usua_Id),
 	--CONSTRAINT FK_Adua_PersonaJuridica_peju_Acce_tbUsuarios_usua_UsuarioEliminacion_usua_Id  FOREIGN KEY (usua_UsuarioEliminacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id)
 );
-
 GO
 
 --Se identificarán los tipos de documentos según acortaciones

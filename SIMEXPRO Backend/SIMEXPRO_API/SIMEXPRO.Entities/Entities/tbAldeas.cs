@@ -9,6 +9,7 @@ namespace SIMEXPRO.Entities.Entities
 {
     public partial class tbAldeas
     {
+
         public tbAldeas()
         {
             tbColonias = new HashSet<tbColonias>();
@@ -48,9 +49,12 @@ namespace SIMEXPRO.Entities.Entities
         public virtual tbUsuarios usua_UsuarioEliminacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }
         public virtual ICollection<tbColonias> tbColonias { get; set; }
-        public virtual ICollection<tbComercianteIndividual> tbComercianteIndividualcoin_AldeaRepresentanteNavigation { get; set; }
+        public virtual ICollection<tbPersonaJuridica> tbPersonaJuridicapeju_AldeaIdRepresentanteNavigation { get; set; }
 
+        public virtual ICollection<tbComercianteIndividual> tbComercianteIndividualcoin_AldeaRepresentanteNavigation { get; set; }
         public virtual ICollection<tbComercianteIndividual> tbComercianteIndividualalde { get; set; }
+        public virtual ICollection<tbPersonaJuridica> tbPersonaJuridicaalde { get; set; }
+
 
 
     }

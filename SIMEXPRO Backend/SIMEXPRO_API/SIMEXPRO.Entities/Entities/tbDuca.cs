@@ -9,6 +9,8 @@ namespace SIMEXPRO.Entities.Entities
 {
     public partial class tbDuca
     {
+        public int duca_AduanaDestino { get; set; }
+
         public string duca_No_Duca { get; set; }
         public string duca_No_Correlativo_Referencia { get; set; }
         public int? deva_Id { get; set; }
@@ -186,6 +188,7 @@ namespace SIMEXPRO.Entities.Entities
         public virtual tbAduanas duca_AduanaSalidaNavigation { get; set; }
         public virtual tbConductor duca_Conductor { get; set; }
         public virtual tbPaises duca_Pais_DestinoNavigation { get; set; }
+        public virtual tbAduanas duca_AduanaDestinoNavigation { get; set; }
 
         public virtual tbLugaresEmbarque duca_Lugar_DesembarqueNavigation { get; set; }
         public virtual tbPaises duca_Pais_Emision_ExportadorNavigation { get; set; }

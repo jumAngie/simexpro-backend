@@ -2598,7 +2598,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
-        public ServiceResult InsertarPersonaJuridica(tbPersonaJuridica item)
+        public ServiceResult InsertarPersonaJuridica(tbPersonas item)
         {
             var result = new ServiceResult();
             try
@@ -2611,6 +2611,90 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 else
                 {
                         
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarPersonaJuridicaTap2(tbPersonaJuridica item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _personaJuridicaRepository.InsertTap2(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarPersonaJuridicaTap3(tbPersonaJuridica item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _personaJuridicaRepository.InsertTap3(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarPersonaJuridicaTap4(tbPersonaJuridica item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _personaJuridicaRepository.InsertTap4(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarPersonaJuridicaTap5(tbPersonaJuridica item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _personaJuridicaRepository.InsertTap5(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
                     return result.Error(map);
                 }
             }
