@@ -2914,6 +2914,20 @@ BEGIN
 		DECLARE @pers_FechaCreacion DATETIME = @coin_FechaCreacion;
 		DECLARE @pers_Id INT;
 		DECLARE @coin_Id INT;
+		DECLARE @estadoCivilRep INT;
+		DECLARE @oficioRep	INT;
+
+	IF(@pers_escvRepresentante = 0 AND @pers_OfprRepresentante = 0 )
+	BEGIN
+		SET @estadoCivilRep = NULL;
+		SET @oficioRep = NULL
+	END
+	ELSE
+	BEGIN
+	SET @estadoCivilRep = @pers_escvRepresentante;
+	SET @oficioRep = @pers_OfprRepresentante;
+	END
+
 
 		INSERT INTO Adua.tbPersonas ([pers_RTN], 
 									 [ofic_Id],
@@ -2927,8 +2941,8 @@ BEGIN
 		@ofic_Id,
 		@escv_Id,
 		@ofpr_Id,
-		@pers_escvRepresentante,
-		@pers_OfprRepresentante,
+		@estadoCivilRep,
+		@oficioRep,
 		@usua_UsuarioCreacion,
 		@pers_FechaCreacion )
 		SET  @pers_Id = SCOPE_IDENTITY() 
@@ -2966,8 +2980,17 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap2  --6,63,
 AS
 BEGIN
 	BEGIN TRY
+	DECLARE  @aldea INT;
+	IF(@alde_Id = 0 )
+	BEGIN
+		SET @aldea = NULL;
+	END
+	ELSE
+	 BEGIN
+	 	SET @aldea = @alde_Id;
+	 END
 		UPDATE Adua.tbComercianteIndividual
-		SET ciud_Id = @ciud_Id, alde_Id = @alde_Id, coin_PuntoReferencia = @coin_PuntoReferencia,
+		SET ciud_Id = @ciud_Id, alde_Id = @aldea, coin_PuntoReferencia = @coin_PuntoReferencia,
 		    colo_Id = @colo_Id, coin_NumeroLocalApart = @coin_NumeroLocalApart
 		WHERE coin_Id = @coin_Id
 		SELECT 1
@@ -2990,9 +3013,19 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap3
 AS
 BEGIN
 	BEGIN TRY
+	DECLARE  @aldea INT;
+	IF(@coin_AldeaRepresentante = 0 )
+	BEGIN
+		SET @aldea = NULL;
+	END
+	ELSE
+	 BEGIN
+	 	SET @aldea = @coin_AldeaRepresentante;
+	 END
+
 		UPDATE Adua.tbComercianteIndividual
 		SET coin_CiudadRepresentante = @coin_CiudadRepresentante, 
-		coin_AldeaRepresentante = @coin_AldeaRepresentante,
+		coin_AldeaRepresentante = @aldea,
 		coin_PuntoReferenciaReprentante = @coin_PuntoReferenciaReprentante,
 		coin_coloniaIdRepresentante = @coin_coloniaIdRepresentante,
 		coin_NumeroLocaDepartRepresentante = @coin_NumeroLocaDepartRepresentante
