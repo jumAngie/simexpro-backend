@@ -3302,14 +3302,16 @@ BEGIN
 
 			,provincias.pvin_Id
 			,provincias.pvin_Nombre
-			,aldea.ciud_Id
-			,colonia.alde_Id
-			,aldea.alde_Nombre
+			,ciudades.ciud_Id
+			,ciudades.ciud_nombre
+			,colonia.colo_Id
+			,colonia.colo_Nombre
+			,coloniaRepresentante.colo_Id
+			,coloniaRepresentante.colo_Nombre
 			,personaJuridica.peju_DNIRepresentante
 			,personaJuridica.peju_DNI
 			,personaJuridica.peju_EscrituraPublica
 			,personaJuridica.colo_Id
-			,colonia.colo_Nombre
 			,personaJuridica.peju_PuntoReferencia
 			,personaJuridica.peju_ColoniaRepresentante
 			,personaJuridica.peju_NumeroLocalRepresentante
