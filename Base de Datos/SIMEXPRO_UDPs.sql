@@ -3064,16 +3064,18 @@ GO
 
 CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap5
 	@coin_Id							INT,
-	@coin_DNI							NVARCHAR(20),
-	@coin_DNIrepresentante				NVARCHAR(20),
-	@coin_DeclaracionComerciante		VARCHAR(50)
+	@doco_URLImagen                     NVARCHAR(MAX),
+	@doco_NombreImagen					NVARCHAR(350),
+	@doco_Numero_O_Referencia			NVARCHAR(50),
+	@doco_TipoDocumento					NVARCHAR(6)
 AS
 BEGIN
 	BEGIN TRY
 			UPDATE Adua.tbComercianteIndividual
-		SET coin_DNI = @coin_DNI,
-			coin_DNIrepresentante = @coin_DNIrepresentante,
-			coin_DeclaracionComerciante = @coin_DeclaracionComerciante
+		SET doco_URLImagen = @doco_URLImagen,
+		    doco_NombreImagen = @doco_NombreImagen,
+			doco_Numero_O_Referencia = @doco_Numero_O_Referencia,
+			doco_TipoDocumento = @doco_TipoDocumento
 		 WHERE coin_Id = @coin_Id
 		 SELECT 1
 	END TRY

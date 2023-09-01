@@ -1840,6 +1840,8 @@ CREATE TABLE Adua.tbDocumentosContratos(
 	peju_Id								INT,
 	doco_Numero_O_Referencia			NVARCHAR(50) NOT NULL,
 	doco_TipoDocumento					NVARCHAR(6),
+	doco_URLImagen                      NVARCHAR(MAX),
+	doco_NombreImagen                   NVARCHAR(350),
 
 	usua_UsuarioCreacion       			INT NOT NULL,
   	doco_FechaCreacion         			DATETIME NOT NULL,
