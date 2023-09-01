@@ -7817,8 +7817,8 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_InsertarTab1
 AS
 BEGIN
 	BEGIN TRY
-		INSERT INTO Adua.tbDuca (duca_No_Duca, duca_No_Correlativo_Referencia, deva_Id, duca_AduanaRegistro, duca_AduanaDestino, duca_Regimen_Aduanero, duca_Modalidad,duca_Clase, duca_FechaVencimiento,duca_Pais_Procedencia,duca_Pais_Destino ,duca_Deposito_Aduanero, duca_Lugar_Desembarque,duca_Manifiesto,duca_Titulo)
-		VALUES (@duca_No_Duca, @duca_No_Correlativo_Referencia, @deva_Id, @duca_AduanaRegistro,@duca_AduanaDestino, @duca_Regimen_Aduanero, @duca_Modalidad,@duca_Clase,@duca_FechaVencimiento,@duca_Pais_Procedencia,@duca_Pais_Destino,@duca_Deposito_Aduanero,@duca_Lugar_Desembarque,@duca_Manifiesto,@duca_Titulo)
+		INSERT INTO Adua.tbDuca (duca_No_Duca, duca_No_Correlativo_Referencia, deva_Id, duca_AduanaRegistro, duca_AduanaDestino, duca_Regimen_Aduanero, duca_Modalidad,duca_Clase, duca_FechaVencimiento,duca_Pais_Procedencia,duca_Pais_Destino ,duca_Deposito_Aduanero, duca_Lugar_Desembarque,duca_Manifiesto,duca_Titulo, usua_UsuarioCreacion, duca_FechaCreacion)
+		VALUES (@duca_No_Duca, @duca_No_Correlativo_Referencia, @deva_Id, @duca_AduanaRegistro,@duca_AduanaDestino, @duca_Regimen_Aduanero, @duca_Modalidad,@duca_Clase,@duca_FechaVencimiento,@duca_Pais_Procedencia,@duca_Pais_Destino,@duca_Deposito_Aduanero,@duca_Lugar_Desembarque,@duca_Manifiesto,@duca_Titulo, @usua_UsuarioCreacion, @duca_FechaCreacion)
 
 		SELECT 1
 	END TRY
@@ -7844,7 +7844,7 @@ CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbDuca_InsertarTab2]
 	@cont_Apellido						NVARCHAR(200),
 	@pais_Id							INT,
 	@marca_Id							INT,
-	@tran_IdUnidadTransporte			INT,
+	@tran_IdUnidadTransporte			VARCHAR(50),
 	@tran_Chasis						NVARCHAR(100),
 	@tran_Remolque						NVARCHAR(50),
 	@tran_CantCarga						INT,
