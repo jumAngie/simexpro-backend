@@ -310,6 +310,9 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.HasIndex(e => new { e.adua_Codigo, e.adua_Nombre }, "UQ_Adua_tbAduanas_adua_Codigo")
                     .IsUnique();
 
+                entity.HasIndex(e => e.adua_Codigo, "UQ_Adua_tbAduanas_adua_Codigo1")
+                    .IsUnique();
+
                 entity.Property(e => e.adua_Codigo)
                     .IsRequired()
                     .HasMaxLength(4)
@@ -752,12 +755,6 @@ namespace SIMEXPRO.DataAccess.Context
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Adua_tbBoletinPago_esbo_Id_Adua_tbEstadoBoletin_esbo_Id");
 
-                entity.HasOne(d => d.liqu)
-                    .WithMany(p => p.tbBoletinPago)
-                    .HasForeignKey(d => d.liqu_Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Adua_tbBoletinPago_lige_Id_Adua_tbLiquidacionGeneral_lige_Id");
-
                 entity.HasOne(d => d.tipl)
                     .WithMany(p => p.tbBoletinPago)
                     .HasForeignKey(d => d.tipl_Id)
@@ -1148,14 +1145,6 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.coin_CorreoElectronicoAlternativo).HasMaxLength(30);
 
-                entity.Property(e => e.coin_DNI).HasMaxLength(20);
-
-                entity.Property(e => e.coin_DNIrepresentante).HasMaxLength(20);
-
-                entity.Property(e => e.coin_DeclaracionComerciante)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.coin_Estado).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.coin_FechaCreacion).HasColumnType("datetime");
@@ -1404,8 +1393,8 @@ namespace SIMEXPRO.DataAccess.Context
                     .HasMaxLength(50);
 
                 entity.Property(e => e.cont_NoIdentificacion)
-                   .IsRequired()
-                   .HasMaxLength(50);
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.cont_Nombre)
                     .IsRequired()
@@ -1685,6 +1674,8 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.Property(e => e.doco_FechaCreacion).HasColumnType("datetime");
 
                 entity.Property(e => e.doco_FechaModificacion).HasColumnType("datetime");
+
+                entity.Property(e => e.doco_NombreImagen).HasMaxLength(350);
 
                 entity.Property(e => e.doco_Numero_O_Referencia)
                     .IsRequired()
@@ -2697,6 +2688,9 @@ namespace SIMEXPRO.DataAccess.Context
                     .HasName("PK_Adua_tbImpuestos_impu_Id");
 
                 entity.ToTable("tbImpuestos", "Adua");
+
+                entity.HasIndex(e => e.impu_Descripcion, "UQ_Adua_tbImpuestos_impu_Descripcion")
+                    .IsUnique();
 
                 entity.Property(e => e.impu_Descripcion)
                     .IsRequired()
@@ -4237,13 +4231,9 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.ToTable("tbPersonaJuridica", "Adua");
 
-                entity.Property(e => e.peju_CorreoElectronico)
-                    .IsRequired()
-                    .HasMaxLength(200);
+                entity.Property(e => e.peju_CorreoElectronico).HasMaxLength(200);
 
-                entity.Property(e => e.peju_CorreoElectronicoAlternativo)
-                    .IsRequired()
-                    .HasMaxLength(200);
+                entity.Property(e => e.peju_CorreoElectronicoAlternativo).HasMaxLength(200);
 
                 entity.Property(e => e.peju_DNI).HasMaxLength(20);
 
@@ -4259,29 +4249,17 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.peju_NumeroLocalApart).HasMaxLength(150);
 
-                entity.Property(e => e.peju_NumeroLocalRepresentante)
-                    .IsRequired()
-                    .HasMaxLength(200);
+                entity.Property(e => e.peju_NumeroLocalRepresentante).HasMaxLength(200);
 
-                entity.Property(e => e.peju_PuntoReferencia)
-                    .IsRequired()
-                    .HasMaxLength(200);
+                entity.Property(e => e.peju_PuntoReferencia).HasMaxLength(200);
 
-                entity.Property(e => e.peju_PuntoReferenciaRepresentante)
-                    .IsRequired()
-                    .HasMaxLength(200);
+                entity.Property(e => e.peju_PuntoReferenciaRepresentante).HasMaxLength(200);
 
-                entity.Property(e => e.peju_TelefonoEmpresa)
-                    .IsRequired()
-                    .HasMaxLength(200);
+                entity.Property(e => e.peju_TelefonoEmpresa).HasMaxLength(200);
 
-                entity.Property(e => e.peju_TelefonoFijoRepresentanteLegal)
-                    .IsRequired()
-                    .HasMaxLength(200);
+                entity.Property(e => e.peju_TelefonoFijoRepresentanteLegal).HasMaxLength(200);
 
-                entity.Property(e => e.peju_TelefonoRepresentanteLegal)
-                    .IsRequired()
-                    .HasMaxLength(200);
+                entity.Property(e => e.peju_TelefonoRepresentanteLegal).HasMaxLength(200);
 
                 entity.HasOne(d => d.alde)
                     .WithMany(p => p.tbPersonaJuridicaalde)
@@ -4296,7 +4274,6 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.HasOne(d => d.colo)
                     .WithMany(p => p.tbPersonaJuridicacolo)
                     .HasForeignKey(d => d.colo_Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Adua_tbPersonaJuridica_colo_Id_Gral_tbColonias_colo_Id");
 
                 entity.HasOne(d => d.peju_AldeaIdRepresentanteNavigation)
@@ -4312,7 +4289,6 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.HasOne(d => d.peju_ColoniaRepresentanteNavigation)
                     .WithMany(p => p.tbPersonaJuridicapeju_ColoniaRepresentanteNavigation)
                     .HasForeignKey(d => d.peju_ColoniaRepresentante)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Adua_tbPersonaJuridica_peju_ColoniaRepresentante_Gral_ColoniaRepresentante_colo_Id");
 
                 entity.HasOne(d => d.pers)
@@ -5281,7 +5257,16 @@ namespace SIMEXPRO.DataAccess.Context
                     .IsRequired()
                     .HasMaxLength(100);
 
+                entity.Property(e => e.tran_IdUnidadTransporte)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.tran_Remolque).HasMaxLength(50);
+
+                entity.Property(e => e.tran_TamanioEquipamiento)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.tran_TipoCarga)
                     .IsRequired()

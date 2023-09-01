@@ -33,7 +33,16 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public int ciud_Id { get; set; }
 
         public string ciud_Nombre { get; set; }
-       
+
+        [NotMapped]
+        public string doco_Numero_O_Referencia { get; set; }
+        [NotMapped]
+        public string doco_TipoDocumento { get; set; }
+        [NotMapped]
+        public string doco_URLImagen { get; set; }
+        [NotMapped]
+        public string doco_NombreImagen { get; set; }
+
         public int pvin_Id { get; set; }
 
         public string pvin_Codigo { get; set; }
