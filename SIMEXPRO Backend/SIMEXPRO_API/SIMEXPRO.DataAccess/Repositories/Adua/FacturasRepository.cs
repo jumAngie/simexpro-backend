@@ -17,13 +17,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
-            parametros.Add("@deva_Id", item.deva_Id, DbType.String, ParameterDirection.Input);
-            parametros.Add("@fact_Numero", item.fact_Numero, DbType.String, ParameterDirection.Input);
-            parametros.Add("@fact_Fecha", item.fact_Fecha, DbType.Date, ParameterDirection.Input);
-            parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@fact_FechaCreacion", item.fact_FechaCreacion, DbType.String, ParameterDirection.Input);
-
-            var answer = db.QueryFirst<string>(ScriptsDataBase.InsertarFacturas, parametros, commandType: CommandType.StoredProcedure);
+            parametros.Add("@fact_Id", item.fact_Id, DbType.Int32, ParameterDirection.Input);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.EliminarFacturas, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
             return result;
         }
@@ -44,6 +39,17 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@fact_FechaCreacion", item.fact_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.InsertarFacturas, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
+        }
+
+        public RequestStatus VerficarFactura (string fact_Numero)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@fact_Numero", fact_Numero, DbType.String, ParameterDirection.Input);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.VerificarFacturas, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
             return result;
         }

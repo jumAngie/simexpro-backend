@@ -3300,19 +3300,14 @@ BEGIN
 			,personas.pers_escvRepresentante
 			,estadoCivilRepresentante.escv_Nombre AS escv_RepresentanteNombre
 
-			,personas.pers_OfprRepresentante
-			,oficioProfesionRepresentante.ofpr_Nombre AS ofpr_RepresentanteNombre
-			,provicionciasRepresentante.pais_Id AS pais_RepresentanteId
-			,personaJuridica.peju_EstadoRepresentante
-			,provicionciasRepresentante.pvin_Nombre AS pvin_RepresentanteNombre
-			,provincias.pais_Id 
-
 			,provincias.pvin_Id
 			,provincias.pvin_Nombre
 			,aldea.ciud_Id
 			,colonia.alde_Id
 			,aldea.alde_Nombre
-
+			,personaJuridica.peju_DNIRepresentante
+			,personaJuridica.peju_DNI
+			,personaJuridica.peju_EscrituraPublica
 			,personaJuridica.colo_Id
 			,colonia.colo_Nombre
 			,personaJuridica.peju_PuntoReferencia
@@ -3342,7 +3337,6 @@ BEGIN
 			LEFT JOIN   Gral.tbColonias					coloniaRepresentante					ON personaJuridica.peju_ColoniaRepresentante	= coloniaRepresentante.colo_Id
 			LEFT JOIN  gral.tbAldeas					aldeaRepresentante						ON coloniaRepresentante.alde_Id					= aldeaRepresentante.alde_Id
 			LEFT JOIN	Gral.tbCiudades					ciudadesReprentante						ON aldeaRepresentante.ciud_Id					= ciudadesReprentante.ciud_Id
-			LEFT JOIN	Gral.tbProvincias				provicionciasRepresentante				ON personaJuridica.peju_EstadoRepresentante		= provicionciasRepresentante.pvin_Id
 
 			LEFT JOIN  Gral.tbColonias					colonia									ON personaJuridica.colo_Id						= colonia.colo_Id
 			LEFT JOIN  gral.tbAldeas					aldea									ON colonia.alde_Id								= aldea.alde_Id
@@ -6543,8 +6537,29 @@ BEGIN
 	WHERE deva_Id = @deva_Id
 END
 
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbFacturas_VerificarFacturas
+	@fact_Numero	NVARCHAR(500)
+AS
+BEGIN	
+	BEGIN TRY
+		IF EXISTS (SELECT fact_Id FROM Adua.tbFacturas WHERE fact_Numero = @fact_Numero)
+			BEGIN 
+				SELECT 1
+			END
+		ELSE
+			BEGIN
+				SELECT 0
+			END
+	END TRY
+	BEGIN CATCH
+		SELECT -2
+	END CATCH
+END
 
 GO
+
 CREATE OR ALTER PROCEDURE Adua.UDP_tbFacturas_Insertar
 	@deva_Id					INT,
 	@fact_Numero				NVARCHAR(4000),
@@ -6638,19 +6653,30 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbFacturas_Eliminar
+
+ALTER   PROCEDURE [Adua].[UDP_tbFacturas_Eliminar]
 	@fact_Id			INT
 AS
 BEGIN
 	BEGIN TRANSACTION
 	BEGIN TRY
-		DELETE FROM Adua.tbItems
-		WHERE fact_Id = @fact_Id
 
-		DELETE FROM Adua.tbFacturas
-		WHERE fact_Id = @fact_Id
+	DECLARE @respuesta INT
+	EXEC dbo.UDP_ValidarReferencias 'fact_Id', @fact_Id,'Adua.tbFacturas',@respuesta OUTPUT
 
-		SELECT 1
+	SELECT @respuesta AS Resultado
+	IF(@respuesta = 1)
+		BEGIN
+
+			DELETE FROM Adua.tbItems
+			WHERE fact_Id = @fact_Id
+
+			DELETE FROM Adua.tbFacturas
+			WHERE fact_Id = @fact_Id
+
+			SELECT 1
+
+		END
 		COMMIT TRAN
 	END TRY
 	BEGIN CATCH
@@ -6658,6 +6684,7 @@ BEGIN
 		ROLLBACK TRAN
 	END CATCH
 END
+
 
 GO
 /* LISTAR items*/
@@ -6842,7 +6869,7 @@ BEGIN
 END
 
 GO
-CREATE OR ALTER PROCEDURE Adua.UDP_tbItems_Editar
+CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbItems_Editar]
 	@item_Id									INT,
 	@fact_Id									INT, 
 	@item_Cantidad								INT, 
@@ -6873,8 +6900,7 @@ BEGIN
 	BEGIN TRY
 		
 		UPDATE Adua.tbItems
-		SET fact_Id = @fact_Id, 
-			item_Cantidad = @item_Cantidad, 
+		SET item_Cantidad = @item_Cantidad, 
 			item_PesoNeto = @item_PesoNeto, 
 			item_PesoBruto = @item_PesoBruto, 
 			unme_Id = @unme_Id, 
@@ -6898,8 +6924,7 @@ BEGIN
 			item_FechaModificacion = @item_FechaModificacion
 		WHERE item_Id = @item_Id
 
-		INSERT INTO Adua.tbItemsHistorial(item_Id, 
-											  fact_Id, 
+		INSERT INTO Adua.tbItemsHistorial(item_Id,
 											  item_Cantidad, 
 											  item_PesoNeto, 
 											  item_PesoBruto, 
@@ -6925,7 +6950,6 @@ BEGIN
 											  hduc_Accion)
 
 			VALUES (@item_Id, 
-					@fact_Id, 
 					@item_Cantidad, 
 					@item_PesoNeto, 
 					@item_PesoBruto, 
@@ -6959,6 +6983,7 @@ BEGIN
 		ROLLBACK TRAN
 	END CATCH
 END
+
 GO
 
 CREATE OR ALTER PROCEDURE Adua.UDP_tbItems_Eliminar
@@ -7834,7 +7859,7 @@ BEGIN
 	SET @tran_FechaCreacion = GETDATE();
 	BEGIN TRY
 		BEGIN TRAN
-			IF @pais_Id IS NOT NULL
+			IF @pais_Id > 0
 				BEGIN
 					INSERT INTO Adua.tbTransporte (pais_Id, tran_Chasis, marca_Id, tran_Remolque, tran_CantCarga, tran_NumDispositivoSeguridad, tran_Equipamiento, tran_TipoCarga, tran_IdContenedor, usua_UsuarioCreacio, tran_FechaCreacion, usua_UsuarioModificacion, tran_FechaModificacion, usua_UsuarioEliminacion, trant_FechaEliminacion, tran_Estado,tran_IdUnidadTransporte, tran_TamanioEquipamiento)
 					VALUES(@pais_Id,@tran_Chasis,@marca_Id,@tran_Remolque,@tran_CantCarga,@tran_NumDispositivoSeguridad,@tran_Equipamiento,@tran_TipoCarga,@tran_IdContenedor,@usua_UsuarioCreacio,@tran_FechaCreacion,NULL,NULL,NULL,NULL,1,@tran_IdUnidadTransporte,@tran_TamanioEquipamiento);

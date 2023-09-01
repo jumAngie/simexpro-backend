@@ -2268,7 +2268,7 @@ GO
 ---- DUCA ----
 CREATE TABLE Adua.tbTransporte( 
 	tran_Id							INT IDENTITY(1,1),
-	tran_IdUnidadTransporte			INT NOT NULL,
+	tran_IdUnidadTransporte			VARCHAR(50) NOT NULL,
 	pais_Id							INT,
 	tran_Chasis						NVARCHAR(100) NOT NULL,
 	marca_Id						INT NOT NULL,
