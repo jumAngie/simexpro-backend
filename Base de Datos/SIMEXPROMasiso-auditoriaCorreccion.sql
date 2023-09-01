@@ -1694,9 +1694,6 @@ GO
 CREATE TABLE Adua.tbComercianteIndividual (
   	coin_Id                           	INT IDENTITY(1,1),
   	pers_Id                           	INT NOT NULL,
-	coin_DNI							NVARCHAR(20), --sujeto a cambios/  nuevo
-	coin_DNIrepresentante				NVARCHAR(20), --sujeto a cambios/  nuevo
-
 
   	pers_FormaRepresentacion 			BIT NOT NULL,
 	ciud_Id								INT, --nuevo
@@ -1715,8 +1712,7 @@ CREATE TABLE Adua.tbComercianteIndividual (
   	coin_TelefonoFijo				    NVARCHAR(20),
   	coin_CorreoElectronico		    	NVARCHAR(30),
   	coin_CorreoElectronicoAlternativo 	NVARCHAR(30),
-	coin_DeclaracionComerciante			VARCHAR(50), --sujeto a cambios/  nuevo
- 
+	
   	usua_UsuarioCreacion       			INT NOT NULL,
   	coin_FechaCreacion         			DATETIME NOT NULL,
   	usua_UsuarioModificacion   			INT DEFAULT NULL,
@@ -1741,6 +1737,10 @@ CREATE TABLE Adua.tbComercianteIndividual (
 	
 );
 GO
+
+
+
+
 
 CREATE TABLE Adua.tbPersonaNatural (
 	pena_Id						INT IDENTITY(1,1),

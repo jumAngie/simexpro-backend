@@ -115,10 +115,10 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             var parametros = new DynamicParameters();
 
             parametros.Add("@coin_Id", item.coin_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@coin_DNI", item.coin_DNI, DbType.String, ParameterDirection.Input);
-            parametros.Add("@coin_DNIrepresentante", item.coin_DNIrepresentante, DbType.String, ParameterDirection.Input);
-            parametros.Add("@coin_DeclaracionComerciante", item.coin_DeclaracionComerciante, DbType.String, ParameterDirection.Input);
-
+            parametros.Add("@doco_URLImagen", item.doco_URLImagen, DbType.String, ParameterDirection.Input);
+            parametros.Add("@doco_NombreImagen", item.doco_NombreImagen, DbType.String, ParameterDirection.Input);
+            parametros.Add("@doco_Numero_O_Referencia", item.doco_Numero_O_Referencia, DbType.String, ParameterDirection.Input);
+            parametros.Add("@doco_TipoDocumento", item.doco_TipoDocumento, DbType.String, ParameterDirection.Input);
             var respuesta = db.QueryFirst<string>(ScriptsDataBase.InsertarComercianteIndividualTap5, parametros, commandType: CommandType.StoredProcedure);
             return new RequestStatus()
             {
