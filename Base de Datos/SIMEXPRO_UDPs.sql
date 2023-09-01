@@ -3288,39 +3288,49 @@ GO
 CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_Listar
 AS
 BEGIN
-	SELECT	 personaJuridica.peju_Id
-			,personas.pers_Id
-			,personas.pers_RTN
-			,personas.ofic_Id
-			,oficina.ofic_Nombre
-			,personas.escv_Id
-			,estadoCivil.escv_Nombre
-			,personas.ofpr_Id
-			,oficioProfesion.ofpr_Nombre
-			,personas.pers_escvRepresentante
-			,estadoCivilRepresentante.escv_Nombre AS escv_RepresentanteNombre
-
-			,provincias.pvin_Id
-			,provincias.pvin_Nombre
-			,ciudades.ciud_Id
-			,ciudades.ciud_nombre
-			,colonia.colo_Id
-			,colonia.colo_Nombre
-			,coloniaRepresentante.colo_Id
-			,coloniaRepresentante.colo_Nombre
-			,personaJuridica.peju_DNIRepresentante
-			,personaJuridica.peju_DNI
-			,personaJuridica.peju_EscrituraPublica
-			,personaJuridica.colo_Id
+	SELECT	 personaJuridica.peju_Id      --
+			,personas.pers_Id             --
+			,personas.pers_RTN            --
+			,personas.ofic_Id             -- TABLA PERSONA TAB 1
+			,oficina.ofic_Nombre          -- 
+			,personas.escv_Id             --
+			,estadoCivil.escv_Nombre      --
+			,personas.ofpr_Id             --
+			,oficioProfesion.ofpr_Nombre  --
+		   
+			,personaJuridica.colo_Id               AS IdColiniaEmpresa
+			,colonia.colo_Nombre                   AS ColiniaEmpresa
+			,personaJuridica.ciud_Id               AS IdCiudadEmpresa
+			,ciudad.ciud_Nombre                    AS CiudadEmpresa
+			,personaJuridica.alde_Id               AS IdAldeaEmpresa    --Tab 2
+			,Aldea.alde_Nombre                     AS AldeaEmpresa 
+			,Provincia.pvin_Id                     AS IdProvinciaEmpresa
+			,Provincia.pvin_Nombre                 AS ProvinciaEmpresa
 			,personaJuridica.peju_PuntoReferencia
-			,personaJuridica.peju_ColoniaRepresentante
+			,personaJuridica.peju_NumeroLocalApart
+
+			,personaJuridica.peju_ColoniaRepresentante  AS IdcoliniaRepresentante
+			,coloniaRepresentante.colo_Nombre           AS ColoniaRepresentante
+			,personaJuridica.peju_AldeaIdRepresentante  AS IdAldeaRepresentante
+			,aldeaRepresentante.alde_Nombre             AS AldeaRepresemtante  --Tab 3
+			,personaJuridica.peju_CiudadIdRepresentante AS IdCiudadRepresentante
+			,ciudadesReprentante.ciud_Nombre            AS CiudadRepresentante
+			,Provincia.pvin_Id                          AS IdProvinciaRepresentante
+			,Provincia.pvin_Nombre                      AS ProvinciaRepresentante
 			,personaJuridica.peju_NumeroLocalRepresentante
 			,personaJuridica.peju_PuntoReferenciaRepresentante
+
 			,personaJuridica.peju_TelefonoEmpresa
 			,personaJuridica.peju_TelefonoFijoRepresentanteLegal
-			,personaJuridica.peju_TelefonoRepresentanteLegal
-			,personaJuridica.peju_CorreoElectronico
+			,personaJuridica.peju_TelefonoRepresentanteLegal        --Tab 4
+			,personaJuridica.peju_CorreoElectronico 
 			,personaJuridica.peju_CorreoElectronicoAlternativo
+
+			,personaJuridica.peju_DNIRepresentante
+			,personaJuridica.peju_RTNSociedadMercantil                --Tab 5
+			,personaJuridica.peju_EscrituraPublica
+			,personaJuridica.peju_RTNReprsentanteLegal
+
 			,personaJuridica.usua_UsuarioCreacion
 			,usuarioCreacion.usua_Nombre				as usuarioCreacionNombre
 			,personaJuridica.peju_FechaCreacion
@@ -3333,17 +3343,16 @@ BEGIN
 			LEFT JOIN	Gral.tbOficinas					oficina									ON personas.ofic_Id								= oficina.ofic_Id
 			LEFT JOIN	Gral.tbEstadosCiviles			estadoCivil								ON personas.escv_Id								= estadoCivil.escv_Id
 			LEFT JOIN	Gral.tbOficio_Profesiones		oficioProfesion							ON personas.ofpr_Id								= oficioProfesion.ofpr_Id
-			LEFT JOIN	Gral.tbEstadosCiviles			estadoCivilRepresentante				ON personas.pers_escvRepresentante				= estadoCivilRepresentante.escv_Id
-			LEFT JOIN	Gral.tbOficio_Profesiones		oficioProfesionRepresentante			ON personas.pers_OfprRepresentante				= oficioProfesionRepresentante.ofpr_Id
+		
+			LEFT JOIN  Gral.tbColonias					colonia									ON personaJuridica.colo_Id						= colonia.colo_Id
+			LEFT JOIN  Gral.tbAldeas                    Aldea                                   ON personaJuridica.alde_Id                      = aldea.alde_Id
+			LEFT JOIN  Gral.tbCiudades                  Ciudad                                  ON personaJuridica.ciud_Id                      = ciudad.ciud_Id
+			LEFT JOIN  Gral.tbProvincias                Provincia                               ON Ciudad.pvin_Id                               = Provincia.pvin_Id
 
 			LEFT JOIN   Gral.tbColonias					coloniaRepresentante					ON personaJuridica.peju_ColoniaRepresentante	= coloniaRepresentante.colo_Id
-			LEFT JOIN  gral.tbAldeas					aldeaRepresentante						ON coloniaRepresentante.alde_Id					= aldeaRepresentante.alde_Id
-			LEFT JOIN	Gral.tbCiudades					ciudadesReprentante						ON aldeaRepresentante.ciud_Id					= ciudadesReprentante.ciud_Id
-
-			LEFT JOIN  Gral.tbColonias					colonia									ON personaJuridica.colo_Id						= colonia.colo_Id
-			LEFT JOIN  gral.tbAldeas					aldea									ON colonia.alde_Id								= aldea.alde_Id
-			LEFT JOIN	Gral.tbCiudades					ciudades								ON aldea.ciud_Id								= ciudades.ciud_Id
-			LEFT JOIN	GraL.tbProvincias				provincias								ON ciudades.pvin_Id								= provincias.pvin_Id
+			LEFT JOIN   Gral.tbAldeas					aldeaRepresentante						ON personaJuridica.peju_AldeaIdRepresentante    = aldeaRepresentante.alde_Id
+			LEFT JOIN	Gral.tbCiudades					ciudadesReprentante						ON personaJuridica.peju_CiudadIdRepresentante	= ciudadesReprentante.ciud_Id
+			LEFT JOIN   Gral.tbProvincias               ProvinciaRepresentante                  ON ciudadesReprentante.pvin_Id                               = ProvinciaRepresentante.pvin_Id
 
 			LEFT JOIN  Acce.tbUsuarios					usuarioCreacion							ON personaJuridica.usua_UsuarioCreacion			= usuarioCreacion.usua_Id
 			LEFT JOIN  Acce.tbUsuarios					usuarioModificacion						ON personaJuridica.usua_UsuarioModificacion		= usuarioModificacion.usua_Id
@@ -3466,16 +3475,17 @@ GO
 CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab5
 ( 
   @peju_Id                                INT,
-  @peju_DNI                               NVARCHAR(20),
+  @peju_RTNSociedadMercantil              NVARCHAR(20),
   @peju_DNIRepresentante                  NVARCHAR(20),
+  @peju_RTNReprsentanteLegal              NVARCHAR(20),
   @peju_EscrituraPublica                  NVARCHAR(20)
 )
 AS
 BEGIN
 	BEGIN TRY
 	  UPDATE [Adua].[tbPersonaJuridica]
-	     SET  [peju_DNI] = @peju_DNI , peju_DNIRepresentante = @peju_DNIRepresentante,
-		     [peju_EscrituraPublica] = @peju_EscrituraPublica
+	     SET  [peju_RTNSociedadMercantil] = @peju_RTNSociedadMercantil , peju_DNIRepresentante = @peju_DNIRepresentante,
+		     [peju_EscrituraPublica] = @peju_EscrituraPublica, peju_RTNReprsentanteLegal = @peju_RTNReprsentanteLegal
       WHERE peju_Id =  @peju_Id
 	   SELECT 1
 	END TRY

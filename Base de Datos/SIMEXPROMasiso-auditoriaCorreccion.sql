@@ -1780,7 +1780,8 @@ GO
 CREATE TABLE Adua.tbPersonaJuridica (
 	peju_Id							  				INT IDENTITY(1,1) ,
 	pers_Id							  				INT NOT NULL,
-	peju_DNI                                        NVARCHAR(20), --nuevo 
+	peju_RTNSociedadMercantil                       NVARCHAR(20), --nuevo 
+	peju_RTNReprsentanteLegal                       NVARCHAR(20), --nuevo
 	peju_DNIRepresentante                           NVARCHAR(20), --nuevo
 	peju_EscrituraPublica                           NVARCHAR(200), 
 
@@ -1823,6 +1824,7 @@ CREATE TABLE Adua.tbPersonaJuridica (
 	--CONSTRAINT FK_Adua_PersonaJuridica_peju_Acce_tbUsuarios_usua_UsuarioEliminacion_usua_Id  FOREIGN KEY (usua_UsuarioEliminacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id)
 );
 GO
+
 --Se identificarán los tipos de documentos según acortaciones
 --RTN-CI:  REGISTRO TRIBUTARIO NACIONAL (RTN) DEL COMERCIANTE INDIVIDUAL
 --DNI-CI:  DOCUMENTO O TARJETA DE IDENTIDAD DEL COMERCIANTE INDIVIDUAL
