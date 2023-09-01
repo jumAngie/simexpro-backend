@@ -32,6 +32,13 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(response);
         }
 
+        [HttpGet("VerificarFactura")]
+        public IActionResult VerificarFactura(string fact_Numero)
+        {
+            var response = _aduanaServices.VerificarFactura(fact_Numero);
+            return Ok(response);
+        }
+
 
         [HttpPost("Insertar")]
         public IActionResult Insertar(FacturasViewModel FacturasViewModel)

@@ -6510,8 +6510,29 @@ BEGIN
 	WHERE deva_Id = @deva_Id
 END
 
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbFacturas_VerificarFacturas
+	@fact_Numero	NVARCHAR(500)
+AS
+BEGIN	
+	BEGIN TRY
+		IF EXISTS (SELECT fact_Id FROM Adua.tbFacturas WHERE fact_Numero = @fact_Numero)
+			BEGIN 
+				SELECT 1
+			END
+		ELSE
+			BEGIN
+				SELECT 0
+			END
+	END TRY
+	BEGIN CATCH
+		SELECT -2
+	END CATCH
+END
 
 GO
+
 CREATE OR ALTER PROCEDURE Adua.UDP_tbFacturas_Insertar
 	@deva_Id					INT,
 	@fact_Numero				NVARCHAR(4000),

@@ -311,6 +311,7 @@ namespace SIMEXPRO.DataAccess
         public static string InsertarFacturas = "Adua.UDP_tbFacturas_Insertar";
         public static string EditarFacturas = "Adua.UDP_tbFacturas_Editar";
         public static string EliminarFacturas = "Adua.UDP_tbFacturas_Eliminar";
+        public static string VerificarFacturas = "Adua.UDP_tbFacturas_VerificarFacturas";
         #endregion
 
         #region Formas de Pago

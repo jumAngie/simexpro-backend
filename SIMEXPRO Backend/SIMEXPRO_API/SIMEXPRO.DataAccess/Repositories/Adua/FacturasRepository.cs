@@ -48,6 +48,17 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return result;
         }
 
+        public RequestStatus VerficarFactura (string fact_Numero)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@fact_Numero", fact_Numero, DbType.String, ParameterDirection.Input);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.VerificarFacturas, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
+        }
+
         public IEnumerable<tbFacturas> List(int deva_Id)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
