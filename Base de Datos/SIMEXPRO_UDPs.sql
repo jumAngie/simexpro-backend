@@ -3267,19 +3267,14 @@ BEGIN
 			,personas.pers_escvRepresentante
 			,estadoCivilRepresentante.escv_Nombre AS escv_RepresentanteNombre
 
-			,personas.pers_OfprRepresentante
-			,oficioProfesionRepresentante.ofpr_Nombre AS ofpr_RepresentanteNombre
-			,provicionciasRepresentante.pais_Id AS pais_RepresentanteId
-			,personaJuridica.peju_EstadoRepresentante
-			,provicionciasRepresentante.pvin_Nombre AS pvin_RepresentanteNombre
-			,provincias.pais_Id 
-
 			,provincias.pvin_Id
 			,provincias.pvin_Nombre
 			,aldea.ciud_Id
 			,colonia.alde_Id
 			,aldea.alde_Nombre
-
+			,personaJuridica.peju_DNIRepresentante
+			,personaJuridica.peju_DNI
+			,personaJuridica.peju_EscrituraPublica
 			,personaJuridica.colo_Id
 			,colonia.colo_Nombre
 			,personaJuridica.peju_PuntoReferencia
@@ -3309,7 +3304,6 @@ BEGIN
 			LEFT JOIN   Gral.tbColonias					coloniaRepresentante					ON personaJuridica.peju_ColoniaRepresentante	= coloniaRepresentante.colo_Id
 			LEFT JOIN  gral.tbAldeas					aldeaRepresentante						ON coloniaRepresentante.alde_Id					= aldeaRepresentante.alde_Id
 			LEFT JOIN	Gral.tbCiudades					ciudadesReprentante						ON aldeaRepresentante.ciud_Id					= ciudadesReprentante.ciud_Id
-			LEFT JOIN	Gral.tbProvincias				provicionciasRepresentante				ON personaJuridica.peju_EstadoRepresentante		= provicionciasRepresentante.pvin_Id
 
 			LEFT JOIN  Gral.tbColonias					colonia									ON personaJuridica.colo_Id						= colonia.colo_Id
 			LEFT JOIN  gral.tbAldeas					aldea									ON colonia.alde_Id								= aldea.alde_Id
