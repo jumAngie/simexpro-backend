@@ -6626,19 +6626,30 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbFacturas_Eliminar
+
+ALTER   PROCEDURE [Adua].[UDP_tbFacturas_Eliminar]
 	@fact_Id			INT
 AS
 BEGIN
 	BEGIN TRANSACTION
 	BEGIN TRY
-		DELETE FROM Adua.tbItems
-		WHERE fact_Id = @fact_Id
 
-		DELETE FROM Adua.tbFacturas
-		WHERE fact_Id = @fact_Id
+	DECLARE @respuesta INT
+	EXEC dbo.UDP_ValidarReferencias 'fact_Id', @fact_Id,'Adua.tbFacturas',@respuesta OUTPUT
 
-		SELECT 1
+	SELECT @respuesta AS Resultado
+	IF(@respuesta = 1)
+		BEGIN
+
+			DELETE FROM Adua.tbItems
+			WHERE fact_Id = @fact_Id
+
+			DELETE FROM Adua.tbFacturas
+			WHERE fact_Id = @fact_Id
+
+			SELECT 1
+
+		END
 		COMMIT TRAN
 	END TRY
 	BEGIN CATCH
@@ -6646,6 +6657,7 @@ BEGIN
 		ROLLBACK TRAN
 	END CATCH
 END
+
 
 GO
 /* LISTAR items*/
@@ -6830,7 +6842,7 @@ BEGIN
 END
 
 GO
-CREATE OR ALTER PROCEDURE Adua.UDP_tbItems_Editar
+CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbItems_Editar]
 	@item_Id									INT,
 	@fact_Id									INT, 
 	@item_Cantidad								INT, 
@@ -6861,8 +6873,7 @@ BEGIN
 	BEGIN TRY
 		
 		UPDATE Adua.tbItems
-		SET fact_Id = @fact_Id, 
-			item_Cantidad = @item_Cantidad, 
+		SET item_Cantidad = @item_Cantidad, 
 			item_PesoNeto = @item_PesoNeto, 
 			item_PesoBruto = @item_PesoBruto, 
 			unme_Id = @unme_Id, 
@@ -6886,8 +6897,7 @@ BEGIN
 			item_FechaModificacion = @item_FechaModificacion
 		WHERE item_Id = @item_Id
 
-		INSERT INTO Adua.tbItemsHistorial(item_Id, 
-											  fact_Id, 
+		INSERT INTO Adua.tbItemsHistorial(item_Id,
 											  item_Cantidad, 
 											  item_PesoNeto, 
 											  item_PesoBruto, 
@@ -6913,7 +6923,6 @@ BEGIN
 											  hduc_Accion)
 
 			VALUES (@item_Id, 
-					@fact_Id, 
 					@item_Cantidad, 
 					@item_PesoNeto, 
 					@item_PesoBruto, 
@@ -6947,6 +6956,7 @@ BEGIN
 		ROLLBACK TRAN
 	END CATCH
 END
+
 GO
 
 CREATE OR ALTER PROCEDURE Adua.UDP_tbItems_Eliminar
