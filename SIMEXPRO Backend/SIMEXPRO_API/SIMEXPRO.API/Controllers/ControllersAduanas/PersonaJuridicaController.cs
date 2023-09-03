@@ -75,17 +75,8 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
         public IActionResult Update(PersonaJuridicaViewModel concepto)
         {
             var item = _mapper.Map<tbPersonaJuridica>(concepto);
-
             var respuesta = _aduanaServices.ActualizarPersonaJuridica(item);
-
-            if (respuesta.Code == 200)
-            {
-                return Ok(respuesta);
-            }
-            else
-            {
-                return BadRequest(respuesta);
-            }
+            return Ok(respuesta);
         }
 
         [HttpPost("Eliminar")]

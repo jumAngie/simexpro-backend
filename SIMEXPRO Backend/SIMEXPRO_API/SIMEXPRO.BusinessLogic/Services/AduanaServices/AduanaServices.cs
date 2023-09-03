@@ -2747,7 +2747,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -2756,6 +2756,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+
 
         public ServiceResult EliminarPersonaJuridica(tbPersonaJuridica item)
         {

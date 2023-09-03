@@ -3497,49 +3497,48 @@ BEGIN
 END
 GO
 /*Editar Persona Juridica*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_Editar
-(
-	@peju_Id								INT,
-	@pers_Id							  	INT,
-	@peju_EstadoRepresentante				INT,
-	@colo_Id							  	INT,
-	@peju_PuntoReferencia					NVARCHAR(200),
-	@peju_ColoniaRepresentante				INT,
-	@peju_NumeroLocalRepresentante		  	NVARCHAR(200),
-	@peju_PuntoReferenciaRepresentante	  	NVARCHAR(200),
-	@peju_TelefonoEmpresa					NVARCHAR(200),
-	@peju_TelefonoFijoRepresentanteLegal 	NVARCHAR(200),
-	@peju_TelefonoRepresentanteLegal	  	NVARCHAR(200),
-	@peju_CorreoElectronico              	NVARCHAR(200),
-	@peju_CorreoElectronicoAlternativo   	NVARCHAR(200),
-	@usua_UsuarioModificacion       		INT,
-	@peju_FechaModificacion         		DATETIME
-)
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_Editar 
+  @pers_Id                 INT,
+  @pers_RTN                NVARCHAR(40),
+  @ofic_Id                 INT,
+  @escv_Id                 INT,
+  @ofpr_Id                 INT,
+  @usua_UsuarioModificacion INT,
+  @peju_FechaModificacion  DATETIME
 AS
 BEGIN
-	BEGIN TRY
-		 UPDATE Adua.tbPersonaJuridica
-			SET pers_Id								= @pers_Id,							  	
-				peju_EstadoRepresentante			= @peju_EstadoRepresentante,				
-				colo_Id								= @colo_Id,							  	
-				peju_PuntoReferencia				= @peju_PuntoReferencia,					
-				peju_ColoniaRepresentante			= @peju_ColoniaRepresentante,				
-				peju_NumeroLocalRepresentante		= @peju_NumeroLocalRepresentante,		  	
-				peju_PuntoReferenciaRepresentante	= @peju_PuntoReferenciaRepresentante,	  	
-				peju_TelefonoEmpresa				= @peju_TelefonoRepresentanteLegal,					
-				peju_TelefonoFijoRepresentanteLegal = @peju_TelefonoFijoRepresentanteLegal, 	
-				peju_TelefonoRepresentanteLegal		= @peju_TelefonoRepresentanteLegal,	  	
-				peju_CorreoElectronico				= @peju_CorreoElectronico,              	
-				peju_CorreoElectronicoAlternativo	= @peju_CorreoElectronicoAlternativo,   	
-				usua_UsuarioModificacion			= @usua_UsuarioModificacion,       			
-				peju_FechaModificacion				= @peju_FechaModificacion
-		  WHERE peju_Id = @peju_Id
+    DECLARE @peju_Id INT;
+	DECLARE @pers_FechaModificacion DATETIME = @peju_FechaModificacion;
+    BEGIN TRY
+        BEGIN TRANSACTION
 
-		  SELECT 1 AS Resultado
-	END TRY
-	BEGIN CATCH
-		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
-	END CATCH
+        UPDATE [Adua].[tbPersonas]
+        SET
+            [pers_RTN] = @pers_RTN,
+            [ofic_Id] = @ofic_Id,
+            [escv_Id] = @escv_Id,
+            [ofpr_Id] = @ofpr_Id,
+            [usua_UsuarioModificacion] = @usua_UsuarioModificacion,
+            [pers_FechaModificacion] = @pers_FechaModificacion
+        WHERE
+            [pers_Id] = @pers_Id;
+
+        SET @peju_Id = (SELECT [peju_Id] FROM Adua.tbPersonaJuridica WHERE [pers_Id] = @pers_Id);
+
+        UPDATE Adua.tbPersonaJuridica
+        SET
+            [usua_UsuarioModificacion] = @usua_UsuarioModificacion,
+            [peju_FechaModificacion] = @peju_FechaModificacion
+        WHERE
+            [pers_Id] = @pers_Id;
+
+	    SELECT 1;
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        SELECT 'Mensaje de error: ' + ERROR_MESSAGE() AS Resultado;
+    END CATCH
 END
 GO
 
