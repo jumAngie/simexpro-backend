@@ -8360,7 +8360,7 @@ BEGIN
 				   @copa_Id, 
 				   @usua_UsuarioCreacion, 
 				   @boen_FechaCreacion,1)
-			SELECT 1
+			SELECT SCOPE_IDENTITY()
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
