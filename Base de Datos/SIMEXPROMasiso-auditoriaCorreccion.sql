@@ -1783,7 +1783,7 @@ CREATE TABLE Adua.tbPersonaJuridica (
 	peju_RTNSociedadMercantil                       NVARCHAR(20), --nuevo 
 	peju_RTNReprsentanteLegal                       NVARCHAR(20), --nuevo
 	peju_DNIRepresentante                           NVARCHAR(20), --nuevo
-	peju_EscrituraPublica                           NVARCHAR(200), 
+	peju_EscrituraPublica                           NVARCHAR(200), --nuevo 
 
 	colo_Id							  				INT ,
 	ciud_Id                                         INT,   -- nuevo

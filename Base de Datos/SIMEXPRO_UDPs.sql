@@ -3300,24 +3300,24 @@ BEGIN
 			,personas.ofpr_Id             --
 			,oficioProfesion.ofpr_Nombre  --
 		   
-			,personaJuridica.colo_Id               AS IdColiniaEmpresa
+			,personaJuridica.colo_Id               
 			,colonia.colo_Nombre                   AS ColiniaEmpresa
-			,personaJuridica.ciud_Id               AS IdCiudadEmpresa
+			,personaJuridica.ciud_Id               
 			,ciudad.ciud_Nombre                    AS CiudadEmpresa
-			,personaJuridica.alde_Id               AS IdAldeaEmpresa    --Tab 2
+			,personaJuridica.alde_Id                   --Tab 2
 			,Aldea.alde_Nombre                     AS AldeaEmpresa 
-			,Provincia.pvin_Id                     AS IdProvinciaEmpresa
+			,Provincia.pvin_Id                     
 			,Provincia.pvin_Nombre                 AS ProvinciaEmpresa
 			,personaJuridica.peju_PuntoReferencia
 			,personaJuridica.peju_NumeroLocalApart
 
-			,personaJuridica.peju_ColoniaRepresentante  AS IdcoliniaRepresentante
+			,personaJuridica.peju_ColoniaRepresentante  
 			,coloniaRepresentante.colo_Nombre           AS ColoniaRepresentante
-			,personaJuridica.peju_AldeaIdRepresentante  AS IdAldeaRepresentante
+			,personaJuridica.peju_AldeaIdRepresentante  
 			,aldeaRepresentante.alde_Nombre             AS AldeaRepresemtante  --Tab 3
-			,personaJuridica.peju_CiudadIdRepresentante AS IdCiudadRepresentante
+			,personaJuridica.peju_CiudadIdRepresentante 
 			,ciudadesReprentante.ciud_Nombre            AS CiudadRepresentante
-			,Provincia.pvin_Id                          AS IdProvinciaRepresentante
+			,Provincia.pvin_Id                          AS ProvinciaIdRepresentante
 			,Provincia.pvin_Nombre                      AS ProvinciaRepresentante
 			,personaJuridica.peju_NumeroLocalRepresentante
 			,personaJuridica.peju_PuntoReferenciaRepresentante

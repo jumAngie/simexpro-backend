@@ -4235,8 +4235,6 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.peju_CorreoElectronicoAlternativo).HasMaxLength(200);
 
-                entity.Property(e => e.peju_DNI).HasMaxLength(20);
-
                 entity.Property(e => e.peju_DNIRepresentante).HasMaxLength(20);
 
                 entity.Property(e => e.peju_EscrituraPublica).HasMaxLength(200);
@@ -4254,6 +4252,10 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.Property(e => e.peju_PuntoReferencia).HasMaxLength(200);
 
                 entity.Property(e => e.peju_PuntoReferenciaRepresentante).HasMaxLength(200);
+
+                entity.Property(e => e.peju_RTNReprsentanteLegal).HasMaxLength(20);
+
+                entity.Property(e => e.peju_RTNSociedadMercantil).HasMaxLength(20);
 
                 entity.Property(e => e.peju_TelefonoEmpresa).HasMaxLength(200);
 

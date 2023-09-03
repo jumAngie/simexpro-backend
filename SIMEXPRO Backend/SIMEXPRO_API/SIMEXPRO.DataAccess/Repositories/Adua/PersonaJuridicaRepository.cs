@@ -90,9 +90,9 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
-
             parametros.Add("@peju_Id", item.peju_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@peju_DNI", item.peju_DNI, DbType.String, ParameterDirection.Input);
+            parametros.Add("@peju_RTNSociedadMercantil", item.peju_RTNSociedadMercantil, DbType.String, ParameterDirection.Input);
+            parametros.Add("@peju_RTNReprsentanteLegal", item.peju_RTNReprsentanteLegal, DbType.String, ParameterDirection.Input);
             parametros.Add("@peju_DNIRepresentante", item.peju_DNIRepresentante, DbType.String, ParameterDirection.Input);
             parametros.Add("@peju_EscrituraPublica", item.peju_EscrituraPublica, DbType.String, ParameterDirection.Input);
 
