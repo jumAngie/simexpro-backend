@@ -22,6 +22,88 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             throw new NotImplementedException();
         }
 
+        public RequestStatus InsertTap2(tbPersonaJuridica item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@peju_Id", item.peju_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@ciud_Id", item.ciud_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@alde_Id", item.alde_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@colo_Id", item.colo_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@peju_NumeroLocalApart", item.peju_NumeroLocalApart, DbType.String, ParameterDirection.Input);
+            parametros.Add("@peju_PuntoReferencia", item.peju_PuntoReferencia, DbType.String, ParameterDirection.Input);
+
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.InsertarPersonaJuridicaTap2, parametros, commandType: CommandType.StoredProcedure);
+            return new RequestStatus()
+            {
+                MessageStatus = respuesta
+            };
+
+        }
+
+        public RequestStatus InsertTap3(tbPersonaJuridica item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@peju_Id", item.peju_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@peju_CiudadIdRepresentante", item.peju_CiudadIdRepresentante, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@peju_AldeaIdRepresentante", item.peju_AldeaIdRepresentante, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@peju_ColoniaRepresentante", item.peju_ColoniaRepresentante, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@peju_NumeroLocalRepresentante", item.peju_NumeroLocalRepresentante, DbType.String, ParameterDirection.Input);
+            parametros.Add("@peju_PuntoReferenciaRepresentante", item.peju_PuntoReferenciaRepresentante, DbType.String, ParameterDirection.Input);
+
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.InsertarPersonaJuridicaTap3, parametros, commandType: CommandType.StoredProcedure);
+            return new RequestStatus()
+            {
+                MessageStatus = respuesta
+            };
+
+        }
+
+        public RequestStatus InsertTap4(tbPersonaJuridica item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@peju_Id", item.peju_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@peju_TelefonoEmpresa", item.peju_TelefonoEmpresa, DbType.String, ParameterDirection.Input);
+            parametros.Add("@peju_TelefonoFijoRepresentanteLegal", item.peju_TelefonoFijoRepresentanteLegal, DbType.String, ParameterDirection.Input);
+            parametros.Add("@peju_TelefonoRepresentanteLegal", item.peju_TelefonoRepresentanteLegal, DbType.String, ParameterDirection.Input);
+            parametros.Add("@peju_CorreoElectronico", item.peju_CorreoElectronico, DbType.String, ParameterDirection.Input);
+            parametros.Add("@peju_CorreoEletronicoAlternativo", item.peju_CorreoElectronicoAlternativo, DbType.String, ParameterDirection.Input);
+
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.InsertarPersonaJuridicaTap4, parametros, commandType: CommandType.StoredProcedure);
+            return new RequestStatus()
+            {
+                MessageStatus = respuesta
+            };
+
+        }
+
+        public RequestStatus InsertTap5(tbPersonaJuridica item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@peju_Id", item.peju_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@peju_RTNSociedadMercantil", item.peju_RTNSociedadMercantil, DbType.String, ParameterDirection.Input);
+            parametros.Add("@peju_RTNReprsentanteLegal", item.peju_RTNReprsentanteLegal, DbType.String, ParameterDirection.Input);
+            parametros.Add("@peju_DNIRepresentante", item.peju_DNIRepresentante, DbType.String, ParameterDirection.Input);
+            parametros.Add("@peju_EscrituraPublica", item.peju_EscrituraPublica, DbType.String, ParameterDirection.Input);
+
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.InsertarPersonaJuridicaTap5, parametros, commandType: CommandType.StoredProcedure);
+            return new RequestStatus()
+            {
+                MessageStatus = respuesta
+            };
+
+        }
+
         public RequestStatus Insert(tbPersonaJuridica item)
         {
             RequestStatus result = new();
@@ -29,18 +111,10 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             var parametros = new DynamicParameters();
 
-            parametros.Add("@pers_Id", item.pers_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@peju_EstadoRepresentante", item.peju_EstadoRepresentante, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@colo_Id", item.colo_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@peju_PuntoReferencia", item.peju_PuntoReferencia, DbType.String, ParameterDirection.Input);
-            parametros.Add("@peju_ColoniaRepresentante", item.peju_ColoniaRepresentante, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@peju_NumeroLocalRepresentante", item.peju_NumeroLocalRepresentante, DbType.String, ParameterDirection.Input);
-            parametros.Add("@peju_PuntoReferenciaRepresentante", item.peju_PuntoReferenciaRepresentante, DbType.String, ParameterDirection.Input);
-            parametros.Add("@peju_TelefonoEmpresa", item.peju_TelefonoEmpresa, DbType.String, ParameterDirection.Input);
-            parametros.Add("@peju_TelefonoFijoRepresentanteLegal", item.peju_TelefonoFijoRepresentanteLegal, DbType.String, ParameterDirection.Input);
-            parametros.Add("@peju_TelefonoRepresentanteLegal", item.peju_TelefonoRepresentanteLegal, DbType.String, ParameterDirection.Input);
-            parametros.Add("@peju_CorreoElectronico", item.peju_CorreoElectronico, DbType.String, ParameterDirection.Input);
-            parametros.Add("@peju_CorreoElectronicoAlternativo", item.peju_CorreoElectronicoAlternativo, DbType.String, ParameterDirection.Input);
+            parametros.Add("@pers_RTN", item.pers_RTN, DbType.String, ParameterDirection.Input);
+            parametros.Add("@ofic_Id", item.ofic_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@escv_Id", item.escv_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@ofpr_Id", item.ofpr_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@peju_FechaCreacion", item.peju_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
 
@@ -63,7 +137,6 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
             parametros.Add("@peju_Id", item.peju_Id, DbType.String, ParameterDirection.Input);
             parametros.Add("@pers_Id", item.pers_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@peju_EstadoRepresentante", item.peju_EstadoRepresentante, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@colo_Id", item.colo_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@peju_PuntoReferencia", item.peju_PuntoReferencia, DbType.String, ParameterDirection.Input);
             parametros.Add("@peju_ColoniaRepresentante", item.peju_ColoniaRepresentante, DbType.Int32, ParameterDirection.Input);
@@ -82,5 +155,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             result.MessageStatus = answer;
             return result;
         }
+
+    
+
     }
 }

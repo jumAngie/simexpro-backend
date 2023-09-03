@@ -33,7 +33,16 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public int ciud_Id { get; set; }
 
         public string ciud_Nombre { get; set; }
- 
+
+        [NotMapped]
+        public string doco_Numero_O_Referencia { get; set; }
+        [NotMapped]
+        public string doco_TipoDocumento { get; set; }
+        [NotMapped]
+        public string doco_URLImagen { get; set; }
+        [NotMapped]
+        public string doco_NombreImagen { get; set; }
+
         public int pvin_Id { get; set; }
 
         public string pvin_Codigo { get; set; }
@@ -44,8 +53,8 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public string pais_Nombre { get; set; }
         public string formaRepresentacionDesc { get; set; }
         public string estadoCivilRepresentante { get; set; }
-        public string pers_escvRepresentante { get; set; }
-        public string pers_OfprRepresentante { get; set; }
+        public int pers_escvRepresentante { get; set; }
+        public int pers_OfprRepresentante { get; set; }
         public string oficioProfesRepresentante { get; set; }
         public string coin_PuntoReferencia { get; set; }
         public int coin_ColoniaRepresentante { get; set; }
@@ -64,5 +73,30 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public string usuarioModificacionNombre { get; set; }
         public DateTime? coin_FechaModificacion { get; set; }
         public bool? coin_Estado { get; set; }
+
+      
+        public string aldeaNombreRepresentante { get; set; }  
+        public string ciudadNrepresentante { get; set; }  
+        public int pvin_IdRepresentante { get; set; }     
+        public string pvin_CodigoRepresentante { get; set; }  
+        public string pvin_NombreRepresentante { get; set; }
+        public string coloniaNombreRepresentante { get; set; }
+
+
+        public string coin_DNI { get; set; }
+        public string coin_DNIrepresentante { get; set; }
+
+
+        public int? alde_Id { get; set; }
+        public int? coin_CiudadRepresentante { get; set; }
+        public int? coin_AldeaRepresentante { get; set; }
+        public string coin_NumeroLocalApart { get; set; }
+        public int? coin_coloniaIdRepresentante { get; set; }
+        public string coin_NumeroLocaDepartRepresentante { get; set; }
+        public string coin_DeclaracionComerciante { get; set; }
+        public string alde_Nombre { get; set; }
+
+
+
     }
 }

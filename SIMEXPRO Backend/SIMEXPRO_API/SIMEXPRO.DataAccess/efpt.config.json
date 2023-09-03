@@ -230,6 +230,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[Adua].[tbRegimenesAduaneros]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[Adua].[tbTipoDocumento]",
          "ObjectType": 0
       },

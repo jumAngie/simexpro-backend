@@ -9,6 +9,7 @@ namespace SIMEXPRO.Entities.Entities
 {
     public partial class tbCiudades
     {
+
         public tbCiudades()
         {
             tbAldeas = new HashSet<tbAldeas>();
@@ -18,6 +19,8 @@ namespace SIMEXPRO.Entities.Entities
             tbProveedores = new HashSet<tbProveedores>();
             tbPedidosOrden = new HashSet<tbPedidosOrden>();
             tbAduanas = new HashSet<tbAduanas>();
+            tbPersonaJuridicaciud = new HashSet<tbPersonaJuridica>();
+            tbPersonaJuridicapeju_CiudadIdRepresentanteNavigation = new HashSet<tbPersonaJuridica>();
         }
 
         public int ciud_Id { get; set; }
@@ -53,6 +56,10 @@ namespace SIMEXPRO.Entities.Entities
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioEliminacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }
+
+        public virtual ICollection<tbComercianteIndividual> tbComercianteIndividualcoin_CiudadRepresentanteNavigation { get; set; }
+        public virtual ICollection<tbComercianteIndividual> tbComercianteIndividualciud { get; set; }
+
         public virtual ICollection<tbAldeas> tbAldeas { get; set; }
         public virtual ICollection<tbColonias> tbColonias { get; set; }
         public virtual ICollection<tbDeclarantes> tbDeclarantes { get; set; }
@@ -60,5 +67,7 @@ namespace SIMEXPRO.Entities.Entities
         public virtual ICollection<tbProveedores> tbProveedores { get; set; }
         public virtual ICollection<tbPedidosOrden> tbPedidosOrden { get; set; }
         public virtual ICollection<tbAduanas> tbAduanas { get; set; }
+        public virtual ICollection<tbPersonaJuridica> tbPersonaJuridicapeju_CiudadIdRepresentanteNavigation { get; set; }
+        public virtual ICollection<tbPersonaJuridica> tbPersonaJuridicaciud { get; set; }
     }
 }

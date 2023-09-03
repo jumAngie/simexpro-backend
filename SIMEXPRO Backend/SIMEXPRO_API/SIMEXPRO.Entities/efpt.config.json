@@ -14,11 +14,23 @@
    "SelectedToBeGenerated": 2,
    "Tables": [
       {
-         "Name": "[Prod].[VW_tbOrdenCompraDetalle_LineaTiempo]",
-         "ObjectType": 3
+         "Name": "[Adua].[tbComercianteIndividual]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbDuca]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbRegimenesAduaneros]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbProcesoPorOrdenCompraDetalle]",
+         "ObjectType": 0
       }
    ],
-   "UiHint": "practicaahm.SIMEXPRO",
+   "UiHint": "simexpro.SIMEXPRO",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": true,
    "UseDbContextSplitting": false,

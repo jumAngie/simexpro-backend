@@ -541,5 +541,9 @@ namespace SIMEXPRO.Entities.Entities
 
         public virtual ICollection<tbProcesoPorOrdenCompraDetalle> tbProcesoPorOrdenCompraDetalle_UsuarioModificacionNavigation { get; set; }
         public virtual ICollection<tbProcesoPorOrdenCompraDetalle> tbProcesoPorOrdenCompraDetalle_UsuarioCreacionNavigation { get; set; }
+
+        public virtual ICollection<tbRegimenesAduaneros> tbRegimenesAduanerosusua_UsuarioCreacionNavigation { get; set; }
+        public virtual ICollection<tbRegimenesAduaneros> tbRegimenesAduanerosusua_UsuarioEliminacionNavigation { get; set; }
+        public virtual ICollection<tbRegimenesAduaneros> tbRegimenesAduanerosusua_UsuarioModificacionNavigation { get; set; }
     }
 }

@@ -20,6 +20,12 @@ namespace SIMEXPRO.Entities.Entities
         public int? peju_Id { get; set; }
         public string doco_Numero_O_Referencia { get; set; }
         public string doco_TipoDocumento { get; set; }
+
+        public string doco_URLImagen { get; set; }
+
+        public string doco_NombreImagen { get; set; }
+
+
         public int usua_UsuarioCreacion { get; set; }
         public DateTime doco_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }

@@ -20,7 +20,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             var parametros = new DynamicParameters();
             parametros.Add("@item_Id", item.item_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioEliminacion", item.usua_UsuarioEliminacion, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@item_FechaEliminacion", item.item_FechaEliminacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@item_FechaEliminacion", item.item_FechaEliminacion, DbType.DateTime, ParameterDirection.Input);
 
             var answer = db.QueryFirst<string>(ScriptsDataBase.EliminarItems, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;

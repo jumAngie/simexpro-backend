@@ -53,7 +53,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@inco_Codigo", item.inco_Codigo, DbType.String, ParameterDirection.Input);
             parametros.Add("@inco_Descripcion", item.inco_Descripcion, DbType.String, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@inco_FechaModificacion", item.inco_FechaModificacion, DbType.String, ParameterDirection.Input);
+            parametros.Add("@inco_FechaModificacion", item.inco_FechaModificacion, DbType.Date, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.EditarIncoterm, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus= answer;
             return result;

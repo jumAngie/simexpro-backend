@@ -200,7 +200,12 @@ namespace SIMEXPRO.DataAccess
 
         #region Comerciante Individual
         public static string ListarComercianteIndividual = "Adua.UDP_tbComercianteIndividual_Listar";
-        public static string InsertarComercianteIndividual = "Adua.UDP_tbComercianteIndividual_Insertar";
+        public static string InsertarComercianteIndividual = "Adua.UDP_tbComercianteIndividual_InsertarTap1";
+        public static string InsertarComercianteIndividualTap2 = "Adua.UDP_tbComercianteIndividual_InsertarTap2";
+        public static string InsertarComercianteIndividualTap3 = "Adua.UDP_tbComercianteIndividual_InsertarTap3";
+        public static string InsertarComercianteIndividualTap4 = "Adua.UDP_tbComercianteIndividual_InsertarTap4";
+        public static string InsertarComercianteIndividualTap5= "Adua.UDP_tbComercianteIndividual_InsertarTap5";
+
         public static string EditarComercianteIndividual = "Adua.UDP_tbComercianteIndividual_Editar";
         #endregion
 
@@ -279,6 +284,7 @@ namespace SIMEXPRO.DataAccess
 
         public static string InsertarDucaTAP1 = "Adua.UDP_tbDuca_InsertarTab1";
         public static string EditarDucaTAP1 = "Adua.UDP_tbDuca_EditarTab1";
+        public static string ListarPorNumeroDuca = "Adua.UDP_tbDuca_ListarPorNumeroDuca";
 
         public static string InsertarDucaTAP2 = "Adua.UDP_tbDuca_InsertarTab2";
         public static string EditarDucaTAP2 = "Adua.UDP_tbDuca_EditarTab2";
@@ -305,6 +311,7 @@ namespace SIMEXPRO.DataAccess
         public static string InsertarFacturas = "Adua.UDP_tbFacturas_Insertar";
         public static string EditarFacturas = "Adua.UDP_tbFacturas_Editar";
         public static string EliminarFacturas = "Adua.UDP_tbFacturas_Eliminar";
+        public static string VerificarFacturas = "Adua.UDP_tbFacturas_VerificarFacturas";
         #endregion
 
         #region Formas de Pago
@@ -324,6 +331,7 @@ namespace SIMEXPRO.DataAccess
         public static string ListarImpuestosPorArancel = "Adua.UDP_tbImpuestosPorArancel_Listar";
         public static string InsertarImpuestosPorArancel = "Adua.UDP_tbImpuestosPorArancel_Insertar";
         public static string EditarImpuestosPorArancel = "Adua.UDP_tbImpuestosPorArancel_Editar";
+        public static string CategoriaAranceles = "Adua.UDP_tbArancelesBuscarCategoria";
         #endregion
 
         #region Incoterm
@@ -380,7 +388,11 @@ namespace SIMEXPRO.DataAccess
 
         #region Persona Juridica
         public static string ListarPersonaJuridica = "Adua.UDP_tbPersonaJuridica_Listar";
-        public static string InsertarPersonaJuridica = "Adua.UDP_tbPersonaJuridica_Insertar";
+        public static string InsertarPersonaJuridica = "Adua.UDP_tbPersonaJuridica_InsertarTab1";
+        public static string InsertarPersonaJuridicaTap2 = "Adua.UDP_tbPersonaJuridica_InsertarTab2";
+        public static string InsertarPersonaJuridicaTap3 = "Adua.UDP_tbPersonaJuridica_InsertarTab3";
+        public static string InsertarPersonaJuridicaTap4 = "Adua.UDP_tbPersonaJuridica_InsertarTab4";
+        public static string InsertarPersonaJuridicaTap5 = "Adua.UDP_tbPersonaJuridica_InsertarTab5";
         public static string EditarPersonaJuridica = "Adua.UDP_tbPersonaJuridica_Editar";
         #endregion
 
@@ -426,6 +438,13 @@ namespace SIMEXPRO.DataAccess
         public static string ListarTransporte = "Adua.UDP_tbTransporte_Listar";
         public static string InsertarTransporte = "Adua.UDP_tbTransporte_Insert";
         public static string EditarTransporte = "Adua.UDP_tbTransporte_Editar";
+        #endregion
+
+        #region Regimenes Aduaneros
+        public static string ListarRegimenesAduaneros = "Adua.UDP_tbRegimenesAduaneros_Listar";
+        public static string InsertarRegimenesAduaneros = "Adua.UDP_tbRegimenesAduaneros_Insertar";
+        public static string EditarRegimenesAduaneros = "Adua.UDP_tbRegimenesAduaneros_Editar";
+        public static string EliminarRegimenesAduaneros = "Adua.UDP_tbRegimenesAduaneros_Eliminar";
         #endregion
 
         #endregion
@@ -709,6 +728,13 @@ namespace SIMEXPRO.DataAccess
         public static string Adua_UDP_ExportadoresPorPais_CantidadPorcentaje = "Adua.UDP_ExportadoresPorPais_CantidadPorcentaje";
         public static string Adua_UDP_EstadosMercancias_CantidadPorcentaje = "Adua.UDP_EstadosMercancias_CantidadPorcentaje";
         public static string Adua_UDP_AduanasIngreso_CantidadPorcentaje = "Adua.UDP_AduanasIngreso_CantidadPorcentaje";
+        public static string Adua_UDP_Importaciones_Contador_Anio = "Adua.UDP_Importaciones_Contador_Anio";
+        public static string Adua_UDP_Importaciones_Contador_Mes = "Adua.UDP_Importaciones_Contador_Mes";
+        public static string Adua_UDP_Importaciones_Contador_Semana = "Adua.UDP_Importaciones_Contador_Semana";
+        public static string Importaciones_Semana = "Adua.UDP_Importaciones_Semana";
+        public static string Importaciones_Mes = "Adua.UDP_Importaciones_Mes";
+        public static string Importaciones_Anio = "Adua.UDP_Importaciones_Anio";
+        public static string RegimenesAduaneros_CantidadPorcentaje = "Adua.UDP_RegimenesAduaneros_CantidadPorcentaje";
         #endregion
     }
 }

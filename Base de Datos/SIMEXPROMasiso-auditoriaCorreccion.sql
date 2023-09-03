@@ -509,6 +509,10 @@ CONSTRAINT FK_Adua_tbAduanas_tbUsuarios_adua_usua_UsuarioEliminacion				FOREIGN 
 CONSTRAINT FK_Adua_tbAduanas_Gral_tbCiudades_Adua_ciud_Id FOREIGN KEY (ciud_Id) REFERENCES Gral.tbCiudades (ciud_Id)
 );
 
+ALTER TABLE Adua.tbAduanas
+ADD CONSTRAINT UQ_Adua_tbAduanas_adua_Codigo1 UNIQUE (adua_Codigo)
+
+
 
 /*Factura Detalles*/
 GO
@@ -527,6 +531,7 @@ CREATE TABLE Adua.tbNivelesComerciales(
 		nico_Estado						BIT 			NOT NULL DEFAULT 1,
 
    CONSTRAINT PK_Adua_tbNivelesComerciales_nico_Id 			PRIMARY KEY (nico_Id),
+   CONSTRAINT UK_Adua_tbNivelesComerciales_nico_Codigo		UNIQUE(nico_Codigo),
    constraint UQ_Adua_tbNivelesComerciales_nico_Descripcion UNIQUE(nico_Descripcion),
    CONSTRAINT FK_Acce_tbUsuarios_Adua_tbNivelesComerciales_nico_UsuarioCreacion 		 FOREIGN KEY (usua_UsuarioCreacion)     REFERENCES Acce.tbUsuarios(usua_Id),
    CONSTRAINT FK_Acce_tbUsuarios_Adua_tbNivelesComerciales_nico_usua_UsuarioModificacion FOREIGN KEY (usua_UsuarioModificacion) REFERENCES Acce.tbUsuarios(usua_Id),
@@ -1310,10 +1315,15 @@ CREATE TABLE Adua.tbEstadoMercancias(
 
 	CONSTRAINT PK_Adua_tbEstadoMercancias_merc_Id											PRIMARY KEY (merc_Id),
 	CONSTRAINT UQ_Adua_tbEstadoMercancias_merc_Codigo										UNIQUE(merc_Codigo),
+	CONSTRAINT UQ_Adua_tbEstadoMercancias_merc_Descripcion									UNIQUE(merc_Descripcion),
 	CONSTRAINT FK_Adua_tbEstadoMercancias_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id		FOREIGN KEY (usua_UsuarioCreacion)		REFERENCES Acce.tbUsuarios(usua_Id),
 	CONSTRAINT FK_Adua_tbEstadoMercancias_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id	FOREIGN KEY (usua_UsuarioModificacion)	REFERENCES Acce.tbUsuarios(usua_Id),
 	CONSTRAINT FK_Adua_tbEstadoMercancias_usua_UsuarioEliminacion_Acce_tbUsuarios_usua_Id	FOREIGN KEY (usua_UsuarioEliminacion)	REFERENCES Acce.tbUsuarios(usua_Id)
 );
+GO
+ALTER TABLE Adua.tbEstadoMercancias
+ADD CONSTRAINT UQ_Adua_tbEstadoMercancias_merc_Descripcion      UNIQUE(merc_Descripcion)
+GO
 
 CREATE TABLE Adua.tbItems(
 	item_Id                                   INT IDENTITY(1,1),
@@ -1473,6 +1483,7 @@ CREATE TABLE Adua.tbImpuestos(
 	CONSTRAINT PK_Adua_tbImpuestos_impu_Id													PRIMARY KEY (impu_Id),
 	CONSTRAINT FK_Adua_tbImpuestos_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id				FOREIGN KEY (usua_UsuarioCreacion)		REFERENCES Acce.tbUsuarios (usua_Id),
 	CONSTRAINT FK_Adua_tbImpuestos_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id			FOREIGN KEY (usua_UsuarioModificacion)	REFERENCES Acce.tbUsuarios (usua_Id),
+	CONSTRAINT UQ_Adua_tbImpuestos_impu_Descripcion											UNIQUE (impu_Descripcion)
 	--CONSTRAINT FK_Adua_tbImpuestos_usua_UsuarioEliminacion_Acce_tbUsuarios_usua_Id			FOREIGN KEY (usua_UsuarioEliminacion)	REFERENCES Acce.tbUsuarios (usua_Id)
 );
 GO
@@ -1683,6 +1694,7 @@ GO
 CREATE TABLE Adua.tbComercianteIndividual (
   	coin_Id                           	INT IDENTITY(1,1),
   	pers_Id                           	INT NOT NULL,
+
   	pers_FormaRepresentacion 			BIT NOT NULL,
 	ciud_Id								INT, --nuevo
 	alde_Id								INT,  --nuevo
@@ -1700,7 +1712,7 @@ CREATE TABLE Adua.tbComercianteIndividual (
   	coin_TelefonoFijo				    NVARCHAR(20),
   	coin_CorreoElectronico		    	NVARCHAR(30),
   	coin_CorreoElectronicoAlternativo 	NVARCHAR(30),
- 
+	
   	usua_UsuarioCreacion       			INT NOT NULL,
   	coin_FechaCreacion         			DATETIME NOT NULL,
   	usua_UsuarioModificacion   			INT DEFAULT NULL,
@@ -1725,6 +1737,10 @@ CREATE TABLE Adua.tbComercianteIndividual (
 	
 );
 GO
+
+
+
+
 
 CREATE TABLE Adua.tbPersonaNatural (
 	pena_Id						INT IDENTITY(1,1),
@@ -1764,17 +1780,28 @@ GO
 CREATE TABLE Adua.tbPersonaJuridica (
 	peju_Id							  				INT IDENTITY(1,1) ,
 	pers_Id							  				INT NOT NULL,
-	peju_EstadoRepresentante						INT NOT NULL,
-	colo_Id							  				INT NOT NULL,
-	peju_PuntoReferencia							NVARCHAR(200) NOT NULL,
-	peju_ColoniaRepresentante						INT NOT NULL,
-	peju_NumeroLocalRepresentante		  				NVARCHAR(200) NOT NULL,
-	peju_PuntoReferenciaRepresentante	  				NVARCHAR(200) NOT NULL,
-	peju_TelefonoEmpresa							NVARCHAR(200) NOT NULL,
-	peju_TelefonoFijoRepresentanteLegal 			NVARCHAR(200) NOT NULL,
-	peju_TelefonoRepresentanteLegal	  				NVARCHAR(200) NOT NULL,
-	peju_CorreoElectronico              			NVARCHAR(200) NOT NULL,
-	peju_CorreoElectronicoAlternativo   			NVARCHAR(200) NOT NULL,
+	peju_RTNSociedadMercantil                       NVARCHAR(20), --nuevo 
+	peju_RTNReprsentanteLegal                       NVARCHAR(20), --nuevo
+	peju_DNIRepresentante                           NVARCHAR(20), --nuevo
+	peju_EscrituraPublica                           NVARCHAR(200), --nuevo 
+
+	colo_Id							  				INT ,
+	ciud_Id                                         INT,   -- nuevo
+	alde_Id								            INT,            --nuevo
+	peju_PuntoReferencia							NVARCHAR(200),
+	peju_NumeroLocalApart				            NVARCHAR(150),  --nuevo
+
+    peju_CiudadIdRepresentante                      INT,            --nuevo
+	peju_ColoniaRepresentante						INT ,   --nuevo
+	peju_AldeaIdRepresentante                       INT,            --nuevo
+	peju_NumeroLocalRepresentante		  			NVARCHAR(200),
+	peju_PuntoReferenciaRepresentante	  			NVARCHAR(200) ,
+
+	peju_TelefonoEmpresa							NVARCHAR(200) ,
+	peju_TelefonoFijoRepresentanteLegal 			NVARCHAR(200) ,
+	peju_TelefonoRepresentanteLegal	  				NVARCHAR(200) ,
+	peju_CorreoElectronico              			NVARCHAR(200),
+	peju_CorreoElectronicoAlternativo   			NVARCHAR(200) ,
   
 	usua_UsuarioCreacion       						INT NOT NULL,
 	peju_FechaCreacion         						DATETIME NOT NULL,
@@ -1785,16 +1812,17 @@ CREATE TABLE Adua.tbPersonaJuridica (
 	peju_Estado                						BIT DEFAULT 1,
 
 	CONSTRAINT PK_Adua_tbPersonaJuridica_peju_Id PRIMARY KEY (peju_Id),
-	CONSTRAINT FK_Adua_tbPersonaJuridica_pers_Id_Adua_Personas_pers_Id                               FOREIGN KEY (pers_Id) REFERENCES Adua.tbPersonas(pers_Id),
-	CONSTRAINT FK_Adua_tbPersonaJuridica_peju_EstadoRepresentante_Gral_tbProvincias_pvin_Id          FOREIGN KEY (peju_EstadoRepresentante) REFERENCES Gral.tbProvincias(pvin_Id),
-	CONSTRAINT FK_Adua_tbPersonaJuridica_colo_Id_Gral_tbColonias_colo_Id                                FOREIGN KEY (colo_Id) REFERENCES Gral.tbColonias(colo_Id),
-	CONSTRAINT FK_Adua_tbPersonaJuridica_peju_ColoniaRepresentante_Gral_ColoniaRepresentante_colo_Id FOREIGN KEY (peju_ColoniaRepresentante) REFERENCES Gral.tbColonias(colo_Id),
-  
-	CONSTRAINT FK_Adua_PersonaJuridica_peju_UsuarioCreacion_Acce_tbUsuarios_usua_Id			  	 FOREIGN KEY (usua_UsuarioCreacion)     REFERENCES Acce.tbUsuarios (usua_Id),
-	CONSTRAINT FK_Adua_PersonaJuridica_peju_UsuarioModificacion_Acce_tbUsuarios_usua_Id		     FOREIGN KEY (usua_UsuarioModificacion) REFERENCES Acce.tbUsuarios (usua_Id),
+	CONSTRAINT FK_Adua_tbPersonaJuridica_pers_Id_Adua_Personas_pers_Id                               FOREIGN KEY (pers_Id)                    REFERENCES Adua.tbPersonas(pers_Id),
+	CONSTRAINT FK_Adua_tbPersonaJuridica_colo_Id_Gral_tbColonias_colo_Id                             FOREIGN KEY (colo_Id)                    REFERENCES Gral.tbColonias(colo_Id),
+	CONSTRAINT FK_Adua_tbPersonaJuridica_peju_ColoniaRepresentante_Gral_ColoniaRepresentante_colo_Id FOREIGN KEY (peju_ColoniaRepresentante)  REFERENCES Gral.tbColonias(colo_Id),
+	CONSTRAINT FK_Adua_tbPersonaJuridica_alde_Id_tbAldeas                                            FOREIGN KEY (alde_Id)                    REFERENCES Gral.tbAldeas(alde_Id),
+	CONSTRAINT FK_Adua_tbPersonaJuridica_AldeaIdRepresentante_tbAldea                                FOREIGN KEY (peju_AldeaIdRepresentante)  REFERENCES Gral.tbAldeas(alde_Id),
+	CONSTRAINT FK_Adua_tbPersonaJuridica_Ciudad_Id_tbCiudad                                          FOREIGN KEY (ciud_Id)                    REFERENCES Gral.tbCiudades(ciud_Id),
+	CONSTRAINT FK_Adua_tbPersonaJuridica_CiudadIdRepresentante_tbCiudad                              FOREIGN KEY (peju_CiudadIdRepresentante) REFERENCES Gral.tbCiudades(ciud_Id),
+	CONSTRAINT FK_Adua_PersonaJuridica_peju_UsuarioCreacion_Acce_tbUsuarios_usua_Id			  	     FOREIGN KEY (usua_UsuarioCreacion)       REFERENCES Acce.tbUsuarios (usua_Id),
+	CONSTRAINT FK_Adua_PersonaJuridica_peju_UsuarioModificacion_Acce_tbUsuarios_usua_Id		         FOREIGN KEY (usua_UsuarioModificacion)   REFERENCES Acce.tbUsuarios (usua_Id),
 	--CONSTRAINT FK_Adua_PersonaJuridica_peju_Acce_tbUsuarios_usua_UsuarioEliminacion_usua_Id  FOREIGN KEY (usua_UsuarioEliminacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id)
 );
-
 GO
 
 --Se identificarán los tipos de documentos según acortaciones
@@ -1812,6 +1840,8 @@ CREATE TABLE Adua.tbDocumentosContratos(
 	peju_Id								INT,
 	doco_Numero_O_Referencia			NVARCHAR(50) NOT NULL,
 	doco_TipoDocumento					NVARCHAR(6),
+	doco_URLImagen                      NVARCHAR(MAX),
+	doco_NombreImagen                   NVARCHAR(350),
 
 	usua_UsuarioCreacion       			INT NOT NULL,
   	doco_FechaCreacion         			DATETIME NOT NULL,
@@ -2242,6 +2272,7 @@ GO
 ---- DUCA ----
 CREATE TABLE Adua.tbTransporte( 
 	tran_Id							INT IDENTITY(1,1),
+	tran_IdUnidadTransporte			VARCHAR(50) NOT NULL,
 	pais_Id							INT,
 	tran_Chasis						NVARCHAR(100) NOT NULL,
 	marca_Id						INT NOT NULL,
@@ -2249,6 +2280,7 @@ CREATE TABLE Adua.tbTransporte(
 	tran_CantCarga					INT NOT NULL,
 	tran_NumDispositivoSeguridad	INT NULL,
 	tran_Equipamiento				NVARCHAR(200) NULL,
+	tran_TamanioEquipamiento		VARCHAR(50) NOT NULL,
 	tran_TipoCarga					NVARCHAR(200) NOT NULL,
 	tran_IdContenedor				NVARCHAR(100) NOT NULL,
 
@@ -2269,8 +2301,10 @@ CREATE TABLE Adua.tbTransporte(
 );
 GO
 
+
 CREATE TABLE Adua.tbConductor(
 	cont_Id							INT IDENTITY(1,1),
+	cont_NoIdentificacion			VARCHAR(50) NOT NULL,
 	cont_Nombre						NVARCHAR(200) NOT NULL,
 	cont_Apellido					NVARCHAR(200) NOT NULL,
 	cont_Licencia					NVARCHAR(50) NOT NULL,
@@ -2414,14 +2448,14 @@ CREATE TABLE Adua.tbDuca(
 	duca_No_Correlativo_Referencia	NVARCHAR(MAX),
 	deva_Id							INT,
 	duca_AduanaRegistro				INT,
-	duca_AduanaSalida				INT,
+	duca_AduanaDestino				INT,
 	duca_DomicilioFiscal_Exportador NVARCHAR(MAX) ,
 	duca_Tipo_Iden_Exportador		INT ,
 	duca_Pais_Emision_Exportador	INT ,
 	duca_Numero_Id_Importador		NVARCHAR(100) ,
 	duca_Pais_Emision_Importador	INT ,
 	duca_DomicilioFiscal_Importador NVARCHAR(MAX) ,
-	duca_Regimen_Aduanero			NVARCHAR(MAX) ,
+	duca_Regimen_Aduanero			INT ,
 	duca_Modalidad					NVARCHAR(MAX) ,
 	duca_Clase						NVARCHAR(MAX) ,
 	duca_Codigo_Declarante			NVARCHAR(200) ,
@@ -2432,8 +2466,7 @@ CREATE TABLE Adua.tbDuca(
 	duca_Pais_Exportacion			INT ,
 	duca_Pais_Destino				INT ,
 	duca_Deposito_Aduanero			NVARCHAR(MAX) ,
-	duca_Lugar_Embarque				NVARCHAR(MAX) ,
-	duca_Lugar_Desembarque			NVARCHAR(MAX) ,
+	duca_Lugar_Desembarque			INT ,
 	duca_Manifiesto					NVARCHAR(MAX) ,
 	duca_Titulo						NVARCHAR(MAX) ,
 	duca_Codigo_Transportista		NVARCHAR(200) NULL,
@@ -2456,19 +2489,21 @@ CREATE TABLE Adua.tbDuca(
 	duca_Estado 					BIT DEFAULT 1
 	
 	CONSTRAINT PK_Adua_tbDuca_duca_No_Duca PRIMARY KEY(duca_No_Duca),
-	CONSTRAINT FK_Adua_tbConductor_cont_Id_Adua_tbDuca_duca_Conductor_Id        FOREIGN KEY(duca_Conductor_Id) 		            REFERENCES Adua.tbConductor(cont_Id),
-	CONSTRAINT FK_Adua_tbDuca_duca_Pais_Procedencia_tbPaises_pais_Id			FOREIGN KEY(duca_Pais_Procedencia) 	            REFERENCES Gral.tbPaises (pais_Id),
-	CONSTRAINT FK_Adua_tbDuca_duca_Pais_Exportacion_tbPaises_pais_Id			FOREIGN KEY(duca_Pais_Exportacion) 	            REFERENCES Gral.tbPaises (pais_Id),
-	CONSTRAINT FK_Adua_tbDuca_duca_Pais_Destino_tbPaises_pais_Id				FOREIGN KEY(duca_Pais_Destino) 		            REFERENCES Gral.tbPaises (pais_Id),
-	CONSTRAINT FK_Adua_tbDuca_duca_Pais_Emision_Exportador_tbPaises_pais_Id		FOREIGN KEY(duca_Pais_Emision_Exportador) 		REFERENCES Gral.tbPaises (pais_Id),
-	CONSTRAINT FK_Adua_tbDuca_duca_Pais_Emision_Importador_tbPaises_pais_Id		FOREIGN KEY(duca_Pais_Emision_Importador) 		REFERENCES Gral.tbPaises (pais_Id),
-	CONSTRAINT FK_Adua_tbDeclaraciones_Valor_deva_Id_Adua_tbDuca_deva_Id		FOREIGN KEY (deva_Id) 							REFERENCES Adua.tbDeclaraciones_Valor(deva_Id),
-	CONSTRAINT FK_Adua_tbDuca_tbUsuarios_duca_UsuCrea			               	FOREIGN KEY (usua_UsuarioCreacion)     			REFERENCES Acce.tbUsuarios 	(usua_Id),
-	CONSTRAINT FK_Prod_tbDuca_tbUsuarios_duca_UsuModifica		               	FOREIGN KEY (usua_UsuarioModificacion) 			REFERENCES Acce.tbUsuarios 	(usua_Id),
-	CONSTRAINT FK_Adua_tbDuca_motr_id_tbModoTransporte_motr_Id			        FOREIGN KEY (motr_id)							REFERENCES Adua.tbModoTransporte(motr_id),
-	CONSTRAINT FK_Adua_tbDuca_duca_AduanaRegistro_tbAduana_adua_Id              FOREIGN KEY (duca_AduanaRegistro)               REFERENCES Adua.tbAduanas(adua_Id),
-	CONSTRAINT FK_Adua_tbDuca_duca_AduanaSalida_tbAduana_adua_Id                FOREIGN KEY (duca_AduanaSalida)                 REFERENCES Adua.tbAduanas(adua_Id),
-	CONSTRAINT FK_Adua_tbDuca_duca_Tipo_Iden_Exportador_tbTiposIdentificacion	FOREIGN KEY (duca_Tipo_Iden_Exportador)			REFERENCES Adua.tbTiposIdentificacion(iden_Id)
+	CONSTRAINT FK_Adua_tbConductor_cont_Id_Adua_tbDuca_duca_Conductor_Id			FOREIGN KEY(duca_Conductor_Id) 		            REFERENCES Adua.tbConductor(cont_Id),
+	CONSTRAINT FK_Adua_tbDuca_duca_Pais_Procedencia_tbPaises_pais_Id				FOREIGN KEY(duca_Pais_Procedencia) 	            REFERENCES Gral.tbPaises (pais_Id),
+	CONSTRAINT FK_Adua_tbDuca_duca_Pais_Exportacion_tbPaises_pais_Id				FOREIGN KEY(duca_Pais_Exportacion) 	            REFERENCES Gral.tbPaises (pais_Id),
+	CONSTRAINT FK_Adua_tbDuca_duca_Pais_Destino_tbPaises_pais_Id					FOREIGN KEY(duca_Pais_Destino) 		            REFERENCES Gral.tbPaises (pais_Id),
+	CONSTRAINT FK_Adua_tbDuca_duca_Pais_Emision_Exportador_tbPaises_pais_Id			FOREIGN KEY(duca_Pais_Emision_Exportador) 		REFERENCES Gral.tbPaises (pais_Id),
+	CONSTRAINT FK_Adua_tbDuca_duca_Pais_Emision_Importador_tbPaises_pais_Id			FOREIGN KEY(duca_Pais_Emision_Importador) 		REFERENCES Gral.tbPaises (pais_Id),
+	CONSTRAINT FK_Adua_tbDeclaraciones_Valor_deva_Id_Adua_tbDuca_deva_Id			FOREIGN KEY (deva_Id) 							REFERENCES Adua.tbDeclaraciones_Valor(deva_Id),
+	CONSTRAINT FK_Adua_tbDuca_tbUsuarios_duca_UsuCrea			               		FOREIGN KEY (usua_UsuarioCreacion)     			REFERENCES Acce.tbUsuarios 	(usua_Id),
+	CONSTRAINT FK_Prod_tbDuca_tbUsuarios_duca_UsuModifica		               		FOREIGN KEY (usua_UsuarioModificacion) 			REFERENCES Acce.tbUsuarios 	(usua_Id),
+	CONSTRAINT FK_Adua_tbDuca_motr_id_tbModoTransporte_motr_Id						FOREIGN KEY (motr_id)							REFERENCES Adua.tbModoTransporte(motr_id),
+	CONSTRAINT FK_Adua_tbDuca_duca_AduanaRegistro_tbAduana_adua_Id					FOREIGN KEY (duca_AduanaRegistro)               REFERENCES Adua.tbAduanas (adua_Id),
+	CONSTRAINT FK_Adua_tbDuca_duca_AduanaDestino_tbAduana_adua_Id					FOREIGN KEY (duca_AduanaDestino)				REFERENCES Adua.tbAduanas (adua_Id),
+	CONSTRAINT FK_Adua_tbDuca_duca_Tipo_Iden_Exportador_tbTiposIdentificacion		FOREIGN KEY (duca_Tipo_Iden_Exportador)			REFERENCES Adua.tbTiposIdentificacion(iden_Id),
+	CONSTRAINT FK_Adua_tbDuca_duca_Regimen_Aduanero_tbRegimenesAduaneros_regi_Id	FOREIGN KEY (duca_Regimen_Aduanero)				REFERENCES Adua.tbRegimenesAduaneros(regi_Id),
+	CONSTRAINT FK_Adua_tbDuca_duca_Lugar_Desembarque_tbLugaresEmbarque_emba_Id		FOREIGN KEY (duca_Lugar_Desembarque)			REFERENCES Adua.tbLugaresEmbarque(emba_Id)
 	--CONSTRAINT FK_Adua_tbDuca__Acce_tbUsuarios_usua_UsuarioEliminacion_usua_Id  FOREIGN KEY (usua_UsuarioEliminacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id)
 );
 GO

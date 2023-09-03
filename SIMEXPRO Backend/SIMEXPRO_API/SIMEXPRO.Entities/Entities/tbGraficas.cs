@@ -27,6 +27,7 @@ namespace SIMEXPRO.Entities.Entities
         public string orco_FechaCreacion { get; set; }
         public string Anio { get; set; }
         public string Mes { get; set; }
+        public string Semana { get; set; }
         public string MesLabel { get; set; }
         public string Fecha { get; set; }
 
@@ -66,6 +67,7 @@ namespace SIMEXPRO.Entities.Entities
 
         public string merc_Descripcion { get; set; }
         public int Cantidad { get; set; }
+        public string label { get; set; }
 
         // Aduanas con mas importaciones
 

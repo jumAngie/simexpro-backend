@@ -28,12 +28,12 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
         public IActionResult Index()
         {
             var listado = _aduanaServices.ListarBaseCalculos();
-            var mapped = _mapper.Map<IEnumerable<ArancelesViewModel>>(listado);
+            var mapped = _mapper.Map<IEnumerable<BaseCalculosViewModel>>(listado);
             return Ok(mapped);
         }
 
         [HttpPost("Insertar")]
-        public IActionResult Insertar(ArancelesViewModel baseCalculo)
+        public IActionResult Insertar(BaseCalculosViewModel baseCalculo)
         {
             var mapped = _mapper.Map<tbBaseCalculos>(baseCalculo);
             var datos = _aduanaServices.InsertarBaseCalculos(mapped);
@@ -41,7 +41,7 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
         }
 
         [HttpPost("Editar")]
-        public IActionResult Editar(ArancelesViewModel baseCalculo)
+        public IActionResult Editar(BaseCalculosViewModel baseCalculo)
         {
             var mapped = _mapper.Map<tbBaseCalculos>(baseCalculo);
             var datos = _aduanaServices.ActualizarBaseCalculos(mapped);

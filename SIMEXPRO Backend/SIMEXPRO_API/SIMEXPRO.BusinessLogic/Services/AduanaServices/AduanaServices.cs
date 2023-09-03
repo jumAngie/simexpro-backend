@@ -51,6 +51,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         private readonly TiposIdentificacionRepository _tiposIdentificacionRepository;
         private readonly TransporteRepository _transporteRepository;
         private readonly AduanaGraficasRepository _aduanagraficasrepository;
+        private readonly RegimenesAduanerosRepository _regimenesAduanerosRepository;
 
         public AduanaServices(AduanasRepository AduanasRepository, ArancelesRepository ArancelesRepository, BaseCalculosRepository BaseCalculosRepository, BoletinPagoRepository BoletinPagoRepository, BoletinPagoDetallesRepository BoletinPagoDetallesRepository,
                                 CodigoImpuestoRepository CodigoImpuestoRepository, ComercianteIndividualRepository ComercianteIndividualRepository, ConceptoPagoRepository ConceptoPagoRepository, CondicionesRepository CondicionesRepository,
@@ -61,7 +62,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                                 LiquidacionPorLineaRepository LiquidacionPorLineaRepository, LugaresEmbarqueRepository LugaresEmbarqueRepository, MarcasRepository MarcasRepository, ModoTransporteRepository ModoTransporteRepository,
                                 NivelesComercialesRepository NivelesComercialesRepository, PersonaJuridicaRepository PersonaJuridicaRepository, PersonaNaturalRepository PersonaNaturalRepository, PersonasRepository PersonasRepository,
                                  TipoDocumentoRepository TipoDocumentoRepository, TipoIntermediarioRepository TipoIntermediarioRepository,TipoLiquidacionRepository TipoLiquidacionRepository, TiposIdentificacionRepository TiposIdentificacionRepository, TransporteRepository TransporteRepository,
-                                AduanaGraficasRepository AduanaGraficasRepository)
+                                AduanaGraficasRepository AduanaGraficasRepository, RegimenesAduanerosRepository regimenesAduanerosRepository)
         {
             _aduanasRepository = AduanasRepository;
             _arancelesRepository = ArancelesRepository;
@@ -103,7 +104,9 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             _tiposIdentificacionRepository = TiposIdentificacionRepository;
             _transporteRepository = TransporteRepository;
             _aduanagraficasrepository = AduanaGraficasRepository;
+            _regimenesAduanerosRepository = regimenesAduanerosRepository;
         }
+
         #region Aduanas
         public ServiceResult ListarAduanas()
         {
@@ -245,6 +248,21 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+
+        public ServiceResult BuscarCategoriaArancel(string aran_Codigo)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _arancelesRepository.Categoria(aran_Codigo);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
 
         #endregion
 
@@ -521,7 +539,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _comercianteIndividualRepository.Insert(item);
-                if (map.MessageStatus != "1")
+                if (map.MessageStatus != "0")
                 {
                     return result.Ok(map);
                 }
@@ -535,6 +553,92 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+
+        public ServiceResult InsertarComercianteIndividualTap2(tbComercianteIndividual item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _comercianteIndividualRepository.InsertTap2(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarComercianteIndividualTap3(tbComercianteIndividual item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _comercianteIndividualRepository.InsertTap3(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarComercianteIndividualTap4(tbComercianteIndividual item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _comercianteIndividualRepository.InsertTap4(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarComercianteIndividualTap5(tbComercianteIndividual item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _comercianteIndividualRepository.InsertTap5(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+
 
         public ServiceResult ActualizarComercianteIndividual(tbComercianteIndividual item)
         {
@@ -1188,6 +1292,20 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+        public ServiceResult VerificarExistencia(string duca_No_Duca)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _ducaRepository.VerificarExistencia(duca_No_Duca);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
 
         public ServiceResult InsertarDucaTap1(tbDuca item)
         {
@@ -1453,6 +1571,20 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var list = _facturasRepository.List(deva_Id);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult VerificarFactura(string fact_Numero)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _facturasRepository.VerficarFactura(fact_Numero);
                 return result.Ok(list);
             }
             catch (Exception ex)
@@ -2519,6 +2651,90 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult InsertarPersonaJuridicaTap2(tbPersonaJuridica item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _personaJuridicaRepository.InsertTap2(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarPersonaJuridicaTap3(tbPersonaJuridica item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _personaJuridicaRepository.InsertTap3(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarPersonaJuridicaTap4(tbPersonaJuridica item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _personaJuridicaRepository.InsertTap4(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarPersonaJuridicaTap5(tbPersonaJuridica item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _personaJuridicaRepository.InsertTap5(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
         public ServiceResult ActualizarPersonaJuridica(tbPersonaJuridica item)
         {
             var result = new ServiceResult();
@@ -3175,6 +3391,184 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+
+        public ServiceResult Importaciones_Contador_Anio()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _aduanagraficasrepository.Importaciones_Contador_Anio();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult Importaciones_Contador_Mes()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _aduanagraficasrepository.Importaciones_Contador_Mes();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult Importaciones_Contador_Semana()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _aduanagraficasrepository.Importaciones_Contador_Semana();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult Importaciones_Semana()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _aduanagraficasrepository.Importaciones_Semana();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult Importaciones_Mes()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _aduanagraficasrepository.Importaciones_Mes();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult Importaciones_Anio()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _aduanagraficasrepository.Importaciones_Anio();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult RegimenesAduaneros_CantidadPorcentaje()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _aduanagraficasrepository.RegimenesAduaneros_CantidadPorcentaje();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        #endregion
+
+        #region Regimenes Aduaneros
+
+        public ServiceResult ListarRegimenesAduaneros()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _regimenesAduanerosRepository.List();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarRegimenesAduaneros(tbRegimenesAduaneros item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _regimenesAduanerosRepository.Insert(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult ActualizarRegimenesAduaneros(tbRegimenesAduaneros item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _regimenesAduanerosRepository.Update(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult EliminarRegimenesAduaneros(tbRegimenesAduaneros item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _regimenesAduanerosRepository.Delete(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
         #endregion
     }
 }

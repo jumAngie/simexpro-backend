@@ -22,6 +22,10 @@ namespace SIMEXPRO.Entities.Entities
         public int tran_CantCarga { get; set; }
         public int? tran_NumDispositivoSeguridad { get; set; }
         public string tran_Equipamiento { get; set; }
+
+        public string tran_IdUnidadTransporte { get; set; }
+
+        public string tran_TamanioEquipamiento { get; set; }
         public string tran_TipoCarga { get; set; }
         public string tran_IdContenedor { get; set; }
         public int usua_UsuarioCreacio { get; set; }

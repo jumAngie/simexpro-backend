@@ -15,6 +15,7 @@ namespace SIMEXPRO.Entities.Entities
         }
 
         public int cont_Id { get; set; }
+        public string cont_NoIdentificacion { get; set; }
         public string cont_Nombre { get; set; }
         public string cont_Apellido { get; set; }
         public string cont_Licencia { get; set; }
@@ -46,5 +47,6 @@ namespace SIMEXPRO.Entities.Entities
         public virtual tbUsuarios usua_UsuarioEliminacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }
         public virtual ICollection<tbDuca> tbDuca { get; set; }
+
     }
 }
