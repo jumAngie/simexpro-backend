@@ -52,6 +52,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         private readonly TransporteRepository _transporteRepository;
         private readonly AduanaGraficasRepository _aduanagraficasrepository;
         private readonly RegimenesAduanerosRepository _regimenesAduanerosRepository;
+        private readonly ImportadoresRepository _importadoresRepository;
 
         public AduanaServices(AduanasRepository AduanasRepository, ArancelesRepository ArancelesRepository, BaseCalculosRepository BaseCalculosRepository, BoletinPagoRepository BoletinPagoRepository, BoletinPagoDetallesRepository BoletinPagoDetallesRepository,
                                 CodigoImpuestoRepository CodigoImpuestoRepository, ComercianteIndividualRepository ComercianteIndividualRepository, ConceptoPagoRepository ConceptoPagoRepository, CondicionesRepository CondicionesRepository,
@@ -62,7 +63,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                                 LiquidacionPorLineaRepository LiquidacionPorLineaRepository, LugaresEmbarqueRepository LugaresEmbarqueRepository, MarcasRepository MarcasRepository, ModoTransporteRepository ModoTransporteRepository,
                                 NivelesComercialesRepository NivelesComercialesRepository, PersonaJuridicaRepository PersonaJuridicaRepository, PersonaNaturalRepository PersonaNaturalRepository, PersonasRepository PersonasRepository,
                                  TipoDocumentoRepository TipoDocumentoRepository, TipoIntermediarioRepository TipoIntermediarioRepository,TipoLiquidacionRepository TipoLiquidacionRepository, TiposIdentificacionRepository TiposIdentificacionRepository, TransporteRepository TransporteRepository,
-                                AduanaGraficasRepository AduanaGraficasRepository, RegimenesAduanerosRepository regimenesAduanerosRepository)
+                                AduanaGraficasRepository AduanaGraficasRepository, RegimenesAduanerosRepository regimenesAduanerosRepository, ImportadoresRepository importadoresRepository)
         {
             _aduanasRepository = AduanasRepository;
             _arancelesRepository = ArancelesRepository;
@@ -105,6 +106,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             _transporteRepository = TransporteRepository;
             _aduanagraficasrepository = AduanaGraficasRepository;
             _regimenesAduanerosRepository = regimenesAduanerosRepository;
+            _importadoresRepository = importadoresRepository;
         }
 
         #region Aduanas
@@ -1739,6 +1741,22 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             catch (Exception ex)
             {
                 return resultado.Error(ex.Message);
+            }
+        }
+        #endregion
+
+        #region Importadores
+        public ServiceResult ListarImportadores()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _importadoresRepository.List();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
             }
         }
         #endregion

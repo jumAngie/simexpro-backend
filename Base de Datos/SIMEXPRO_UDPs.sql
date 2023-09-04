@@ -15396,6 +15396,25 @@ AS
 GO
 	
 /*Importadores*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbImportadores_Listar
+AS
+BEGIN	
+	SELECT [impo_Id], 
+		   [nico_Id], 
+		   [decl_Id], 
+		   [impo_NivelComercial_Otro], 
+		   [impo_RTN], 
+		   [impo_NumRegistro], 
+		   [usua_UsuarioCreacion], 
+		   [impo_FechaCreacion], 
+		   [usua_UsuarioModificacion], 
+		   [impo_FechaModificacion], 
+		   [usua_UsuarioEliminacion], 
+		   [impo_FechaEliminacion], 
+		   [impo_Estado]
+	FROM [Adua].[tbImportadores]
+END
+
 CREATE OR ALTER TRIGGER Adua.TR_tbImportadores_Update
 ON Adua.tbImportadores AFTER UPDATE 
 AS
