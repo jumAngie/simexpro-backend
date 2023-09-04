@@ -13,6 +13,9 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public int mate_Id { get; set; }
         public int prod_Cantidad { get; set; }
         public decimal prod_Precio { get; set; }
+
+        [NotMapped]
+        public string detalles { get; set; }
         public string mate_Descripcion { get; set; }
         //public decimal prod_Peso { get; set; }
         public int usua_UsuarioCreacion { get; set; }
