@@ -15,6 +15,7 @@ namespace SIMEXPRO.Entities.Entities
         public string adua_DespachoNombre { get; set; }
         public string deva_DeclaracionMercancia { get; set; }
         public DateTime? deva_FechaAceptacion { get; set; }
+        public bool? deva_Finalizacion { get; set; }
         public int? impo_Id { get; set; }
         public string impo_NumRegistro { get; set; }
         public int? nico_Id { get; set; }
@@ -46,6 +47,7 @@ namespace SIMEXPRO.Entities.Entities
         public int? inte_ciudId { get; set; }
         public string deva_LugarEntrega { get; set; }
         public int? pais_EntregaId { get; set; }
+        public string pais_EntregaNombre { get; set; }
         public int? inco_Id { get; set; }
         public string inco_Descripcion { get; set; }
         public string inco_Version { get; set; }
@@ -59,6 +61,7 @@ namespace SIMEXPRO.Entities.Entities
         public string deva_FormaPagoOtra { get; set; }
         public int? emba_Id { get; set; }
         public int? pais_ExportacionId { get; set; }
+        public string pais_ExportacionNombre { get; set; }
         public DateTime? deva_FechaExportacion { get; set; }
         public int? mone_Id { get; set; }
         public string mone_Otra { get; set; }
