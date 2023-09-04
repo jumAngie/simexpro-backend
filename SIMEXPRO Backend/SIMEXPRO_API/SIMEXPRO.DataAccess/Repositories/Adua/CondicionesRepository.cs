@@ -74,8 +74,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@codi_Concepto_Monto_Declarado", item.codi_Concepto_Monto_Declarado, DbType.String, ParameterDirection.Input);
             parametros.Add("@codi_Existen_Canones", item.codi_Existen_Canones, DbType.Boolean, ParameterDirection.Input);
             parametros.Add("@codi_Indicar_Canones", item.codi_Indicar_Canones, DbType.String, ParameterDirection.Input);
-            parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@codi_FechaCreacion", item.codi_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
+            parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@codi_FechaModificacion", item.codi_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.EditarCondiciones, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
             return result;

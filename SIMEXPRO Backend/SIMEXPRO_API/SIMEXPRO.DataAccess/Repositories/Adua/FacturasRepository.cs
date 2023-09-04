@@ -77,8 +77,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@deva_Id", item.deva_Id, DbType.String, ParameterDirection.Input);
             parametros.Add("@fact_Numero", item.fact_Numero, DbType.String, ParameterDirection.Input);
             parametros.Add("@fact_Fecha", item.fact_Fecha, DbType.Date, ParameterDirection.Input);
-            parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@fact_FechaCreacion", item.fact_FechaCreacion, DbType.String, ParameterDirection.Input);
+            parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@fact_FechaModificacion", item.fact_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
 
             var answer = db.QueryFirst<string>(ScriptsDataBase.EditarFacturas, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;

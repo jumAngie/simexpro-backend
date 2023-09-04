@@ -744,7 +744,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _condicionesRepository.Insert(item);
-                if (map.MessageStatus == "1")
+                if (map.MessageStatus != "0")
                 {
                     return result.Ok(map);
                 }
@@ -1622,7 +1622,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _facturasRepository.Update(item);
-                if (map.MessageStatus == "1")
+                if (map.MessageStatus != "0")
                 {
                     return result.Ok(map);
                 }

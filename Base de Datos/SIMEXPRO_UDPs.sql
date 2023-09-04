@@ -6619,42 +6619,51 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbFacturas_Editar
+
+ALTER   PROCEDURE [Adua].[UDP_tbFacturas_Editar]
 	@fact_Id					INT, 
 	@fact_Numero				NVARCHAR(4000),
 	@deva_Id					INT,
 	@fact_Fecha					DATE, 
-	@usua_UsuarioCreacion		INT, 
-	@fact_FechaCreacion			DATETIME
+	@usua_UsuarioModificacion	INT, 
+	@fact_FechaModificacion		DATETIME
 AS
 BEGIN
 	BEGIN TRANSACTION
 	BEGIN TRY
 
-		UPDATE Adua.tbFacturas
-		SET   deva_Id = @deva_Id, 
-		      fact_Numero = @fact_Numero,
-			  fact_Fecha = @fact_Fecha, 
-			  usua_UsuarioCreacion = @usua_UsuarioCreacion, 
-			  fact_FechaCreacion = @fact_FechaCreacion
-		WHERE fact_Id = @fact_Id
+	IF NOT EXISTS(SELECT fact_Id FROM Adua.tbFacturas WHERE fact_Id = @fact_Id AND fact_Numero = @fact_Numero)
+		BEGIN
+			UPDATE Adua.tbFacturas
+			SET   deva_Id = @deva_Id, 
+				  fact_Numero = @fact_Numero,
+				  fact_Fecha = @fact_Fecha, 
+				  usua_UsuarioModificacion = @usua_UsuarioModificacion, 
+				  fact_FechaModificacion = @fact_FechaModificacion
+			WHERE fact_Id = @fact_Id
 
 
-		INSERT INTO Adua.tbFacturasHistorial(fact_Id, 
-												 fact_Numero,
-												 deva_Id, 
-												 fect_Fecha, 
-												 hfact_UsuarioAccion, 
-												 hfact_FechaAccion, 
-												 hfact_Accion)
-		VALUES (@fact_Id,
-				@fact_Numero,
-				@deva_Id, 
-			    @fact_Fecha, 
-			    @usua_UsuarioCreacion, 
-			    @fact_FechaCreacion,
-				'Editar')
-
+			INSERT INTO Adua.tbFacturasHistorial(fact_Id, 
+													 fact_Numero,
+													 deva_Id, 
+													 fect_Fecha, 
+													 hfact_UsuarioAccion, 
+													 hfact_FechaAccion, 
+													 hfact_Accion)
+			VALUES (@fact_Id,
+					@fact_Numero,
+					@deva_Id, 
+					@fact_Fecha, 
+					@usua_UsuarioModificacion, 
+					@fact_FechaModificacion,
+					'Editar')
+			
+			SELECT 1
+		END
+	ELSE
+		BEGIN
+			SELECT 2
+		END
 		COMMIT TRAN
 	END TRY
 	BEGIN CATCH
@@ -6662,7 +6671,7 @@ BEGIN
 		ROLLBACK TRAN
 	END CATCH 
 END
-GO
+
 
 
 ALTER   PROCEDURE [Adua].[UDP_tbFacturas_Eliminar]
@@ -9044,7 +9053,7 @@ END
 
 /*Insertar condiciones*/
 GO
-CREATE OR ALTER PROCEDURE Adua.UDP_tbCondiciones_Insertar 
+CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbCondiciones_Insertar] 
 	@deva_Id									INT, 
 	@codi_Restricciones_Utilizacion				BIT, 
 	@codi_Indicar_Restricciones_Utilizacion		NVARCHAR(500), 
@@ -9063,6 +9072,8 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbCondiciones_Insertar
 AS
 BEGIN
 	BEGIN TRY
+		DECLARE @codi_Id INT;
+
 		INSERT INTO Adua.tbCondiciones(deva_Id, 
 										   codi_Restricciones_Utilizacion, 
 										   codi_Indicar_Restricciones_Utilizacion, 
@@ -9093,6 +9104,8 @@ BEGIN
 				@codi_Indicar_Canones, 
 				@usua_UsuarioCreacion, 
 				@codi_FechaCreacion)
+
+		SET @codi_Id = SCOPE_IDENTITY()
 
 		INSERT INTO Adua.tbCondicionesHistorial(codi_Id,
 													deva_Id, 
@@ -9129,7 +9142,7 @@ BEGIN
 				@codi_FechaCreacion,
 				'Insertar')
 
-		SELECT 1
+		SELECT @codi_Id
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
