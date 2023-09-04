@@ -134,5 +134,12 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
                 return Ok(result);
 
         }
+
+        [HttpPost("FinalizarDeclaracionValor")]
+        public IActionResult FinalizarPedidoOrden(string deva_Id)
+        {
+            var datos = _aduanaServices.FinalizarDeva(deva_Id);
+            return Ok(datos);
+        }
     }
 }

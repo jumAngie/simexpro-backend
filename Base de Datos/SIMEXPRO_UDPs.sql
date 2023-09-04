@@ -7433,6 +7433,25 @@ BEGIN
 END
 
 GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbdeclaracion_Valor_Finalizar
+	@deva_Id	INT
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE [Adua].[tbDeclaraciones_Valor]
+		SET [deva_Finalizacion] = 1
+		WHERE deva_Id = @deva_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE()
+	END CATCH
+
+END
+
+GO
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDeclaraciones_Valor_Eliminar
 	@deva_Id					INT,
 	@usua_UsuarioEliminacion	INT,
