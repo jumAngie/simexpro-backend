@@ -178,6 +178,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[Adua].[tbItemsDEVAPorDuca]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[Adua].[tbItemsHistorial]",
          "ObjectType": 0
       },

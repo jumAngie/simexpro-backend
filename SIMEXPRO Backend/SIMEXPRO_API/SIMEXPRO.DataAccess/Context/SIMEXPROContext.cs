@@ -75,6 +75,7 @@ namespace SIMEXPRO.DataAccess.Context
         public virtual DbSet<tbIntermediarios> tbIntermediarios { get; set; }
         public virtual DbSet<tbIntermediariosHistorial> tbIntermediariosHistorial { get; set; }
         public virtual DbSet<tbItems> tbItems { get; set; }
+        public virtual DbSet<tbItemsDEVAPorDuca> tbItemsDEVAPorDuca { get; set; }
         public virtual DbSet<tbItemsHistorial> tbItemsHistorial { get; set; }
         public virtual DbSet<tbLiquidacionGeneral> tbLiquidacionGeneral { get; set; }
         public virtual DbSet<tbLiquidacionGeneralHistorial> tbLiquidacionGeneralHistorial { get; set; }
@@ -183,6 +184,8 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.impo_NumRegistro).HasMaxLength(40);
 
+                entity.Property(e => e.impo_RTN).HasMaxLength(40);
+
                 entity.Property(e => e.impo_Telefono).HasMaxLength(50);
 
                 entity.Property(e => e.inco_Descripcion).HasMaxLength(150);
@@ -202,6 +205,10 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.Property(e => e.mone_Otra).HasMaxLength(200);
 
                 entity.Property(e => e.nico_Descripcion).HasMaxLength(150);
+
+                entity.Property(e => e.pais_EntregaNombre).HasMaxLength(155);
+
+                entity.Property(e => e.pais_ExportacionNombre).HasMaxLength(155);
 
                 entity.Property(e => e.prov_Correo_Electronico).HasMaxLength(150);
 
@@ -2951,6 +2958,40 @@ namespace SIMEXPRO.DataAccess.Context
                     .WithMany(p => p.tbItemsusua_UsuarioModificacionNavigation)
                     .HasForeignKey(d => d.usua_UsuarioModificacion)
                     .HasConstraintName("FK_Adua_tbItems_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id");
+            });
+
+            modelBuilder.Entity<tbItemsDEVAPorDuca>(entity =>
+            {
+                entity.HasKey(e => e.dedu_Id)
+                    .HasName("PK_Adua_tbItemsDEVAPorDuca_dedu_Id");
+
+                entity.ToTable("tbItemsDEVAPorDuca", "Adua");
+
+                entity.Property(e => e.dedu_FechaCreacion).HasColumnType("datetime");
+
+                entity.Property(e => e.dedu_FechaModificacion).HasColumnType("datetime");
+
+                entity.Property(e => e.duca_No_DUCA).HasMaxLength(100);
+
+                entity.HasOne(d => d.deva)
+                    .WithMany(p => p.tbItemsDEVAPorDuca)
+                    .HasForeignKey(d => d.deva_Id)
+                    .HasConstraintName("FK_Adua_tbItemsDEVAPorDuca_deva_Id_Adua_tbDeclaraciones_Valor_deva_Id");
+
+                entity.HasOne(d => d.duca_No_DUCANavigation)
+                    .WithMany(p => p.tbItemsDEVAPorDuca)
+                    .HasForeignKey(d => d.duca_No_DUCA)
+                    .HasConstraintName("FK_Adua_tbItemsDEVAPorDuca_duca_No_DUCA_Adua_tbDuca_duca_No_Duca");
+
+                entity.HasOne(d => d.usua_UsuarioCreacionNavigation)
+                    .WithMany(p => p.tbItemsDEVAPorDucausua_UsuarioCreacionNavigation)
+                    .HasForeignKey(d => d.usua_UsuarioCreacion)
+                    .HasConstraintName("FK_Acce_tbUsuarios_Adua_tbItemsDEVAPorDuca_usua_UsuarioCreacion");
+
+                entity.HasOne(d => d.usua_UsuarioModificacionNavigation)
+                    .WithMany(p => p.tbItemsDEVAPorDucausua_UsuarioModificacionNavigation)
+                    .HasForeignKey(d => d.usua_UsuarioModificacion)
+                    .HasConstraintName("FK_Acce_tbUsuarios_Adua_tbItemsDEVAPorDuca_usua_UsuarioModificacion");
             });
 
             modelBuilder.Entity<tbItemsHistorial>(entity =>

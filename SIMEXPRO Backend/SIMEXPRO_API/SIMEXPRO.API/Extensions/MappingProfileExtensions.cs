@@ -76,6 +76,7 @@ namespace SIMEXPRO.API.Extentions
             CreateMap<tbDuca, DucaViewModel>().ReverseMap();
             CreateMap<tbCondiciones, CondicionesViewModel>().ReverseMap();
             CreateMap<RegimenesAduanerosViewModel, tbRegimenesAduaneros>().ReverseMap();
+            CreateMap<ItemsDEVAxDUCAViewModel, tbItemsDEVAPorDuca>().ReverseMap();
             #endregion
 
             #region Producción

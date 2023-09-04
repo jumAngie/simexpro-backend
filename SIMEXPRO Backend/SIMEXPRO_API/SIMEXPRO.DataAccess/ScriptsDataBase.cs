@@ -453,6 +453,11 @@ namespace SIMEXPRO.DataAccess
         public static string EliminarRegimenesAduaneros = "Adua.UDP_tbRegimenesAduaneros_Eliminar";
         #endregion
 
+        #region Items DEVA X DUCA
+        public static string InsertarItemDEVAxDuca = "Adua.UDP_tbItemsDEVAPorDuca_Insertar";
+        public static string EditarItemDevaxDuca = "Adua.UDP_tbItemsDEVAPorDuca_Editar";
+        #endregion
+
         #endregion
 
         #region Produccion

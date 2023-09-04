@@ -139,8 +139,11 @@ VALUES	('Marítimo',1,GETDATE()),
 --***** INSERT TABLA TIPO DOCUMENTOS --******--
 GO
 INSERT INTO Adua.tbTipoDocumento(tido_Codigo, tido_Descripcion,usua_UsuarioCreacion,tido_FechaCreacion)
-VALUES	('DF','DUCA-F',1,GETDATE()),
-		('DT','DUCA-T',1,GETDATE());
+VALUES	('001','Documentos de Pago',2,GETDATE()),
+		('002','Documentos de Valoración',2,GETDATE()),
+		('003','Factura Comercial',2,GETDATE()),
+		('004','Manifiesto',2,GETDATE()),
+		('005','Documentos de Seguro',2,GETDATE());
 
 
 /*-------------------------------------------*/
