@@ -14,8 +14,8 @@
    "SelectedToBeGenerated": 2,
    "Tables": [
       {
-         "Name": "[Adua].[tbItemsDEVAPorDuca]",
-         "ObjectType": 0
+         "Name": "[Adua].[VW_tbDeclaraciones_ValorCompleto]",
+         "ObjectType": 3
       }
    ],
    "UiHint": "simexpro.SIMEXPRO",

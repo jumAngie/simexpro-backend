@@ -4940,7 +4940,7 @@ GO
 /*Vista que trae todos los campos de la parte  1 del formulario de la declaración de valor, incluso los que están en 
   otras tablas conectadas a tbDeclaraciones_Valor (no se incluyen las facturas ni las condiciones)*/
 
-CREATE OR ALTER VIEW Adua.VW_tbDeclaraciones_ValorCompleto
+CREATE OR ALTER   VIEW [Adua].[VW_tbDeclaraciones_ValorCompleto]
 AS
 SELECT		deva.deva_Id, 
 			deva.deva_AduanaIngresoId, 
@@ -4949,6 +4949,7 @@ SELECT		deva.deva_Id,
 			aduaDespacho.adua_Nombre			AS adua_DespachoNombre,
 			deva.deva_DeclaracionMercancia, 
 			deva.deva_FechaAceptacion, 
+			deva.deva_Finalizacion,
 
 			impo.impo_Id, 
 			impo.impo_NumRegistro,
@@ -4960,31 +4961,39 @@ SELECT		deva.deva_Id,
 			declaImpo.decl_Correo_Electronico	AS impo_Correo_Electronico,
 			declaImpo.decl_Telefono				AS impo_Telefono,
 			declaImpo.decl_Fax					AS impo_Fax,			
-			declaImpo.ciud_Id					AS impo_ciudId,
+			provimpo.pvin_Id					AS impo_ciudId,
+			provimpo.pais_Id					AS impo_paisId,
+			impo.impo_RTN				        AS impo_RTN,
 			
-			deva.pvde_Id,			
+			deva.pvde_Id,		
+			declaProv.decl_NumeroIdentificacion AS prov_NumeroIdentificacion,
 			declaProv.decl_Nombre_Raso			AS prov_Nombre_Raso,
 			declaProv.decl_Direccion_Exacta		AS prov_Direccion_Exacta,
 			declaProv.decl_Correo_Electronico	AS prov_Correo_Electronico,
 			declaProv.decl_Telefono				AS prov_Telefono,
 			declaProv.decl_Fax					AS prov_Fax,			
-			declaProv.ciud_Id					AS prov_ciudId,
+			provprove.pvin_Id					AS prov_ciudId,
+			provprove.pais_Id					AS prov_paisId,
 			prov.coco_Id,			
 			coco.coco_Descripcion,
 			prov.pvde_Condicion_Otra,		
 
 			inte.inte_Id, 
 			inte.tite_Id,
+			declaInte.decl_NumeroIdentificacion AS inte_NumeroIdentificacion,
 			declaInte.decl_Nombre_Raso			AS inte_Nombre_Raso,
 			declaInte.decl_Direccion_Exacta		AS inte_Direccion_Exacta,
 			declaInte.decl_Correo_Electronico	AS inte_Correo_Electronico,
 			declaInte.decl_Telefono				AS inte_Telefono,
 			declaInte.decl_Fax					AS inte_Fax,			
-			declaInte.ciud_Id					AS inte_ciudId,
+			provInte.pvin_Id					AS inte_ciudId,
+			provInte.pais_Id					AS inte_paisId,
+			inte.inte_Tipo_Otro,
 
 
 			deva.deva_LugarEntrega, 
 			deva.pais_EntregaId, 
+			pais.pais_Codigo + ' - ' + pais.pais_Nombre as pais_EntregaNombre,
 			inco.inco_Id, 
 			inco.inco_Descripcion,
 			deva.inco_Version, 
@@ -4999,11 +5008,54 @@ SELECT		deva.deva_Id,
 			deva.deva_FormaPagoOtra, 
 			deva.emba_Id, 
 			deva.pais_ExportacionId, 
+			paix.pais_Codigo + ' - ' + paix.pais_Nombre as pais_ExportacionNombre,
 			deva.deva_FechaExportacion, 
 			deva.mone_Id, 
 			deva.mone_Otra, 
 			deva.deva_ConversionDolares, 
+			
+			
 			----deva_Condiciones, 
+            condi.codi_Id,
+			condi.codi_Restricciones_Utilizacion, 
+			condi.codi_Indicar_Restricciones_Utilizacion, 
+			condi.codi_Depende_Precio_Condicion, 
+			condi.codi_Indicar_Existe_Condicion, 
+			condi.codi_Condicionada_Revertir, 
+			condi.codi_Vinculacion_Comprador_Vendedor, 
+			condi.codi_Tipo_Vinculacion, 
+			condi.codi_Vinculacion_Influye_Precio, 
+			condi.codi_Pagos_Descuentos_Indirectos, 
+			condi.codi_Concepto_Monto_Declarado, 
+			condi.codi_Existen_Canones, 
+			condi.codi_Indicar_Canones, 
+
+			----deva_Base Calculo, 
+            bacu.base_Id,  
+			bacu.base_PrecioFactura, 
+			bacu.base_PagosIndirectos, 
+			bacu.base_PrecioReal, 
+			bacu.base_MontCondicion, 
+			bacu.base_MontoReversion, 
+			bacu.base_ComisionCorrelaje, 
+			bacu.base_Gasto_Envase_Embalaje, 
+			bacu.base_ValoresMateriales_Incorporado, 
+			bacu.base_Valor_Materiales_Utilizados, 
+			bacu.base_Valor_Materiales_Consumidos, 
+			bacu.base_Valor_Ingenieria_Importado, 
+			bacu.base_Valor_Canones, 
+			bacu.base_Gasto_TransporteM_Importada, 
+			bacu.base_Gastos_Carga_Importada, 
+			bacu.base_Costos_Seguro, 
+			bacu.base_Total_Ajustes_Precio_Pagado, 
+			bacu.base_Gastos_Asistencia_Tecnica, 
+			bacu.base_Gastos_Transporte_Posterior, 
+			bacu.base_Derechos_Impuestos, 
+			bacu.base_Monto_Intereses, 
+			bacu.base_Deducciones_Legales, 
+			bacu.base_Total_Deducciones_Precio, 
+			bacu.base_Valor_Aduana,
+
 			deva.usua_UsuarioCreacion, 
 			usuaCrea.usua_Nombre				AS usua_CreacionNombre,
 			deva.deva_FechaCreacion, 
@@ -5015,14 +5067,26 @@ SELECT		deva.deva_Id,
 			LEFT JOIN Adua.tbAduanas aduaDespacho			ON deva.deva_AduanaDespachoId = aduaDespacho.adua_Id
 			LEFT JOIN Adua.tbImportadores impo				ON deva.impo_Id = impo.impo_Id
 			LEFT JOIN Adua.tbDeclarantes declaImpo			ON impo.decl_Id = declaImpo.decl_Id
+			LEFT JOIN Gral.tbProvincias provimpo            ON declaImpo.ciud_Id = provimpo.pvin_Id
+			
+			
 			LEFT JOIN Adua.tbNivelesComerciales nico		ON impo.nico_Id = nico.nico_Id
 			LEFT JOIN Adua.tbProveedoresDeclaracion prov	ON prov.pvde_Id = deva.pvde_Id
 			LEFT JOIN Adua.tbDeclarantes declaProv			ON prov.decl_Id = declaProv.decl_Id
+			LEFT JOIN Gral.tbProvincias provprove           ON declaProv.ciud_Id = provprove.pvin_Id
+
 			LEFT JOIN Adua.tbCondicionesComerciales coco	ON prov.coco_Id = coco.coco_Id
 			LEFT JOIN Adua.tbIntermediarios inte			ON inte.inte_Id = deva.inte_Id
 			LEFT JOIN Adua.tbDeclarantes declaInte			ON declaInte.decl_Id = inte.decl_Id
+			LEFT JOIN Gral.tbProvincias provInte            ON declaInte.ciud_Id = provInte.pvin_Id
 			LEFT JOIN Adua.tbIncoterm inco					ON deva.inco_Id = inco.inco_Id
 			LEFT JOIN Gral.tbFormas_Envio foen				ON deva.foen_Id = foen.foen_Id 
+			LEFT JOIN Gral.tbPaises	pais					ON deva.pais_EntregaId = pais.pais_Id
+			LEFT JOIN Gral.tbPaises	paix					ON deva.pais_ExportacionId	 = paix.pais_Id
+			
+			Inner JOIN Adua.tbCondiciones condi              ON deva.deva_Id = condi.deva_Id
+			Inner JOIN Adua.tbBaseCalculos bacu               ON deva.deva_Id = bacu.deva_Id
+			
 			LEFT JOIN Acce.tbUsuarios usuaCrea				ON deva.usua_UsuarioCreacion = usuaCrea.usua_Id
 			LEFT JOIN Acce.tbUsuarios usuaModifica			ON deva.usua_UsuarioModificacion = usuaModifica.usua_Id
 GO
