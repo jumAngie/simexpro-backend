@@ -11,7 +11,8 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public int pers_Id { get; set; }
         public string pena_DireccionExacta { get; set; }
         public int ciud_Id { get; set; }
-
+        public int pvin_Id { get; set; }
+        public string pvin_Nombre { get; set; }
 
         public int escv_Id { get; set; }
 

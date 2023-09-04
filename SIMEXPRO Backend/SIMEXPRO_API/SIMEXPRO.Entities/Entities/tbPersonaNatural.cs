@@ -16,6 +16,11 @@ namespace SIMEXPRO.Entities.Entities
 
         [NotMapped]
         public string ciud_Nombre { get; set; }
+        [NotMapped]
+        public int pvin_Id { get; set; }
+        [NotMapped]
+        public string pvin_Nombre { get; set; }
+
         public string pena_TelefonoFijo { get; set; }
         public string pena_TelefonoCelular { get; set; }
         public string pena_CorreoElectronico { get; set; }
