@@ -14,19 +14,7 @@
    "SelectedToBeGenerated": 2,
    "Tables": [
       {
-         "Name": "[Adua].[tbComercianteIndividual]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[Adua].[tbDuca]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[Adua].[tbRegimenesAduaneros]",
-         "ObjectType": 0
-      },
-      {
-         "Name": "[Prod].[tbProcesoPorOrdenCompraDetalle]",
+         "Name": "[Adua].[tbItemsDEVAPorDuca]",
          "ObjectType": 0
       }
    ],

@@ -27,6 +27,8 @@ namespace SIMEXPRO.Entities.Entities
         public string impo_Telefono { get; set; }
         public string impo_Fax { get; set; }
         public int? impo_ciudId { get; set; }
+        
+        public string impo_RTN { get; set; }
         public int? pvde_Id { get; set; }
         public string prov_Nombre_Raso { get; set; }
         public string prov_Direccion_Exacta { get; set; }
