@@ -15434,6 +15434,8 @@ BEGIN
 	FROM [Adua].[tbImportadores]
 END
 
+GO
+
 CREATE OR ALTER TRIGGER Adua.TR_tbImportadores_Update
 ON Adua.tbImportadores AFTER UPDATE 
 AS
