@@ -3513,9 +3513,10 @@ BEGIN
 	END CATCH
 END
 GO
+
 /*Editar Persona Juridica*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_Editar 
-  @pers_Id                 INT,
+CREATE OR ALTER PROCEDURE [Adua].[UDP_tbPersonaJuridica_Editar]
+  @peju_Id                 INT,
   @pers_RTN                NVARCHAR(40),
   @ofic_Id                 INT,
   @escv_Id                 INT,
@@ -3524,7 +3525,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_Editar
   @peju_FechaModificacion  DATETIME
 AS
 BEGIN
-    DECLARE @peju_Id INT;
+    DECLARE @pers_Id INT = (SELECT pers_Id FROM Adua.tbPersonaJuridica WHERE peju_Id = @peju_Id);
 	DECLARE @pers_FechaModificacion DATETIME = @peju_FechaModificacion;
     BEGIN TRY
         BEGIN TRANSACTION
@@ -3540,14 +3541,13 @@ BEGIN
         WHERE
             [pers_Id] = @pers_Id;
 
-        SET @peju_Id = (SELECT [peju_Id] FROM Adua.tbPersonaJuridica WHERE [pers_Id] = @pers_Id);
 
         UPDATE Adua.tbPersonaJuridica
         SET
             [usua_UsuarioModificacion] = @usua_UsuarioModificacion,
             [peju_FechaModificacion] = @peju_FechaModificacion
         WHERE
-            [pers_Id] = @pers_Id;
+            peju_Id = @peju_Id;
 
 	    SELECT 1;
         COMMIT TRANSACTION;
@@ -3558,8 +3558,6 @@ BEGIN
     END CATCH
 END
 GO
-
-
 --**********LUGARES EMBARQUE**********--
 /*Listar lugares embarque*/
 CREATE OR ALTER  PROCEDURE [Adua].[UDP_tbLugaresEmbarque_Listar] 

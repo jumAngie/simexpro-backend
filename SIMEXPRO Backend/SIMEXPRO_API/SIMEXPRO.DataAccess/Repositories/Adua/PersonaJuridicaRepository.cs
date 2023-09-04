@@ -135,7 +135,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             var parametros = new DynamicParameters();
 
-            parametros.Add("@pers_Id", item.pers_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@peju_Id", item.peju_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@pers_RTN", item.pers_RTN, DbType.String, ParameterDirection.Input);
             parametros.Add("@ofic_Id", item.ofic_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@escv_Id", item.escv_Id, DbType.Int32, ParameterDirection.Input);
