@@ -78,6 +78,14 @@ namespace SIMEXPRO.Entities.Entities
         public string peju_CorreoElectronicoAlternativo { get; set; }
 
         //tab5
+        [NotMapped]
+        public string doco_URLImagen { get; set; }
+        [NotMapped]
+        public string doco_NombreImagen { get; set; }
+        [NotMapped]
+        public string doco_Numero_O_Referencia { get; set; }
+        [NotMapped]
+        public string @doco_TipoDocumento { get; set; }
         public string peju_RTNReprsentanteLegal { get; set; }
         public string peju_RTNSociedadMercantil { get; set; }
         public string peju_DNIRepresentante { get; set; }

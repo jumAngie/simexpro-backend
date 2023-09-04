@@ -85,6 +85,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
         }
 
+
+
         public RequestStatus InsertTap5(tbPersonaJuridica item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
