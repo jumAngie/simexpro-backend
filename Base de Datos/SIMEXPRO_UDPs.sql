@@ -3315,8 +3315,8 @@ BEGIN
 			,aldeaRepresentante.alde_Nombre             AS AldeaRepresemtante  --Tab 3
 			,personaJuridica.peju_CiudadIdRepresentante 
 			,ciudadesReprentante.ciud_Nombre            AS CiudadRepresentante
-			,Provincia.pvin_Id                          AS ProvinciaIdRepresentante
-			,Provincia.pvin_Nombre                      AS ProvinciaRepresentante
+			,ProvinciaRepresentante.pvin_Id                          AS ProvinciaIdRepresentante
+			,ProvinciaRepresentante.pvin_Nombre                      AS ProvinciaRepresentante
 			,personaJuridica.peju_NumeroLocalRepresentante
 			,personaJuridica.peju_PuntoReferenciaRepresentante
 
@@ -3361,7 +3361,6 @@ END
 GO
 
 /*Insertar Persona Juridica*/
-
 CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab1 
 
   @pers_RTN                 NVARCHAR(40),
@@ -3489,6 +3488,22 @@ BEGIN
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
 	END CATCH
 END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab5
+   @peju_Id                    INT,
+   @doco_URLImagen             NVARCHAR(MAX),
+   @doco_NombreImagen		   NVARCHAR(350),
+   @doco_Numero_O_Referencia   NVARCHAR(50),
+   @doco_TipoDocumento         NVARCHAR(6),
+
+   @usua_UsuarioCreacion       INT,
+   @doco_FechaCreacion         DATETIME
+AS
+BEGIN 
+    INSERT INTO [Adua].[tbDocumentosContratos]([peju_Id],[doco_Numero_O_Referencia], [doco_TipoDocumento], [usua_UsuarioCreacion], [doco_FechaCreacion],[doco_URLImagen], [doco_NombreImagen])
+	VALUES (@peju_Id,@doco_Numero_O_Referencia,@doco_TipoDocumento,@usua_UsuarioCreacion,@doco_FechaCreacion, @doco_URLImagen, @doco_NombreImagen)
+END;
 GO
 
 CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab5
