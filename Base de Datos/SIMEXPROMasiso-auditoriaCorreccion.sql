@@ -851,6 +851,7 @@ CREATE TABLE Adua.tbDeclaraciones_Valor
 		mone_Otra 						NVARCHAR(200),
 		deva_ConversionDolares 			DECIMAL(18,2),
 		--deva_Condiciones 				NVARCHAR(MAX),
+		deva_Finalizacion				BIT default(0),
 		usua_UsuarioCreacion 			INT,
 		deva_FechaCreacion  			DATETIME,
 		usua_UsuarioModificacion		INT,
@@ -878,6 +879,7 @@ CREATE TABLE Adua.tbDeclaraciones_Valor
 	--CONSTRAINT FK_Acce_tbUsuarios_Adua_tbDeclaraciones_Valor_deva_usua_UsuarioEliminacion  FOREIGN KEY (usua_UsuarioEliminacion)  REFERENCES Acce.tbUsuarios(usua_Id)
 )
 
+go
 
 CREATE TABLE Adua.tbDeclaraciones_ValorHistorial
 (

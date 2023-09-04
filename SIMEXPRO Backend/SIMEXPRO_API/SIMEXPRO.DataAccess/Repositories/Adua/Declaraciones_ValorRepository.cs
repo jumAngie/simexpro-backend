@@ -217,6 +217,17 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return resultado;
         }
 
+        public RequestStatus FinalizarDeva(string deva_ID)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@deva_Id", deva_ID, DbType.Int32, ParameterDirection.Input);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.FinalizarDeva, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
+        }
+
         //public RequestStatus UpdateTab2(tbDeclaraciones_Valor item, tbDeclarantes declProv, tbDeclarantes declInte, tbProveedoresDeclaracion itemProv, tbIntermediarios itemInte)
         //{
         //    using var db = new SqlConnection(SIMEXPRO.ConnectionString);
