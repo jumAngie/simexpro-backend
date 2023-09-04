@@ -3067,19 +3067,17 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap5
 	@doco_URLImagen                     NVARCHAR(MAX),
 	@doco_NombreImagen					NVARCHAR(350),
 	@doco_Numero_O_Referencia			NVARCHAR(50),
-	@doco_TipoDocumento					NVARCHAR(6)
+	@doco_TipoDocumento					NVARCHAR(6),
+
+	@usua_UsuarioCreacion               INT, 
+	@coin_FechaCreacion                 DATETIME
 AS
 BEGIN
 	BEGIN TRY
-			UPDATE Adua.tbComercianteIndividual
-		SET doco_URLImagen = @doco_URLImagen,
-		    doco_NombreImagen = @doco_NombreImagen,
-			doco_Numero_O_Referencia = @doco_Numero_O_Referencia,
-			doco_TipoDocumento = @doco_TipoDocumento
-		 WHERE coin_Id = @coin_Id
+			INSERT INTO Adua.tbDocumentosContratos([coin_Id],[doco_Numero_O_Referencia], [doco_TipoDocumento], [usua_UsuarioCreacion], [doco_FechaCreacion],[doco_URLImagen], [doco_NombreImagen]) 
+			VALUES (@coin_Id,@doco_Numero_O_Referencia,@doco_TipoDocumento,@usua_UsuarioCreacion,@coin_FechaCreacion,@doco_URLImagen,@doco_NombreImagen)
 		 SELECT 1
 	END TRY
-
 BEGIN CATCH
 	SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
 END CATCH

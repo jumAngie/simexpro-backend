@@ -119,6 +119,10 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@doco_NombreImagen", item.doco_NombreImagen, DbType.String, ParameterDirection.Input);
             parametros.Add("@doco_Numero_O_Referencia", item.doco_Numero_O_Referencia, DbType.String, ParameterDirection.Input);
             parametros.Add("@doco_TipoDocumento", item.doco_TipoDocumento, DbType.String, ParameterDirection.Input);
+
+            parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@coin_FechaCreacion", item.coin_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
+
             var respuesta = db.QueryFirst<string>(ScriptsDataBase.InsertarComercianteIndividualTap5, parametros, commandType: CommandType.StoredProcedure);
             return new RequestStatus()
             {
@@ -126,6 +130,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             };
 
         }
+
 
 
 
