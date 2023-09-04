@@ -347,6 +347,10 @@ namespace SIMEXPRO.DataAccess
         public static string EliminarItems = "Adua.UDP_tbItems_Eliminar";
         #endregion
 
+        #region Importadores
+        public static string ListarImportadores = "Adua.UDP_tbImportadores_Listar";
+        #endregion
+
         #region Liquidacion General
         public static string ListarLiquidacionGeneral = "Adua.UDP_tbLiquidacionGeneral_Listar";
         public static string InsertarLiquidacionGeneral = "Adua.UDP_tbLiquidacionGeneral_Insertar";

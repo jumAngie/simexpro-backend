@@ -5,9 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SIMEXPRO.Entities.Entities;
 
 namespace SIMEXPRO.API.Controllers.ControllersAduanas
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ImportadoresController : Controller
     {
         private readonly AduanaServices _aduanaServices;
@@ -18,9 +21,12 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             _aduanaServices = AduanaServices;
             _mapper = mapper;
         }
-        public IActionResult Index()
+        [HttpGet("Listar")]
+        public IActionResult List()
         {
-            return View();
+            var list = _aduanaServices.ListarImportadores();
+            list.Data = _mapper.Map<IEnumerable<tbImportadores>>(list.Data);
+            return Ok(list);
         }
     }
 }
