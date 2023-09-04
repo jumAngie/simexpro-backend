@@ -2446,6 +2446,7 @@ GO
 ----**************IMPORTANTE****************----
 --duca_CanalAsignado: Verde = V, Rojo = R, Amarillo = A
 CREATE TABLE Adua.tbDuca(
+	duca_Id							INT IDENTITY (1,1),
 	duca_No_Duca					NVARCHAR(100),
 	duca_No_Correlativo_Referencia	NVARCHAR(MAX),
 	deva_Id							INT,
@@ -2490,7 +2491,7 @@ CREATE TABLE Adua.tbDuca(
 	--duca_FechaEliminacion		DATETIME DEFAULT NULL,
 	duca_Estado 					BIT DEFAULT 1
 	
-	CONSTRAINT PK_Adua_tbDuca_duca_No_Duca PRIMARY KEY(duca_No_Duca),
+	CONSTRAINT PK_Adua_tbDuca_duca_No_Duca PRIMARY KEY(duca_No_Duca, duca_Id),
 	CONSTRAINT FK_Adua_tbConductor_cont_Id_Adua_tbDuca_duca_Conductor_Id			FOREIGN KEY(duca_Conductor_Id) 		            REFERENCES Adua.tbConductor(cont_Id),
 	CONSTRAINT FK_Adua_tbDuca_duca_Pais_Procedencia_tbPaises_pais_Id				FOREIGN KEY(duca_Pais_Procedencia) 	            REFERENCES Gral.tbPaises (pais_Id),
 	CONSTRAINT FK_Adua_tbDuca_duca_Pais_Exportacion_tbPaises_pais_Id				FOREIGN KEY(duca_Pais_Exportacion) 	            REFERENCES Gral.tbPaises (pais_Id),
