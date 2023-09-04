@@ -3411,9 +3411,19 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab2
 )
 AS
 BEGIN
+
 	BEGIN TRY
+	 DECLARE @aldea INT;
+     IF (@aldea = 0)
+	 BEGIN
+	   SET @aldea = NULL;	
+	 END
+	 ELSE
+	 BEGIN
+	     SET @aldea = @alde_Id;
+	 END
 	  UPDATE [Adua].[tbPersonaJuridica]
-	     SET  ciud_Id = @ciud_Id, alde_Id = @alde_Id, peju_PuntoReferencia = @peju_PuntoReferencia,
+	     SET  ciud_Id = @ciud_Id, alde_Id = @aldea, peju_PuntoReferencia = @peju_PuntoReferencia,
 		    colo_Id = @colo_Id, peju_NumeroLocalApart = @peju_NumeroLocalApart 
       WHERE peju_Id =  @peju_Id
 	   SELECT 1
@@ -3436,6 +3446,15 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab3
 AS
 BEGIN
 	BEGIN TRY
+	   DECLARE @aldea INT;
+     IF (@aldea = 0)
+	 BEGIN
+	   SET @aldea = NULL;	
+	 END
+	 ELSE
+	 BEGIN
+	     SET @aldea = @peju_AldeaIdRepresentante;
+	 END
 	  UPDATE [Adua].[tbPersonaJuridica]
 	     SET  peju_CiudadIdRepresentante = @peju_CiudadIdRepresentante, peju_AldeaIdRepresentante = @peju_AldeaIdRepresentante, peju_PuntoReferenciaRepresentante = @peju_PuntoReferenciaRepresentante,
 		    peju_ColoniaRepresentante = @peju_ColoniaRepresentante, peju_NumeroLocalRepresentante = @peju_NumeroLocalRepresentante 
