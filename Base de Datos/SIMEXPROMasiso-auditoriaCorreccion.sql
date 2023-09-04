@@ -2978,8 +2978,8 @@ CREATE TABLE Adua.tbDocumentosDeSoporte(
 	doso_NumeroDocumento		        NVARCHAR(15) NOT NULL,
 	doso_FechaEmision			        DATE,
 	doso_FechaVencimiento		        DATE,
-	doso_PaisEmision			        INT NOT NULL,
-	doso_LineaAplica			        CHAR(4) NOT NULL,
+	doso_PaisEmision			        INT ,
+	doso_LineaAplica			        CHAR(4),
 	doso_EntidadEmitioDocumento         NVARCHAR(75),
 	doso_Monto				           	NVARCHAR(50),
 
