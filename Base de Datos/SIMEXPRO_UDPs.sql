@@ -8558,7 +8558,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbBoletinPago_Editar
 	@boen_NDeclaracion         NVARCHAR(200), 
 	--@pena_RTN                  NVARCHAR(20), 
 	@boen_Preimpreso           NVARCHAR(MAX), 
-	@boen_Declarante           NVARCHAR(200), 
+	--@boen_Declarante           NVARCHAR(200), 
 	@boen_TotalPagar           DECIMAL(18,2), 
 	@boen_TotalGarantizar      DECIMAL(18,2), 
 	--@boen_RTN                  NVARCHAR(100), 
@@ -8622,6 +8622,7 @@ GO
 
 CREATE OR ALTER PROCEDURE Adua.UDP_tbBoletinPagoDetalles_Insertar
 (
+	@boen_Id					INT,
 	@lige_Id					INT,
 	@bode_Concepto				VARCHAR(50),
 	@bode_TipoObligacion		VARCHAR(50),
@@ -8633,13 +8634,15 @@ AS
 BEGIN
 	BEGIN TRY
 		INSERT INTO Adua.tbBoletinPagoDetalles
-					(lige_Id,				   
+					(boen_Id,
+					lige_Id,				   
 					bode_Concepto,				   
 					bode_TipoObligacion,			   
 					bode_CuentaPA01,				   
 					usua_UsuarioCreacion,           
 					bode_FechaCreacion)
-			VALUES (@lige_Id,			
+			VALUES (@boen_Id,
+					@lige_Id,			
 					@bode_Concepto,		
 					@bode_TipoObligacion,
 					@bode_CuentaPA01,	

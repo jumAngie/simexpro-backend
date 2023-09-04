@@ -33,7 +33,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@boen_FechaEmision", item.boen_FechaEmision, DbType.Date, ParameterDirection.Input);
             parametros.Add("@esbo_Id", item.esbo_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@boen_Observaciones", item.boen_Observaciones, DbType.String, ParameterDirection.Input);
-            parametros.Add("@boen_NDeclaracion", item.boen_NDeclaracion, DbType.String, ParameterDirection.Input);
+            //parametros.Add("@boen_NDeclaracion", item.boen_NDeclaracion, DbType.String, ParameterDirection.Input);
             //parametros.Add("@pena_RTN", item.pena_RTN, DbType.String, ParameterDirection.Input);
             parametros.Add("@boen_Preimpreso", item.boen_Preimpreso, DbType.String, ParameterDirection.Input);
             //parametros.Add("@boen_Declarante", item.boen_Declarante, DbType.String, ParameterDirection.Input);

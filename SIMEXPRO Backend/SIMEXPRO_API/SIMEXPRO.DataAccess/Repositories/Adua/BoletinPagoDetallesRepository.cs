@@ -25,8 +25,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
         public RequestStatus Insert(tbBoletinPagoDetalles item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
-
             var parametros = new DynamicParameters();
+            parametros.Add("@boen_Id", item.boen, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@lige_Id", item.lige_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@bode_Concepto", item.bode_Concepto, DbType.String, ParameterDirection.Input);
             parametros.Add("@bode_TipoObligacion", item.bode_TipoObligacion, DbType.String, ParameterDirection.Input);
@@ -63,6 +63,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
             var parametros = new DynamicParameters();
             parametros.Add("@bode_Id", item.bode_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@boen_Id", item.boen_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@lige_Id", item.lige_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@bode_Concepto", item.bode_Concepto, DbType.String, ParameterDirection.Input);
             parametros.Add("@bode_TipoObligacion", item.bode_TipoObligacion, DbType.String, ParameterDirection.Input);
