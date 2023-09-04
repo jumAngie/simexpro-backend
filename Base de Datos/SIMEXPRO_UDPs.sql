@@ -7127,7 +7127,7 @@ BEGIN
 END
 
 GO
-CREATE OR ALTER PROCEDURE Adua.UDP_tbBaseCalculos_Insertar 
+CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbBaseCalculos_Insertar] 
 	@deva_Id								INT, 
 	@base_PrecioFactura						DECIMAL(18,2), 
 	@base_PagosIndirectos					DECIMAL(18,2), 
@@ -7158,6 +7158,9 @@ AS
 BEGIN
 	BEGIN TRANSACTION
 	BEGIN TRY
+
+	DECLARE @base_ID INT;
+
 		INSERT INTO Adua.tbBaseCalculos(deva_Id, 
 											base_PrecioFactura, 
 											base_PagosIndirectos, 
@@ -7210,6 +7213,8 @@ BEGIN
 				@base_Valor_Aduana, 
 				@usua_UsuarioCreacion, 
 				@base_FechaCreacion)
+
+		SET @base_ID = SCOPE_IDENTITY();
 
 		INSERT INTO Adua.tbBaseCalculosHistorial(base_Id,
 													 deva_Id, 
@@ -7268,7 +7273,7 @@ BEGIN
 				@base_FechaCreacion,
 				'Insertar')
 
-		SELECT 1
+		SELECT @base_ID
 
 		COMMIT TRAN
 	END TRY
@@ -7277,6 +7282,7 @@ BEGIN
 		ROLLBACK TRAN
 	END CATCH
 END
+
 
 GO
 CREATE OR ALTER PROCEDURE Adua.UDP_tbBaseCalculos_Editar 

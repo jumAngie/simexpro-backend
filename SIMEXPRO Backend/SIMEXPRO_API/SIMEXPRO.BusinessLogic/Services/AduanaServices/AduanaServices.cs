@@ -289,7 +289,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _baseCalculosRepository.Insert(item);
-                if (map.MessageStatus == "1")
+                if (map.MessageStatus != "0")
                 {
                     return result.Ok(map);
                 }
