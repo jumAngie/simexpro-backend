@@ -16,6 +16,7 @@ namespace SIMEXPRO.Entities.Entities
             tbDocumentosPDF = new HashSet<tbDocumentosPDF>();
             tbDuca = new HashSet<tbDuca>();
             tbFacturas = new HashSet<tbFacturas>();
+            tbItemsDEVAPorDuca = new HashSet<tbItemsDEVAPorDuca>();
         }
 
         public int deva_Id { get; set; }
@@ -140,5 +141,7 @@ namespace SIMEXPRO.Entities.Entities
         public virtual ICollection<tbDocumentosPDF> tbDocumentosPDF { get; set; }
         public virtual ICollection<tbDuca> tbDuca { get; set; }
         public virtual ICollection<tbFacturas> tbFacturas { get; set; }
+
+        public virtual ICollection<tbItemsDEVAPorDuca> tbItemsDEVAPorDuca { get; set; }
     }
 }

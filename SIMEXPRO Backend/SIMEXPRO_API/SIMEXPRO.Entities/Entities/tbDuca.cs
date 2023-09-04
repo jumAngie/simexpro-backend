@@ -211,5 +211,7 @@ namespace SIMEXPRO.Entities.Entities
         public virtual ICollection<tbLiquidacionGeneral> tbLiquidacionGeneral { get; set; }
         public virtual ICollection<tbPedidosOrden> tbPedidosOrden { get; set; }
         public virtual ICollection<tbFacturasExportacion> tbFacturasExportacion { get; set; }
+
+        public virtual ICollection<tbItemsDEVAPorDuca> tbItemsDEVAPorDuca { get; set; }
     }
 }

@@ -53,17 +53,18 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         private readonly AduanaGraficasRepository _aduanagraficasrepository;
         private readonly RegimenesAduanerosRepository _regimenesAduanerosRepository;
         private readonly ImportadoresRepository _importadoresRepository;
+        private readonly ItemsDEVAporDUCARepository _itemsDEVAporDUCARepository;
 
         public AduanaServices(AduanasRepository AduanasRepository, ArancelesRepository ArancelesRepository, BaseCalculosRepository BaseCalculosRepository, BoletinPagoRepository BoletinPagoRepository, BoletinPagoDetallesRepository BoletinPagoDetallesRepository,
                                 CodigoImpuestoRepository CodigoImpuestoRepository, ComercianteIndividualRepository ComercianteIndividualRepository, ConceptoPagoRepository ConceptoPagoRepository, CondicionesRepository CondicionesRepository,
-                                CondicionesComercialesRepository CondicionesComercialesRepository,Declaraciones_ValorHistorialRepository Declaraciones_ValorHistorialRepository, Declaraciones_ValorRepository Declaraciones_ValorRepository,
-                                DocumentosContratosRepository DocumentosContratosRepository, DocumentosdeSoporteRepository DocumentosdeSoporteRepository, DocumentosPDFRepository DocumentosPDFRepository, 
-                                DucaRepository DucaRepository, EstadoBoletinRepository EstadoBoletinRepository, EstadoMercanciasRepository EstadoMercanciasRepository, FacturasRepository FacturasRepository , FormasdePagoRepository FormasdePagoRepository, ImpuestosporAracelRepository ImpuestosporAracelRepository,
+                                CondicionesComercialesRepository CondicionesComercialesRepository, Declaraciones_ValorHistorialRepository Declaraciones_ValorHistorialRepository, Declaraciones_ValorRepository Declaraciones_ValorRepository,
+                                DocumentosContratosRepository DocumentosContratosRepository, DocumentosdeSoporteRepository DocumentosdeSoporteRepository, DocumentosPDFRepository DocumentosPDFRepository,
+                                DucaRepository DucaRepository, EstadoBoletinRepository EstadoBoletinRepository, EstadoMercanciasRepository EstadoMercanciasRepository, FacturasRepository FacturasRepository, FormasdePagoRepository FormasdePagoRepository, ImpuestosporAracelRepository ImpuestosporAracelRepository,
                                 ImpuestosRepository ImpuestosRepository, IncotermRepository IncotermRepository, IntermediarioRepository IntermediarioRepository, ItemsRepository ItemsRepository, LiquidacionGeneralRepository LiquidacionGeneralRepository,
                                 LiquidacionPorLineaRepository LiquidacionPorLineaRepository, LugaresEmbarqueRepository LugaresEmbarqueRepository, MarcasRepository MarcasRepository, ModoTransporteRepository ModoTransporteRepository,
                                 NivelesComercialesRepository NivelesComercialesRepository, PersonaJuridicaRepository PersonaJuridicaRepository, PersonaNaturalRepository PersonaNaturalRepository, PersonasRepository PersonasRepository,
-                                 TipoDocumentoRepository TipoDocumentoRepository, TipoIntermediarioRepository TipoIntermediarioRepository,TipoLiquidacionRepository TipoLiquidacionRepository, TiposIdentificacionRepository TiposIdentificacionRepository, TransporteRepository TransporteRepository,
-                                AduanaGraficasRepository AduanaGraficasRepository, RegimenesAduanerosRepository regimenesAduanerosRepository, ImportadoresRepository importadoresRepository)
+                                 TipoDocumentoRepository TipoDocumentoRepository, TipoIntermediarioRepository TipoIntermediarioRepository, TipoLiquidacionRepository TipoLiquidacionRepository, TiposIdentificacionRepository TiposIdentificacionRepository, TransporteRepository TransporteRepository,
+                                AduanaGraficasRepository AduanaGraficasRepository, RegimenesAduanerosRepository regimenesAduanerosRepository, ImportadoresRepository importadoresRepository, ItemsDEVAporDUCARepository itemsDEVAporDUCARepository)
         {
             _aduanasRepository = AduanasRepository;
             _arancelesRepository = ArancelesRepository;
@@ -107,6 +108,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             _aduanagraficasrepository = AduanaGraficasRepository;
             _regimenesAduanerosRepository = regimenesAduanerosRepository;
             _importadoresRepository = importadoresRepository;
+            _itemsDEVAporDUCARepository = itemsDEVAporDUCARepository;
         }
 
         #region Aduanas
@@ -3588,6 +3590,52 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _regimenesAduanerosRepository.Delete(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region ItemsDEVAxDUCA
+
+        public ServiceResult InsertarItemsDEVAxDUCA(tbItemsDEVAPorDuca item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _itemsDEVAporDUCARepository.Insert(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult ActualizarItemsDEVAxDUCA(tbItemsDEVAPorDuca item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _itemsDEVAporDUCARepository.Update(item);
                 if (map.MessageStatus == "1")
                 {
                     return result.Ok(map);
