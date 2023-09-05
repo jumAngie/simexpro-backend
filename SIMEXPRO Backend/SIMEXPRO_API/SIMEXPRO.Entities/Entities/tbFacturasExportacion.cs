@@ -28,11 +28,11 @@ namespace SIMEXPRO.Entities.Entities
         public int? usua_UsuarioModificacion { get; set; }
         public DateTime? faex_FechaModificacion { get; set; }
 
-        [NotMapped]
-        public int faex_Estado { get; set; }
+        //[NotMapped]
+        //public int faex_Estado { get; set; }
 
-        [NotMapped]
-        public int faex_Finalizado { get; set; }
+        //[NotMapped]
+        //public int faex_Finalizado { get; set; }
 
 
         [NotMapped]
