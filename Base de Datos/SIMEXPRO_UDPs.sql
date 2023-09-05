@@ -8421,43 +8421,6 @@ BEGIN
 END
 GO
 
-SELECT * FROM Adua.tbImpuestosPorArancel
-GO
-
-CREATE OR ALTER PROCEDURE Adua.UDP_tbArancelesxImpuestos_Crear
-@impu_Id INT,
-@usua_UsuarioCreacion INT,
-@imar_FechaCreacion DATETIME
-AS
-BEGIN
-DECLARE @aran_Id INT 
-SELECT TOP 1 @aran_Id = aran_ID FROM Adua.tbAranceles ORDER BY aran_ID desc
-INSERT INTO Adua.tbImpuestosPorArancel (impu_Id, aran_Id, usua_UsuarioCreacion, imar_FechaCreacion)
-VALUES (@impu_Id, @aran_Id,@usua_UsuarioCreacion,@imar_FechaCreacion)
-SELECT 1
-END
-GO
-
-CREATE OR ALTER PROCEDURE Adua.UDP_tbArancelesxImpuestos_Listar
-@aran_Id INT 
-AS
-BEGIN
-SELECT IpA.imar_Id, imp.impu_Id, imp.impu_Descripcion FROM Adua.tbImpuestosPorArancel IpA
-INNER JOIN Adua.tbImpuestos imp ON IpA.impu_Id = imp.impu_Id 
-WHERE aran_Id = @aran_Id
-END
-GO
-
-CREATE OR ALTER PROCEDURE Adua.UDP_tbArancelesxImpuestos_Eliminar
-@imar_Id INT
-AS
-BEGIN
-DELETE FROM Adua.tbImpuestosPorArancel 
-WHERE imar_Id = @imar_Id
-SELECT 1
-END
-GO
-
 /*Listar Aranceles Subcategoria*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbAranceles_ListarSubcategoria
 AS
@@ -10171,34 +10134,25 @@ GO
 --INSERTAR
 CREATE OR ALTER PROCEDURE Adua.UDP_tbImpuestosPorArancel_Insertar 
 	@impu_Id     				INT,
-	@aran_Id					INT,
 	@imar_PorcentajeImpuesto	DECIMAL(18,2),
 	@usua_UsuarioCreacion		INT,
 	@imar_FechaCreacion			DATETIME
 AS
 BEGIN
 	BEGIN TRY
-		IF EXISTS(SELECT imar_Id FROM Adua.tbImpuestosPorArancel WHERE impu_Id = @impu_Id AND aran_Id = @aran_Id AND imar_Estado = 0 AND imar_PorcentajeImpuesto = @imar_PorcentajeImpuesto)
-			BEGIN
-				UPDATE Adua.tbImpuestosPorArancel
-				SET	   imar_Estado = 1
-				WHERE  impu_Id = @impu_Id AND aran_Id = @aran_Id
-				SELECT 1
-			END
-		ELSE
-			BEGIN 
-				INSERT INTO Adua.tbImpuestosPorArancel (impu_Id, 
-				                                            aran_Id,
-															imar_PorcentajeImpuesto,
-											                usua_UsuarioCreacion, 
-											                imar_FechaCreacion)
-			VALUES(@impu_Id,	
-			       @aran_Id,
-				   @imar_PorcentajeImpuesto,			
-				   @usua_UsuarioCreacion,
-				   @imar_FechaCreacion)
-				SELECT 1
-			END
+	DECLARE @aran_Id INT 
+	SELECT TOP 1 @aran_Id = aran_ID FROM Adua.tbAranceles ORDER BY aran_ID desc
+			INSERT INTO Adua.tbImpuestosPorArancel (impu_Id, 
+				                                        aran_Id,
+														imar_PorcentajeImpuesto,
+											            usua_UsuarioCreacion, 
+											            imar_FechaCreacion)
+		VALUES(@impu_Id,	
+			    @aran_Id,
+				@imar_PorcentajeImpuesto,			
+				@usua_UsuarioCreacion,
+				@imar_FechaCreacion)
+			SELECT 1
 	END TRY
 	BEGIN CATCH
 				SELECT 'Error Message: ' + ERROR_MESSAGE()	
@@ -10233,6 +10187,40 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE Adua.UDP_tbImpuestosPorArancel_ListarPorArancel
+@aran_Id INT 
+AS
+BEGIN
+SELECT	imar.imar_Id				 AS IdImpuestoPorArancel,
+		    impu.impu_Id				 AS ArancelCodigo,
+		    aran.aran_Id				 AS DescripcionImpuesto,
+		   	imar.imar_PorcentajeImpuesto AS CantidadPorPorcentajeImpuesto,	
+			usu.usua_Id					 AS IDUsuarioCreacion,
+			usu.usua_Nombre				 AS UsuarioCreacion ,
+			impu_FechaCreacion			 AS FechaCreacion,
+										 
+			usu1.usua_Id				 AS IDUsuarioModificacion,
+			usu1.usua_Nombre			 AS UsuarioModificacion,
+			impu_FechaModificacion		 AS FechaModificacion
+ 
+  FROM	    Adua.tbImpuestosPorArancel imar
+            INNER JOIN Adua.tbImpuestos impu ON imar.impu_Id = impu.impu_Id
+			INNER JOIN Acce.tbUsuarios usu ON usu.usua_Id = impu.usua_UsuarioCreacion 
+			LEFT JOIN Acce.tbUsuarios usu1 ON usu1.usua_Id = impu.usua_UsuarioModificacion
+			INNER JOIN Adua.tbAranceles aran ON imar.aran_Id = aran.aran_Id 
+			WHERE imar.imar_Estado = 1 AND aran_Id = @aran_Id
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbImpuestosPorArancel_Eliminar
+@imar_Id INT
+AS
+BEGIN
+	DELETE FROM Adua.tbImpuestosPorArancel 
+	WHERE imar_Id = @imar_Id
+SELECT 1
+END
+GO
 
 
 --*********************** UDPS codigo impuesto ***********************
