@@ -43,21 +43,6 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             result.MessageStatus = answer;
             return result;
         }
-        public RequestStatus Insert(tbPODetallePorPedidoOrdenDetalle item)
-        {
-            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
-            RequestStatus result = new RequestStatus();
-            var parametros = new DynamicParameters();
-            parametros.Add("@prod_Id", item.prod_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@code_Id", item.code_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@ocpo_FechaCreacion", item.ocpo_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
-
-            var answer = db.QueryFirst<string>(ScriptsDataBase.InsertarPODetallePorPedidoOrdenDetalle, parametros, commandType: CommandType.StoredProcedure);
-            result.MessageStatus = answer;
-            return result;
-        }
-
         public IEnumerable<tbPODetallePorPedidoOrdenDetalle> List()
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
