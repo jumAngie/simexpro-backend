@@ -4940,7 +4940,7 @@ GO
 /*Vista que trae todos los campos de la parte  1 del formulario de la declaración de valor, incluso los que están en 
   otras tablas conectadas a tbDeclaraciones_Valor (no se incluyen las facturas ni las condiciones)*/
 
-CREATE OR ALTER   VIEW [Adua].[VW_tbDeclaraciones_ValorCompleto]
+CREATE OR ALTER VIEW [Adua].[VW_tbDeclaraciones_ValorCompleto]
 AS
 SELECT		deva.deva_Id, 
 			deva.deva_AduanaIngresoId, 
@@ -4950,45 +4950,81 @@ SELECT		deva.deva_Id,
 			deva.deva_DeclaracionMercancia, 
 			deva.deva_FechaAceptacion, 
 			deva.deva_Finalizacion,
+			deva.deva_PagoEfectuado, 
+			deva.pais_ExportacionId, 
+			paix.pais_Codigo + ' - ' + paix.pais_Nombre as pais_ExportacionNombre,
+			deva.deva_FechaExportacion, 
+			deva.mone_Id, 
+			mone.mone_Codigo + ' - ' + mone.mone_Descripcion as monedaNombre,
+			deva.mone_Otra, 
+			deva.deva_ConversionDolares, 
 
-			impo.impo_Id, 
-			impo.impo_NumRegistro,
+			--Lugares de embarque
+			deva.emba_Id,
+			emba.emba_Codigo,
+			emba.emba_Codigo +' - '+ emba.emba_Descripcion as LugarEmbarque,
+
+			--Nivel comercial del importador
 			impo.nico_Id,
 			nico.nico_Descripcion,
+
+			--datos del importador de la tabla de importador
+			impo.impo_Id, 
+			impo.impo_NumRegistro,
+			impo.impo_RTN				        AS impo_RTN,
 			impo.impo_NivelComercial_Otro,
+
+			--Datos del importador pero de la tabla de declarantes
 			declaImpo.decl_Nombre_Raso			AS impo_Nombre_Raso,
 			declaImpo.decl_Direccion_Exacta		AS impo_Direccion_Exacta,
 			declaImpo.decl_Correo_Electronico	AS impo_Correo_Electronico,
 			declaImpo.decl_Telefono				AS impo_Telefono,
 			declaImpo.decl_Fax					AS impo_Fax,			
 			provimpo.pvin_Id					AS impo_ciudId,
+			provimpo.pvin_Codigo + ' - ' + provimpo.pvin_Nombre AS impo_CiudadNombre,
 			provimpo.pais_Id					AS impo_paisId,
-			impo.impo_RTN				        AS impo_RTN,
+			impoPais.pais_Codigo + ' - ' + impoPais.pais_Nombre AS impo_PaisNombre,
 			
+
+			--Condiciones comerciales del proveedor
+			prov.coco_Id,			
+			coco.coco_Descripcion,
+
+			--Proveedor 		
 			deva.pvde_Id,		
 			declaProv.decl_NumeroIdentificacion AS prov_NumeroIdentificacion,
 			declaProv.decl_Nombre_Raso			AS prov_Nombre_Raso,
 			declaProv.decl_Direccion_Exacta		AS prov_Direccion_Exacta,
 			declaProv.decl_Correo_Electronico	AS prov_Correo_Electronico,
 			declaProv.decl_Telefono				AS prov_Telefono,
-			declaProv.decl_Fax					AS prov_Fax,			
+			declaProv.decl_Fax					AS prov_Fax,
+			prov.pvde_Condicion_Otra,
 			provprove.pvin_Id					AS prov_ciudId,
+			provprove.pvin_Codigo + ' - ' + provprove.pvin_Nombre AS prov_CiudadNombre,
 			provprove.pais_Id					AS prov_paisId,
-			prov.coco_Id,			
-			coco.coco_Descripcion,
-			prov.pvde_Condicion_Otra,		
-
-			inte.inte_Id, 
+			provPais.pais_Codigo + ' - ' + provPais.pais_Nombre AS prov_PaisNombre,
+			
+					
+			--Tipo intermediario 
 			inte.tite_Id,
+			tite.tite_Codigo +' - '+ tite.tite_Descripcion as TipoIntermediario,
+			 
+			  --Datos intermediario tabla intermediario
+			inte.inte_Id, 
+			provInte.pvin_Id					AS inte_ciudId,
+			provInte.pvin_Codigo + ' - ' + provInte.pvin_Nombre AS inte_CiudadNombre,
+			provInte.pais_Id					AS inte_paisId,
+			intePais.pais_Codigo + ' - ' + intePais.pais_Nombre AS inte_PaisNombre,
+			inte.inte_Tipo_Otro,
+
+			 --Datos intermediario tabla declarante
 			declaInte.decl_NumeroIdentificacion AS inte_NumeroIdentificacion,
 			declaInte.decl_Nombre_Raso			AS inte_Nombre_Raso,
 			declaInte.decl_Direccion_Exacta		AS inte_Direccion_Exacta,
 			declaInte.decl_Correo_Electronico	AS inte_Correo_Electronico,
 			declaInte.decl_Telefono				AS inte_Telefono,
 			declaInte.decl_Fax					AS inte_Fax,			
-			provInte.pvin_Id					AS inte_ciudId,
-			provInte.pais_Id					AS inte_paisId,
-			inte.inte_Tipo_Otro,
+			
 
 
 			deva.deva_LugarEntrega, 
@@ -4999,20 +5035,16 @@ SELECT		deva.deva_Id,
 			deva.inco_Version, 
 			deva.deva_NumeroContrato, 
 			deva.deva_FechaContrato, 
+
+			--Datos forma de envio
 			foen.foen_Id, 
 			foen.foen_Descripcion,
-
 			deva.deva_FormaEnvioOtra, 
-			deva.deva_PagoEfectuado, 
-			fopa_Id, 
-			deva.deva_FormaPagoOtra, 
-			deva.emba_Id, 
-			deva.pais_ExportacionId, 
-			paix.pais_Codigo + ' - ' + paix.pais_Nombre as pais_ExportacionNombre,
-			deva.deva_FechaExportacion, 
-			deva.mone_Id, 
-			deva.mone_Otra, 
-			deva.deva_ConversionDolares, 
+
+			--Datos forma de pago
+			deva.fopa_Id, 
+			fopa.fopa_Descripcion,
+			deva.deva_FormaPagoOtra,  			
 			
 			
 			----deva_Condiciones, 
@@ -5068,22 +5100,31 @@ SELECT		deva.deva_Id,
 			LEFT JOIN Adua.tbImportadores impo				ON deva.impo_Id = impo.impo_Id
 			LEFT JOIN Adua.tbDeclarantes declaImpo			ON impo.decl_Id = declaImpo.decl_Id
 			LEFT JOIN Gral.tbProvincias provimpo            ON declaImpo.ciud_Id = provimpo.pvin_Id
+			LEFT JOIN Gral.tbPaises impoPais                ON provimpo.pais_Id = impoPais.pais_Id
+			LEFT JOIN Gral.tbMonedas mone                   ON deva.mone_Id = mone.mone_Id
 			
 			
 			LEFT JOIN Adua.tbNivelesComerciales nico		ON impo.nico_Id = nico.nico_Id
 			LEFT JOIN Adua.tbProveedoresDeclaracion prov	ON prov.pvde_Id = deva.pvde_Id
 			LEFT JOIN Adua.tbDeclarantes declaProv			ON prov.decl_Id = declaProv.decl_Id
 			LEFT JOIN Gral.tbProvincias provprove           ON declaProv.ciud_Id = provprove.pvin_Id
+			LEFT JOIN Gral.tbPaises provPais                ON provprove.pais_Id = provPais.pais_Id
+
 
 			LEFT JOIN Adua.tbCondicionesComerciales coco	ON prov.coco_Id = coco.coco_Id
 			LEFT JOIN Adua.tbIntermediarios inte			ON inte.inte_Id = deva.inte_Id
+			LEFT JOIN Adua.tbTipoIntermediario tite			ON inte.tite_Id = tite.tite_Id
 			LEFT JOIN Adua.tbDeclarantes declaInte			ON declaInte.decl_Id = inte.decl_Id
 			LEFT JOIN Gral.tbProvincias provInte            ON declaInte.ciud_Id = provInte.pvin_Id
+			LEFT JOIN Gral.tbPaises intePais                ON provInte.pais_Id = intePais.pais_Id
+
 			LEFT JOIN Adua.tbIncoterm inco					ON deva.inco_Id = inco.inco_Id
 			LEFT JOIN Gral.tbFormas_Envio foen				ON deva.foen_Id = foen.foen_Id 
+			LEFT JOIN Adua.tbFormasdePago fopa				ON deva.fopa_Id = fopa.fopa_Id
 			LEFT JOIN Gral.tbPaises	pais					ON deva.pais_EntregaId = pais.pais_Id
 			LEFT JOIN Gral.tbPaises	paix					ON deva.pais_ExportacionId	 = paix.pais_Id
-			
+			LEFT JOIN Adua.tbLugaresEmbarque emba			ON deva.emba_Id = emba.emba_Id 
+
 			Inner JOIN Adua.tbCondiciones condi              ON deva.deva_Id = condi.deva_Id
 			Inner JOIN Adua.tbBaseCalculos bacu               ON deva.deva_Id = bacu.deva_Id
 			
@@ -11069,6 +11110,10 @@ BEGIN
 			(SELECT		adet_Id,						
 					   lote.lote_Id,
 					   lote.lote_CodigoLote,
+					   mate.mate_Id,
+					   mate.mate_Descripcion,
+					   lote.colr_Id,
+					   colors.colr_Nombre,
 					   adet_Cantidad,				
 					   AsignacionesOrdenDetalle.usua_UsuarioCreacion,
 					   usuarioCreacion.usua_Nombre							AS usuarioCreacionNombre,
@@ -11079,6 +11124,8 @@ BEGIN
 			FROM Prod.tbAsignacionesOrdenDetalle		AS AsignacionesOrdenDetalle	
 			INNER JOIN Prod.tbLotes		lote				ON AsignacionesOrdenDetalle.lote_Id = lote.lote_Id
 			INNER JOIN Acce.tbUsuarios usuarioCreacion		ON AsignacionesOrdenDetalle.usua_UsuarioCreacion = usuarioCreacion.usua_Id
+			INNER JOIN prod.tbMateriales mate				ON lote.mate_Id = mate.mate_Id
+			LEFT JOIN prod.tbColores colors					ON colors.colr_Id = lote.colr_Id
 			LEFT JOIN Acce.tbUsuarios usuarioModificacion	ON AsignacionesOrdenDetalle.usua_UsuarioModificacion = usuarioModificacion.usua_Id
 			WHERE 	AsignacionesOrdenDetalle.asor_Id = asignacionesOrden.asor_Id FOR JSON AUTO) AS Detalles
 
@@ -15722,3 +15769,157 @@ BEGIN
     FROM Prod.tbLotes L
     INNER JOIN deleted D ON L.lote_Id = D.lote_Id
 END;
+
+
+GO 
+
+CREATE OR ALTER PROCEDURE Adua.UPD_tbItemsDEVAPorDuca_DEVAsPorDUCANo
+@duca_No_DUCA NVARCHAR(100)
+AS
+BEGIN
+	SELECT [dedu_Id]
+			,DPD.[deva_Id]
+			,DPD.[usua_UsuarioCreacion]
+			,DPD.[dedu_FechaCreacion]
+			,DPD.[usua_UsuarioModificacion]
+			,DPD.[dedu_FechaModificacion]
+			,DPD.[duca_No_DUCA]
+			,deva.deva_Id, 
+			deva.deva_AduanaIngresoId, 
+			aduaIngreso.adua_Nombre				AS adua_IngresoNombre,
+			deva.deva_AduanaDespachoId, 
+			aduaDespacho.adua_Nombre			AS adua_DespachoNombre,
+			deva.deva_DeclaracionMercancia, 
+			deva.deva_FechaAceptacion, 
+			deva.deva_Finalizacion,
+			deva.deva_PagoEfectuado, 
+			deva.pais_ExportacionId, 
+			paix.pais_Codigo + ' - ' + paix.pais_Nombre as pais_ExportacionNombre,
+			deva.deva_FechaExportacion, 
+			deva.mone_Id, 
+			mone.mone_Codigo + ' - ' + mone.mone_Descripcion as monedaNombre,
+			deva.mone_Otra, 
+			deva.deva_ConversionDolares, 
+
+			--Lugares de embarque
+			deva.emba_Id,
+			emba.emba_Codigo,
+			emba.emba_Codigo +' - '+ emba.emba_Descripcion as LugarEmbarque,
+
+			--Nivel comercial del importador
+			impo.nico_Id,
+			nico.nico_Descripcion,
+
+			--datos del importador de la tabla de importador
+			impo.impo_Id, 
+			impo.impo_NumRegistro,
+			impo.impo_RTN				        AS impo_RTN,
+			impo.impo_NivelComercial_Otro,
+
+			--Datos del importador pero de la tabla de declarantes
+			declaImpo.decl_Nombre_Raso			AS impo_Nombre_Raso,
+			declaImpo.decl_Direccion_Exacta		AS impo_Direccion_Exacta,
+			declaImpo.decl_Correo_Electronico	AS impo_Correo_Electronico,
+			declaImpo.decl_Telefono				AS impo_Telefono,
+			declaImpo.decl_Fax					AS impo_Fax,			
+			provimpo.pvin_Id					AS impo_ciudId,
+			provimpo.pvin_Codigo + ' - ' + provimpo.pvin_Nombre AS impo_CiudadNombre,
+			provimpo.pais_Id					AS impo_paisId,
+			impoPais.pais_Codigo + ' - ' + impoPais.pais_Nombre AS impo_PaisNombre,
+			
+
+			--Condiciones comerciales del proveedor
+			prov.coco_Id,			
+			coco.coco_Descripcion,
+
+			--Proveedor 		
+			deva.pvde_Id,		
+			declaProv.decl_NumeroIdentificacion AS prov_NumeroIdentificacion,
+			declaProv.decl_Nombre_Raso			AS prov_Nombre_Raso,
+			declaProv.decl_Direccion_Exacta		AS prov_Direccion_Exacta,
+			declaProv.decl_Correo_Electronico	AS prov_Correo_Electronico,
+			declaProv.decl_Telefono				AS prov_Telefono,
+			declaProv.decl_Fax					AS prov_Fax,
+			prov.pvde_Condicion_Otra,
+			provprove.pvin_Id					AS prov_ciudId,
+			provprove.pvin_Codigo + ' - ' + provprove.pvin_Nombre AS prov_CiudadNombre,
+			provprove.pais_Id					AS prov_paisId,
+			provPais.pais_Codigo + ' - ' + provPais.pais_Nombre AS prov_PaisNombre,
+			
+					
+			--Tipo intermediario 
+			inte.tite_Id,
+			tite.tite_Codigo +' - '+ tite.tite_Descripcion as TipoIntermediario,
+			 
+			  --Datos intermediario tabla intermediario
+			inte.inte_Id, 
+			provInte.pvin_Id					AS inte_ciudId,
+			provInte.pvin_Codigo + ' - ' + provInte.pvin_Nombre AS inte_CiudadNombre,
+			provInte.pais_Id					AS inte_paisId,
+			intePais.pais_Codigo + ' - ' + intePais.pais_Nombre AS inte_PaisNombre,
+			inte.inte_Tipo_Otro,
+
+			 --Datos intermediario tabla declarante
+			declaInte.decl_NumeroIdentificacion AS inte_NumeroIdentificacion,
+			declaInte.decl_Nombre_Raso			AS inte_Nombre_Raso,
+			declaInte.decl_Direccion_Exacta		AS inte_Direccion_Exacta,
+			declaInte.decl_Correo_Electronico	AS inte_Correo_Electronico,
+			declaInte.decl_Telefono				AS inte_Telefono,
+			declaInte.decl_Fax					AS inte_Fax,			
+			
+
+
+			deva.deva_LugarEntrega, 
+			deva.pais_EntregaId, 
+			pais.pais_Codigo + ' - ' + pais.pais_Nombre as pais_EntregaNombre,
+			inco.inco_Id, 
+			inco.inco_Descripcion,
+			deva.inco_Version, 
+			deva.deva_NumeroContrato, 
+			deva.deva_FechaContrato, 
+
+			--Datos forma de envio
+			foen.foen_Id, 
+			foen.foen_Descripcion,
+			deva.deva_FormaEnvioOtra, 
+
+			--Datos forma de pago
+			deva.fopa_Id, 
+			fopa.fopa_Descripcion,
+			deva.deva_FormaPagoOtra 			
+			
+  FROM [Adua].[tbItemsDEVAPorDuca] DPD 
+			INNER JOIN Adua.tbDeclaraciones_Valor deva		ON DPD.deva_Id = deva.deva_Id 
+			LEFT JOIN Adua.tbAduanas aduaIngreso			ON deva.deva_AduanaIngresoId = aduaIngreso.adua_Id
+			LEFT JOIN Adua.tbAduanas aduaDespacho			ON deva.deva_AduanaDespachoId = aduaDespacho.adua_Id
+			LEFT JOIN Adua.tbImportadores impo				ON deva.impo_Id = impo.impo_Id
+			LEFT JOIN Adua.tbDeclarantes declaImpo			ON impo.decl_Id = declaImpo.decl_Id
+			LEFT JOIN Gral.tbProvincias provimpo            ON declaImpo.ciud_Id = provimpo.pvin_Id
+			LEFT JOIN Gral.tbPaises impoPais                ON provimpo.pais_Id = impoPais.pais_Id
+			LEFT JOIN Gral.tbMonedas mone                   ON deva.mone_Id = mone.mone_Id
+			
+			
+			LEFT JOIN Adua.tbNivelesComerciales nico		ON impo.nico_Id = nico.nico_Id
+			LEFT JOIN Adua.tbProveedoresDeclaracion prov	ON prov.pvde_Id = deva.pvde_Id
+			LEFT JOIN Adua.tbDeclarantes declaProv			ON prov.decl_Id = declaProv.decl_Id
+			LEFT JOIN Gral.tbProvincias provprove           ON declaProv.ciud_Id = provprove.pvin_Id
+			LEFT JOIN Gral.tbPaises provPais                ON provprove.pais_Id = provPais.pais_Id
+
+
+			LEFT JOIN Adua.tbCondicionesComerciales coco	ON prov.coco_Id = coco.coco_Id
+			LEFT JOIN Adua.tbIntermediarios inte			ON inte.inte_Id = deva.inte_Id
+			LEFT JOIN Adua.tbTipoIntermediario tite			ON inte.tite_Id = tite.tite_Id
+			LEFT JOIN Adua.tbDeclarantes declaInte			ON declaInte.decl_Id = inte.decl_Id
+			LEFT JOIN Gral.tbProvincias provInte            ON declaInte.ciud_Id = provInte.pvin_Id
+			LEFT JOIN Gral.tbPaises intePais                ON provInte.pais_Id = intePais.pais_Id
+
+			LEFT JOIN Adua.tbIncoterm inco					ON deva.inco_Id = inco.inco_Id
+			LEFT JOIN Gral.tbFormas_Envio foen				ON deva.foen_Id = foen.foen_Id 
+			LEFT JOIN Adua.tbFormasdePago fopa				ON deva.fopa_Id = fopa.fopa_Id
+			LEFT JOIN Gral.tbPaises	pais					ON deva.pais_EntregaId = pais.pais_Id
+			LEFT JOIN Gral.tbPaises	paix					ON deva.pais_ExportacionId	 = paix.pais_Id
+			LEFT JOIN Adua.tbLugaresEmbarque emba			ON deva.emba_Id = emba.emba_Id 
+			WHERE DPD.[duca_No_DUCA] = @duca_No_DUCA
+			
+			END
+			

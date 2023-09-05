@@ -908,6 +908,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+
         public ServiceResult ListarDeclaraciones_Valor()
         {
             var result = new ServiceResult();
@@ -3645,6 +3646,19 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
 
         #region ItemsDEVAxDUCA
 
+        public ServiceResult ListarDeclaraciones_ValorPorDucaNo(string DucaNo)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _itemsDEVAporDUCARepository.ListDVxDC(DucaNo);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         public ServiceResult InsertarItemsDEVAxDUCA(tbItemsDEVAPorDuca item)
         {
             var result = new ServiceResult();
