@@ -8320,6 +8320,40 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE Adua.UDP_tbAranceles_ListarByCodigo
+	@aran_Codigo	NVARCHAR(20)
+AS
+BEGIN
+	SELECT	aran_Id,
+			aran_Codigo,
+			DATALENGTH(aran_Codigo) AS tamaño, 
+			CASE 
+				WHEN DATALENGTH(aran_Codigo) = 10 THEN 'Categoria'
+				WHEN DATALENGTH(aran_Codigo) = 12 THEN 'Subcategoria'
+				ELSE 'Arancel' 
+			END AS aran_Tipo,
+			aran_Descripcion,
+		
+			ara.usua_UsuarioCreacion,
+			usu.usua_Nombre           AS UsuarioCreacion,		
+			ara.aran_FechaCreacion, 
+		
+		
+		ara.usua_UsuarioModificacion,
+		usu1.usua_Nombre              AS UsuarioModificacion,
+		ara.aran_FechaModificacion	
+		
+ 
+   FROM	Adua.tbAranceles ara
+   INNER JOIN Acce.tbUsuarios usu ON ara.usua_UsuarioCreacion = usu.usua_Id
+   LEFT JOIN Acce.tbUsuarios usu1 ON usu1.usua_Id = ara.usua_UsuarioModificacion 
+   WHERE ara.aran_Codigo LIKE '%'+ @aran_Codigo + '%' AND aram_Estado = 1
+   ORDER BY DATALENGTH(aran_Codigo) 
+
+END
+GO
+
+
 /*Listar Aranceles Categoria*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbAranceles_ListarCategoria
 AS
@@ -9534,7 +9568,7 @@ BEGIN TRY
 		 VALUES
 			   (@tido_Id
 			   ,@duca_No_Duca
-			   ,@doso_NumeroDocumento
+			   ,UPPER(@doso_NumeroDocumento)
 			   ,@doso_FechaEmision
 			   ,@doso_FechaVencimiento
 			   ,@doso_PaisEmision

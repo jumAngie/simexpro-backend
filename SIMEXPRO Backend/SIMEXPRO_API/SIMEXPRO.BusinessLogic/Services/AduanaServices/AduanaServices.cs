@@ -209,6 +209,21 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult ListarArancelesFiltrado(string codigo)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _arancelesRepository.ListFiltrado(codigo);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
+
         public ServiceResult InsertarAranceles(tbAranceles item)
         {
             var result = new ServiceResult();
