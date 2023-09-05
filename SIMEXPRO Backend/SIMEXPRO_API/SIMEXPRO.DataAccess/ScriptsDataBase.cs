@@ -284,6 +284,8 @@ namespace SIMEXPRO.DataAccess
         #region Duca
         public static string ListarDuca = "Adua.UDP_tbDuca_Listar";
 
+        public static string PreInsertDuca = "Adua.UDP_tbDuca_PreInsertar";
+
         public static string InsertarDucaTAP1 = "Adua.UDP_tbDuca_InsertarTab1";
         public static string EditarDucaTAP1 = "Adua.UDP_tbDuca_EditarTab1";
         public static string ListarPorNumeroDuca = "Adua.UDP_tbDuca_ListarPorNumeroDuca";
@@ -454,7 +456,7 @@ namespace SIMEXPRO.DataAccess
         #endregion
 
         #region Items DEVA X DUCA
-        public static string InsertarItemDEVAxDuca = "Adua.UDP_tbItemsDEVAPorDuca_Insertar";
+        public static string InsertarItemDEVAxDuca = "Adua.UDP_tbItemsDEVAPorDuca_InsertarDuca";
         public static string EditarItemDevaxDuca = "Adua.UDP_tbItemsDEVAPorDuca_Editar";
         #endregion
 

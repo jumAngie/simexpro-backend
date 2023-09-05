@@ -1326,6 +1326,27 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult PreInsertar(tbDuca item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var respuesta = _ducaRepository.PreInsert(item);
+                if (respuesta.MessageStatus == "1")
+                {
+                    return result.Ok(respuesta);
+                }
+                else
+                {
+                    return result.Error(respuesta);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
         public ServiceResult InsertarDucaTap1(tbDuca item)
         {
             var result = new ServiceResult();

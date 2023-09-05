@@ -22,6 +22,7 @@ namespace SIMEXPRO.Entities.Entities
         public DateTime? deva_FechaExportacion { get; set; }
         public int? mone_Id { get; set; }
         public string mone_Otra { get; set; }
+        public string monedaNombre { get; set; }
         public decimal? deva_ConversionDolares { get; set; }
 
 
@@ -41,6 +42,8 @@ namespace SIMEXPRO.Entities.Entities
 
         public string impo_Nombre_Raso { get; set; }
         public string impo_Direccion_Exacta { get; set; }
+        public string impo_CiudadNombre { get; set; }
+        public string impo_PaisNombre { get; set; }
         public string impo_Correo_Electronico { get; set; }
         public string impo_Telefono { get; set; }
         public string impo_Fax { get; set; }
@@ -57,6 +60,8 @@ namespace SIMEXPRO.Entities.Entities
         public string prov_NumeroIdentificacion { get; set; }
         public string prov_Nombre_Raso { get; set; }
         public string prov_Direccion_Exacta { get; set; }
+        public string prov_CiudadNombre { get; set; }
+        public string prov_PaisNombre { get; set; }
         public string prov_Correo_Electronico { get; set; }
         public string prov_Telefono { get; set; }
         public string prov_Fax { get; set; }
@@ -80,6 +85,8 @@ namespace SIMEXPRO.Entities.Entities
         public string inte_Nombre_Raso { get; set; }
         public string inte_Direccion_Exacta { get; set; }
         public string inte_Correo_Electronico { get; set; }
+        public string inte_CiudadNombre { get; set; }
+        public string inte_PaisNombre { get; set; }
         public string inte_Telefono { get; set; }
         public string inte_Fax { get; set; }
 

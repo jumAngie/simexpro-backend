@@ -142,11 +142,71 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.ToView("VW_tbDeclaraciones_ValorCompleto", "Adua");
 
+                entity.Property(e => e.LugarEmbarque).HasMaxLength(208);
+
+                entity.Property(e => e.TipoIntermediario).HasMaxLength(155);
+
                 entity.Property(e => e.adua_DespachoNombre).HasMaxLength(500);
 
                 entity.Property(e => e.adua_IngresoNombre).HasMaxLength(500);
 
+                entity.Property(e => e.base_ComisionCorrelaje).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_Costos_Seguro).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_Deducciones_Legales).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_Derechos_Impuestos).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_Gasto_Envase_Embalaje).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_Gasto_TransporteM_Importada).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_Gastos_Asistencia_Tecnica).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_Gastos_Carga_Importada).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_Gastos_Transporte_Posterior).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_MontCondicion).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_MontoReversion).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_Monto_Intereses).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_PagosIndirectos).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_PrecioFactura).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_PrecioReal).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_Total_Ajustes_Precio_Pagado).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_Total_Deducciones_Precio).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_Valor_Aduana).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_Valor_Canones).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_Valor_Ingenieria_Importado).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_Valor_Materiales_Consumidos).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_Valor_Materiales_Utilizados).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.base_ValoresMateriales_Incorporado).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.coco_Descripcion).HasMaxLength(150);
+
+                entity.Property(e => e.codi_Concepto_Monto_Declarado).HasMaxLength(500);
+
+                entity.Property(e => e.codi_Indicar_Canones).HasMaxLength(500);
+
+                entity.Property(e => e.codi_Indicar_Existe_Condicion).HasMaxLength(500);
+
+                entity.Property(e => e.codi_Indicar_Restricciones_Utilizacion).HasMaxLength(500);
+
+                entity.Property(e => e.codi_Tipo_Vinculacion).HasMaxLength(500);
 
                 entity.Property(e => e.deva_ConversionDolares).HasColumnType("decimal(18, 2)");
 
@@ -172,6 +232,10 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.foen_Descripcion).HasMaxLength(500);
 
+                entity.Property(e => e.fopa_Descripcion).HasMaxLength(150);
+
+                entity.Property(e => e.impo_CiudadNombre).HasMaxLength(173);
+
                 entity.Property(e => e.impo_Correo_Electronico).HasMaxLength(150);
 
                 entity.Property(e => e.impo_Direccion_Exacta).HasMaxLength(250);
@@ -184,6 +248,8 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.impo_NumRegistro).HasMaxLength(40);
 
+                entity.Property(e => e.impo_PaisNombre).HasMaxLength(155);
+
                 entity.Property(e => e.impo_RTN).HasMaxLength(40);
 
                 entity.Property(e => e.impo_Telefono).HasMaxLength(50);
@@ -191,6 +257,8 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.Property(e => e.inco_Descripcion).HasMaxLength(150);
 
                 entity.Property(e => e.inco_Version).HasMaxLength(10);
+
+                entity.Property(e => e.inte_CiudadNombre).HasMaxLength(173);
 
                 entity.Property(e => e.inte_Correo_Electronico).HasMaxLength(150);
 
@@ -200,15 +268,25 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.inte_Nombre_Raso).HasMaxLength(250);
 
+                entity.Property(e => e.inte_NumeroIdentificacion).HasMaxLength(50);
+
+                entity.Property(e => e.inte_PaisNombre).HasMaxLength(155);
+
                 entity.Property(e => e.inte_Telefono).HasMaxLength(50);
 
+                entity.Property(e => e.inte_Tipo_Otro).HasMaxLength(30);
+
                 entity.Property(e => e.mone_Otra).HasMaxLength(200);
+
+                entity.Property(e => e.monedaNombre).HasMaxLength(506);
 
                 entity.Property(e => e.nico_Descripcion).HasMaxLength(150);
 
                 entity.Property(e => e.pais_EntregaNombre).HasMaxLength(155);
 
                 entity.Property(e => e.pais_ExportacionNombre).HasMaxLength(155);
+
+                entity.Property(e => e.prov_CiudadNombre).HasMaxLength(173);
 
                 entity.Property(e => e.prov_Correo_Electronico).HasMaxLength(150);
 
@@ -217,6 +295,10 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.Property(e => e.prov_Fax).HasMaxLength(50);
 
                 entity.Property(e => e.prov_Nombre_Raso).HasMaxLength(250);
+
+                entity.Property(e => e.prov_NumeroIdentificacion).HasMaxLength(50);
+
+                entity.Property(e => e.prov_PaisNombre).HasMaxLength(155);
 
                 entity.Property(e => e.prov_Telefono).HasMaxLength(50);
 
@@ -1734,7 +1816,6 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.Property(e => e.doso_FechaVencimiento).HasColumnType("date");
 
                 entity.Property(e => e.doso_LineaAplica)
-                    .IsRequired()
                     .HasMaxLength(4)
                     .IsUnicode(false)
                     .IsFixedLength(true);
@@ -1938,11 +2019,6 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.Property(e => e.duca_PesoNetoTotal).HasColumnType("decimal(20, 8)");
 
                 entity.Property(e => e.duca_Ventaja).HasMaxLength(100);
-
-                entity.HasOne(d => d.deva)
-                    .WithMany(p => p.tbDuca)
-                    .HasForeignKey(d => d.deva_Id)
-                    .HasConstraintName("FK_Adua_tbDeclaraciones_Valor_deva_Id_Adua_tbDuca_deva_Id");
 
                 entity.HasOne(d => d.duca_AduanaDestinoNavigation)
                     .WithMany(p => p.tbDucaduca_AduanaDestinoNavigation)

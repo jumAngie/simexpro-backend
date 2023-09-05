@@ -7801,16 +7801,12 @@ BEGIN
    SELECT --Identificación de la Declaración parte I
 		  duca_No_Duca, 
 		  duca_No_Correlativo_Referencia, 
-		  duca.deva_Id,
-		  deva.deva_FechaAceptacion,
 		  
 		  --4.1 Exportador / Proveedor
-		  decla.decl_NumeroIdentificacion,
 		  duca_Tipo_Iden_Exportador, 
 		  tipo.iden_Descripcion					AS 'Tipo_identidad_exportador_descripcion',
 		  duca_Pais_Emision_Exportador,
 		  paisEE.pais_Nombre					AS 'Nombre_pais_del_exportador', 
-		  decla.decl_Nombre_Raso,
 		  duca_DomicilioFiscal_Exportador, 
 		  
 		  --Identificación de la Declaración parte II --
@@ -7818,10 +7814,6 @@ BEGIN
 		  adua1.adua_Nombre						AS 'Nombre_Aduana_Registro',			
 		  duca.duca_AduanaDestino,
 		  adua2.adua_Nombre						AS 'Nombre_Aduana_Destino',
-		  deva.deva_AduanaIngresoId,
-		  adua3.adua_Nombre						AS 'Nombre_Aduana_Ingreso',
-		  deva.deva_AduanaDespachoId,
-		  adua4.adua_Nombre						AS 'Nombre_Aduana_Despacho',
 		  
 		  --5.1  Iportador / Destinatario
 		  duca_Numero_Id_Importador, 
@@ -7883,14 +7875,6 @@ BEGIN
 		  trns.tran_TipoCarga,
 		  trns.tran_IdContenedor,	
 		  	  
-		  --25.Valores Totales 
-		  baca.base_Gasto_TransporteM_Importada,
-		  baca.base_Costos_Seguro,
-		  deva.inco_Id							AS 'baseCalculos_inco_Id',
-		  icot.inco_Descripcion,
-		  baca.base_Valor_Aduana,
-		  deva.deva_ConversionDolares,
-		  
 		  --Otros gastos
 		  
 		  --32.Totales 
@@ -7914,7 +7898,6 @@ LEFT JOIN Adua.tbTransporte				AS trns		ON cond.tran_Id = trns.tran_Id
 LEFT JOIN Gral.tbPaises					AS paisc	ON cond.pais_IdExpedicion = paisc.pais_Id 
 LEFT JOIN Gral.tbPaises					AS paist	ON paist.pais_Id = trns.pais_Id
 LEFT JOIN Adua.tbMarcas					AS marc		ON marc.marc_Id = trns.marca_Id
-LEFT JOIN Adua.tbDeclaraciones_Valor	AS deva		ON duca.deva_Id = deva.deva_Id
 LEFT JOIN Gral.tbPaises					AS paisD	ON duca.duca_Pais_Destino = paisD.pais_Id
 LEFT JOIN Gral.tbPaises					AS paisEE	ON duca.duca_Pais_Emision_Exportador = paisEE.pais_Id
 LEFT JOIN Gral.tbPaises					AS paisEI	ON duca.duca_Pais_Emision_Importador = paisEI.pais_Id
@@ -7923,21 +7906,55 @@ LEFT JOIN Gral.tbPaises					AS paisP	ON duca.duca_Pais_Procedencia = paisP.pais_
 LEFT JOIN Adua.tbModoTransporte			AS modoT	ON duca.motr_id = modoT.motr_Id
 LEFT JOIN Adua.tbAduanas				AS adua1	ON duca.duca_AduanaRegistro = adua1.adua_Id
 LEFT JOIN Adua.tbAduanas				AS adua2	ON duca.duca_AduanaDestino = adua2.adua_Id
-LEFT JOIN Adua.tbAduanas				AS adua3	ON deva.deva_AduanaIngresoId = adua3.adua_Id
-LEFT JOIN Adua.tbAduanas				AS adua4	ON deva.deva_AduanaDespachoId = adua4.adua_Id
-LEFT JOIN Adua.tbProveedoresDeclaracion AS prode	ON deva.pvde_Id = Prode.pvde_Id
-LEFT JOIN Adua.tbDeclarantes			AS decla	ON prode.decl_Id = decla.decl_Id
-LEFT JOIN Adua.tbBaseCalculos			AS baca     ON baca.base_Id = decla.decl_Id 
-LEFT JOIN Adua.tbTiposIdentificacion	AS tipo		ON duca.duca_Tipo_Iden_Exportador = tipo.iden_Id
-LEFT JOIN Adua.tbIncoterm				AS icot     ON icot.inco_Id = deva.inco_Id 
+LEFT JOIN Adua.tbTiposIdentificacion	AS tipo		ON duca.duca_Tipo_Iden_Exportador = tipo.iden_Id 
 END
 GO
 
+/* Preinsert DUCA*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_PreInsertar
+	@duca_No_DUCA	NVARCHAR(100)
+AS
+BEGIN	
+	BEGIN TRY
+		INSERT INTO Adua.tbDuca (duca_No_Duca, duca_No_Correlativo_Referencia, duca_AduanaRegistro, duca_AduanaDestino, duca_Regimen_Aduanero, duca_Modalidad,duca_Clase, duca_FechaVencimiento,duca_Pais_Procedencia,duca_Pais_Destino ,duca_Deposito_Aduanero, duca_Lugar_Desembarque,duca_Manifiesto,duca_Titulo, usua_UsuarioCreacion, duca_FechaCreacion)
+		VALUES (@duca_No_DUCA, NULL, NULL, NULL, NULL, NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, NULL, NULL)
+
+		SELECT 1
+
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error: ' + ERROR_MESSAGE();
+	END CATCH
+END
+
+GO
+
+/* Insert [Adua].[tbItemsDEVAPorDuca]*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbItemsDEVAPorDuca_InsertarDuca
+	@duca_No_DUCA			NVARCHAR,
+	@deva_Id				INT,
+	@usua_UsuarioCreacion	INT,
+	@dedu_FechaCreacion		DATETIME
+AS
+BEGIN	
+	BEGIN TRY
+		
+		INSERT INTO [Adua].[tbItemsDEVAPorDuca]([duca_No_DUCA], [deva_Id], [usua_UsuarioCreacion], [dedu_FechaCreacion], [usua_UsuarioModificacion], [dedu_FechaModificacion])
+		VALUES(@duca_No_DUCA,@deva_Id,@usua_UsuarioCreacion,@dedu_FechaCreacion,NULL,NULL)
+
+		SELECT 1
+
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error: ' + ERROR_MESSAGE();
+	END CATCH
+END
+
+GO
 
 /* Insertar Duca tab1*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_InsertarTab1
 	@duca_No_Duca						NVARCHAR(100),
-	@deva_Id							INT,
 	@duca_No_Correlativo_Referencia		NVARCHAR(MAX),
 	@duca_AduanaRegistro				INT,
 	@duca_AduanaDestino					INT,
@@ -7956,9 +7973,23 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_InsertarTab1
 AS
 BEGIN
 	BEGIN TRY
-		INSERT INTO Adua.tbDuca (duca_No_Duca, duca_No_Correlativo_Referencia, deva_Id, duca_AduanaRegistro, duca_AduanaDestino, duca_Regimen_Aduanero, duca_Modalidad,duca_Clase, duca_FechaVencimiento,duca_Pais_Procedencia,duca_Pais_Destino ,duca_Deposito_Aduanero, duca_Lugar_Desembarque,duca_Manifiesto,duca_Titulo, usua_UsuarioCreacion, duca_FechaCreacion)
-		VALUES (@duca_No_Duca, @duca_No_Correlativo_Referencia, @deva_Id, @duca_AduanaRegistro,@duca_AduanaDestino, @duca_Regimen_Aduanero, @duca_Modalidad,@duca_Clase,@duca_FechaVencimiento,@duca_Pais_Procedencia,@duca_Pais_Destino,@duca_Deposito_Aduanero,@duca_Lugar_Desembarque,@duca_Manifiesto,@duca_Titulo, @usua_UsuarioCreacion, @duca_FechaCreacion)
-
+		UPDATE Adua.tbDuca
+		SET duca_No_Correlativo_Referencia	 = @duca_No_Correlativo_Referencia,
+			duca_AduanaRegistro				 = @duca_AduanaRegistro,
+			duca_AduanaDestino				 = @duca_AduanaDestino,
+			duca_Regimen_Aduanero			 = @duca_Regimen_Aduanero,
+			duca_Modalidad					 = @duca_Modalidad,
+			duca_Clase						 = @duca_Clase,
+			duca_FechaVencimiento			 = @duca_FechaVencimiento,
+			duca_Pais_Procedencia			 = @duca_Pais_Procedencia,
+			duca_Pais_Destino				 = @duca_Pais_Destino,
+			duca_Deposito_Aduanero			 = @duca_Deposito_Aduanero,
+			duca_Lugar_Desembarque			 = @duca_Lugar_Desembarque,
+			duca_Manifiesto					 = @duca_Manifiesto,
+			duca_Titulo						 = @duca_Titulo,
+			usua_UsuarioCreacion			 = @usua_UsuarioCreacion,
+			duca_FechaCreacion				 = @duca_FechaCreacion
+			WHERE duca_No_Duca = @duca_No_Duca	
 		SELECT 1
 	END TRY
 	BEGIN CATCH
@@ -9462,13 +9493,8 @@ BEGIN
 	  FROM Adua.tbDocumentosDeSoporte doso	
 			INNER JOIN Adua.tbTipoDocumento tido   ON	doso.tido_Id					= tido.tido_Id 
 			INNER JOIN Acce.tbUsuarios	  crea	   ON	doso.usua_UsuarioCreacion		= crea.usua_Id
-			INNER JOIN Acce.tbUsuarios	  modi     ON	doso.usua_UsuarioModificacion	= modi.usua_Id
-			INNER JOIN Acce.tbUsuarios	  elim     ON	doso.usua_UsuarioEliminacion	= elim.usua_Id
-
-
-
-
-
+			LEFT JOIN Acce.tbUsuarios	  modi     ON	doso.usua_UsuarioModificacion	= modi.usua_Id
+			LEFT JOIN Acce.tbUsuarios	  elim     ON	doso.usua_UsuarioEliminacion	= elim.usua_Id
 END
 
 GO

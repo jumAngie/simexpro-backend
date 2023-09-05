@@ -23,13 +23,24 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             throw new NotImplementedException();
         }
 
+        public RequestStatus PreInsert(tbDuca item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parameters = new DynamicParameters();
+            parameters.Add("@duca_No_Duca", item.duca_No_Duca, DbType.String, ParameterDirection.Input);
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.PreInsertDuca, parameters, commandType: CommandType.StoredProcedure);
+            return new RequestStatus()
+            {
+                MessageStatus = respuesta
+            };
+        }
+
+
         public RequestStatus Insert(tbDuca item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
 
             var parameters = new DynamicParameters();
-
-            parameters.Add("@deva_Id", item.deva_Id, DbType.Int32, ParameterDirection.Input);
 
             parameters.Add("@duca_No_Correlativo_Referencia", item.duca_No_Correlativo_Referencia, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_No_Duca", item.duca_No_Duca, DbType.String, ParameterDirection.Input);
@@ -151,7 +162,6 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
             var parameters = new DynamicParameters();
 
-            parameters.Add("@deva_Id", item.deva_Id, DbType.Int32, ParameterDirection.Input);
 
             parameters.Add("@duca_No_Correlativo_Referencia", item.duca_No_Correlativo_Referencia, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_No_Duca", item.duca_No_Duca, DbType.String, ParameterDirection.Input);
