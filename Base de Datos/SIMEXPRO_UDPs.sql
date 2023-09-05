@@ -11068,6 +11068,7 @@ BEGIN
 			asor_FechaModificacion,
 			(SELECT		adet_Id,						
 					   lote.lote_Id,
+					   lote.lote_CodigoLote,
 					   adet_Cantidad,				
 					   AsignacionesOrdenDetalle.usua_UsuarioCreacion,
 					   usuarioCreacion.usua_Nombre							AS usuarioCreacionNombre,
