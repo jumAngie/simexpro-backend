@@ -11730,7 +11730,7 @@ GO
 
 
 --*****Insertar*****--
-CREATE OR ALTER PROCEDURE Prod.UDP_tbReporteModuloDia_Insertar
+CREATE OR ALTER PROCEDURE Prod.UDP_tbReporteModuloDia_Insertar-- 1, '10/10/1100', 1, 1, 1, '10/10/10'
 @modu_Id				INT, 
 @remo_Fecha				DATE, 
 @remo_TotalDia			INT, 
@@ -11749,6 +11749,9 @@ BEGIN
 		@usua_UsuarioCreacion,	
 		@remo_FechaCreacion
 		)
+
+		SELECT SCOPE_IDENTITY()
+
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE() 
