@@ -35,6 +35,22 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string clie_Nombre_O_Razon_Social { get; set; }
 
+
+        [NotMapped]
+        public string clie_Direccion { get; set; }
+
+        [NotMapped]
+        public string clie_Numero_Contacto { get; set; }
+
+        [NotMapped]
+        public string clie_RTN { get; set; }
+
+        [NotMapped]
+        public string clie_Correo_Electronico { get; set; }
+
+        [NotMapped]
+        public string clie_FAX { get; set; }
+
         [NotMapped]
         public string usuarioCreacionNombre { get; set; }
 

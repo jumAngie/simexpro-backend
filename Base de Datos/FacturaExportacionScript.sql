@@ -14,8 +14,15 @@ AS
 				FactExport.orco_Id, 
 				CONCAT('No. ', PO.orco_Id, ' - ', Clie.clie_Nombre_O_Razon_Social, ' - ', CONVERT(DATE, PO.orco_FechaEmision)) AS orco_Descripcion,
 				
-				FactExport.faex_Total, 
+				FactExport.faex_Total,
+
 				Clie.clie_Nombre_O_Razon_Social,
+				Clie.clie_Direccion,
+				Clie.clie_Numero_Contacto,
+				Clie.clie_RTN,
+				Clie.clie_Correo_Electronico,
+				Clie.clie_FAX,
+				
 				FactExport.usua_UsuarioCreacion, 
 				UserCrea.usua_Nombre	AS usuarioCreacionNombre,
 				FactExport.faex_FechaCreacion, 
