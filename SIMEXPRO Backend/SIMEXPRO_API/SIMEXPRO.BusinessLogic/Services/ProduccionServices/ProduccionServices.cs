@@ -3309,6 +3309,99 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
+        public ServiceResult EliminarFacturasExportacion(tbFacturasExportacion item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _facturasExportacionRepository.Delete(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult FinalizarFacturasExportacion(tbFacturasExportacion item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _facturasExportacionRepository.Finalizar(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult OrdenesCompraDDL()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _facturasExportacionRepository.OrdenesCompraDDL();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult DUCAsDDL()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _facturasExportacionRepository.DUCAsDDL();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult ComprobarNoDUCA(tbFacturasExportacion item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _facturasExportacionRepository.ComprobarNoDUCA(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region Facturas Exportacion Detalles
@@ -3369,7 +3462,40 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
+        public ServiceResult EliminarFacturasExportacionDetalles(tbFacturasExportacionDetalles item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _facturasExportacionDetallesRepository.Delete(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
 
+        public ServiceResult PODetallesDDL(int id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _facturasExportacionDetallesRepository.POdetalles(id);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region Graficas
