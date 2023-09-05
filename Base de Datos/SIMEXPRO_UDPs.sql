@@ -8380,6 +8380,43 @@ BEGIN
 END
 GO
 
+SELECT * FROM Adua.tbImpuestosPorArancel
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbArancelesxImpuestos_Crear
+@impu_Id INT,
+@usua_UsuarioCreacion INT,
+@imar_FechaCreacion DATETIME
+AS
+BEGIN
+DECLARE @aran_Id INT 
+SELECT TOP 1 @aran_Id = aran_ID FROM Adua.tbAranceles ORDER BY aran_ID desc
+INSERT INTO Adua.tbImpuestosPorArancel (impu_Id, aran_Id, usua_UsuarioCreacion, imar_FechaCreacion)
+VALUES (@impu_Id, @aran_Id,@usua_UsuarioCreacion,@imar_FechaCreacion)
+SELECT 1
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbArancelesxImpuestos_Listar
+@aran_Id INT 
+AS
+BEGIN
+SELECT IpA.imar_Id, imp.impu_Id, imp.impu_Descripcion FROM Adua.tbImpuestosPorArancel IpA
+INNER JOIN Adua.tbImpuestos imp ON IpA.impu_Id = imp.impu_Id 
+WHERE aran_Id = @aran_Id
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbArancelesxImpuestos_Eliminar
+@imar_Id INT
+AS
+BEGIN
+DELETE FROM Adua.tbImpuestosPorArancel 
+WHERE imar_Id = @imar_Id
+SELECT 1
+END
+GO
+
 /*Listar Aranceles Subcategoria*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbAranceles_ListarSubcategoria
 AS
