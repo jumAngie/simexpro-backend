@@ -2771,7 +2771,9 @@ CREATE TABLE Prod.tbFacturasExportacion(
 	usua_UsuarioCreacion		INT NOT NULL,
 	faex_FechaCreacion			DATETIME NOT NULL,
 	usua_UsuarioModificacion	INT DEFAULT NULL,
-	faex_FechaModificacion		DATETIME DEFAULT NULL
+	faex_FechaModificacion		DATETIME DEFAULT NULL,
+	faex_Finalizado				BIT DEFAULT 0,
+	faex_Estado					BIT DEFAULT 1
 
 	CONSTRAINT PK_Prod_tbFacturasExportacion_faex_Id									PRIMARY KEY(faex_Id),
 	CONSTRAINT FK_Prod_tbFacturasExportacion_Adua_tbDuca								FOREIGN KEY(duca_No_Duca)			   REFERENCES Adua.tbDuca	    (duca_No_Duca),
@@ -2780,6 +2782,7 @@ CREATE TABLE Prod.tbFacturasExportacion(
 	CONSTRAINT FK_Prod_tbFacturasExportacion_Acce_tbUsuarios_usua_UsuarioModificacion	FOREIGN KEY(usua_UsuarioModificacion)  REFERENCES Acce.tbUsuarios   (usua_Id)
 );
 GO
+
 
 CREATE TABLE Prod.tbFacturasExportacionDetalles(
 	fede_Id						INT IDENTITY(1,1),
@@ -2802,6 +2805,7 @@ CREATE TABLE Prod.tbFacturasExportacionDetalles(
 	CONSTRAINT FK_Prod_tbFacturasExportacionDetalles_Acce_tbUsuarios_usua_UsuarioModificacion	FOREIGN KEY(usua_UsuarioModificacion)  REFERENCES Acce.tbUsuarios			(usua_Id)
 );
 GO
+
 
 --Seccion pt2
 

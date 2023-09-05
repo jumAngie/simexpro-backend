@@ -49,5 +49,44 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             return Ok(respuesta);
         }
 
+        [HttpPost("Eliminar")]
+        public IActionResult Delete(FacturasExportacionViewModel item)
+        {
+            var mapped = _mapper.Map<tbFacturasExportacion>(item);
+            var respuesta = _produccionServices.EliminarFacturasExportacion(mapped);
+            return Ok(respuesta);
+        }
+        
+        [HttpPost("Finalizar")]
+        public IActionResult Finalizar(FacturasExportacionViewModel item)
+        {
+            var mapped = _mapper.Map<tbFacturasExportacion>(item);
+            var respuesta = _produccionServices.FinalizarFacturasExportacion(mapped);
+            return Ok(respuesta);
+        }
+
+        [HttpGet("PODDL")]
+        public IActionResult OrdenesCompraDDL()
+        {
+            var listado = _produccionServices.OrdenesCompraDDL();
+            listado.Data = _mapper.Map<IEnumerable<FacturasExportacionViewModel>>(listado.Data);
+            return Ok(listado);
+        }
+
+        [HttpGet("DUCADDL")]
+        public IActionResult DUCAsDDL()
+        {
+            var listado = _produccionServices.DUCAsDDL();
+            listado.Data = _mapper.Map<IEnumerable<FacturasExportacionViewModel>>(listado.Data);
+            return Ok(listado);
+        }
+
+        [HttpPost("ComprobarNoDUCA")]
+        public IActionResult ComprobarNoDUCA(FacturasExportacionViewModel item)
+        {
+            var mapped = _mapper.Map<tbFacturasExportacion>(item);
+            var respuesta = _produccionServices.ComprobarNoDUCA(mapped);
+            return Ok(respuesta);
+        }
     }
 }

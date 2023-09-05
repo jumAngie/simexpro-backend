@@ -41,6 +41,15 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
         {
             throw new NotImplementedException();
         }
+        public IEnumerable<VW_tbDeclaraciones_ValorCompleto> ListDVxDC(string DucaNo)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@duca_No_DUCA", DucaNo, DbType.String, ParameterDirection.Input);
+            return db.Query<VW_tbDeclaraciones_ValorCompleto>(ScriptsDataBase.LitarItemDEVAxDuca, parametros, commandType: CommandType.StoredProcedure);
+ 
+        }
 
         public RequestStatus Update(tbItemsDEVAPorDuca item)
         {
