@@ -14077,33 +14077,33 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbReporteModuloDiaDetalle_Listar
 @remo_Id		INT
 AS
 BEGIN
-	SELECT	rdet_Id, 
-			remo_Id, 
-			rdet_TotalDia, 
-			rdet_TotalDanado, 
-			OrdenCompra.orco_Id,
-			colores.colr_Nombre,
-			case ordencompradetalle.code_Sexo 
-			when 'M' then 'Masculino'
-			when 'F' then 'Femenino'
-			else ordencompradetalle.code_Sexo end as Sexo,
-			clientes.[clie_Nombre_Contacto],
-			clientes.[clie_RTN],
- 			ReporteModuloDia.code_Id, 
-			ordencompradetalle.esti_Id,
-			estilos.esti_Descripcion,
-			ReporteModuloDia.usua_UsuarioCreacion, 
-			rdet_FechaCreacion, 
-			ReporteModuloDia.usua_UsuarioModificacion, 
-			rdet_FechaModificacion, 
-			rdet_Estado 
-	FROM	Prod.tbReporteModuloDiaDetalle ReporteModuloDia
-			INNER JOIN Prod.tbOrdenCompraDetalles ordencompradetalle  	ON  ReporteModuloDia.code_Id = ordencompradetalle.code_Id 
-			INNER JOIN Prod.tbEstilos			estilos					ON ordencompradetalle.esti_Id = estilos.esti_Id
-			INNER JOIN Prod.tbOrdenCompra		OrdenCompra				ON	ordencompradetalle.orco_Id = OrdenCompra.orco_Id
-			INNER JOIN Prod.tbClientes			clientes				ON  OrdenCompra.orco_IdCliente = clientes.clie_Id
-			INNER JOIN Prod.tbColores			colores					ON	ordencompradetalle.code_Id	= colores.colr_Id
-			WHERE ReporteModuloDia.remo_Id = @remo_Id AND rdet_Estado = 1
+	SELECT    rdet_Id, 
+            remo_Id, 
+            rdet_TotalDia, 
+            rdet_TotalDanado, 
+            OrdenCompra.orco_Id,
+            colores.colr_Nombre,
+            case ordencompradetalle.code_Sexo 
+            when 'M' then 'Masculino'
+            when 'F' then 'Femenino'
+            else ordencompradetalle.code_Sexo end as Sexo,
+            clientes.[clie_Nombre_Contacto],
+            clientes.[clie_RTN],
+             ReporteModuloDia.code_Id, 
+            ordencompradetalle.esti_Id,
+            estilos.esti_Descripcion,
+            ReporteModuloDia.usua_UsuarioCreacion, 
+            rdet_FechaCreacion, 
+            ReporteModuloDia.usua_UsuarioModificacion, 
+            rdet_FechaModificacion, 
+            rdet_Estado 
+    FROM    Prod.tbReporteModuloDiaDetalle ReporteModuloDia
+            INNER JOIN Prod.tbOrdenCompraDetalles ordencompradetalle      ON  ReporteModuloDia.code_Id = ordencompradetalle.code_Id 
+            INNER JOIN Prod.tbEstilos            estilos                    ON ordencompradetalle.esti_Id = estilos.esti_Id
+            INNER JOIN Prod.tbOrdenCompra        OrdenCompra                ON    ordencompradetalle.orco_Id = OrdenCompra.orco_Id
+            INNER JOIN Prod.tbClientes            clientes                ON  OrdenCompra.orco_IdCliente = clientes.clie_Id
+            left JOIN Prod.tbColores            colores                    ON    ordencompradetalle.code_Id    = colores.colr_Id
+            WHERE ReporteModuloDia.remo_Id = @remo_Id AND rdet_Estado = 1
 
 	
 END
