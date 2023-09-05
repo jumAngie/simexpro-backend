@@ -11060,7 +11060,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Prod.UDP_tbAsignacionesOrden_Insertar --1,'10-16-2004', '10-16-2004', 1,1,1,1, '10-16-2004'  
+CREATE OR ALTER PROCEDURE Prod.UDP_tbAsignacionesOrden_Insertar --1,'10-16-2004', '10-16-2004', 1,1,1,'[{"lote_Id":1,"adet_Cantidad":2},{"lote_Id":2,"adet_Cantidad":2},{"lote_Id":3,"adet_Cantidad":2},{"lote_Id":4,"adet_Cantidad":2},{"lote_Id":7,"adet_Cantidad":2}]',1, '10-16-2004'  
 (
 	@asor_OrdenDetId			INT,
 	@asor_FechaInicio			DATETIME,
@@ -11068,11 +11068,13 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbAsignacionesOrden_Insertar --1,'10-16-2004'
 	@asor_Cantidad				INT,
 	@proc_Id					INT,
 	@empl_Id					INT,
+	@detalles					NVARCHAR(MAX),
 	@usua_UsuarioCreacion		INT,
 	@asor_FechaCreacion			DATETIME
 )
 AS
 BEGIN
+BEGIN TRANSACTION
 	BEGIN TRY
 		INSERT INTO Prod.tbAsignacionesOrden
 					(asor_OrdenDetId,			
@@ -11092,9 +11094,30 @@ BEGIN
 					@usua_UsuarioCreacion,		
 					@asor_FechaCreacion)
 		
-		SELECT SCOPE_IDENTITY() 
+		DECLARE @asor_Id INT = SCOPE_IDENTITY() 
+
+
+INSERT INTO [Prod].[tbAsignacionesOrdenDetalle]
+           ([lote_Id]
+           ,[adet_Cantidad]
+           ,[asor_Id]
+           ,[usua_UsuarioCreacion]
+           ,[adet_FechaCreacion])
+     SELECT *
+           ,@asor_Id
+           ,@usua_UsuarioCreacion	
+		   ,@asor_FechaCreacion
+		   FROM OPENJSON(@detalles, '$.detalles')
+				WITH (
+					 lote_Id INT
+					,adet_Cantidad INT
+				) 
+
+	SELECT 1
+	COMMIT TRAN
 	END TRY
 	BEGIN CATCH
+		 ROLLBACK TRAN
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
 	END CATCH
 END
