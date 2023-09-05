@@ -15601,7 +15601,27 @@ BEGIN
 	END CATCH
 END
 GO
+
+
+
 --*********************************************************************--
+--------------------- PROC DE DUCA INICIAR --------------------------------------
+CREATE OR ALTER PROC Adua.UDP_tbDUCA_PreInsertarListado
+AS
+	BEGIN
+		SELECT	deva_Id, 
+				ADUAIngreso.adua_Codigo + ' ' +  ADUAIngreso.adua_Nombre AS 'AduanaIngreso', 
+				ADUADespacho.adua_Codigo + ' ' +  ADUADespacho.adua_Nombre AS 'AduanaDespacho',
+				DEVA.deva_FechaAceptacion
+		FROM [Adua].[tbDeclaraciones_Valor] DEVA					INNER JOIN [Adua].[tbAduanas] ADUAIngreso
+		ON	 DEVA.deva_AduanaIngresoId = ADUAIngreso.adua_Id		INNER JOIN [Adua].[tbAduanas] ADUADespacho
+		ON	 DEVA.deva_AduanaDespachoId = ADUADespacho.adua_Id
+END
+--------------------- PROC DE DUCA FINALIZAR --------------------------------------
+--*********************************************************************--
+
+
+
 
 -------****************** FILTRADO  DE DATOS ***************----------
 
