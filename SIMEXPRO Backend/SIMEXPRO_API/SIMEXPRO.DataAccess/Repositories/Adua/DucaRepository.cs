@@ -23,6 +23,15 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             throw new NotImplementedException();
         }
 
+
+        public IEnumerable<tbDeclaraciones_Valor> ListadoDevaNoDuca()
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            return db.Query<tbDeclaraciones_Valor>(ScriptsDataBase.ListarDevaNoDuca, null, commandType: CommandType.StoredProcedure);
+        }
+
+
         public RequestStatus PreInsert()
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);

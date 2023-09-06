@@ -14430,7 +14430,7 @@ BEGIN
 					   @prod_FechaCreacion
 			        )
 		
-		SELECT SCOPE_IDENTITY() AS Resultado
+		SELECT 1
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
@@ -14460,7 +14460,7 @@ BEGIN
                usua_UsuarioModificacion = @usua_UsuarioModificacion,
                prod_FechaModificacion = @prod_FechaModificacion
 		 WHERE prod_Id = @prod_Id
-		SELECT SCOPE_IDENTITY() AS Resultado
+		SELECT 1
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
@@ -14468,9 +14468,27 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE Prod.UDP_tbPedidosOrdenDetalle_Eliminar
+	@prod_Id                    INT	
+AS
+BEGIN
+	BEGIN TRY 
+		UPDATE Prod.tbPedidosOrdenDetalle
+		   SET prod_Estado = 0
+		 WHERE prod_Id = @prod_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE() 
+	END CATCH
+END
+
+GO
 ----------------------------UDPS tbPODetallePorPedidoOrdenDetalle-----------------------------
 --LISTAR
 CREATE OR ALTER PROCEDURE Prod.UDP_tbPODetallePorPedidoOrdenDetalle_Listar
+@prod_Id INT
 AS
 BEGIN
   SELECT    ocpo.ocpo_Id,
@@ -14500,6 +14518,7 @@ BEGIN
 			LEFT JOIN Prod.tbTallas talla					ON code.tall_Id = talla.tall_Id
 			LEFT JOIN Prod.tbColores colr					ON code.colr_Id = colr.colr_Id
 			LEFT JOIN Acce.tbUsuarios usu					ON usu.usua_Id = ocpo.usua_UsuarioCreacion 
+			WHERe prod_Id =@prod_Id
 END 
 GO
 
