@@ -28,7 +28,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
             parametros.Add("@prov_Id", item.prov_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@peor_No_Duca", item.peor_No_Duca, DbType.String, ParameterDirection.Input);
+            parametros.Add("@duca_Id", item.duca_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@ciud_Id", item.ciud_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@peor_DireccionExacta", item.peor_DireccionExacta, DbType.String, ParameterDirection.Input);
             parametros.Add("@peor_FechaEntrada", item.peor_FechaEntrada, DbType.DateTime, ParameterDirection.Input);
@@ -57,7 +57,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             var parametros = new DynamicParameters();
             parametros.Add("@peor_Id", item.peor_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@prov_Id", item.prov_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@peor_No_Duca", item.peor_No_Duca, DbType.String, ParameterDirection.Input);
+            parametros.Add("@duca_Id", item.duca_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@ciud_Id", item.ciud_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@peor_DireccionExacta", item.peor_DireccionExacta, DbType.String, ParameterDirection.Input);
             parametros.Add("@peor_FechaEntrada", item.peor_FechaEntrada, DbType.DateTime, ParameterDirection.Input);

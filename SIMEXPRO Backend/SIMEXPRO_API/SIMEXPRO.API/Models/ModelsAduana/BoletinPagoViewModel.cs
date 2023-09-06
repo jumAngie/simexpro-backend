@@ -10,7 +10,7 @@ namespace SIMEXPRO.API.Models.ModelsAduana
     {
         public int boen_Id { get; set; }
         public int liqu_Id { get; set; }
-        public string duca_No_Duca { get; set; }
+        public int duca_Id { get; set; }
         [NotMapped]
         public string lige_TotalGral { get; set; }
         public int tipl_Id { get; set; }

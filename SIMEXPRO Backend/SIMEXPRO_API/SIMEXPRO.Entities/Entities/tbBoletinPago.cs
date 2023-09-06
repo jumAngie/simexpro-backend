@@ -15,7 +15,7 @@ namespace SIMEXPRO.Entities.Entities
 
         public int boen_Id { get; set; }
         public int liqu_Id { get; set; }
-        public string duca_No_Duca { get; set; }
+        public int duca_Id { get; set; }
         [NotMapped]
         public string lige_TotalGral { get; set; }
         public int tipl_Id { get; set; }
@@ -45,7 +45,7 @@ namespace SIMEXPRO.Entities.Entities
         public bool boen_Estado { get; set; }
 
         public virtual tbCodigoImpuesto coim { get; set; }
-        public virtual tbDuca duca_No_DucaNavigation { get; set; }
+        public virtual tbDuca duca { get; set; }
         public virtual tbEstadoBoletin esbo { get; set; }
         public virtual tbLiquidacionGeneral liqu { get; set; }
         public virtual tbTipoLiquidacion tipl { get; set; }

@@ -9,7 +9,7 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
     public class FacturasExportacionViewModel
     {
         public int faex_Id { get; set; }
-        public string duca_No_Duca { get; set; }
+        public int duca_Id { get; set; }
         public DateTime faex_Fecha { get; set; }
         public int orco_Id { get; set; }
         public decimal faex_Total { get; set; }
