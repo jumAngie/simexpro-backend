@@ -15312,36 +15312,6 @@ GO
 
 --Listar Modelos Maquina
 
-/*Ejecutar procedimiento de listar ModelosMaquina*/
-CREATE OR ALTER PROCEDURE Prod.UDP_tbModelosMaquina_Listar
-AS
-BEGIN
-	SELECT	moma.mmaq_Id,
-		    moma.mmaq_Nombre,
-		    moma.mmaq_Imagen,
-			moma.marq_Id,       
-		    mrqu.marq_Nombre ,                         
-			moma.func_Id,
-		    fuma.func_Nombre      ,                    
-			moma.usua_UsuarioCreacion,
-			usu.usua_Nombre         ,                  
-			moma.mmaq_FechaCreacion,
-			moma.usua_UsuarioModificacion,
-			usu1.usua_Nombre                          AS UsuarioModificacion,
-			moma.mmaq_FechaModificacion,
-			moma.usua_UsuarioEliminacion,
-			usuEli.usua_Nombre                        AS usuarioEliminacionNombre,
-			moma.mmaq_FechaEliminacion,
-            moma.mmaq_Estado
-  FROM	    Prod.tbModelosMaquina moma  
-            INNER JOIN Prod.tbFuncionesMaquina fuma    ON moma.func_Id                  = fuma.func_Id 
-			INNER JOIN Acce.tbUsuarios usu             ON usu.usua_Id                   = moma.usua_UsuarioCreacion 
-			LEFT JOIN Acce.tbUsuarios usu1             ON usu1.usua_UsuarioModificacion = moma.usua_UsuarioModificacion
-			LEFT JOIN Acce.tbUsuarios usuEli           ON usuEli.usua_Id                = moma.usua_UsuarioEliminacion
-			INNER JOIN Prod.tbMarcasMaquina	mrqu       ON mrqu.marq_Id                  = moma.marq_Id 
-			WHERE moma.mmaq_Estado                                                      = 1
-END
-GO
 
 /*Insertar procedimiento de listar ModelosMaquina*/
 CREATE OR ALTER PROCEDURE Prod.UDP_tbModelosMaquina_Insertar 
