@@ -2121,7 +2121,7 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             var result = new ServiceResult();
             try
             {
-                if (item.pedi_Id != 0)
+                if (item.prod_Id != 0)
                 {
                     var map = _pedidosOrdenDetallesRepository.Delete(item);
                     if (map.MessageStatus == "1")

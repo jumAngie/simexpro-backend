@@ -283,6 +283,7 @@ namespace SIMEXPRO.DataAccess
 
         #region Duca
         public static string ListarDuca = "Adua.UDP_tbDuca_Listar";
+        public static string ListarDevaNoDuca = "Adua.UDP_tbDUCA_PreInsertarListado";
 
         public static string PreInsertDuca = "Adua.UDP_tbDuca_PreInsertar";
 
@@ -684,6 +685,7 @@ namespace SIMEXPRO.DataAccess
         public static string InsertarPedidosOrdenDetalles = "Prod.UDP_tbPedidosOrdenDetalle_Insertar";
         public static string EditarPedidosOrdenDetalles = "Prod.UDP_tbPedidosOrdenDetalle_Editar";
         public static string PedidosOrdenDetallesFind = "Prod.UDP_tbPedidosOrdenDetalle_Find";
+        public static string PedidosOrdenDetallesEliminar = "Prod.UDP_tbPedidosOrdenDetalle_Eliminar";
         #endregion
 
         #region Pedidos Produccion
