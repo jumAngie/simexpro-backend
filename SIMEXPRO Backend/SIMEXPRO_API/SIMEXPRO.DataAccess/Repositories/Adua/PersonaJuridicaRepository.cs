@@ -134,7 +134,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
             parametros.Add("@peju_Id", item.peju_Id, DbType.Int32, ParameterDirection.Input);
-            var answer = db.QueryFirst<string>(ScriptsDataBase.FinalizarOrdenCompra, parametros, commandType: CommandType.StoredProcedure);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.FinalizarPersonaJuridica, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
             return result;
         }
