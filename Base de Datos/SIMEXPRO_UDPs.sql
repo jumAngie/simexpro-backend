@@ -7999,6 +7999,7 @@ BEGIN
 		  duca.usua_UsuarioModificacion, 
 		  usu2.usua_Nombre,
 		  duca_FechaModificacion, 
+		  duca_Finalizado
 		  duca_Estado
 	 FROM Adua.tbDuca duca 
 LEFT JOIN Acce.tbUsuarios				AS usu1		ON duca.usua_UsuarioCreacion = usu1.usua_Id
@@ -15679,8 +15680,8 @@ AS
 BEGIN
     SELECT
         DEVA.deva_Id, 
-        ADUAIngreso.adua_Codigo + ' ' + ADUAIngreso.adua_Nombre AS 'AduanaIngreso', 
-        ADUADespacho.adua_Codigo + ' ' + ADUADespacho.adua_Nombre AS 'AduanaDespacho',
+        ADUAIngreso.adua_Codigo + ' ' + ADUAIngreso.adua_Nombre AS 'adua_IngresoNombre', 
+        ADUADespacho.adua_Codigo + ' ' + ADUADespacho.adua_Nombre AS 'adua_DespachoNombre',
         DEVA.deva_FechaAceptacion
     FROM [Adua].[tbDeclaraciones_Valor] DEVA
     INNER JOIN [Adua].[tbAduanas] ADUAIngreso ON DEVA.deva_AduanaIngresoId = ADUAIngreso.adua_Id
