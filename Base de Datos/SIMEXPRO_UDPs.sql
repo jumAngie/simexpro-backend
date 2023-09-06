@@ -7999,6 +7999,7 @@ BEGIN
 		  duca.usua_UsuarioModificacion, 
 		  usu2.usua_Nombre,
 		  duca_FechaModificacion, 
+		  duca_Finalizado
 		  duca_Estado
 	 FROM Adua.tbDuca duca 
 LEFT JOIN Acce.tbUsuarios				AS usu1		ON duca.usua_UsuarioCreacion = usu1.usua_Id
@@ -11281,7 +11282,7 @@ INSERT INTO [Prod].[tbAsignacionesOrdenDetalle]
 					,adet_Cantidad INT
 				) 
 
-	SELECT 1
+	SELECT SCOPE_IDENTITY() 
 	COMMIT TRAN
 	END TRY
 	BEGIN CATCH
@@ -14430,7 +14431,7 @@ BEGIN
 					   @prod_FechaCreacion
 			        )
 		
-		SELECT SCOPE_IDENTITY() AS Resultado
+		SELECT 1
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
@@ -14460,7 +14461,7 @@ BEGIN
                usua_UsuarioModificacion = @usua_UsuarioModificacion,
                prod_FechaModificacion = @prod_FechaModificacion
 		 WHERE prod_Id = @prod_Id
-		SELECT SCOPE_IDENTITY() AS Resultado
+		SELECT 1
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
@@ -14468,9 +14469,27 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE Prod.UDP_tbPedidosOrdenDetalle_Eliminar
+	@prod_Id                    INT	
+AS
+BEGIN
+	BEGIN TRY 
+		UPDATE Prod.tbPedidosOrdenDetalle
+		   SET prod_Estado = 0
+		 WHERE prod_Id = @prod_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE() 
+	END CATCH
+END
+
+GO
 ----------------------------UDPS tbPODetallePorPedidoOrdenDetalle-----------------------------
 --LISTAR
 CREATE OR ALTER PROCEDURE Prod.UDP_tbPODetallePorPedidoOrdenDetalle_Listar
+@prod_Id INT
 AS
 BEGIN
   SELECT    ocpo.ocpo_Id,
@@ -14500,6 +14519,7 @@ BEGIN
 			LEFT JOIN Prod.tbTallas talla					ON code.tall_Id = talla.tall_Id
 			LEFT JOIN Prod.tbColores colr					ON code.colr_Id = colr.colr_Id
 			LEFT JOIN Acce.tbUsuarios usu					ON usu.usua_Id = ocpo.usua_UsuarioCreacion 
+			WHERe prod_Id =@prod_Id
 END 
 GO
 
@@ -15627,23 +15647,23 @@ GO
 --------------------- PROC DE DUCA INICIAR --------------------------------------
 CREATE OR ALTER PROC Adua.UDP_tbDUCA_PreInsertarListado
 AS
-	BEGIN
-		SELECT	deva_Id, 
-				ADUAIngreso.adua_Codigo + ' ' +  ADUAIngreso.adua_Nombre AS 'AduanaIngreso', 
-				ADUADespacho.adua_Codigo + ' ' +  ADUADespacho.adua_Nombre AS 'AduanaDespacho',
-				DEVA.deva_FechaAceptacion
-		FROM [Adua].[tbDeclaraciones_Valor] DEVA					INNER JOIN [Adua].[tbAduanas] ADUAIngreso
-		ON	 DEVA.deva_AduanaIngresoId = ADUAIngreso.adua_Id		INNER JOIN [Adua].[tbAduanas] ADUADespacho
-		ON	 DEVA.deva_AduanaDespachoId = ADUADespacho.adua_Id
+BEGIN
+    SELECT
+        DEVA.deva_Id, 
+        ADUAIngreso.adua_Codigo + ' ' + ADUAIngreso.adua_Nombre AS 'adua_IngresoNombre', 
+        ADUADespacho.adua_Codigo + ' ' + ADUADespacho.adua_Nombre AS 'adua_DespachoNombre',
+        DEVA.deva_FechaAceptacion
+    FROM [Adua].[tbDeclaraciones_Valor] DEVA
+    INNER JOIN [Adua].[tbAduanas] ADUAIngreso ON DEVA.deva_AduanaIngresoId = ADUAIngreso.adua_Id
+    INNER JOIN [Adua].[tbAduanas] ADUADespacho ON DEVA.deva_AduanaDespachoId = ADUADespacho.adua_Id
+    LEFT JOIN [Adua].[tbItemsDEVAPorDuca] ITEMSDEVAPorDuca ON DEVA.deva_Id = ITEMSDEVAPorDuca.deva_Id
+    WHERE ITEMSDEVAPorDuca.deva_Id IS NULL; -- Excluir registros que existen en la otra tabla
 END
+
 --------------------- PROC DE DUCA FINALIZAR --------------------------------------
 --*********************************************************************--
 
-
-
-
 -------****************** FILTRADO  DE DATOS ***************----------
-
 
 
 /*------------ PROVINCIAS POR PAIS --------------*/

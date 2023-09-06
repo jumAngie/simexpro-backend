@@ -49,6 +49,14 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             var result = db.Query<tbPODetallePorPedidoOrdenDetalle>(ScriptsDataBase.ListarPODetallePorPedidoOrdenDetalle, null, commandType: System.Data.CommandType.StoredProcedure);
             return result;
         }
+        public IEnumerable<tbPODetallePorPedidoOrdenDetalle> ListxProd_Id(int  prod_Id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@prod_Id", prod_Id, DbType.Int32, ParameterDirection.Input);
+            var result = db.Query<tbPODetallePorPedidoOrdenDetalle>(ScriptsDataBase.ListarPODetallePorPedidoOrdenDetalle, parametros, commandType: System.Data.CommandType.StoredProcedure);
+            return result;
+        }
 
         public RequestStatus Update(tbPODetallePorPedidoOrdenDetalle item)
         {

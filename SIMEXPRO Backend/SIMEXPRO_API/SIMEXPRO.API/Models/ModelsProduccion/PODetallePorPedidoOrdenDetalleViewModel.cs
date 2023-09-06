@@ -17,6 +17,7 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public DateTime? ocpo_FechaModificacion { get; set; }
 
         public string tall_Nombre { get; set; }
+        public string clie_Nombre_O_Razon_Social { get; set; }
         public int code_CantidadPrenda { get; set; }
         public string code_Sexo { get; set; }
         public string colr_Nombre { get; set; }

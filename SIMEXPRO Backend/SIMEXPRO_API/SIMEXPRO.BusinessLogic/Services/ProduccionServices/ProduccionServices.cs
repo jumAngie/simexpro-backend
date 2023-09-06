@@ -43,6 +43,7 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
         private readonly ProcesoPorOrdenCompraDetalleRepository _procesoPorOrdenCompraDetalleRepository;
         private readonly FacturasExportacionRepository _facturasExportacionRepository;
         private readonly FacturasExportacionDetallesRepository _facturasExportacionDetallesRepository;
+        private readonly ReportesRepository _reportesRepository;
 
         public ProduccionServices(AreasRepository areasRepository,
                                     AsignacionesOrdenDetalleRepository asignacionesOrdenDetalleRepository,
@@ -79,7 +80,8 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
                                     GraficasRepository graficasRepository,
                                     ProcesoPorOrdenCompraDetalleRepository procesoPorOrdenCompraDetalleRepository,
                                     FacturasExportacionRepository facturasExportacionRepository,
-                                    FacturasExportacionDetallesRepository facturasExportacionDetallesRepository
+                                    FacturasExportacionDetallesRepository facturasExportacionDetallesRepository,
+                                    ReportesRepository reportesRepository
 
             )
         {
@@ -121,6 +123,7 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             _procesoPorOrdenCompraDetalleRepository = procesoPorOrdenCompraDetalleRepository;
             _facturasExportacionRepository = facturasExportacionRepository;
             _facturasExportacionDetallesRepository = facturasExportacionDetallesRepository;
+            _reportesRepository = reportesRepository;
         }
 
 
@@ -2118,7 +2121,7 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             var result = new ServiceResult();
             try
             {
-                if (item.pedi_Id != 0)
+                if (item.prod_Id != 0)
                 {
                     var map = _pedidosOrdenDetallesRepository.Delete(item);
                     if (map.MessageStatus == "1")
@@ -2420,12 +2423,12 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
         #endregion
 
         #region PO Detalle Por Pedido Orden Detalle
-        public ServiceResult ListarPODetallePorPedidoOrdenDetalle()
+        public ServiceResult ListarPODetallePorPedidoOrdenDetalle(int prod_Id)
         {
             var result = new ServiceResult();
             try
             {
-                var list = _PODetallePorPedidoOrdenDetalleRepository.List();
+                var list = _PODetallePorPedidoOrdenDetalleRepository.ListxProd_Id(prod_Id);
                 return result.Ok(list);
             }
             catch (Exception ex)
@@ -3679,6 +3682,40 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
                 return result.Error(ex.Message);
             }
         }
+        #endregion
+
+        #region Reportes
+
+
+        public ServiceResult TiemposMaquinas(tbReportes reportes)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _reportesRepository.MaquinasTiempo(reportes);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        
+        public ServiceResult ModuloProduccion(tbReportes reportes)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _reportesRepository.ModuloProduccion(reportes);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+
         #endregion
     }
 }
