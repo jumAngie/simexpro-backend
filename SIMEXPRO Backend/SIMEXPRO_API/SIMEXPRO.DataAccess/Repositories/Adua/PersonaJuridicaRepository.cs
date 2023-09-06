@@ -128,6 +128,16 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return db.Query<tbPersonaJuridica>(ScriptsDataBase.ListarPersonaJuridica, null, commandType: CommandType.StoredProcedure);
         }
 
+        public RequestStatus FinalizarContrato(tbPersonaJuridica item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@peju_Id", item.peju_Id, DbType.Int32, ParameterDirection.Input);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.FinalizarOrdenCompra, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
+        }
         public RequestStatus Update(tbPersonaJuridica item)
         {
             RequestStatus result = new();

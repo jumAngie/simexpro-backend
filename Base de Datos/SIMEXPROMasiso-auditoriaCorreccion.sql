@@ -1790,10 +1790,6 @@ GO
 CREATE TABLE Adua.tbPersonaJuridica (
 	peju_Id							  				INT IDENTITY(1,1) ,
 	pers_Id							  				INT NOT NULL,
-	peju_RTNSociedadMercantil                       NVARCHAR(20), --nuevo 
-	peju_RTNReprsentanteLegal                       NVARCHAR(20), --nuevo
-	peju_DNIRepresentante                           NVARCHAR(20), --nuevo
-	peju_EscrituraPublica                           NVARCHAR(200), --nuevo 
 
 	colo_Id							  				INT ,
 	ciud_Id                                         INT,   -- nuevo
@@ -1812,7 +1808,7 @@ CREATE TABLE Adua.tbPersonaJuridica (
 	peju_TelefonoRepresentanteLegal	  				NVARCHAR(200) ,
 	peju_CorreoElectronico              			NVARCHAR(200),
 	peju_CorreoElectronicoAlternativo   			NVARCHAR(200) ,
-  
+    peju_ContratoFinalizado                         BIT,
 	usua_UsuarioCreacion       						INT NOT NULL,
 	peju_FechaCreacion         						DATETIME NOT NULL,
 	usua_UsuarioModificacion   						INT DEFAULT NULL,

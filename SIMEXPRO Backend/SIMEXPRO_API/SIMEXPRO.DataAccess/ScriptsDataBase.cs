@@ -405,6 +405,7 @@ namespace SIMEXPRO.DataAccess
         public static string InsertarPersonaJuridicaTap4 = "Adua.UDP_tbPersonaJuridica_InsertarTab4";
         public static string InsertarPersonaJuridicaTap5 = "Adua.UDP_tbPersonaJuridica_InsertarTab5";
         public static string EditarPersonaJuridica = "Adua.UDP_tbPersonaJuridica_Editar";
+        public static string FinalizarPersonaJuridica = "Adua.UDP_tbPersonaJuridica_ContratoFinalizado";
         #endregion
 
         #region Persona Natural

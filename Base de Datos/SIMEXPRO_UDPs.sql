@@ -3346,11 +3346,6 @@ BEGIN
 			,personaJuridica.peju_CorreoElectronico 
 			,personaJuridica.peju_CorreoElectronicoAlternativo
 
-			,personaJuridica.peju_DNIRepresentante
-			,personaJuridica.peju_RTNSociedadMercantil                --Tab 5
-			,personaJuridica.peju_EscrituraPublica
-			,personaJuridica.peju_RTNReprsentanteLegal
-
 			,personaJuridica.usua_UsuarioCreacion
 			,usuarioCreacion.usua_Nombre				as usuarioCreacionNombre
 			,personaJuridica.peju_FechaCreacion
@@ -3358,6 +3353,7 @@ BEGIN
 			,usuarioModificacion.usua_Nombre			as usuarioModificaNombre
 			,personaJuridica.peju_FechaModificacion
 			,personaJuridica.peju_Estado
+			,personaJuridica.peju_ContratoFinalizado
 			FROM	    Adua.tbPersonaJuridica			personaJuridica
 			LEFT JOIN	Adua.tbPersonas					personas								ON personaJuridica.pers_Id						= personas.pers_Id
 			LEFT JOIN	Gral.tbOficinas					oficina									ON personas.ofic_Id								= oficina.ofic_Id
@@ -3381,7 +3377,7 @@ END
 GO
 
 /*Insertar Persona Juridica*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab1 
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab1 --'18042001059874',2,2,1,2,'09-06-2023'
 
   @pers_RTN                 NVARCHAR(40),
   @ofic_Id                  INT,
@@ -3419,7 +3415,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab2
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab2 --45,2,2,2,'Local Numero 10','Frente a Comercial Pineda'
 (
   @peju_Id                          INT,
   @ciud_Id					        INT,
@@ -3453,7 +3449,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab3
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab3 --45,1,2,2,'Departamento 11','Frente a Pollos Wicho'
 (
   @peju_Id                            INT,
   @peju_CiudadIdRepresentante	      INT,
@@ -3486,7 +3482,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab4
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab4 --45,'+504 8895-6574','+504 8569-8514', '+504 2365-8574','ianh8902@gmail.com', 'ianalex2210@gmail.com'
 ( 
   @peju_Id                                INT,
   @peju_TelefonoEmpresa                   NVARCHAR(200),
@@ -3524,29 +3520,6 @@ BEGIN
     INSERT INTO [Adua].[tbDocumentosContratos]([peju_Id],[doco_Numero_O_Referencia], [doco_TipoDocumento], [usua_UsuarioCreacion], [doco_FechaCreacion],[doco_URLImagen], [doco_NombreImagen])
 	VALUES (@peju_Id,@doco_Numero_O_Referencia,@doco_TipoDocumento,@usua_UsuarioCreacion,@doco_FechaCreacion, @doco_URLImagen, @doco_NombreImagen)
 END;
-GO
-
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab5
-( 
-  @peju_Id                                INT,
-  @peju_RTNSociedadMercantil              NVARCHAR(20),
-  @peju_DNIRepresentante                  NVARCHAR(20),
-  @peju_RTNReprsentanteLegal              NVARCHAR(20),
-  @peju_EscrituraPublica                  NVARCHAR(20)
-)
-AS
-BEGIN
-	BEGIN TRY
-	  UPDATE [Adua].[tbPersonaJuridica]
-	     SET  [peju_RTNSociedadMercantil] = @peju_RTNSociedadMercantil , peju_DNIRepresentante = @peju_DNIRepresentante,
-		     [peju_EscrituraPublica] = @peju_EscrituraPublica, peju_RTNReprsentanteLegal = @peju_RTNReprsentanteLegal
-      WHERE peju_Id =  @peju_Id
-	   SELECT 1
-	END TRY
-	BEGIN CATCH
-		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
-	END CATCH
-END
 GO
 
 /*Editar Persona Juridica*/
@@ -3591,6 +3564,23 @@ BEGIN
         ROLLBACK TRANSACTION;
         SELECT 'Mensaje de error: ' + ERROR_MESSAGE() AS Resultado;
     END CATCH
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_ContratoFinalizado 
+	@peju_Id	INT
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE Adua.tbPersonaJuridica
+		SET	   [peju_ContratoFinalizado] = 1
+		WHERE  peju_Id = @peju_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error:' + ERROR_MESSAGE()
+	END CATCH
 END
 GO
 --**********LUGARES EMBARQUE**********--

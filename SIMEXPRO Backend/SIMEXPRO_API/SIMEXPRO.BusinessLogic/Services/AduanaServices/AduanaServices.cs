@@ -2357,6 +2357,21 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+
+        public ServiceResult FinalizarContrato(tbPersonaJuridica item)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _personaJuridicaRepository.FinalizarContrato(item);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region PersonaNatural
