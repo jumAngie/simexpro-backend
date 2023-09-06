@@ -1620,11 +1620,13 @@ CREATE TABLE Adua.tbCodigoImpuesto (
     coim_Estado                	BIT DEFAULT 1,
 
 	CONSTRAINT PK_Adua_tbCodigoImpuesto_coim_Id PRIMARY KEY (coim_Id),
+	CONSTRAINT UQ_Adua_tbCodigoImpuesto_coim_Descripcion UNIQUE (coim_Descripcion),
 	CONSTRAINT FK_Adua_tbCodigoImpuesto_coim_UsuarioCreacion_Acce_tbUsuarios_usua_Id FOREIGN KEY (usua_UsuarioCreacion) REFERENCES Acce.tbUsuarios (usua_Id),
     CONSTRAINT FK_Adua_tbCodigoImpuesto_coim_UsuarioModificacion_Acce_tbUsuarios_usua_Id FOREIGN KEY (usua_UsuarioModificacion) REFERENCES Acce.tbUsuarios (usua_Id),
     CONSTRAINT FK_Adua_tbCodigoImpuesto_usua_UsuarioEliminacion_Acce_tbUsuarios_usua_Id FOREIGN KEY (usua_UsuarioEliminacion) REFERENCES Acce.tbUsuarios (usua_Id),
 );
 GO
+
 
 --CREATE TABLE Adua.tbFormaPresentacion (
 --    pres_Id 					INT IDENTITY(1,1),

@@ -9,7 +9,8 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Listar
 AS
 	BEGIN
 		SELECT	FactExport.faex_Id, 
-				FactExport.duca_No_Duca, 
+				FactExport.duca_Id,
+				Duca.duca_No_Duca,
 				FactExport.faex_Fecha, 
 				FactExport.orco_Id, 
 				CONCAT('No. ', PO.orco_Id, ' - ', Clie.clie_Nombre_O_Razon_Social, ' - ', CONVERT(DATE, PO.orco_FechaEmision)) AS orco_Descripcion,
@@ -59,6 +60,7 @@ AS
 		INNER JOIN Prod.tbOrdenCompra		AS PO			ON FactExport.orco_Id = PO.orco_Id
 		INNER JOIN Prod.tbClientes			AS Clie			ON PO.orco_IdCliente = Clie.clie_Id
 		INNER JOIN Acce.tbUsuarios			AS UserCrea		ON FactExport.usua_UsuarioCreacion = UserCrea.usua_Id
+		INNER JOIN Adua.tbDuca				AS Duca			ON FactExport.duca_Id = Duca.duca_Id
 		LEFT JOIN Acce.tbUsuarios			AS UserModifica ON FactExport.usua_UsuarioModificacion = UserModifica.usua_Id
 		WHERE FactExport.faex_Estado = 1
 	END
@@ -74,9 +76,11 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Insertar --'12345678696
 AS
 BEGIN
 	BEGIN TRY
-		INSERT INTO Prod.tbFacturasExportacion(duca_No_Duca, faex_Fecha, orco_Id, 
+		DECLARE @duca_Id INT = (SELECT duca_Id FROM Adua.tbDuca WHERE duca_No_Duca = @duca_No_Duca)
+
+		INSERT INTO Prod.tbFacturasExportacion(duca_Id, faex_Fecha, orco_Id, 
 												faex_Total, usua_UsuarioCreacion, faex_FechaCreacion)
-		VALUES(@duca_No_Duca, @faex_Fecha, @orco_Id, 0, @usua_UsuarioCreacion, @faex_FechaCreacion)
+		VALUES(@duca_Id, @faex_Fecha, @orco_Id, 0, @usua_UsuarioCreacion, @faex_FechaCreacion)
 
 		DECLARE @faex_Id INT = SCOPE_IDENTITY();
 
@@ -103,7 +107,8 @@ BEGIN
 	BEGIN TRY
 		
 		DECLARE @prev_orco_Id INT =	(SELECT orco_Id FROM Prod.tbFacturasExportacion WHERE faex_Id = @faex_Id)
-		
+		DECLARE @duca_Id INT = (SELECT duca_Id FROM Adua.tbDuca WHERE duca_No_Duca = @duca_No_Duca)
+
 		IF @prev_orco_Id != @orco_Id
 			BEGIN
 
@@ -114,7 +119,7 @@ BEGIN
 
 
 				UPDATE Prod.tbFacturasExportacion
-				SET	duca_No_Duca = @duca_No_Duca, 
+				SET	duca_Id = @duca_Id, 
 					faex_Fecha = @faex_Fecha, 
 					orco_Id = @orco_Id, 
 					usua_UsuarioModificacion = @usua_UsuarioModificacion, 
@@ -126,7 +131,7 @@ BEGIN
 		ELSE
 			BEGIN
 				UPDATE Prod.tbFacturasExportacion
-				SET	duca_No_Duca = @duca_No_Duca, 
+				SET	duca_Id = @duca_Id, 
 					faex_Fecha = @faex_Fecha, 
 					orco_Id = @orco_Id, 
 					usua_UsuarioModificacion = @usua_UsuarioModificacion, 
@@ -193,7 +198,7 @@ GO
 
 /* PROCEDIMIENTOS tb.FacturasExportacionDetalles*/
 
--- PROCEDIMIENTO PARA LISTAR LAS FACTURAS EXPORTACION DETALLES
+-- PROCEDIMIENTO PARA LISTAR LAS FACTURAS EXPORTACION DETALLES POR EL ID DEL ENCABEZADO
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacionDetalles_Listar
 	@faex_Id INT
 AS
@@ -342,7 +347,7 @@ GO
 CREATE OR ALTER PROCEDURE Prod.UDP_DUCAsDDL
 AS
 BEGIN
-	SELECT duca_No_Duca FROM Adua.tbDuca
+	SELECT duca_Id ,duca_No_Duca FROM Adua.tbDuca
 	WHERE duca_Estado = 1
 END
 GO
@@ -384,9 +389,11 @@ CREATE OR ALTER PROCEDURE Prod.UDP_ComprobarNoDUCA
 AS
 BEGIN
 	BEGIN TRY
-		IF EXISTS (SELECT * FROM Adua.tbDuca WHERE duca_No_Duca = @duca_No_Duca)
+		IF EXISTS (SELECT duca_Id FROM Adua.tbDuca WHERE duca_No_Duca = @duca_No_Duca)
 			BEGIN 
-				SELECT duca_No_Duca FROM Adua.tbDuca WHERE duca_No_Duca = @duca_No_Duca
+				--SELECT duca_No_Duca FROM Adua.tbDuca WHERE duca_No_Duca = @duca_No_Duca
+				SELECT @duca_No_Duca
+
 			END
 		ELSE
 			BEGIN
@@ -399,7 +406,7 @@ BEGIN
 END
 GO
 
-
+SELECT * FROM Adua.tbDuca
 SELECT * FROM Prod.tbColores
 SELECT * FROM Prod.tbTallas
 SELECT * FROM Prod.tbOrdenCompraDetalles WHERE orco_Id = 1
