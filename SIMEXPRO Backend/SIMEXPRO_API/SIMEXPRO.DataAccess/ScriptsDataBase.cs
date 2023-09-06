@@ -183,7 +183,6 @@ namespace SIMEXPRO.DataAccess
         public static string ListarBoletinPago = "Adua.UDP_tbBoletinPago_Listar";
         public static string InsertarBoletinPago = "Adua.UDP_tbBoletinPago_Insertar";
         public static string EditarBoletinPago = "Adua.UDP_tbBoletinPago_Editar";
-        public static string EliminarBoletinPago = "Adua.UDP_tbBoletinPago_Eliminar";
         #endregion
 
         #region Boletin de Pago detalles
@@ -289,7 +288,6 @@ namespace SIMEXPRO.DataAccess
 
         public static string InsertarDucaTAP1 = "Adua.UDP_tbDuca_InsertarTab1";
         public static string EditarDucaTAP1 = "Adua.UDP_tbDuca_EditarTab1";
-        public static string ListarPorNumeroDuca = "Adua.UDP_tbDuca_ListarPorNumeroDuca";
 
         public static string InsertarDucaTAP2 = "Adua.UDP_tbDuca_InsertarTab2";
         public static string EditarDucaTAP2 = "Adua.UDP_tbDuca_EditarTab2";
@@ -350,6 +348,7 @@ namespace SIMEXPRO.DataAccess
         #region Items
         public static string ListarItems = "Adua.UDP_tbItems_Listar";
         public static string InsertarItems = "Adua.UDP_tbItems_Insertar";
+        public static string EditarItemDuca = "Adua.UDP_tbItems_EditarItemDuca";
         public static string EditarItems = "Adua.UDP_tbItems_Editar";
         public static string EliminarItems = "Adua.UDP_tbItems_Eliminar";
         #endregion
@@ -411,6 +410,7 @@ namespace SIMEXPRO.DataAccess
         public static string ListarPersonaNatural = "Adua.UDP_tbPersonaNatural_Listar";
         public static string InsertarPersonaNatural = "Adua.UDP_tbPersonaNatural_Insertar";
         public static string EditarPersonaNatural = "Adua.UDP_tbPersonaNatural_Editar";
+        public static string FinalizarPersonaNatural = "Adua.UDP_tbPersonaNatural_Finalizado";
         #endregion
 
         #region Personas
@@ -459,6 +459,7 @@ namespace SIMEXPRO.DataAccess
         #endregion
 
         #region Items DEVA X DUCA
+        public static string ListadoDevasPorducaId = "Adua.UDP_tbItemsDEVAPorDuca_ListadoDevasPorduca_Id";
         public static string LitarItemDEVAxDuca = "Adua.UPD_tbItemsDEVAPorDuca_DEVAsPorDUCANo";
         public static string InsertarItemDEVAxDuca = "Adua.UDP_tbItemsDEVAPorDuca_InsertarDuca";
         public static string EditarItemDevaxDuca = "Adua.UDP_tbItemsDEVAPorDuca_Editar";

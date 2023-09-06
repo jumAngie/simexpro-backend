@@ -25,12 +25,19 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
         }
 
         [HttpGet("ListarDevaPorDucaNo")]
-        public IActionResult ListarDevaPorDucaNo(string DucaNo)
+        public IActionResult ListarDevaPorDucaNo(int duca_Id)
         {
-            var listado = _aduanaServices.ListarDeclaraciones_ValorPorDucaNo(DucaNo);
+            var listado = _aduanaServices.ListarDeclaraciones_ValorPorDucaNo(duca_Id);
             return Ok(listado);
         }
 
+        [HttpGet("ListadoDevasPorducaId")]
+        public IActionResult ListadoDevas(int duca_Id)
+        {
+            var listado = _aduanaServices.ListadoDevasPorducaId(duca_Id);
+
+            return Ok(listado);
+        }
 
         [HttpPost("Insertar")]
         public IActionResult Insert(ItemsDEVAxDUCAViewModel modelo)

@@ -23,12 +23,11 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             throw new NotImplementedException();
         }
 
-        public RequestStatus PreInsert(tbDuca item)
+        public RequestStatus PreInsert()
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
-            var parameters = new DynamicParameters();
-            parameters.Add("@duca_No_Duca", item.duca_No_Duca, DbType.String, ParameterDirection.Input);
-            var respuesta = db.QueryFirst<string>(ScriptsDataBase.PreInsertDuca, parameters, commandType: CommandType.StoredProcedure);
+            
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.PreInsertDuca, null, commandType: CommandType.StoredProcedure);
             return new RequestStatus()
             {
                 MessageStatus = respuesta
@@ -42,8 +41,9 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
             var parameters = new DynamicParameters();
 
-            parameters.Add("@duca_No_Correlativo_Referencia", item.duca_No_Correlativo_Referencia, DbType.String, ParameterDirection.Input);
+            parameters.Add("@duca_Id", item.duca_Id, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@duca_No_Duca", item.duca_No_Duca, DbType.String, ParameterDirection.Input);
+            parameters.Add("@duca_No_Correlativo_Referencia", item.duca_No_Correlativo_Referencia, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_AduanaRegistro", item.duca_AduanaRegistro, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@duca_AduanaDestino", item.duca_AduanaDestino, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@duca_Regimen_Aduanero", item.duca_Regimen_Aduanero, DbType.Int32, ParameterDirection.Input);
@@ -74,7 +74,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
             var parameters = new DynamicParameters();
 
-            parameters.Add("@duca_No_Duca", item.duca_No_Duca, DbType.String, ParameterDirection.Input);
+            parameters.Add("@duca_Id", item.duca_Id, DbType.Int32, ParameterDirection.Input);
 
             parameters.Add("@duca_Codigo_Declarante", item.duca_Codigo_Declarante, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Numero_Id_Declarante", item.duca_Numero_Id_Declarante, DbType.String, ParameterDirection.Input);
@@ -100,7 +100,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parameters.Add("@tran_TamanioEquipamiento", item.tran_TamanioEquipamiento, DbType.String, ParameterDirection.Input);
             parameters.Add("@tran_TipoCarga", item.tran_TipoCarga, DbType.String, ParameterDirection.Input);
             parameters.Add("@tran_IdContenedor", item.tran_IdContenedor, DbType.String, ParameterDirection.Input);
-            parameters.Add("@usua_UsuarioCreacio", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
+            parameters.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@tran_FechaCreacion", item.duca_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
 
             var respuesta = db.QueryFirst<string>(ScriptsDataBase.InsertarDucaTAP2, parameters, commandType: CommandType.StoredProcedure);
@@ -118,7 +118,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             var parameters = new DynamicParameters();
 
             parameters.Add("@tido_Id", item.tido_Id, DbType.Int32, ParameterDirection.Input);
-            parameters.Add("@duca_No_Duca", item.duca_No_Duca, DbType.String, ParameterDirection.Input);
+            parameters.Add("@duca_Id", item.duca_Id, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@doso_NumeroDocumento", item.doso_NumeroDocumento, DbType.String, ParameterDirection.Input);
             parameters.Add("@doso_FechaEmision", item.doso_FechaEmision, DbType.DateTime, ParameterDirection.Input);
             parameters.Add("@doso_FechaVencimiento", item.doso_FechaVencimiento, DbType.DateTime, ParameterDirection.Input);
@@ -143,28 +143,15 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return db.Query<tbDuca>(ScriptsDataBase.ListarDuca, null, commandType: System.Data.CommandType.StoredProcedure);
         }
 
-        public RequestStatus VerificarExistencia(string duca_No_Duca)
-        {
-            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
-            RequestStatus result = new RequestStatus();
-            var parameters = new DynamicParameters();
-            parameters.Add("@duca_No_Duca", duca_No_Duca, DbType.String, ParameterDirection.Input);
-            var respuesta = db.QueryFirst<string>(ScriptsDataBase.ListarPorNumeroDuca, parameters, commandType: System.Data.CommandType.StoredProcedure);
-            result.MessageStatus = respuesta;
-            return result;
-
-
-        }
-
         public RequestStatus Update(tbDuca item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
 
             var parameters = new DynamicParameters();
 
-
-            parameters.Add("@duca_No_Correlativo_Referencia", item.duca_No_Correlativo_Referencia, DbType.String, ParameterDirection.Input);
+            parameters.Add("@duca_Id", item.duca_Id, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@duca_No_Duca", item.duca_No_Duca, DbType.String, ParameterDirection.Input);
+            parameters.Add("@duca_No_Correlativo_Referencia", item.duca_No_Correlativo_Referencia, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_AduanaRegistro", item.duca_AduanaRegistro, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@duca_AduanaDestino", item.duca_AduanaDestino, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@duca_Regimen_Aduanero", item.duca_Regimen_Aduanero, DbType.Int32, ParameterDirection.Input);
@@ -195,7 +182,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
             var parameters = new DynamicParameters();
 
-            parameters.Add("@duca_No_Duca", item.duca_No_Duca, DbType.String, ParameterDirection.Input);
+            parameters.Add("@duca_Id", item.duca_Id, DbType.Int32, ParameterDirection.Input);
 
             parameters.Add("@duca_Codigo_Declarante", item.duca_Codigo_Declarante, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Numero_Id_Declarante", item.duca_Numero_Id_Declarante, DbType.String, ParameterDirection.Input);
@@ -204,7 +191,9 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parameters.Add("@duca_Codigo_Transportista", item.duca_Codigo_Transportista, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Transportista_Nombre", item.duca_Transportista_Nombre, DbType.String, ParameterDirection.Input);
             parameters.Add("@motr_Id", item.motr_Id, DbType.Int32, ParameterDirection.Input);
+            parameters.Add("@duca_Conductor_Id", item.duca_Conductor_Id, DbType.Int32, ParameterDirection.Input);
 
+            parameters.Add("@cont_NoIdentificacion", item.cont_NoIdentificacion, DbType.String, ParameterDirection.Input);
             parameters.Add("@cont_Licencia", item.cont_Licencia, DbType.String, ParameterDirection.Input);
             parameters.Add("@pais_IdExpedicion", item.pais_IdExpedicion, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@cont_Nombre", item.cont_Nombre, DbType.String, ParameterDirection.Input);
@@ -237,8 +226,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
             var parameters = new DynamicParameters();
 
+            parameters.Add("@doso_Id", item.doso_Id, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@tido_Id", item.tido_Id, DbType.Int32, ParameterDirection.Input);
-            parameters.Add("@duca_No_Duca", item.duca_No_Duca, DbType.String, ParameterDirection.Input);
             parameters.Add("@doso_NumeroDocumento", item.doso_NumeroDocumento, DbType.String, ParameterDirection.Input);
             parameters.Add("@doso_FechaEmision", item.doso_FechaEmision, DbType.DateTime, ParameterDirection.Input);
             parameters.Add("@doso_FechaVencimiento", item.doso_FechaVencimiento, DbType.DateTime, ParameterDirection.Input);

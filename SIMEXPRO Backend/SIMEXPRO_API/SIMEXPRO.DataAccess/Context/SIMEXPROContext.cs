@@ -230,6 +230,11 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.deva_NumeroContrato).HasMaxLength(200);
 
+                entity.Property(e => e.emba_Codigo)
+                    .HasMaxLength(5)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
+
                 entity.Property(e => e.foen_Descripcion).HasMaxLength(500);
 
                 entity.Property(e => e.fopa_Descripcion).HasMaxLength(150);
@@ -825,18 +830,16 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.boen_TotalPagar).HasColumnType("decimal(18, 2)");
 
-                entity.Property(e => e.duca_No_Duca).HasMaxLength(100);
-
                 entity.HasOne(d => d.coim)
                     .WithMany(p => p.tbBoletinPago)
                     .HasForeignKey(d => d.coim_Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Adua_tbBoletinPago_coim_Id_Adua_tbCodigoImpuesto_coim_Id");
 
-                entity.HasOne(d => d.duca_No_DucaNavigation)
+                entity.HasOne(d => d.duca)
                     .WithMany(p => p.tbBoletinPago)
-                    .HasForeignKey(d => d.duca_No_Duca)
-                    .HasConstraintName("FK_Adua_tbBoletinPago_tbDuca_duca_No_Duca");
+                    .HasForeignKey(d => d.duca_Id)
+                    .HasConstraintName("FK_Adua_tbBoletinPago_tbDuca_Duca_Id");
 
                 entity.HasOne(d => d.esbo)
                     .WithMany(p => p.tbBoletinPago)
@@ -1108,6 +1111,9 @@ namespace SIMEXPRO.DataAccess.Context
                     .HasName("PK_Adua_tbCodigoImpuesto_coim_Id");
 
                 entity.ToTable("tbCodigoImpuesto", "Adua");
+
+                entity.HasIndex(e => e.coim_Descripcion, "UQ_Adua_tbCodigoImpuesto_coim_Descripcion")
+                    .IsUnique();
 
                 entity.Property(e => e.coim_Descripcion)
                     .IsRequired()
@@ -1826,15 +1832,11 @@ namespace SIMEXPRO.DataAccess.Context
                     .IsRequired()
                     .HasMaxLength(15);
 
-                entity.Property(e => e.duca_No_Duca)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
-                entity.HasOne(d => d.duca_No_DucaNavigation)
+                entity.HasOne(d => d.duca)
                     .WithMany(p => p.tbDocumentosDeSoporte)
-                    .HasForeignKey(d => d.duca_No_Duca)
+                    .HasForeignKey(d => d.duca_Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Adua_tbDocumentosDeSoporte_Adua_tbDuca_duca_No_Duca");
+                    .HasConstraintName("FK_Adua_tbDocumentosDeSoporte_Adua_tbDuca_duca_Id");
 
                 entity.HasOne(d => d.tido)
                     .WithMany(p => p.tbDocumentosDeSoporte)
@@ -1981,12 +1983,9 @@ namespace SIMEXPRO.DataAccess.Context
 
             modelBuilder.Entity<tbDuca>(entity =>
             {
-                entity.HasKey(e => e.duca_No_Duca)
-                    .HasName("PK_Adua_tbDuca_duca_No_Duca");
+                entity.HasKey(e => e.duca_Id);
 
                 entity.ToTable("tbDuca", "Adua");
-
-                entity.Property(e => e.duca_No_Duca).HasMaxLength(100);
 
                 entity.Property(e => e.duca_CanalAsignado)
                     .HasMaxLength(1)
@@ -2009,6 +2008,10 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.Property(e => e.duca_FechaModificacion).HasColumnType("datetime");
 
                 entity.Property(e => e.duca_FechaVencimiento).HasColumnType("date");
+
+                entity.Property(e => e.duca_Finalizado).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.duca_No_Duca).HasMaxLength(100);
 
                 entity.Property(e => e.duca_Numero_Id_Declarante).HasMaxLength(200);
 
@@ -2453,10 +2456,6 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.ToTable("tbFacturasExportacion", "Prod");
 
-                entity.Property(e => e.duca_No_Duca)
-                    .IsRequired()
-                    .HasMaxLength(100);
-
                 entity.Property(e => e.faex_Estado).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.faex_Fecha).HasColumnType("datetime");
@@ -2469,11 +2468,11 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.faex_Total).HasColumnType("decimal(18, 0)");
 
-                entity.HasOne(d => d.duca_No_DucaNavigation)
+                entity.HasOne(d => d.duca)
                     .WithMany(p => p.tbFacturasExportacion)
-                    .HasForeignKey(d => d.duca_No_Duca)
+                    .HasForeignKey(d => d.duca_Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Prod_tbFacturasExportacion_Adua_tbDuca");
+                    .HasConstraintName("FK_Prod_tbFacturasExportacion_Adua_tbDuca_duca_Id");
 
                 entity.HasOne(d => d.orco)
                     .WithMany(p => p.tbFacturasExportacion)
@@ -2954,9 +2953,13 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.ToTable("tbItems", "Adua");
 
+                entity.Property(e => e.item_Acuerdo).HasMaxLength(100);
+
                 entity.Property(e => e.item_CaracteristicasMercancias)
                     .IsRequired()
                     .HasMaxLength(400);
+
+                entity.Property(e => e.item_ClaseBulto).HasMaxLength(100);
 
                 entity.Property(e => e.item_ClasificacionArancelaria)
                     .HasMaxLength(16)
@@ -3047,17 +3050,15 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.dedu_FechaModificacion).HasColumnType("datetime");
 
-                entity.Property(e => e.duca_No_DUCA).HasMaxLength(100);
-
                 entity.HasOne(d => d.deva)
                     .WithMany(p => p.tbItemsDEVAPorDuca)
                     .HasForeignKey(d => d.deva_Id)
                     .HasConstraintName("FK_Adua_tbItemsDEVAPorDuca_deva_Id_Adua_tbDeclaraciones_Valor_deva_Id");
 
-                entity.HasOne(d => d.duca_No_DUCANavigation)
+                entity.HasOne(d => d.duca)
                     .WithMany(p => p.tbItemsDEVAPorDuca)
-                    .HasForeignKey(d => d.duca_No_DUCA)
-                    .HasConstraintName("FK_Adua_tbItemsDEVAPorDuca_duca_No_DUCA_Adua_tbDuca_duca_No_Duca");
+                    .HasForeignKey(d => d.duca_Id)
+                    .HasConstraintName("FK_Adua_tbItemsDEVAPorDuca_duca_Id_Adua_tbDuca_duca_Id");
 
                 entity.HasOne(d => d.usua_UsuarioCreacionNavigation)
                     .WithMany(p => p.tbItemsDEVAPorDucausua_UsuarioCreacionNavigation)
@@ -3120,10 +3121,6 @@ namespace SIMEXPRO.DataAccess.Context
                     .HasName("PK_Adua_tbLiquidacionGeneral_lige_Id");
 
                 entity.ToTable("tbLiquidacionGeneral", "Adua");
-
-                entity.Property(e => e.duca_Id)
-                    .IsRequired()
-                    .HasMaxLength(100);
 
                 entity.Property(e => e.lige_ModalidadPago)
                     .IsRequired()
@@ -4199,8 +4196,6 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.peor_FechaModificacion).HasColumnType("datetime");
 
-                entity.Property(e => e.peor_No_Duca).HasMaxLength(100);
-
                 entity.Property(e => e.peor_Obsevaciones).HasMaxLength(400);
 
                 entity.HasOne(d => d.ciud)
@@ -4208,10 +4203,10 @@ namespace SIMEXPRO.DataAccess.Context
                     .HasForeignKey(d => d.ciud_Id)
                     .HasConstraintName("FK_Prod_tbPedidosOrden_Gral_tbCiudades_ciud_Id");
 
-                entity.HasOne(d => d.peor_No_DucaNavigation)
+                entity.HasOne(d => d.duca)
                     .WithMany(p => p.tbPedidosOrden)
-                    .HasForeignKey(d => d.peor_No_Duca)
-                    .HasConstraintName("FK_Prod_tbPedidosOrden_tbDuca_peor_No_Duca");
+                    .HasForeignKey(d => d.duca_Id)
+                    .HasConstraintName("FK_Prod_tbPedidosOrden_tbDuca_Duca_Id");
 
                 entity.HasOne(d => d.prov)
                     .WithMany(p => p.tbPedidosOrden)

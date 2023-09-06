@@ -57,5 +57,13 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             var respuesta = _aduanaServices.EliminarPersonaNatural(item);
             return Ok(respuesta);
         }
+        
+        [HttpPost("Finalizar")]
+        public IActionResult Finalizar(PersonaNaturalViewModel personaNaturalViewModel)
+        {
+            var item = _mapper.Map<tbPersonaNatural>(personaNaturalViewModel);
+            var respuesta = _aduanaServices.FinalizarPersonaNatural(item);
+            return Ok(respuesta);
+        }
     }
 }

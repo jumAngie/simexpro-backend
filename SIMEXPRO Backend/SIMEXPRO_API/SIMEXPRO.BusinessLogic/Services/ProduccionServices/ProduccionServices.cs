@@ -2163,23 +2163,9 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             var result = new ServiceResult();
             try
             {
-                if (item.peor_No_Duca.ToString() != "")
-                {
-                    var map = _pedidosOrdenRepository.Insert(item);
-                    if (map.MessageStatus != "0")
-                    {
-                        return result.Ok(map);
-                    }
-                    else
-                    {
+                var map = _pedidosOrdenRepository.Insert(item);
 
-                        return result.Error(map);
-                    }
-                }
-                else
-                {
-                    return result.SetMessage("La solicitud contiene sintaxis erronea", ServiceResultType.BadRecuest);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2192,23 +2178,8 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             var result = new ServiceResult();
             try
             {
-                if (item.peor_Id.ToString() != "")
-                {
-                    var map = _pedidosOrdenRepository.Update(item);
-                    if (map.MessageStatus == "1")
-                    {
-                        return result.Ok(map);
-                    }
-                    else
-                    {
-
-                        return result.Error(map);
-                    }
-                }
-                else
-                {
-                    return result.SetMessage("La solicitud contiene sintaxis erronea", ServiceResultType.BadRecuest);
-                }
+                var map = _pedidosOrdenRepository.Update(item);
+                return result.Ok(map);
             }
             catch (Exception ex)
             {

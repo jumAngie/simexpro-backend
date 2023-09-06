@@ -84,6 +84,33 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             throw new NotImplementedException();
         }
 
+        public RequestStatus EditarItemDuca(tbItems item)
+        {
+            RequestStatus result = new();
+
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@item_Id", item.item_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@item_Cantidad_Bultos", item.item_Cantidad_Bultos, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@item_ClaseBulto", item.item_ClaseBulto, DbType.String, ParameterDirection.Input);
+            parametros.Add("@item_Acuerdo", item.item_Acuerdo, DbType.String, ParameterDirection.Input);
+            parametros.Add("@item_PesoNeto", item.item_PesoNeto, DbType.Decimal, ParameterDirection.Input);
+            parametros.Add("@item_PesoBruto", item.item_PesoBruto, DbType.Decimal, ParameterDirection.Input);
+            parametros.Add("@item_GastosDeTransporte", item.item_GastosDeTransporte, DbType.Decimal, ParameterDirection.Input);
+            parametros.Add("@item_Seguro", item.item_Seguro, DbType.Decimal, ParameterDirection.Input);
+            parametros.Add("@item_OtrosGastos", item.item_OtrosGastos, DbType.Decimal, ParameterDirection.Input);
+            parametros.Add("@item_CuotaContingente", item.item_CuotaContingente, DbType.Decimal, ParameterDirection.Input);
+            parametros.Add("@item_ReglasAccesorias", item.item_ReglasAccesorias, DbType.String, ParameterDirection.Input);
+            parametros.Add("@item_CriterioCertificarOrigen", item.item_CriterioCertificarOrigen, DbType.String, ParameterDirection.Input);
+            parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@item_FechaModificacion", item.item_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
+
+            var answer = db.QueryFirst<string>(ScriptsDataBase.EditarItemDuca, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
+        }
+
         public RequestStatus Update(tbItems item)
         {
             RequestStatus result = new();

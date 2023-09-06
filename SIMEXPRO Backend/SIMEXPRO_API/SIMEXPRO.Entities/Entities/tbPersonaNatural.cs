@@ -36,6 +36,7 @@ namespace SIMEXPRO.Entities.Entities
         public int? usua_UsuarioModificacion { get; set; }
         public DateTime? pena_FechaModificacion { get; set; }
         public bool? pena_Estado { get; set; }
+        public bool? pena_Finalizado { get; set; }
 
         [NotMapped]
         public string usuarioCreacion { get; set; }

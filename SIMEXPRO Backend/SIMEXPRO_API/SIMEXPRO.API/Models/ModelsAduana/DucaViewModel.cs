@@ -8,6 +8,7 @@ namespace SIMEXPRO.API.Models.ModelsAduana
 {
     public class DucaViewModel
     {
+        public int duca_Id { get; set; } 
         public string duca_No_Duca { get; set; }
         public string duca_No_Correlativo_Referencia { get; set; }
         public int duca_AduanaRegistro { get; set; }
@@ -50,6 +51,7 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public int? usua_UsuarioModificacion { get; set; }
         public DateTime? duca_FechaModificacion { get; set; }
         public bool? duca_Estado { get; set; }
+        public bool duca_Finalizado { get; set; }
 
         public DateTime deva_FechaAceptacion { get; set; }
 
