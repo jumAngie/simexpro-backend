@@ -19,7 +19,7 @@ namespace SIMEXPRO.Entities.Entities
         public string lige_TotalPorTributo { get; set; }
         public string lige_ModalidadPago { get; set; }
         public string lige_TotalGral { get; set; }
-        public string duca_Id { get; set; }
+        public int duca_Id { get; set; }
 
         public virtual tbDuca duca { get; set; }
         public virtual ICollection<tbBoletinPago> tbBoletinPago { get; set; }
