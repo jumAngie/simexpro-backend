@@ -1167,7 +1167,8 @@ CREATE TABLE Prod.tbEstilos(
 CREATE TABLE Prod.tbColores(
 	colr_Id						INT  IDENTITY(1,1),
 	colr_Nombre					NVARCHAR(200) NOT NULL,
-	--colr_Codigo					NVARCHAR(50) NOT NULL,
+	colr_Codigo					NVARCHAR(50),
+	colr_CodigoHtml				NVARCHAR(50),
 	usua_UsuarioCreacion		INT,
 	colr_FechaCreacion			DATETIME NOT NULL, 
 	usua_UsuarioModificacion	INT,
