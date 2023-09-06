@@ -13,17 +13,20 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public DateTime faex_Fecha { get; set; }
         public int orco_Id { get; set; }
         public decimal faex_Total { get; set; }
+        public bool faex_Estado { get; set; }
+        public bool faex_Finalizado { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         public DateTime faex_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }
         public DateTime? faex_FechaModificacion { get; set; }
 
-        [NotMapped]
-        public int faex_Estado { get; set; }
+        //[NotMapped]
+        //public int faex_Estado { get; set; }
 
+        //[NotMapped]
+        //public int faex_Finalizado { get; set; }
         [NotMapped]
-        public int faex_Finalizado { get; set; }
-
+        public string duca_No_Duca { get; set; }
 
         [NotMapped]
         public string clie_Nombre_O_Razon_Social { get; set; }
