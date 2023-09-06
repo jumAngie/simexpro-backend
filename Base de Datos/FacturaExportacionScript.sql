@@ -416,3 +416,50 @@ SELECT * FROM Prod.tbFacturasExportacion
 SELECT * FROM Prod.tbFacturasExportacion WHERE faex_Id = 162
 SELECT * FROM Prod.tbFacturasExportacionDetalles WHERE faex_Id = 162
 GO
+
+
+CREATE OR ALTER PROCEDURE Prod.UDP_OrdenCompraDataToExport
+AS
+BEGIN
+		SELECT	 
+			ordenCompra.orco_Id
+			,cliente.clie_Nombre_O_Razon_Social
+			,cliente.clie_Direccion
+			,cliente.clie_RTN
+			,cliente.clie_Nombre_Contacto
+			,cliente.clie_Numero_Contacto
+			,cliente.clie_Correo_Electronico
+			,cliente.clie_FAX
+			,ordenCompra.orco_FechaEmision
+			,ordenCompra.orco_FechaLimite
+			,ordenCompra.orco_Materiales
+			,fomapago.fopa_Descripcion
+			,tipoEmbajale.tiem_Descripcion
+			,ordenCompra.orco_EstadoOrdenCompra
+			,ordenCompra.orco_DireccionEntrega
+			,(
+			
+			SELECT	 ordenCompraDetalle.code_Id
+					,ordenCompraDetalle.code_CantidadPrenda
+					,estilo.esti_Descripcion
+					,talla.tall_Nombre
+					,ordenCompraDetalle.code_Sexo
+					,colores.colr_Nombre
+					,ordenCompraDetalle.code_Unidad
+					,ordenCompraDetalle.code_Valor
+					,ordenCompraDetalle.code_Impuesto
+					,ordenCompraDetalle.code_EspecificacionEmbalaje
+					,ordenCompraDetalle.code_CodigoDetalle
+			  FROM	Prod.tbOrdenCompraDetalles			    ordenCompraDetalle
+					INNER JOIN	Prod.tbEstilos				estilo						ON	ordenCompraDetalle.esti_Id						= estilo.esti_Id
+					INNER JOIN	Prod.tbTallas				talla						ON	ordenCompraDetalle.tall_Id						= talla.tall_Id
+					INNER JOIN  Prod.tbColores				colores						ON	ordenCompraDetalle.colr_Id						= colores.colr_Id
+					WHERE ordenCompraDetalle.orco_Id	=	ordenCompra.orco_Id FOR JSON PATH
+			) AS Detalles
+		FROM  Prod.tbOrdenCompra							ordenCompra
+			INNER JOIN  Prod.tbClientes					cliente				ON ordenCompra.orco_IdCliente  = cliente.clie_Id
+			INNER JOIN  Prod.tbTipoEmbalaje				tipoEmbajale		ON ordenCompra.orco_IdEmbalaje = tipoEmbajale.tiem_Id
+			INNER JOIN	Adua.tbFormasdePago				fomapago			ON ordenCompra.orco_MetodoPago = fomapago.fopa_Id
+		WHERE ordenCompra.orco_Estado = 1
+END
+GO
