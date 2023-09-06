@@ -1340,6 +1340,9 @@ CREATE TABLE Adua.tbItems(
 	item_Modelo                               NVARCHAR(100) NOT NULL,
 	merc_Id                                   INT NOT NULL,
 	pais_IdOrigenMercancia                    INT,
+	item_Cantidad_Bultos					  INT,
+	item_ClaseBulto							  NVARCHAR(100),
+	item_Acuerdo							  NVARCHAR(100),
 	item_ClasificacionArancelaria             CHAR(16),
 	item_ValorUnitario                        DECIMAL(18,2), 
 	item_GastosDeTransporte                   DECIMAL(18,2), 
@@ -1370,6 +1373,8 @@ CREATE TABLE Adua.tbItems(
 	--CONSTRAINT FK_Adua_tbItems_usua_UsuarioEliminacion_Acce_tbUsuarios_usua_Id		FOREIGN KEY (usua_UsuarioEliminacion)	REFERENCES Acce.tbUsuarios(usua_Id)
 );
 GO
+
+
 
 CREATE TABLE Adua.tbItemsHistorial(
 	hite_Id									  INT IDENTITY(1,1),
@@ -2482,7 +2487,7 @@ CREATE TABLE Adua.tbDuca(
 	duca_FechaVencimiento			DATE ,
 	duca_CanalAsignado				CHAR ,
 	duca_Ventaja					NVARCHAR(100),
-
+	duca_Finalizado					BIT default 0,
 	usua_UsuarioCreacion			INT ,
 	duca_FechaCreacion				DATETIME ,
 	usua_UsuarioModificacion		INT DEFAULT NULL,
@@ -2510,7 +2515,6 @@ CREATE TABLE Adua.tbDuca(
 	--CONSTRAINT FK_Adua_tbDuca__Acce_tbUsuarios_usua_UsuarioEliminacion_usua_Id  FOREIGN KEY (usua_UsuarioEliminacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id)
 );
 GO
-
 
 CREATE TABLE Adua.tbDucaHistorial(
 	hduc_Id 						INT IDENTITY(1,1),
@@ -2574,11 +2578,13 @@ CREATE TABLE Adua.tbRegimenesAduaneros(
 	CONSTRAINT FK_Adua_tbRegimenesAduaneros_usua_UsuarioEliminacion_Acce_tbUsuarios_usua_Id   	FOREIGN KEY(usua_UsuarioEliminacion)  REFERENCES Acce.tbUsuarios (usua_Id)
 );
 
+GO
+
 
 CREATE TABLE Prod.tbPedidosOrden(--No se podrá eliminar de ninguna manera
 	peor_Id   					INT IDENTITY(1,1),
 	prov_Id						INT,
-	peor_No_Duca				NVARCHAR(100),
+	duca_Id						INT,
 	ciud_Id						INT,
 	peor_DireccionExacta		NVARCHAR(500), 
 	peor_FechaEntrada			DATETIME,
@@ -2599,11 +2605,10 @@ CREATE TABLE Prod.tbPedidosOrden(--No se podrá eliminar de ninguna manera
 	CONSTRAINT FK_Prod_tbPedidosOrden_Gral_tbCiudades_ciud_Id			 			FOREIGN KEY (ciud_Id)					REFERENCES Gral.tbCiudades(ciud_Id),
 	CONSTRAINT FK_Prod_tbPedidosOrden_tbUsuarios_peor_UsuarioCreacion				FOREIGN KEY (usua_UsuarioCreacion)     	REFERENCES Acce.tbUsuarios (usua_Id),
 	CONSTRAINT FK_Prod_tbPedidosOrden_tbUsuarios_peor_UsuarioModificacion			FOREIGN KEY (usua_UsuarioModificacion) 	REFERENCES Acce.tbUsuarios (usua_Id),
-	CONSTRAINT FK_Prod_tbPedidosOrden_tbDuca_peor_No_Duca							FOREIGN KEY(peor_No_Duca)				REFERENCES Adua.tbDuca(duca_No_Duca),
+	CONSTRAINT FK_Prod_tbPedidosOrden_tbDuca_Duca_Id FOREIGN KEY (duca_Id) REFERENCES Adua.tbDuca(duca_Id)
 	--CONSTRAINT FK_Prod_tbPedidosOrden__Acce_tbUsuarios_usua_UsuarioEliminacion_usua_Id  FOREIGN KEY (usua_UsuarioEliminacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id)
 );
 	GO
-
 
 CREATE TABLE Prod.tbPedidosOrdenDetalle(--No se podrá eliminar de ninguna manera
 	prod_Id							INT IDENTITY(1,1),
@@ -2763,7 +2768,7 @@ GO
 -----------------Factura de exportación-------------------
 CREATE TABLE Prod.tbFacturasExportacion(
 	faex_Id						INT IDENTITY(1,1), 
-	duca_No_Duca				NVARCHAR(100) NOT NULL,
+	duca_Id						INT NOT NULL,
 	faex_Fecha					DATETIME	  NOT NULL,
 	orco_Id						INT			  NOT NULL,
 	faex_Total					DECIMAL		  NOT NULL,
@@ -2776,13 +2781,12 @@ CREATE TABLE Prod.tbFacturasExportacion(
 	faex_Estado					BIT DEFAULT 1
 
 	CONSTRAINT PK_Prod_tbFacturasExportacion_faex_Id									PRIMARY KEY(faex_Id),
-	CONSTRAINT FK_Prod_tbFacturasExportacion_Adua_tbDuca								FOREIGN KEY(duca_No_Duca)			   REFERENCES Adua.tbDuca	    (duca_No_Duca),
+	CONSTRAINT FK_Prod_tbFacturasExportacion_Adua_tbDuca_duca_Id						FOREIGN KEY(duca_Id)				 REFERENCES Adua.tbDuca	    (duca_Id),
 	CONSTRAINT FK_Prod_tbFacturasExportacion_tbOrdenCompra_orco_Id						FOREIGN KEY(orco_Id)				   REFERENCES Prod.tbOrdenCompra(orco_Id),
 	CONSTRAINT FK_Prod_tbFacturasExportacion_Acce_tbUsuarios_usua_UsuarioCreacion		FOREIGN KEY(usua_UsuarioCreacion)	   REFERENCES Acce.tbUsuarios   (usua_Id),	
 	CONSTRAINT FK_Prod_tbFacturasExportacion_Acce_tbUsuarios_usua_UsuarioModificacion	FOREIGN KEY(usua_UsuarioModificacion)  REFERENCES Acce.tbUsuarios   (usua_Id)
 );
 GO
-
 
 CREATE TABLE Prod.tbFacturasExportacionDetalles(
 	fede_Id						INT IDENTITY(1,1),
@@ -2815,10 +2819,10 @@ CREATE TABLE Adua.tbLiquidacionGeneral(
 	lige_TotalPorTributo	 NVARCHAR(25) NOT NULL,
 	lige_ModalidadPago		 NVARCHAR(55) NOT NULL,
 	lige_TotalGral			 NVARCHAR(50) NULL,
-	duca_Id				     NVARCHAR(100) NOT NULL,
+	duca_Id				     INT NOT NULL,
 
 	CONSTRAINT PK_Adua_tbLiquidacionGeneral_lige_Id PRIMARY KEY(lige_Id),
-	CONSTRAINT FK_Adua_tbDuca_duca_Id_Adua_tbLiquidacionGeneral_duca_Id 	                    FOREIGN KEY	(duca_Id) 				        REFERENCES Adua.tbDuca(duca_No_Duca)
+	CONSTRAINT [FK_Adua_tbDuca_duca_Id_Adua_tbLiquidacionGeneral_duca_Id] FOREIGN KEY (duca_Id) REFERENCES Adua.tbDuca(duca_Id)
 	--CONSTRAINT FK_Adua_tbLiquidacionGeneral_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id	    FOREIGN KEY (usua_UsuarioCreacion)     		REFERENCES Acce.tbUsuarios 	(usua_Id),
 	--CONSTRAINT FK_Adua_tbLiquidacionGeneral_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id	FOREIGN KEY (usua_UsuarioModificacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id),
 	--CONSTRAINT FK_Adua_tbLiquidacionGeneral_Acce_tbUsuarios_usua_UsuarioEliminacion_usua_Id  FOREIGN KEY (usua_UsuarioEliminacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id)
@@ -2979,7 +2983,7 @@ GO
 CREATE TABLE Adua.tbDocumentosDeSoporte(
 	doso_Id						        INT IDENTITY(1,1),
 	tido_Id					        	INT NOT NULL,
-	duca_No_Duca						NVARCHAR(100) NOT NULL,
+	duca_Id								INT NOT NULL,
 	doso_NumeroDocumento		        NVARCHAR(15) NOT NULL,
 	doso_FechaEmision			        DATE,
 	doso_FechaVencimiento		        DATE,
@@ -2997,12 +3001,13 @@ CREATE TABLE Adua.tbDocumentosDeSoporte(
 	doso_Estado 				        BIT DEFAULT 1
 	CONSTRAINT PK_Adua_tbDocumentosDeSoporte_doso_Id PRIMARY KEY(doso_Id),
 	CONSTRAINT FK_tbDocumentosDeSoporte_Adua_tbTipoDocumento_tido_Id	            				FOREIGN KEY (tido_Id) 			        	REFERENCES Adua.tbTipoDocumento(tido_Id),
-	CONSTRAINT FK_Adua_tbDocumentosDeSoporte_Adua_tbDuca_duca_No_Duca 	            				FOREIGN KEY (duca_No_Duca) 			        REFERENCES Adua.tbDuca		(duca_No_Duca),
+	CONSTRAINT FK_Adua_tbDocumentosDeSoporte_Adua_tbDuca_duca_Id FOREIGN KEY (duca_Id) REFERENCES Adua.tbDuca(duca_Id),
 	CONSTRAINT FK_Adua_tbDocumentosDeSoporte_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id			FOREIGN KEY (usua_UsuarioCreacion)     		REFERENCES Acce.tbUsuarios 	(usua_Id),
 	CONSTRAINT FK_Adua_tbDocumentosDeSoporte_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id		FOREIGN KEY (usua_UsuarioModificacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id),
 	CONSTRAINT FK_Adua_tbDocumentosDeSoporte_usua_UsuarioEliminacion_Acce_tbUsuarios_usua_Id 		FOREIGN KEY (usua_UsuarioEliminacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id)
 );
 GO
+
 
 --**********************************************************************************************
 --********** TABLA PAISES / procedimientos tomando en cuenta los uniques ***********************

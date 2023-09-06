@@ -7143,6 +7143,56 @@ END
 
 GO
 
+CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbItems_EditarItemDuca]
+	@item_Id									INT,
+	@item_Cantidad_Bultos						INT,
+	@item_ClaseBulto							NVARCHAR(100),
+	@item_Acuerdo								NVARCHAR(100),
+	@item_PesoNeto								DECIMAL(18,2), 
+	@item_PesoBruto								DECIMAL(18,2),  
+	@item_GastosDeTransporte					DECIMAL(18,2), 
+	@item_Seguro								DECIMAL(18,2), 
+	@item_OtrosGastos							DECIMAL(18,2),
+	@item_CuotaContingente						DECIMAL(18,2), 
+	@item_ReglasAccesorias						NVARCHAR(MAX), 
+	@item_CriterioCertificarOrigen				NVARCHAR(MAX), 
+	@usua_UsuarioModificacion					INT, 
+	@item_FechaModificacion						DATETIME
+AS
+BEGIN
+	BEGIN TRANSACTION
+	BEGIN TRY
+		
+		UPDATE Adua.tbItems
+		SET item_Acuerdo = @item_Acuerdo,
+			item_ClaseBulto = @item_ClaseBulto,
+			item_Cantidad_Bultos = @item_Cantidad_Bultos,
+			item_PesoNeto = @item_PesoNeto, 
+			item_PesoBruto = @item_PesoBruto, 		
+			item_GastosDeTransporte = @item_GastosDeTransporte, 
+			item_Seguro = @item_Seguro, 
+			item_OtrosGastos = @item_OtrosGastos, 
+			item_CuotaContingente = @item_CuotaContingente, 
+			item_ReglasAccesorias = @item_ReglasAccesorias, 
+			item_CriterioCertificarOrigen = @item_CriterioCertificarOrigen, 
+			usua_UsuarioModificacion = @usua_UsuarioModificacion, 
+			item_FechaModificacion = @item_FechaModificacion
+		WHERE item_Id = @item_Id
+
+		
+		SELECT 1
+
+		COMMIT TRAN
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE()
+		ROLLBACK TRAN
+	END CATCH
+END
+
+GO
+
+
 CREATE OR ALTER PROCEDURE Adua.UDP_tbItems_Eliminar
 	@item_Id					INT,
 	@item_FechaEliminacion		DATETIME,
@@ -7840,6 +7890,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_Listar
 AS
 BEGIN
    SELECT --Identificación de la Declaración parte I
+		  duca_Id,
 		  duca_No_Duca, 
 		  duca_No_Correlativo_Referencia, 
 		  
@@ -7951,16 +8002,17 @@ LEFT JOIN Adua.tbTiposIdentificacion	AS tipo		ON duca.duca_Tipo_Iden_Exportador 
 END
 GO
 
+ 
+
 /* Preinsert DUCA*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_PreInsertar
-	@duca_No_DUCA	NVARCHAR(100)
 AS
 BEGIN	
 	BEGIN TRY
 		INSERT INTO Adua.tbDuca (duca_No_Duca, duca_No_Correlativo_Referencia, duca_AduanaRegistro, duca_AduanaDestino, duca_Regimen_Aduanero, duca_Modalidad,duca_Clase, duca_FechaVencimiento,duca_Pais_Procedencia,duca_Pais_Destino ,duca_Deposito_Aduanero, duca_Lugar_Desembarque,duca_Manifiesto,duca_Titulo, usua_UsuarioCreacion, duca_FechaCreacion)
-		VALUES (@duca_No_DUCA, NULL, NULL, NULL, NULL, NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, NULL, NULL)
+		VALUES (NULL, NULL, NULL, NULL, NULL, NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, NULL, NULL)
 
-		SELECT 1
+		SELECT SCOPE_IDENTITY()
 
 	END TRY
 	BEGIN CATCH
