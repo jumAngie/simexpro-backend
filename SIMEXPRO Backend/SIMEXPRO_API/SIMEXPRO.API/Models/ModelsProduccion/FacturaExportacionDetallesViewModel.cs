@@ -39,5 +39,10 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public decimal code_Impuesto { get; set; }
         [NotMapped]
         public string code_EspecificacionEmbalaje { get; set; }
+
+        [NotMapped]
+        public string code_Descripcion { get; set; }
+
+
     }
 }

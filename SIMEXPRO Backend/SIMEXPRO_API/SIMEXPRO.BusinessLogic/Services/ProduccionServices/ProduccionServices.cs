@@ -43,6 +43,7 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
         private readonly ProcesoPorOrdenCompraDetalleRepository _procesoPorOrdenCompraDetalleRepository;
         private readonly FacturasExportacionRepository _facturasExportacionRepository;
         private readonly FacturasExportacionDetallesRepository _facturasExportacionDetallesRepository;
+        private readonly ReportesRepository _reportesRepository;
 
         public ProduccionServices(AreasRepository areasRepository,
                                     AsignacionesOrdenDetalleRepository asignacionesOrdenDetalleRepository,
@@ -79,7 +80,8 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
                                     GraficasRepository graficasRepository,
                                     ProcesoPorOrdenCompraDetalleRepository procesoPorOrdenCompraDetalleRepository,
                                     FacturasExportacionRepository facturasExportacionRepository,
-                                    FacturasExportacionDetallesRepository facturasExportacionDetallesRepository
+                                    FacturasExportacionDetallesRepository facturasExportacionDetallesRepository,
+                                    ReportesRepository reportesRepository
 
             )
         {
@@ -121,6 +123,7 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             _procesoPorOrdenCompraDetalleRepository = procesoPorOrdenCompraDetalleRepository;
             _facturasExportacionRepository = facturasExportacionRepository;
             _facturasExportacionDetallesRepository = facturasExportacionDetallesRepository;
+            _reportesRepository = reportesRepository;
         }
 
 
@@ -2118,7 +2121,7 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             var result = new ServiceResult();
             try
             {
-                if (item.pedi_Id != 0)
+                if (item.prod_Id != 0)
                 {
                     var map = _pedidosOrdenDetallesRepository.Delete(item);
                     if (map.MessageStatus == "1")
@@ -2163,23 +2166,9 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             var result = new ServiceResult();
             try
             {
-                if (item.peor_No_Duca.ToString() != "")
-                {
-                    var map = _pedidosOrdenRepository.Insert(item);
-                    if (map.MessageStatus != "0")
-                    {
-                        return result.Ok(map);
-                    }
-                    else
-                    {
+                var map = _pedidosOrdenRepository.Insert(item);
 
-                        return result.Error(map);
-                    }
-                }
-                else
-                {
-                    return result.SetMessage("La solicitud contiene sintaxis erronea", ServiceResultType.BadRecuest);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2192,23 +2181,8 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             var result = new ServiceResult();
             try
             {
-                if (item.peor_Id.ToString() != "")
-                {
-                    var map = _pedidosOrdenRepository.Update(item);
-                    if (map.MessageStatus == "1")
-                    {
-                        return result.Ok(map);
-                    }
-                    else
-                    {
-
-                        return result.Error(map);
-                    }
-                }
-                else
-                {
-                    return result.SetMessage("La solicitud contiene sintaxis erronea", ServiceResultType.BadRecuest);
-                }
+                var map = _pedidosOrdenRepository.Update(item);
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2449,12 +2423,12 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
         #endregion
 
         #region PO Detalle Por Pedido Orden Detalle
-        public ServiceResult ListarPODetallePorPedidoOrdenDetalle()
+        public ServiceResult ListarPODetallePorPedidoOrdenDetalle(int prod_Id)
         {
             var result = new ServiceResult();
             try
             {
-                var list = _PODetallePorPedidoOrdenDetalleRepository.List();
+                var list = _PODetallePorPedidoOrdenDetalleRepository.ListxProd_Id(prod_Id);
                 return result.Ok(list);
             }
             catch (Exception ex)
@@ -3309,6 +3283,99 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
+        public ServiceResult EliminarFacturasExportacion(tbFacturasExportacion item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _facturasExportacionRepository.Delete(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult FinalizarFacturasExportacion(tbFacturasExportacion item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _facturasExportacionRepository.Finalizar(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult OrdenesCompraDDL()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _facturasExportacionRepository.OrdenesCompraDDL();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult DUCAsDDL()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _facturasExportacionRepository.DUCAsDDL();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult ComprobarNoDUCA(tbFacturasExportacion item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _facturasExportacionRepository.ComprobarNoDUCA(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region Facturas Exportacion Detalles
@@ -3369,7 +3436,40 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
+        public ServiceResult EliminarFacturasExportacionDetalles(tbFacturasExportacionDetalles item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _facturasExportacionDetallesRepository.Delete(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
 
+        public ServiceResult PODetallesDDL(int id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _facturasExportacionDetallesRepository.POdetalles(id);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region Graficas
@@ -3582,6 +3682,40 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
                 return result.Error(ex.Message);
             }
         }
+        #endregion
+
+        #region Reportes
+
+
+        public ServiceResult TiemposMaquinas(tbReportes reportes)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _reportesRepository.MaquinasTiempo(reportes);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        
+        public ServiceResult ModuloProduccion(tbReportes reportes)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _reportesRepository.ModuloProduccion(reportes);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+
         #endregion
     }
 }

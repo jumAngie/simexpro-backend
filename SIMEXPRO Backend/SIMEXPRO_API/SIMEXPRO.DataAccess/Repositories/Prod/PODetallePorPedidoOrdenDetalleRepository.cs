@@ -28,7 +28,6 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
         {
             throw new NotImplementedException();
         }
-
         public RequestStatus Insert(tbPODetallePorPedidoOrdenDetalle item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
@@ -36,6 +35,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             var parametros = new DynamicParameters();
             parametros.Add("@prod_Id", item.prod_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@code_Id", item.code_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@orco_Id", item.orco_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@ocpo_FechaCreacion", item.ocpo_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
 
@@ -43,11 +43,18 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             result.MessageStatus = answer;
             return result;
         }
-
         public IEnumerable<tbPODetallePorPedidoOrdenDetalle> List()
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             var result = db.Query<tbPODetallePorPedidoOrdenDetalle>(ScriptsDataBase.ListarPODetallePorPedidoOrdenDetalle, null, commandType: System.Data.CommandType.StoredProcedure);
+            return result;
+        }
+        public IEnumerable<tbPODetallePorPedidoOrdenDetalle> ListxProd_Id(int  prod_Id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@prod_Id", prod_Id, DbType.Int32, ParameterDirection.Input);
+            var result = db.Query<tbPODetallePorPedidoOrdenDetalle>(ScriptsDataBase.ListarPODetallePorPedidoOrdenDetalle, parametros, commandType: System.Data.CommandType.StoredProcedure);
             return result;
         }
 

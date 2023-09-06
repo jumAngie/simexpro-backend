@@ -26,8 +26,8 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
         [HttpGet("Listar")]
         public IActionResult Index(int fact_Id)
         {
-            //var item = _mapper.Map<tbItems>(concepto);
             var respuesta = _aduanaServices.ListarItems(fact_Id);
+            respuesta.Data = _mapper.Map<IEnumerable<ItemsViewModel>>(respuesta.Data);
 
             return Ok(respuesta);
         }
@@ -38,6 +38,14 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             var item = _mapper.Map<tbItems>(concepto);
 
             var respuesta = _aduanaServices.InsertarItems(item);
+
+            return Ok(respuesta);
+        }
+
+        [HttpPost("EditarItemDuca")]
+        public IActionResult EditarItemDuca(ItemsViewModel item)
+        {
+            var respuesta = _aduanaServices.ActualizarItemDuca(_mapper.Map<tbItems>(item));
 
             return Ok(respuesta);
         }

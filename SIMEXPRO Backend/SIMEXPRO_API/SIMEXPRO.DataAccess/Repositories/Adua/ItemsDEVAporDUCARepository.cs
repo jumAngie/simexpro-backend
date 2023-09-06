@@ -28,7 +28,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
-            parametros.Add("@duca_No_DUCA", item.duca_No_DUCA, DbType.String, ParameterDirection.Input);
+            parametros.Add("@duca_Id", item.duca_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@deva_Id", item.deva_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@dedu_FechaCreacion", item.dedu_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
@@ -42,13 +42,30 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             throw new NotImplementedException();
         }
 
+        public IEnumerable<VW_tbDeclaraciones_ValorCompleto> ListDVxDC(int duca_Id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@duca_Id", duca_Id, DbType.Int32, ParameterDirection.Input);
+            return db.Query<VW_tbDeclaraciones_ValorCompleto>(ScriptsDataBase.LitarItemDEVAxDuca, parametros, commandType: CommandType.StoredProcedure);
+        }
+
+        public IEnumerable<tbItemsDEVAPorDuca> ListadoDevasPorducaId(int duca_Id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@duca_Id", duca_Id, DbType.Int32, ParameterDirection.Input);
+            return db.Query<tbItemsDEVAPorDuca>(ScriptsDataBase.ListadoDevasPorducaId, parametros, commandType: CommandType.StoredProcedure);
+        }
+
         public RequestStatus Update(tbItemsDEVAPorDuca item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
             parametros.Add("@dedu_Id",                  item.dedu_Id,                   DbType.Int32,       ParameterDirection.Input);
-            parametros.Add("@duca_No_DUCA",             item.duca_No_DUCA,              DbType.String,      ParameterDirection.Input);
+            parametros.Add("@duca_Id",                  item.duca_Id,                   DbType.Int32,      ParameterDirection.Input);
             parametros.Add("@deva_Id",                  item.deva_Id,                   DbType.Int32,       ParameterDirection.Input);
             parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion,  DbType.Int32,       ParameterDirection.Input);
             parametros.Add("@dedu_FechaModificacion",   item.dedu_FechaModificacion,    DbType.DateTime,    ParameterDirection.Input);

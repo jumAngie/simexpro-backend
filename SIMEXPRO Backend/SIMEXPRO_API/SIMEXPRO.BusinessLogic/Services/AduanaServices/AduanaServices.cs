@@ -132,15 +132,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _aduanasRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -154,15 +146,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _aduanasRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -176,15 +160,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _aduanasRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -209,21 +185,28 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult ListarArancelesFiltrado(string codigo)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _arancelesRepository.ListFiltrado(codigo);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
+
         public ServiceResult InsertarAranceles(tbAranceles item)
         {
             var result = new ServiceResult();
             try
             {
                 var map = _arancelesRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -237,15 +220,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _arancelesRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -313,15 +288,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _baseCalculosRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -352,14 +319,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _boletinPagoRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -373,15 +333,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _boletinPagoRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -458,16 +410,8 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             var result = new ServiceResult();
             try
             {
-                    var map = _codigoImpuestoRepository.Insert(item);
-                    if (map.MessageStatus == "1")
-                    {
-                        return result.Ok(map);
-                    }
-                    else
-                    {
-                        
-                        return result.Error(map);
-                    }
+                var map = _codigoImpuestoRepository.Insert(item);
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -480,16 +424,8 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             var result = new ServiceResult();
             try
             {
-                    var map = _codigoImpuestoRepository.Update(item);
-                    if (map.MessageStatus == "1")
-                    {
-                        return result.Ok(map);
-                    }
-                    else
-                    {
-                        
-                        return result.Error(map);
-                    }
+               var map = _codigoImpuestoRepository.Update(item);
+               return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -502,16 +438,8 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             var result = new ServiceResult();
             try
             {
-                    var map = _codigoImpuestoRepository.Delete(item);
-                    if (map.MessageStatus == "1")
-                    {
-                        return result.Ok(map);
-                    }
-                    else
-                    {
-                        
-                        return result.Error(map);
-                    }
+                var map = _codigoImpuestoRepository.Delete(item);
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -524,7 +452,6 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         public ServiceResult ListarComercianteIndividual()
         {
             var resultado = new ServiceResult();
-
 
             try
             {
@@ -564,14 +491,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _comercianteIndividualRepository.InsertTap2(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -585,14 +505,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _comercianteIndividualRepository.InsertTap3(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -606,14 +519,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _comercianteIndividualRepository.InsertTap4(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -627,14 +533,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _comercianteIndividualRepository.InsertTap5(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -650,14 +549,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _comercianteIndividualRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -687,14 +579,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _conceptoPagoRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -709,15 +594,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             {
                 var map = _conceptoPagoRepository.Update(item);
 
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -770,15 +647,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _condicionesRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -810,15 +679,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _condicionesComercialesRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -832,15 +693,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _condicionesComercialesRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -856,15 +709,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 if (item.coco_Id != 0)
                 {
                     var map = _condicionesComercialesRepository.Delete(item);
-                    if (map.MessageStatus == "1")
-                    {
-                        return result.Ok(map);
-                    }
-                    else
-                    {
-                        
-                        return result.Error(map);
-                    }
+                    return result.Ok(map);
                 }
                 else
                 {
@@ -893,6 +738,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+
         public ServiceResult ListarDeclaraciones_Valor()
         {
             var result = new ServiceResult();
@@ -1055,14 +901,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _declaraciones_ValorRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -1155,15 +994,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _documentosdeSoporteRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
                 
             }
             catch (Exception ex)
@@ -1178,15 +1009,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _documentosdeSoporteRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -1200,15 +1023,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _documentosdeSoporteRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -1238,14 +1053,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _documentosPDFRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -1259,14 +1067,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _documentosPDFRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -1280,14 +1081,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _documentosPDFRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -1311,18 +1105,42 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
-        public ServiceResult VerificarExistencia(string duca_No_Duca)
-        {
-            var resultado = new ServiceResult();
 
+        public ServiceResult ListaDevaNoDuca()
+        {
+            var result = new ServiceResult();
             try
             {
-                var list = _ducaRepository.VerificarExistencia(duca_No_Duca);
-                return resultado.Ok(list);
+                var list = _ducaRepository.ListadoDevaNoDuca();
+
+                return result.Ok(list);
             }
             catch (Exception ex)
             {
-                return resultado.Error(ex.Message);
+                return result.Error(ex.Message);
+            }
+        }
+
+
+
+        public ServiceResult PreInsertar()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var respuesta = _ducaRepository.PreInsert();
+                if (respuesta.MessageStatus == "1")
+                {
+                    return result.Ok(respuesta);
+                }
+                else
+                {
+                    return result.Error(respuesta);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
             }
         }
 
@@ -1522,15 +1340,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _estadoMercanciasRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -1544,15 +1354,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _estadoMercanciasRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -1566,14 +1368,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _estadoMercanciasRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -1663,15 +1458,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _facturasRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -1799,15 +1586,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _impuestosporAracelRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -1821,15 +1600,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _impuestosporAracelRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -1843,15 +1614,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _impuestosporAracelRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -1881,14 +1644,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _impuestosRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -1902,14 +1658,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _impuestosRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -1923,14 +1672,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _impuestosRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2100,14 +1842,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _itemsRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2115,20 +1850,30 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult ActualizarItemDuca(tbItems item)
+        {
+            var result = new ServiceResult();
+
+            try
+            {
+                var respuesta = _itemsRepository.EditarItemDuca(item);
+
+                return result.Ok(respuesta);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+
         public ServiceResult ActualizarItems(tbItems item)
         {
             var result = new ServiceResult();
             try
             {
                 var map = _itemsRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2142,14 +1887,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _itemsRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2179,14 +1917,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _liquidacionGeneralRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2200,15 +1931,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _liquidacionGeneralRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2222,15 +1945,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _liquidacionGeneralRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2260,15 +1975,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _liquidacionPorLineaRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2282,15 +1989,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _liquidacionPorLineaRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2304,15 +2003,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                     var map = _liquidacionPorLineaRepository.Delete(item);
-                    if (map.MessageStatus == "1")
-                    {
-                        return result.Ok(map);
-                    }
-                    else
-                    {
-                        
-                        return result.Error(map);
-                    }
+                    return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2342,15 +2033,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _lugaresEmbarqueRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2364,15 +2047,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _lugaresEmbarqueRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2386,15 +2061,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _lugaresEmbarqueRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2424,15 +2091,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _marcasRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2446,15 +2105,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _marcasRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2468,15 +2119,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _marcasRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2506,15 +2149,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _modoTransporteRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2528,15 +2163,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _modoTransporteRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2550,15 +2177,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _modoTransporteRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2588,15 +2207,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _nivelesComercialesRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2610,15 +2221,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _nivelesComercialesRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2632,15 +2235,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _nivelesComercialesRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2670,15 +2265,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _personaJuridicaRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2692,14 +2279,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _personaJuridicaRepository.InsertTap2(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2713,14 +2293,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _personaJuridicaRepository.InsertTap3(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2734,14 +2307,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _personaJuridicaRepository.InsertTap4(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2755,14 +2321,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _personaJuridicaRepository.InsertTap5(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2776,15 +2335,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _personaJuridicaRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2799,15 +2350,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _personaJuridicaRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                        
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2835,15 +2378,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _personaNaturalRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2857,15 +2392,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _personaNaturalRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2879,6 +2406,19 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _personaNaturalRepository.Delete(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult FinalizarPersonaNatural(tbPersonaNatural item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _personaNaturalRepository.Finalizar(item);
                 if (map.MessageStatus == "1")
                 {
                     return result.Ok(map);
@@ -2918,15 +2458,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _personasRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2940,15 +2472,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _personasRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2962,15 +2486,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _personasRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -3000,15 +2516,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _tipoDocumentoRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -3022,15 +2530,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _tipoDocumentoRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -3044,14 +2544,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _tipoDocumentoRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                } 
+                return result.Ok(map); 
             }
             catch (Exception ex)
             {
@@ -3081,15 +2574,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _tipoIntermediarioRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -3103,15 +2588,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _tipoIntermediarioRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -3125,15 +2602,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _tipoIntermediarioRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -3163,15 +2632,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _tipoLiquidacionRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -3184,14 +2645,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             var result = new ServiceResult();
             try
             {var map = _tipoLiquidacionRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -3205,15 +2659,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                     var map = _tipoLiquidacionRepository.Delete(item);
-                    if (map.MessageStatus == "1")
-                    {
-                        return result.Ok(map);
-                    }
-                    else
-                    {
-
-                        return result.Error(map);
-                    }
+                    return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -3244,14 +2690,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _tiposIdentificacionRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -3265,14 +2704,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _tiposIdentificacionRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -3286,15 +2718,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _tiposIdentificacionRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -3325,14 +2749,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _transporteRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -3346,15 +2763,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _transporteRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -3368,15 +2777,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _transporteRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -3548,14 +2949,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _regimenesAduanerosRepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -3569,14 +2963,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _regimenesAduanerosRepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -3590,14 +2977,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _regimenesAduanerosRepository.Delete(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -3609,20 +2989,41 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
 
         #region ItemsDEVAxDUCA
 
+        public ServiceResult ListarDeclaraciones_ValorPorDucaNo(int duca_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _itemsDEVAporDUCARepository.ListDVxDC(duca_Id);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult ListadoDevasPorducaId(int duca_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _itemsDEVAporDUCARepository.ListadoDevasPorducaId(duca_Id);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
         public ServiceResult InsertarItemsDEVAxDUCA(tbItemsDEVAPorDuca item)
         {
             var result = new ServiceResult();
             try
             {
                 var map = _itemsDEVAporDUCARepository.Insert(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -3636,14 +3037,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _itemsDEVAporDUCARepository.Update(item);
-                if (map.MessageStatus == "1")
-                {
-                    return result.Ok(map);
-                }
-                else
-                {
-                    return result.Error(map);
-                }
+                return result.Ok(map);
             }
             catch (Exception ex)
             {

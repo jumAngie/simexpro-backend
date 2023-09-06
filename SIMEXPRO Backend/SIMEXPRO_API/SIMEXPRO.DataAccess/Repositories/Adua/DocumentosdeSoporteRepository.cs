@@ -28,7 +28,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
             parametros.Add("@tido_Id", item.tido_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@duca_No_Duca", item.duca_No_Duca, DbType.String, ParameterDirection.Input);
+            parametros.Add("@duca_Id", item.duca_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@doso_NumeroDocumento", item.doso_NumeroDocumento, DbType.String, ParameterDirection.Input);
             parametros.Add("@doso_FechaEmision", item.doso_FechaEmision, DbType.Date, ParameterDirection.Input);
             parametros.Add("@doso_FechaVencimiento", item.doso_FechaVencimiento, DbType.Date, ParameterDirection.Input);

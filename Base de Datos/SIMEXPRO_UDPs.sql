@@ -2818,9 +2818,9 @@ BEGIN
 			ELSE 'Condicion Propia'
 			END											AS formaRepresentacionDesc,
 
-			coin.coin_DNI,
-			coin.coin_DNIrepresentante,
-			coin.coin_DeclaracionComerciante,
+			--coin.coin_DNI,
+			--coin.coin_DNIrepresentante,
+			--coin.coin_DeclaracionComerciante,
 
 			coin.alde_Id, --nuevo
 			alde.alde_Nombre, --nuevo
@@ -3115,8 +3115,8 @@ BEGIN
 				pers_FormaRepresentacion			= @fopr_Id,                           	
 				colo_Id								= @colo_Id,                           	
 				coin_PuntoReferencia				= @coin_PuntoReferencia,			  	
-				coin_ColoniaRepresentante			= @coin_ColoniaRepresentante,		  	
-				coin_NumeroLocalReprentante			= @coin_NumeroLocalReprentante,	    
+				--coin_ColoniaRepresentante			= @coin_ColoniaRepresentante,		  	
+				--coin_NumeroLocalReprentante			= @coin_NumeroLocalReprentante,	    
 				coin_PuntoReferenciaReprentante		= @coin_PuntoReferenciaReprentante,   	
 				coin_TelefonoCelular				= @coin_TelefonoCelular,			    
 				coin_TelefonoFijo					= @coin_TelefonoFijo,				    
@@ -3161,7 +3161,8 @@ BEGIN
 				tbpn.usua_UsuarioModificacion			, 
 				usu2.usua_Nombre						AS usuarioModificacion,
 				tbpn.pena_FechaModificacion				, 
-				tbpn.pena_Estado
+				tbpn.pena_Estado						,
+				tbpn.pena_Finalizado
 		FROM	Adua.tbPersonaNatural  tbpn			
 				INNER JOIN Acce.tbUsuarios usu			ON 	tbpn.usua_UsuarioCreacion		= usu.usua_Id 
 				LEFT  JOIN Acce.tbUsuarios usu2			ON	tbpn.usua_UsuarioModificacion	= usu2.usua_Id
@@ -3281,6 +3282,25 @@ BEGIN
 END
 GO
 
+
+--*****Finalizar*****--
+
+CREATE OR ALTER  PROCEDURE [Adua].[UDP_tbPersonaNatural_Finalizado]
+	@pena_Id	INT
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE [Adua].[tbPersonaNatural]
+		SET	   [pena_Finalizado] = 1
+		WHERE  pena_Id = @pena_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error:' + ERROR_MESSAGE()
+	END CATCH
+END
+GO
 --*************** UDPS Para Tabla Persona Juridica ************--
 
 /*Listar Persona Juridica*/
@@ -3841,7 +3861,7 @@ BEGIN TRANSACTION
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
 	END CATCH 
 END
-
+GO
 
 /******************************** Formas de pago*****************************************/
 
@@ -4940,7 +4960,7 @@ GO
 /*Vista que trae todos los campos de la parte  1 del formulario de la declaración de valor, incluso los que están en 
   otras tablas conectadas a tbDeclaraciones_Valor (no se incluyen las facturas ni las condiciones)*/
 
-CREATE OR ALTER   VIEW [Adua].[VW_tbDeclaraciones_ValorCompleto]
+CREATE OR ALTER VIEW [Adua].[VW_tbDeclaraciones_ValorCompleto]
 AS
 SELECT		deva.deva_Id, 
 			deva.deva_AduanaIngresoId, 
@@ -4950,45 +4970,81 @@ SELECT		deva.deva_Id,
 			deva.deva_DeclaracionMercancia, 
 			deva.deva_FechaAceptacion, 
 			deva.deva_Finalizacion,
+			deva.deva_PagoEfectuado, 
+			deva.pais_ExportacionId, 
+			paix.pais_Codigo + ' - ' + paix.pais_Nombre as pais_ExportacionNombre,
+			deva.deva_FechaExportacion, 
+			deva.mone_Id, 
+			mone.mone_Codigo + ' - ' + mone.mone_Descripcion as monedaNombre,
+			deva.mone_Otra, 
+			deva.deva_ConversionDolares, 
 
-			impo.impo_Id, 
-			impo.impo_NumRegistro,
+			--Lugares de embarque
+			deva.emba_Id,
+			emba.emba_Codigo,
+			emba.emba_Codigo +' - '+ emba.emba_Descripcion as LugarEmbarque,
+
+			--Nivel comercial del importador
 			impo.nico_Id,
 			nico.nico_Descripcion,
+
+			--datos del importador de la tabla de importador
+			impo.impo_Id, 
+			impo.impo_NumRegistro,
+			impo.impo_RTN				        AS impo_RTN,
 			impo.impo_NivelComercial_Otro,
+
+			--Datos del importador pero de la tabla de declarantes
 			declaImpo.decl_Nombre_Raso			AS impo_Nombre_Raso,
 			declaImpo.decl_Direccion_Exacta		AS impo_Direccion_Exacta,
 			declaImpo.decl_Correo_Electronico	AS impo_Correo_Electronico,
 			declaImpo.decl_Telefono				AS impo_Telefono,
 			declaImpo.decl_Fax					AS impo_Fax,			
 			provimpo.pvin_Id					AS impo_ciudId,
+			provimpo.pvin_Codigo + ' - ' + provimpo.pvin_Nombre AS impo_CiudadNombre,
 			provimpo.pais_Id					AS impo_paisId,
-			impo.impo_RTN				        AS impo_RTN,
+			impoPais.pais_Codigo + ' - ' + impoPais.pais_Nombre AS impo_PaisNombre,
 			
+
+			--Condiciones comerciales del proveedor
+			prov.coco_Id,			
+			coco.coco_Descripcion,
+
+			--Proveedor 		
 			deva.pvde_Id,		
 			declaProv.decl_NumeroIdentificacion AS prov_NumeroIdentificacion,
 			declaProv.decl_Nombre_Raso			AS prov_Nombre_Raso,
 			declaProv.decl_Direccion_Exacta		AS prov_Direccion_Exacta,
 			declaProv.decl_Correo_Electronico	AS prov_Correo_Electronico,
 			declaProv.decl_Telefono				AS prov_Telefono,
-			declaProv.decl_Fax					AS prov_Fax,			
+			declaProv.decl_Fax					AS prov_Fax,
+			prov.pvde_Condicion_Otra,
 			provprove.pvin_Id					AS prov_ciudId,
+			provprove.pvin_Codigo + ' - ' + provprove.pvin_Nombre AS prov_CiudadNombre,
 			provprove.pais_Id					AS prov_paisId,
-			prov.coco_Id,			
-			coco.coco_Descripcion,
-			prov.pvde_Condicion_Otra,		
-
-			inte.inte_Id, 
+			provPais.pais_Codigo + ' - ' + provPais.pais_Nombre AS prov_PaisNombre,
+			
+					
+			--Tipo intermediario 
 			inte.tite_Id,
+			tite.tite_Codigo +' - '+ tite.tite_Descripcion as TipoIntermediario,
+			 
+			  --Datos intermediario tabla intermediario
+			inte.inte_Id, 
+			provInte.pvin_Id					AS inte_ciudId,
+			provInte.pvin_Codigo + ' - ' + provInte.pvin_Nombre AS inte_CiudadNombre,
+			provInte.pais_Id					AS inte_paisId,
+			intePais.pais_Codigo + ' - ' + intePais.pais_Nombre AS inte_PaisNombre,
+			inte.inte_Tipo_Otro,
+
+			 --Datos intermediario tabla declarante
 			declaInte.decl_NumeroIdentificacion AS inte_NumeroIdentificacion,
 			declaInte.decl_Nombre_Raso			AS inte_Nombre_Raso,
 			declaInte.decl_Direccion_Exacta		AS inte_Direccion_Exacta,
 			declaInte.decl_Correo_Electronico	AS inte_Correo_Electronico,
 			declaInte.decl_Telefono				AS inte_Telefono,
 			declaInte.decl_Fax					AS inte_Fax,			
-			provInte.pvin_Id					AS inte_ciudId,
-			provInte.pais_Id					AS inte_paisId,
-			inte.inte_Tipo_Otro,
+			
 
 
 			deva.deva_LugarEntrega, 
@@ -4999,20 +5055,16 @@ SELECT		deva.deva_Id,
 			deva.inco_Version, 
 			deva.deva_NumeroContrato, 
 			deva.deva_FechaContrato, 
+
+			--Datos forma de envio
 			foen.foen_Id, 
 			foen.foen_Descripcion,
-
 			deva.deva_FormaEnvioOtra, 
-			deva.deva_PagoEfectuado, 
-			fopa_Id, 
-			deva.deva_FormaPagoOtra, 
-			deva.emba_Id, 
-			deva.pais_ExportacionId, 
-			paix.pais_Codigo + ' - ' + paix.pais_Nombre as pais_ExportacionNombre,
-			deva.deva_FechaExportacion, 
-			deva.mone_Id, 
-			deva.mone_Otra, 
-			deva.deva_ConversionDolares, 
+
+			--Datos forma de pago
+			deva.fopa_Id, 
+			fopa.fopa_Descripcion,
+			deva.deva_FormaPagoOtra,  			
 			
 			
 			----deva_Condiciones, 
@@ -5068,22 +5120,31 @@ SELECT		deva.deva_Id,
 			LEFT JOIN Adua.tbImportadores impo				ON deva.impo_Id = impo.impo_Id
 			LEFT JOIN Adua.tbDeclarantes declaImpo			ON impo.decl_Id = declaImpo.decl_Id
 			LEFT JOIN Gral.tbProvincias provimpo            ON declaImpo.ciud_Id = provimpo.pvin_Id
+			LEFT JOIN Gral.tbPaises impoPais                ON provimpo.pais_Id = impoPais.pais_Id
+			LEFT JOIN Gral.tbMonedas mone                   ON deva.mone_Id = mone.mone_Id
 			
 			
 			LEFT JOIN Adua.tbNivelesComerciales nico		ON impo.nico_Id = nico.nico_Id
 			LEFT JOIN Adua.tbProveedoresDeclaracion prov	ON prov.pvde_Id = deva.pvde_Id
 			LEFT JOIN Adua.tbDeclarantes declaProv			ON prov.decl_Id = declaProv.decl_Id
 			LEFT JOIN Gral.tbProvincias provprove           ON declaProv.ciud_Id = provprove.pvin_Id
+			LEFT JOIN Gral.tbPaises provPais                ON provprove.pais_Id = provPais.pais_Id
+
 
 			LEFT JOIN Adua.tbCondicionesComerciales coco	ON prov.coco_Id = coco.coco_Id
 			LEFT JOIN Adua.tbIntermediarios inte			ON inte.inte_Id = deva.inte_Id
+			LEFT JOIN Adua.tbTipoIntermediario tite			ON inte.tite_Id = tite.tite_Id
 			LEFT JOIN Adua.tbDeclarantes declaInte			ON declaInte.decl_Id = inte.decl_Id
 			LEFT JOIN Gral.tbProvincias provInte            ON declaInte.ciud_Id = provInte.pvin_Id
+			LEFT JOIN Gral.tbPaises intePais                ON provInte.pais_Id = intePais.pais_Id
+
 			LEFT JOIN Adua.tbIncoterm inco					ON deva.inco_Id = inco.inco_Id
 			LEFT JOIN Gral.tbFormas_Envio foen				ON deva.foen_Id = foen.foen_Id 
+			LEFT JOIN Adua.tbFormasdePago fopa				ON deva.fopa_Id = fopa.fopa_Id
 			LEFT JOIN Gral.tbPaises	pais					ON deva.pais_EntregaId = pais.pais_Id
 			LEFT JOIN Gral.tbPaises	paix					ON deva.pais_ExportacionId	 = paix.pais_Id
-			
+			LEFT JOIN Adua.tbLugaresEmbarque emba			ON deva.emba_Id = emba.emba_Id 
+
 			Inner JOIN Adua.tbCondiciones condi              ON deva.deva_Id = condi.deva_Id
 			Inner JOIN Adua.tbBaseCalculos bacu               ON deva.deva_Id = bacu.deva_Id
 			
@@ -6767,10 +6828,10 @@ BEGIN
 		ROLLBACK TRAN
 	END CATCH 
 END
+GO
 
 
-
-ALTER   PROCEDURE [Adua].[UDP_tbFacturas_Eliminar]
+CREATE OR ALTER PROCEDURE [Adua].[UDP_tbFacturas_Eliminar]
 	@fact_Id			INT
 AS
 BEGIN
@@ -7099,8 +7160,56 @@ BEGIN
 		ROLLBACK TRAN
 	END CATCH
 END
-
 GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbItems_EditarItemDuca
+	@item_Id									INT,
+	@item_Cantidad_Bultos						INT,
+	@item_ClaseBulto							NVARCHAR(100),
+	@item_Acuerdo								NVARCHAR(100),
+	@item_PesoNeto								DECIMAL(18,2), 
+	@item_PesoBruto								DECIMAL(18,2),  
+	@item_GastosDeTransporte					DECIMAL(18,2), 
+	@item_Seguro								DECIMAL(18,2), 
+	@item_OtrosGastos							DECIMAL(18,2),
+	@item_CuotaContingente						DECIMAL(18,2), 
+	@item_ReglasAccesorias						NVARCHAR(MAX), 
+	@item_CriterioCertificarOrigen				NVARCHAR(MAX), 
+	@usua_UsuarioModificacion					INT, 
+	@item_FechaModificacion						DATETIME
+AS
+BEGIN
+	BEGIN TRANSACTION
+	BEGIN TRY
+		
+		UPDATE Adua.tbItems
+		SET item_Acuerdo = @item_Acuerdo,
+			item_ClaseBulto = @item_ClaseBulto,
+			item_Cantidad_Bultos = @item_Cantidad_Bultos,
+			item_PesoNeto = @item_PesoNeto, 
+			item_PesoBruto = @item_PesoBruto, 		
+			item_GastosDeTransporte = @item_GastosDeTransporte, 
+			item_Seguro = @item_Seguro, 
+			item_OtrosGastos = @item_OtrosGastos, 
+			item_CuotaContingente = @item_CuotaContingente, 
+			item_ReglasAccesorias = @item_ReglasAccesorias, 
+			item_CriterioCertificarOrigen = @item_CriterioCertificarOrigen, 
+			usua_UsuarioModificacion = @usua_UsuarioModificacion, 
+			item_FechaModificacion = @item_FechaModificacion
+		WHERE item_Id = @item_Id
+
+		
+		SELECT 1
+
+		COMMIT TRAN
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE()
+		ROLLBACK TRAN
+	END CATCH
+END
+GO
+
 
 CREATE OR ALTER PROCEDURE Adua.UDP_tbItems_Eliminar
 	@item_Id					INT,
@@ -7799,18 +7908,15 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_Listar
 AS
 BEGIN
    SELECT --Identificación de la Declaración parte I
+		  duca_Id,
 		  duca_No_Duca, 
 		  duca_No_Correlativo_Referencia, 
-		  duca.deva_Id,
-		  deva.deva_FechaAceptacion,
 		  
 		  --4.1 Exportador / Proveedor
-		  decla.decl_NumeroIdentificacion,
 		  duca_Tipo_Iden_Exportador, 
 		  tipo.iden_Descripcion					AS 'Tipo_identidad_exportador_descripcion',
 		  duca_Pais_Emision_Exportador,
 		  paisEE.pais_Nombre					AS 'Nombre_pais_del_exportador', 
-		  decla.decl_Nombre_Raso,
 		  duca_DomicilioFiscal_Exportador, 
 		  
 		  --Identificación de la Declaración parte II --
@@ -7818,10 +7924,6 @@ BEGIN
 		  adua1.adua_Nombre						AS 'Nombre_Aduana_Registro',			
 		  duca.duca_AduanaDestino,
 		  adua2.adua_Nombre						AS 'Nombre_Aduana_Destino',
-		  deva.deva_AduanaIngresoId,
-		  adua3.adua_Nombre						AS 'Nombre_Aduana_Ingreso',
-		  deva.deva_AduanaDespachoId,
-		  adua4.adua_Nombre						AS 'Nombre_Aduana_Despacho',
 		  
 		  --5.1  Iportador / Destinatario
 		  duca_Numero_Id_Importador, 
@@ -7859,7 +7961,7 @@ BEGIN
 		  duca_Transportista_Nombre,
 		  
 		  --23.1 Conductor 
-		  cond.cont_Id,
+		  duca_Conductor_Id,
 		  cond.cont_Licencia,
 		  paisc.pais_Nombre						AS 'Nombre_pais_conductor',
 		  cond.cont_Nombre,
@@ -7883,14 +7985,6 @@ BEGIN
 		  trns.tran_TipoCarga,
 		  trns.tran_IdContenedor,	
 		  	  
-		  --25.Valores Totales 
-		  baca.base_Gasto_TransporteM_Importada,
-		  baca.base_Costos_Seguro,
-		  deva.inco_Id							AS 'baseCalculos_inco_Id',
-		  icot.inco_Descripcion,
-		  baca.base_Valor_Aduana,
-		  deva.deva_ConversionDolares,
-		  
 		  --Otros gastos
 		  
 		  --32.Totales 
@@ -7905,6 +7999,7 @@ BEGIN
 		  duca.usua_UsuarioModificacion, 
 		  usu2.usua_Nombre,
 		  duca_FechaModificacion, 
+		  duca_Finalizado
 		  duca_Estado
 	 FROM Adua.tbDuca duca 
 LEFT JOIN Acce.tbUsuarios				AS usu1		ON duca.usua_UsuarioCreacion = usu1.usua_Id
@@ -7914,7 +8009,6 @@ LEFT JOIN Adua.tbTransporte				AS trns		ON cond.tran_Id = trns.tran_Id
 LEFT JOIN Gral.tbPaises					AS paisc	ON cond.pais_IdExpedicion = paisc.pais_Id 
 LEFT JOIN Gral.tbPaises					AS paist	ON paist.pais_Id = trns.pais_Id
 LEFT JOIN Adua.tbMarcas					AS marc		ON marc.marc_Id = trns.marca_Id
-LEFT JOIN Adua.tbDeclaraciones_Valor	AS deva		ON duca.deva_Id = deva.deva_Id
 LEFT JOIN Gral.tbPaises					AS paisD	ON duca.duca_Pais_Destino = paisD.pais_Id
 LEFT JOIN Gral.tbPaises					AS paisEE	ON duca.duca_Pais_Emision_Exportador = paisEE.pais_Id
 LEFT JOIN Gral.tbPaises					AS paisEI	ON duca.duca_Pais_Emision_Importador = paisEI.pais_Id
@@ -7923,21 +8017,56 @@ LEFT JOIN Gral.tbPaises					AS paisP	ON duca.duca_Pais_Procedencia = paisP.pais_
 LEFT JOIN Adua.tbModoTransporte			AS modoT	ON duca.motr_id = modoT.motr_Id
 LEFT JOIN Adua.tbAduanas				AS adua1	ON duca.duca_AduanaRegistro = adua1.adua_Id
 LEFT JOIN Adua.tbAduanas				AS adua2	ON duca.duca_AduanaDestino = adua2.adua_Id
-LEFT JOIN Adua.tbAduanas				AS adua3	ON deva.deva_AduanaIngresoId = adua3.adua_Id
-LEFT JOIN Adua.tbAduanas				AS adua4	ON deva.deva_AduanaDespachoId = adua4.adua_Id
-LEFT JOIN Adua.tbProveedoresDeclaracion AS prode	ON deva.pvde_Id = Prode.pvde_Id
-LEFT JOIN Adua.tbDeclarantes			AS decla	ON prode.decl_Id = decla.decl_Id
-LEFT JOIN Adua.tbBaseCalculos			AS baca     ON baca.base_Id = decla.decl_Id 
-LEFT JOIN Adua.tbTiposIdentificacion	AS tipo		ON duca.duca_Tipo_Iden_Exportador = tipo.iden_Id
-LEFT JOIN Adua.tbIncoterm				AS icot     ON icot.inco_Id = deva.inco_Id 
+LEFT JOIN Adua.tbTiposIdentificacion	AS tipo		ON duca.duca_Tipo_Iden_Exportador = tipo.iden_Id 
 END
 GO
 
+ 
+
+/* Preinsert DUCA*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_PreInsertar
+AS
+BEGIN	
+	BEGIN TRY
+		INSERT INTO Adua.tbDuca (duca_No_Duca, duca_No_Correlativo_Referencia, duca_AduanaRegistro, duca_AduanaDestino, duca_Regimen_Aduanero, duca_Modalidad,duca_Clase, duca_FechaVencimiento,duca_Pais_Procedencia,duca_Pais_Destino ,duca_Deposito_Aduanero, duca_Lugar_Desembarque,duca_Manifiesto,duca_Titulo, usua_UsuarioCreacion, duca_FechaCreacion)
+		VALUES (NULL, NULL, NULL, NULL, NULL, NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, NULL, NULL)
+
+		SELECT SCOPE_IDENTITY()
+
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error: ' + ERROR_MESSAGE();
+	END CATCH
+END
+
+GO
+
+/* Insert [Adua].[tbItemsDEVAPorDuca]*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbItemsDEVAPorDuca_InsertarDuca
+	@duca_Id				INT,
+	@deva_Id				INT,
+	@usua_UsuarioCreacion	INT,
+	@dedu_FechaCreacion		DATETIME
+AS
+BEGIN	
+	BEGIN TRY
+		
+		INSERT INTO [Adua].[tbItemsDEVAPorDuca](duca_Id, [deva_Id], [usua_UsuarioCreacion], [dedu_FechaCreacion], [usua_UsuarioModificacion], [dedu_FechaModificacion])
+		VALUES(@duca_Id,@deva_Id,@usua_UsuarioCreacion,@dedu_FechaCreacion,NULL,NULL)
+
+		SELECT 1
+
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error: ' + ERROR_MESSAGE();
+	END CATCH
+END
+GO
 
 /* Insertar Duca tab1*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_InsertarTab1
+	@duca_Id							INT,
 	@duca_No_Duca						NVARCHAR(100),
-	@deva_Id							INT,
 	@duca_No_Correlativo_Referencia		NVARCHAR(MAX),
 	@duca_AduanaRegistro				INT,
 	@duca_AduanaDestino					INT,
@@ -7956,8 +8085,24 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_InsertarTab1
 AS
 BEGIN
 	BEGIN TRY
-		INSERT INTO Adua.tbDuca (duca_No_Duca, duca_No_Correlativo_Referencia, deva_Id, duca_AduanaRegistro, duca_AduanaDestino, duca_Regimen_Aduanero, duca_Modalidad,duca_Clase, duca_FechaVencimiento,duca_Pais_Procedencia,duca_Pais_Destino ,duca_Deposito_Aduanero, duca_Lugar_Desembarque,duca_Manifiesto,duca_Titulo, usua_UsuarioCreacion, duca_FechaCreacion)
-		VALUES (@duca_No_Duca, @duca_No_Correlativo_Referencia, @deva_Id, @duca_AduanaRegistro,@duca_AduanaDestino, @duca_Regimen_Aduanero, @duca_Modalidad,@duca_Clase,@duca_FechaVencimiento,@duca_Pais_Procedencia,@duca_Pais_Destino,@duca_Deposito_Aduanero,@duca_Lugar_Desembarque,@duca_Manifiesto,@duca_Titulo, @usua_UsuarioCreacion, @duca_FechaCreacion)
+	 UPDATE Adua.tbDuca
+		SET duca_No_Duca					 = UPPER(@duca_No_Duca),
+			duca_No_Correlativo_Referencia	 = UPPER(@duca_No_Correlativo_Referencia),
+			duca_AduanaRegistro				 = @duca_AduanaRegistro,
+			duca_AduanaDestino				 = @duca_AduanaDestino,
+			duca_Regimen_Aduanero			 = @duca_Regimen_Aduanero,
+			duca_Modalidad					 = @duca_Modalidad,
+			duca_Clase						 = @duca_Clase,
+			duca_FechaVencimiento			 = @duca_FechaVencimiento,
+			duca_Pais_Procedencia			 = @duca_Pais_Procedencia,
+			duca_Pais_Destino				 = @duca_Pais_Destino,
+			duca_Deposito_Aduanero			 = @duca_Deposito_Aduanero,
+			duca_Lugar_Desembarque			 = @duca_Lugar_Desembarque,
+			duca_Manifiesto					 = UPPER(@duca_Manifiesto),
+			duca_Titulo						 = UPPER(@duca_Titulo),
+			usua_UsuarioCreacion			 = @usua_UsuarioCreacion,
+			duca_FechaCreacion				 = @duca_FechaCreacion
+	  WHERE duca_Id = @duca_Id	
 
 		SELECT 1
 	END TRY
@@ -7968,7 +8113,7 @@ END
 GO
 
 CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbDuca_InsertarTab2]
-	@duca_No_Duca						NVARCHAR(100),
+	@duca_Id							INT,
 	@duca_Codigo_Declarante				NVARCHAR(200),
 	@duca_Numero_Id_Declarante			NVARCHAR(200),
 	@duca_NombreSocial_Declarante		NVARCHAR(MAX),
@@ -7992,7 +8137,7 @@ CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbDuca_InsertarTab2]
 	@tran_TamanioEquipamiento			NVARCHAR(50),
 	@tran_TipoCarga						NVARCHAR(200),
 	@tran_IdContenedor					NVARCHAR(100),
-	@usua_UsuarioCreacio				INT,
+	@usua_UsuarioCreacion				INT,
 	@tran_FechaCreacion					DATETIME
 AS	
 BEGIN
@@ -8002,13 +8147,13 @@ BEGIN
 		BEGIN TRAN
 			IF @pais_Id > 0
 				BEGIN
-					INSERT INTO Adua.tbTransporte (pais_Id, tran_Chasis, marca_Id, tran_Remolque, tran_CantCarga, tran_NumDispositivoSeguridad, tran_Equipamiento, tran_TipoCarga, tran_IdContenedor, usua_UsuarioCreacio, tran_FechaCreacion, usua_UsuarioModificacion, tran_FechaModificacion, usua_UsuarioEliminacion, trant_FechaEliminacion, tran_Estado,tran_IdUnidadTransporte, tran_TamanioEquipamiento)
-					VALUES(@pais_Id,@tran_Chasis,@marca_Id,@tran_Remolque,@tran_CantCarga,@tran_NumDispositivoSeguridad,@tran_Equipamiento,@tran_TipoCarga,@tran_IdContenedor,@usua_UsuarioCreacio,@tran_FechaCreacion,NULL,NULL,NULL,NULL,1,@tran_IdUnidadTransporte,@tran_TamanioEquipamiento);
+					INSERT INTO Adua.tbTransporte (pais_Id, tran_Chasis, marca_Id, tran_Remolque, tran_CantCarga, tran_NumDispositivoSeguridad, tran_Equipamiento, tran_TipoCarga, tran_IdContenedor, usua_UsuarioCreacio, tran_FechaCreacion,tran_IdUnidadTransporte, tran_TamanioEquipamiento)
+					VALUES(@pais_Id,UPPER(@tran_Chasis),@marca_Id,@tran_Remolque,@tran_CantCarga,@tran_NumDispositivoSeguridad,@tran_Equipamiento,@tran_TipoCarga,@tran_IdContenedor,@usua_UsuarioCreacion,@tran_FechaCreacion,@tran_IdUnidadTransporte,@tran_TamanioEquipamiento);
 
 					DECLARE @Transporte_Id INT = (SELECT TOP 1 tran_Id FROM Adua.tbTransporte ORDER BY tran_Id DESC);
 			
-					INSERT INTO Adua.tbConductor (cont_NoIdentificacion, cont_Nombre, cont_Apellido, cont_Licencia, pais_IdExpedicion, tran_Id, usua_UsuarioCreacion, cont_FechaCreacion, usua_UsuarioModificacion, cont_FechaModificacion, usua_UsuarioEliminacion, cont_FechaEliminacion, cont_Estado)
-					VALUES(@cont_NoIdentificacion, @cont_Nombre,@cont_Apellido,@cont_Licencia,@pais_IdExpedicion,@Transporte_Id,@usua_UsuarioCreacio,@tran_FechaCreacion,NULL,NULL,NULL,NULL,1);
+					INSERT INTO Adua.tbConductor (cont_NoIdentificacion, cont_Nombre, cont_Apellido, cont_Licencia, pais_IdExpedicion, tran_Id, usua_UsuarioCreacion, cont_FechaCreacion)
+					VALUES(@cont_NoIdentificacion, @cont_Nombre,@cont_Apellido,@cont_Licencia,@pais_IdExpedicion,@Transporte_Id,@usua_UsuarioCreacion,@tran_FechaCreacion);
 
 					DECLARE @ducaConductor INT = (SELECT TOP 1 cont_Id FROM Adua.tbConductor ORDER BY cont_Id DESC);
 
@@ -8021,7 +8166,7 @@ BEGIN
 						  ,motr_id = @motr_Id
 						  ,duca_Transportista_Nombre = @duca_Transportista_Nombre
 						  ,duca_Conductor_Id = @ducaConductor      
-					 WHERE duca_No_Duca = @duca_No_Duca
+					 WHERE duca_Id = @duca_Id
 				END
 		     ELSE
 				BEGIN
@@ -8033,7 +8178,7 @@ BEGIN
 						  ,duca_Codigo_Transportista = @duca_Codigo_Transportista 
 						  ,motr_id = @motr_Id
 						  ,duca_Transportista_Nombre = @duca_Transportista_Nombre     
-					 WHERE duca_No_Duca = @duca_No_Duca
+					 WHERE duca_Id = @duca_Id
 				END
 		COMMIT 
 		SELECT 1
@@ -8048,7 +8193,7 @@ GO
 /* Insertar Duca tab3*/
 CREATE OR ALTER PROCEDURE  Adua.UDP_tbDuca_InsertarTab3
 	@tido_Id					INT,
-	@duca_No_Duca				NVARCHAR(100),
+	@duca_Id					INT,
 	@doso_NumeroDocumento		NVARCHAR(15),
 	@doso_FechaEmision			DATETIME,
 	@doso_FechaVencimiento		DATETIME,
@@ -8056,13 +8201,14 @@ CREATE OR ALTER PROCEDURE  Adua.UDP_tbDuca_InsertarTab3
 	@doso_LineaAplica			CHAR(4),
 	@doso_EntiadEmitioDocumento	NVARCHAR(75),
 	@doso_Monto					NVARCHAR(50),
-	@usua_UsuarioCreacio		INT,
+	@usua_UsuarioCreacion		INT,
 	@doso_FechaCreacion			DATETIME
 AS
 BEGIN
 	BEGIN TRY
-		INSERT INTO Adua.tbDocumentosDeSoporte (tido_Id, duca_No_Duca, doso_NumeroDocumento, doso_FechaEmision, doso_FechaVencimiento, doso_PaisEmision, doso_LineaAplica, doso_EntidadEmitioDocumento, doso_Monto, usua_UsuarioCreacion, doso_FechaCreacion, usua_UsuarioModificacion, doso_FechaModificacion, usua_UsuarioEliminacion, doso_FechaEliminacion, doso_Estado)
-		VALUES(@tido_Id, @duca_No_Duca, @doso_NumeroDocumento,@doso_FechaEmision,@doso_FechaVencimiento,@doso_PaisEmision,@doso_LineaAplica,@doso_EntiadEmitioDocumento,@doso_Monto,@usua_UsuarioCreacio,@doso_FechaCreacion,NULL,NULL,NULL,NULL,1);
+		INSERT INTO Adua.tbDocumentosDeSoporte (tido_Id, duca_Id, doso_NumeroDocumento, doso_FechaEmision, doso_FechaVencimiento, doso_PaisEmision, doso_LineaAplica, doso_EntidadEmitioDocumento, doso_Monto, usua_UsuarioCreacion, doso_FechaCreacion)
+		VALUES(@tido_Id, @duca_Id, UPPER(@doso_NumeroDocumento), @doso_FechaEmision, @doso_FechaVencimiento, @doso_PaisEmision, @doso_LineaAplica, @doso_EntiadEmitioDocumento, @doso_Monto, @usua_UsuarioCreacion, @doso_FechaCreacion);
+		
 		SELECT 1
 	END TRY
 	BEGIN CATCH
@@ -8073,8 +8219,8 @@ GO
 
 ---------------------EDIT DUCA------------------------
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_EditarTab1
+	@duca_Id							INT,
 	@duca_No_Duca						NVARCHAR(100),
-	@deva_Id							INT,
 	@duca_No_Correlativo_Referencia		NVARCHAR(MAX),
 	@duca_AduanaRegistro				INT,
 	@duca_AduanaDestino					INT,
@@ -8093,24 +8239,24 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_EditarTab1
 AS
 BEGIN
 	BEGIN TRY
-		  UPDATE Adua.tbDuca
-			 SET deva_Id = @deva_Id,
-				 duca_No_Correlativo_Referencia = @duca_No_Correlativo_Referencia,
-			     duca_AduanaRegistro = @duca_AduanaRegistro, 
-				 duca_AduanaDestino = @duca_AduanaDestino,
-				 duca_Regimen_Aduanero = @duca_Regimen_Aduanero,
-				 duca_Modalidad = @duca_Modalidad,
-				 duca_Clase = @duca_Clase,
-				 duca_FechaVencimiento = @duca_FechaVencimiento,
-				 duca_Pais_Procedencia = @duca_Pais_Procedencia ,
-				 duca_Pais_Destino = @duca_Pais_Destino,
-				 duca_Deposito_Aduanero = @duca_Deposito_Aduanero,
-				 duca_Lugar_Desembarque = @duca_Lugar_Desembarque,
-				 duca_Manifiesto = @duca_Manifiesto,
-				 duca_Titulo = @duca_Titulo,
-				 usua_UsuarioModificacion = @usua_UsuarioModificacion,
-				 duca_FechaModificacion = @duca_FechaModificacion
-		   WHERE duca_No_Duca = @duca_No_Duca  
+	 UPDATE Adua.tbDuca
+		SET duca_No_Duca					 = UPPER(@duca_No_Duca),
+			duca_No_Correlativo_Referencia	 = UPPER(@duca_No_Correlativo_Referencia),
+			duca_AduanaRegistro				 = @duca_AduanaRegistro,
+			duca_AduanaDestino				 = @duca_AduanaDestino,
+			duca_Regimen_Aduanero			 = @duca_Regimen_Aduanero,
+			duca_Modalidad					 = @duca_Modalidad,
+			duca_Clase						 = @duca_Clase,
+			duca_FechaVencimiento			 = @duca_FechaVencimiento,
+			duca_Pais_Procedencia			 = @duca_Pais_Procedencia,
+			duca_Pais_Destino				 = @duca_Pais_Destino,
+			duca_Deposito_Aduanero			 = @duca_Deposito_Aduanero,
+			duca_Lugar_Desembarque			 = @duca_Lugar_Desembarque,
+			duca_Manifiesto					 = UPPER(@duca_Manifiesto),
+			duca_Titulo						 = UPPER(@duca_Titulo),
+			usua_UsuarioModificacion		 = @usua_UsuarioModificacion,
+			duca_FechaModificacion			 = @duca_FechaModificacion
+	  WHERE duca_Id = @duca_Id	
 
 		  SELECT 1
 	END TRY
@@ -8120,8 +8266,8 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbDuca_EditarTab2]
-	@duca_No_Duca						NVARCHAR(100),
+CREATE OR ALTER PROCEDURE [Adua].[UDP_tbDuca_EditarTab2]
+	@duca_Id							INT,
 	@duca_Codigo_Declarante				NVARCHAR(200),
 	@duca_Numero_Id_Declarante			NVARCHAR(200),
 	@duca_NombreSocial_Declarante		NVARCHAR(MAX),
@@ -8129,6 +8275,7 @@ CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbDuca_EditarTab2]
 	@duca_Codigo_Transportista			NVARCHAR(200),
 	@duca_Transportista_Nombre			NVARCHAR(MAX),
 	@motr_Id							INT,
+	@duca_Conductor_Id					INT,
 	@cont_NoIdentificacion				VARCHAR(50),
 	@cont_Licencia						NVARCHAR(200),
 	@pais_IdExpedicion					INT,
@@ -8152,11 +8299,11 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRAN
 
-	    DECLARE @Transporte_Id INT = (SELECT TOP 1 tran_Id FROM Adua.tbTransporte ORDER BY tran_Id DESC);
+	    DECLARE @Transporte_Id INT = (SELECT tran_Id FROM Adua.tbConductor WHERE cont_Id = @duca_Conductor_Id);
 
 		UPDATE Adua.tbTransporte 
 		SET    pais_Id = @pais_Id, 
-		       tran_Chasis = @tran_Chasis, 
+		       tran_Chasis = UPPER(@tran_Chasis), 
 		       marca_Id = @marca_Id, 
 			   tran_Remolque = @tran_Remolque, 
 			   tran_CantCarga = @tran_CantCarga,
@@ -8169,8 +8316,7 @@ BEGIN
 			   tran_IdUnidadTransporte = @tran_IdUnidadTransporte,
 			   tran_TamanioEquipamiento = @tran_TamanioEquipamiento
 		WHERE  tran_Id = @Transporte_Id
-		
-		DECLARE @ducaConductor INT = (SELECT TOP 1 cont_Id FROM Adua.tbConductor ORDER BY cont_Id DESC);
+
 		UPDATE Adua.tbConductor
 		SET    cont_NoIdentificacion = @cont_NoIdentificacion,
 			   cont_Nombre = @cont_Nombre,
@@ -8180,7 +8326,7 @@ BEGIN
 			   tran_Id = @Transporte_Id,
 			   usua_UsuarioModificacion = @usua_UsuarioModificacion,
 			   cont_FechaModificacion = @duca_FechaModificacion
-        WHERE @ducaConductor = cont_Id
+        WHERE  cont_Id = @duca_Conductor_Id
 
 		UPDATE Adua.tbDuca
 		   SET duca_Codigo_Declarante = @duca_Codigo_Declarante
@@ -8190,10 +8336,10 @@ BEGIN
 			  ,duca_Codigo_Transportista = @duca_Codigo_Transportista 
 			  ,motr_id = @motr_Id
 			  ,duca_Transportista_Nombre = @duca_Transportista_Nombre
-			  ,duca_Conductor_Id = @ducaConductor
+			  ,duca_Conductor_Id = @duca_Conductor_Id
 			  ,usua_UsuarioModificacion = @usua_UsuarioModificacion
 			  ,duca_FechaModificacion = @duca_FechaModificacion
-		 WHERE duca_No_Duca = @duca_No_Duca
+		 WHERE duca_Id = @duca_Id
 		
 		COMMIT
 		SELECT 1
@@ -8206,8 +8352,8 @@ END
 GO
 
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_EditarTab3
+	@doso_Id						INT,
 	@tido_Id						INT,
-	@duca_No_Duca					NVARCHAR(100),
 	@doso_NumeroDocumento			NVARCHAR(15),
 	@doso_FechaEmision				DATETIME,
 	@doso_FechaVencimiento			DATETIME,
@@ -8221,17 +8367,17 @@ AS
 BEGIN
     BEGIN TRY
 	    UPDATE Adua.tbDocumentosDeSoporte 
-		   SET duca_No_Duca = @duca_No_Duca,
-		       doso_NumeroDocumento = @doso_NumeroDocumento,
-			   doso_FechaEmision = @doso_FechaEmision,
-			   doso_FechaVencimiento = @doso_FechaVencimiento,
-			   doso_PaisEmision = @doso_PaisEmision,
-			   doso_LineaAplica = @doso_LineaAplica,
-			   doso_EntidadEmitioDocumento = @doso_EntiadEmitioDocumento,
-			   doso_Monto = @doso_Monto,
-			   usua_UsuarioModificacion = @usua_UsuarioModificacion,
-			   doso_FechaModificacion = @doso_FechaModificacion
-		 WHERE tido_Id = @tido_Id
+		   SET tido_Id						= @tido_Id,
+		       doso_NumeroDocumento			= UPPER(@doso_NumeroDocumento),
+			   doso_FechaEmision			= @doso_FechaEmision,
+			   doso_FechaVencimiento		= @doso_FechaVencimiento,
+			   doso_PaisEmision				= @doso_PaisEmision,
+			   doso_LineaAplica				= @doso_LineaAplica,
+			   doso_EntidadEmitioDocumento	= @doso_EntiadEmitioDocumento,
+			   doso_Monto					= @doso_Monto,
+			   usua_UsuarioModificacion		= @usua_UsuarioModificacion,
+			   doso_FechaModificacion		= @doso_FechaModificacion
+		 WHERE doso_Id = @doso_Id
 
 		SELECT 1
     END TRY
@@ -8241,19 +8387,6 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_ListarPorNumeroDuca  
-@duca_No_Duca NVARCHAR(100)
-AS BEGIN
-    DECLARE @resultado INT
-
-    IF EXISTS (SELECT 1 FROM Adua.tbDuca WHERE duca_No_Duca = @duca_No_Duca)
-        SET @resultado = 1
-    ELSE
-        SET @resultado = 0
-
-    SELECT @resultado AS Resultado
-END
-GO
 
 --************ARCELES******************--
 /*Listar Aranceles Todos*/
@@ -8288,6 +8421,40 @@ BEGIN
 
 END
 GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbAranceles_ListarByCodigo
+	@aran_Codigo	NVARCHAR(20)
+AS
+BEGIN
+	SELECT	aran_Id,
+			aran_Codigo,
+			DATALENGTH(aran_Codigo) AS tamaño, 
+			CASE 
+				WHEN DATALENGTH(aran_Codigo) = 10 THEN 'Categoria'
+				WHEN DATALENGTH(aran_Codigo) = 12 THEN 'Subcategoria'
+				ELSE 'Arancel' 
+			END AS aran_Tipo,
+			aran_Descripcion,
+		
+			ara.usua_UsuarioCreacion,
+			usu.usua_Nombre           AS UsuarioCreacion,		
+			ara.aran_FechaCreacion, 
+		
+		
+		ara.usua_UsuarioModificacion,
+		usu1.usua_Nombre              AS UsuarioModificacion,
+		ara.aran_FechaModificacion	
+		
+ 
+   FROM	Adua.tbAranceles ara
+   INNER JOIN Acce.tbUsuarios usu ON ara.usua_UsuarioCreacion = usu.usua_Id
+   LEFT JOIN Acce.tbUsuarios usu1 ON usu1.usua_Id = ara.usua_UsuarioModificacion 
+   WHERE ara.aran_Codigo LIKE '%'+ @aran_Codigo + '%' AND aram_Estado = 1
+   ORDER BY DATALENGTH(aran_Codigo) 
+
+END
+GO
+
 
 /*Listar Aranceles Categoria*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbAranceles_ListarCategoria
@@ -8565,7 +8732,7 @@ AS
 BEGIN
 	SELECT  boletin.boen_Id, 
 	        boletin.liqu_Id, 
-			boletin.duca_No_Duca,
+			boletin.duca_Id,
 			lig.lige_TotalGral,
 			boletin.tipl_Id, 
 			tipli.tipl_Descripcion,
@@ -8606,7 +8773,7 @@ END
 GO
 CREATE OR ALTER PROCEDURE Adua.UDP_tbBoletinPago_Insertar 
 	@liqu_Id                 INT, 
-	@duca_No_Duca		     NVARCHAR(100),
+	@duca_Id				 INT,
 	@tipl_Id                 INT, 
 	@boen_FechaEmision       DATE, 
 	@esbo_Id                 INT, 
@@ -8628,7 +8795,7 @@ BEGIN
 	
 	BEGIN TRY
 			INSERT INTO Adua.tbBoletinPago(liqu_Id,
-										   duca_No_Duca,
+										   duca_Id,
 			                               tipl_Id, 
 										   boen_FechaEmision, 
 										   esbo_Id, 
@@ -8647,7 +8814,7 @@ BEGIN
 										   boen_FechaCreacion,
 										   boen_Estado)
 			VALUES(@liqu_Id, 
-				   @duca_No_Duca,
+				   @duca_Id,
 			       @tipl_Id, 
 				   @boen_FechaEmision, 
 				   @esbo_Id, 
@@ -8678,7 +8845,7 @@ GO
 CREATE OR ALTER PROCEDURE Adua.UDP_tbBoletinPago_Editar
 	@boen_Id                   INT,
 	@liqu_Id                   INT, 
-	@duca_No_Duca		       NVARCHAR(100),
+	@duca_Id				   INT,
 	@tipl_Id                   INT, 
 	@boen_FechaEmision         DATE, 
 	@esbo_Id                   INT, 
@@ -8700,7 +8867,7 @@ BEGIN
 	BEGIN TRY
 		UPDATE  Adua.tbBoletinPago
 		SET		liqu_Id                   = @liqu_Id,
-			    duca_No_Duca			  = @duca_No_Duca,
+			    duca_Id					  = @duca_Id,
 		        tipl_Id                   = @tipl_Id,
 				boen_FechaEmision         = @boen_FechaEmision,
 				esbo_Id                   = @esbo_Id,
@@ -9441,7 +9608,7 @@ BEGIN
 		   ,tido.tido_Id
 		   ,tido.tido_Codigo
 		   ,tido.tido_Descripcion
-		   ,doso.duca_No_Duca
+		   ,doso.duca_Id
 		   ,doso.doso_NumeroDocumento
 		   ,doso.doso_FechaEmision
 		   ,doso.doso_FechaVencimiento
@@ -9462,13 +9629,8 @@ BEGIN
 	  FROM Adua.tbDocumentosDeSoporte doso	
 			INNER JOIN Adua.tbTipoDocumento tido   ON	doso.tido_Id					= tido.tido_Id 
 			INNER JOIN Acce.tbUsuarios	  crea	   ON	doso.usua_UsuarioCreacion		= crea.usua_Id
-			INNER JOIN Acce.tbUsuarios	  modi     ON	doso.usua_UsuarioModificacion	= modi.usua_Id
-			INNER JOIN Acce.tbUsuarios	  elim     ON	doso.usua_UsuarioEliminacion	= elim.usua_Id
-
-
-
-
-
+			LEFT JOIN Acce.tbUsuarios	  modi     ON	doso.usua_UsuarioModificacion	= modi.usua_Id
+			LEFT JOIN Acce.tbUsuarios	  elim     ON	doso.usua_UsuarioEliminacion	= elim.usua_Id
 END
 
 GO
@@ -9476,7 +9638,7 @@ GO
 /* INSERTAR DOCUMENTOS DE SOPORTE */
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosDeSoporte_Insertar 
 	@tido_Id					        INT,
-	@duca_No_Duca						NVARCHAR(100),
+	@duca_Id							INT,
 	@doso_NumeroDocumento		        NVARCHAR(15),
 	@doso_FechaEmision			        DATE,
 	@doso_FechaVencimiento		        DATE,
@@ -9494,7 +9656,7 @@ BEGIN TRY
 
 	INSERT INTO Adua.tbDocumentosDeSoporte
 			   (tido_Id
-			   ,duca_No_Duca
+			   ,duca_Id
 			   ,doso_NumeroDocumento
 			   ,doso_FechaEmision
 			   ,doso_FechaVencimiento
@@ -9507,8 +9669,8 @@ BEGIN TRY
 			   ,doso_FechaCreacion)
 		 VALUES
 			   (@tido_Id
-			   ,@duca_No_Duca
-			   ,@doso_NumeroDocumento
+			   ,@duca_Id
+			   ,UPPER(@doso_NumeroDocumento)
 			   ,@doso_FechaEmision
 			   ,@doso_FechaVencimiento
 			   ,@doso_PaisEmision
@@ -9526,6 +9688,7 @@ BEGIN TRY
 	END CATCH 
 
 END
+
 
 -------------------------------------------------------
 
@@ -10032,34 +10195,25 @@ GO
 --INSERTAR
 CREATE OR ALTER PROCEDURE Adua.UDP_tbImpuestosPorArancel_Insertar 
 	@impu_Id     				INT,
-	@aran_Id					INT,
 	@imar_PorcentajeImpuesto	DECIMAL(18,2),
 	@usua_UsuarioCreacion		INT,
 	@imar_FechaCreacion			DATETIME
 AS
 BEGIN
 	BEGIN TRY
-		IF EXISTS(SELECT imar_Id FROM Adua.tbImpuestosPorArancel WHERE impu_Id = @impu_Id AND aran_Id = @aran_Id AND imar_Estado = 0 AND imar_PorcentajeImpuesto = @imar_PorcentajeImpuesto)
-			BEGIN
-				UPDATE Adua.tbImpuestosPorArancel
-				SET	   imar_Estado = 1
-				WHERE  impu_Id = @impu_Id AND aran_Id = @aran_Id
-				SELECT 1
-			END
-		ELSE
-			BEGIN 
-				INSERT INTO Adua.tbImpuestosPorArancel (impu_Id, 
-				                                            aran_Id,
-															imar_PorcentajeImpuesto,
-											                usua_UsuarioCreacion, 
-											                imar_FechaCreacion)
-			VALUES(@impu_Id,	
-			       @aran_Id,
-				   @imar_PorcentajeImpuesto,			
-				   @usua_UsuarioCreacion,
-				   @imar_FechaCreacion)
-				SELECT 1
-			END
+	DECLARE @aran_Id INT 
+	SELECT TOP 1 @aran_Id = aran_ID FROM Adua.tbAranceles ORDER BY aran_ID desc
+			INSERT INTO Adua.tbImpuestosPorArancel (impu_Id, 
+				                                        aran_Id,
+														imar_PorcentajeImpuesto,
+											            usua_UsuarioCreacion, 
+											            imar_FechaCreacion)
+		VALUES(@impu_Id,	
+			    @aran_Id,
+				@imar_PorcentajeImpuesto,			
+				@usua_UsuarioCreacion,
+				@imar_FechaCreacion)
+			SELECT 1
 	END TRY
 	BEGIN CATCH
 				SELECT 'Error Message: ' + ERROR_MESSAGE()	
@@ -10094,6 +10248,40 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE Adua.UDP_tbImpuestosPorArancel_ListarPorArancel
+@aran_Id INT 
+AS
+BEGIN
+SELECT	imar.imar_Id				 AS IdImpuestoPorArancel,
+		    impu.impu_Id				 AS ArancelCodigo,
+		    aran.aran_Id				 AS DescripcionImpuesto,
+		   	imar.imar_PorcentajeImpuesto AS CantidadPorPorcentajeImpuesto,	
+			usu.usua_Id					 AS IDUsuarioCreacion,
+			usu.usua_Nombre				 AS UsuarioCreacion ,
+			impu_FechaCreacion			 AS FechaCreacion,
+										 
+			usu1.usua_Id				 AS IDUsuarioModificacion,
+			usu1.usua_Nombre			 AS UsuarioModificacion,
+			impu_FechaModificacion		 AS FechaModificacion
+ 
+  FROM	    Adua.tbImpuestosPorArancel imar
+            INNER JOIN Adua.tbImpuestos impu ON imar.impu_Id = impu.impu_Id
+			INNER JOIN Acce.tbUsuarios usu ON usu.usua_Id = impu.usua_UsuarioCreacion 
+			LEFT JOIN Acce.tbUsuarios usu1 ON usu1.usua_Id = impu.usua_UsuarioModificacion
+			INNER JOIN Adua.tbAranceles aran ON imar.aran_Id = aran.aran_Id 
+			WHERE imar.imar_Estado = 1 AND imar.aran_Id = @aran_Id
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbImpuestosPorArancel_Eliminar
+@imar_Id INT
+AS
+BEGIN
+	DELETE FROM Adua.tbImpuestosPorArancel 
+	WHERE imar_Id = @imar_Id
+SELECT 1
+END
+GO
 
 
 --*********************** UDPS codigo impuesto ***********************
@@ -11007,6 +11195,11 @@ BEGIN
 			asor_FechaModificacion,
 			(SELECT		adet_Id,						
 					   lote.lote_Id,
+					   lote.lote_CodigoLote,
+					   mate.mate_Id,
+					   mate.mate_Descripcion,
+					   lote.colr_Id,
+					   colors.colr_Nombre,
 					   adet_Cantidad,				
 					   AsignacionesOrdenDetalle.usua_UsuarioCreacion,
 					   usuarioCreacion.usua_Nombre							AS usuarioCreacionNombre,
@@ -11017,6 +11210,8 @@ BEGIN
 			FROM Prod.tbAsignacionesOrdenDetalle		AS AsignacionesOrdenDetalle	
 			INNER JOIN Prod.tbLotes		lote				ON AsignacionesOrdenDetalle.lote_Id = lote.lote_Id
 			INNER JOIN Acce.tbUsuarios usuarioCreacion		ON AsignacionesOrdenDetalle.usua_UsuarioCreacion = usuarioCreacion.usua_Id
+			INNER JOIN prod.tbMateriales mate				ON lote.mate_Id = mate.mate_Id
+			LEFT JOIN prod.tbColores colors					ON colors.colr_Id = lote.colr_Id
 			LEFT JOIN Acce.tbUsuarios usuarioModificacion	ON AsignacionesOrdenDetalle.usua_UsuarioModificacion = usuarioModificacion.usua_Id
 			WHERE 	AsignacionesOrdenDetalle.asor_Id = asignacionesOrden.asor_Id FOR JSON AUTO) AS Detalles
 
@@ -11034,7 +11229,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Prod.UDP_tbAsignacionesOrden_Insertar --1,'10-16-2004', '10-16-2004', 1,1,1,1, '10-16-2004'  
+CREATE OR ALTER PROCEDURE Prod.UDP_tbAsignacionesOrden_Insertar --1,'10-16-2004', '10-16-2004', 1,1,1,'[{"lote_Id":1,"adet_Cantidad":2},{"lote_Id":2,"adet_Cantidad":2},{"lote_Id":3,"adet_Cantidad":2},{"lote_Id":4,"adet_Cantidad":2},{"lote_Id":7,"adet_Cantidad":2}]',1, '10-16-2004'  
 (
 	@asor_OrdenDetId			INT,
 	@asor_FechaInicio			DATETIME,
@@ -11042,11 +11237,13 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbAsignacionesOrden_Insertar --1,'10-16-2004'
 	@asor_Cantidad				INT,
 	@proc_Id					INT,
 	@empl_Id					INT,
+	@detalles					NVARCHAR(MAX),
 	@usua_UsuarioCreacion		INT,
 	@asor_FechaCreacion			DATETIME
 )
 AS
 BEGIN
+BEGIN TRANSACTION
 	BEGIN TRY
 		INSERT INTO Prod.tbAsignacionesOrden
 					(asor_OrdenDetId,			
@@ -11066,9 +11263,30 @@ BEGIN
 					@usua_UsuarioCreacion,		
 					@asor_FechaCreacion)
 		
-		SELECT SCOPE_IDENTITY() 
+		DECLARE @asor_Id INT = SCOPE_IDENTITY() 
+
+
+INSERT INTO [Prod].[tbAsignacionesOrdenDetalle]
+           ([lote_Id]
+           ,[adet_Cantidad]
+           ,[asor_Id]
+           ,[usua_UsuarioCreacion]
+           ,[adet_FechaCreacion])
+     SELECT *
+           ,@asor_Id
+           ,@usua_UsuarioCreacion	
+		   ,@asor_FechaCreacion
+		   FROM OPENJSON(@detalles, '$.detalles')
+				WITH (
+					 lote_Id INT
+					,adet_Cantidad INT
+				) 
+
+	SELECT SCOPE_IDENTITY() 
+	COMMIT TRAN
 	END TRY
 	BEGIN CATCH
+		 ROLLBACK TRAN
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
 	END CATCH
 END
@@ -11646,7 +11864,7 @@ GO
 
 
 --*****Insertar*****--
-CREATE OR ALTER PROCEDURE Prod.UDP_tbReporteModuloDia_Insertar
+CREATE OR ALTER PROCEDURE Prod.UDP_tbReporteModuloDia_Insertar-- 1, '10/10/1100', 1, 1, 1, '10/10/10'
 @modu_Id				INT, 
 @remo_Fecha				DATE, 
 @remo_TotalDia			INT, 
@@ -11665,6 +11883,9 @@ BEGIN
 		@usua_UsuarioCreacion,	
 		@remo_FechaCreacion
 		)
+
+		SELECT SCOPE_IDENTITY()
+
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE() 
@@ -11717,6 +11938,7 @@ BEGIN
 		SELECT 'Error:' + ERROR_MESSAGE()
 	END CATCH
 END
+GO
 
 --**********REVISION DE CALIDAD**********--
 /*Listar revisión de calidad*/
@@ -13446,7 +13668,7 @@ SELECT	peor_Id,
 		prov.prov_Id, 
 		prov.prov_NombreCompania,
 		prov.prov_NombreContacto,
-		peor_No_Duca, 
+		po.duca_Id, 
 		ciud.ciud_Id,
 		ciud.ciud_Nombre,
 		pais.pais_Codigo,
@@ -13488,7 +13710,7 @@ FROM	Prod.tbPedidosOrden po
 		LEFT JOIN  gral.tbCiudades	  ciud			    ON po.ciud_Id = ciud.ciud_Id
 		LEFT JOIN Gral.tbProvincias   pvin				ON pvin.pvin_Id = ciud.pvin_Id
 		LEFT JOIN Gral.tbPaises	      pais				ON pvin.pais_Id = pais.pais_Id
-		LEFT JOIN  Adua.tbDuca        duca			    ON po.peor_No_Duca = duca.duca_No_Duca
+		LEFT JOIN  Adua.tbDuca        duca			    ON po.duca_Id = duca.duca_Id
 		LEFT JOIN  Acce.tbUsuarios    crea				ON crea.usua_Id = po.usua_UsuarioCreacion 
 		LEFT JOIN  Acce.tbUsuarios    modi				ON modi.usua_Id = po.usua_UsuarioModificacion 	
 END
@@ -13498,7 +13720,7 @@ GO
 
 CREATE OR ALTER PROCEDURE [Prod].[UDP_tbPedidosOrden_Insertar]
 @prov_Id				INT, 
-@peor_No_Duca			NVARCHAR(100), 
+@duca_Id				INT, 
 @ciud_Id				INT,
 @peor_DireccionExacta	NVARCHAR(500),
 @peor_FechaEntrada		DATETIME, 
@@ -13508,9 +13730,9 @@ CREATE OR ALTER PROCEDURE [Prod].[UDP_tbPedidosOrden_Insertar]
 AS
 BEGIN
 	BEGIN TRY
-		INSERT INTO Prod.tbPedidosOrden (prov_Id, peor_No_Duca,ciud_Id,peor_DireccionExacta, peor_FechaEntrada, peor_Obsevaciones, usua_UsuarioCreacion, peor_FechaCreacion)
+		INSERT INTO Prod.tbPedidosOrden (prov_Id, duca_Id,ciud_Id,peor_DireccionExacta, peor_FechaEntrada, peor_Obsevaciones, usua_UsuarioCreacion, peor_FechaCreacion)
 		VALUES	(@prov_Id,				
-				 @peor_No_Duca,	
+				 @duca_Id,	
 				 @ciud_Id,	
 				 @peor_DireccionExacta,
 				 @peor_FechaEntrada,		
@@ -13533,7 +13755,7 @@ GO
 CREATE OR ALTER   PROCEDURE [Prod].[UDP_tbPedidosOrden_Editar]
 @peor_Id					INT, 
 @prov_Id					INT, 
-@peor_No_Duca				NVARCHAR(100), 
+@duca_Id					INT, 
 @ciud_Id					INT,
 @peor_DireccionExacta		NVARCHAR(500),
 @peor_FechaEntrada			DATETIME, 
@@ -13545,7 +13767,7 @@ BEGIN
 	BEGIN TRY
 		UPDATE Prod.tbPedidosOrden 
 		SET prov_Id 				= @prov_Id, 
-		peor_No_Duca				= @peor_No_Duca,
+		duca_Id						= @duca_Id,
 		ciud_Id						= @ciud_Id,
 		peor_DireccionExacta		= @peor_DireccionExacta,
 		peor_FechaEntrada			= @peor_FechaEntrada,	 
@@ -13990,33 +14212,33 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbReporteModuloDiaDetalle_Listar
 @remo_Id		INT
 AS
 BEGIN
-	SELECT	rdet_Id, 
-			remo_Id, 
-			rdet_TotalDia, 
-			rdet_TotalDanado, 
-			OrdenCompra.orco_Id,
-			colores.colr_Nombre,
-			case ordencompradetalle.code_Sexo 
-			when 'M' then 'Masculino'
-			when 'F' then 'Femenino'
-			else ordencompradetalle.code_Sexo end as Sexo,
-			clientes.[clie_Nombre_Contacto],
-			clientes.[clie_RTN],
- 			ReporteModuloDia.code_Id, 
-			ordencompradetalle.esti_Id,
-			estilos.esti_Descripcion,
-			ReporteModuloDia.usua_UsuarioCreacion, 
-			rdet_FechaCreacion, 
-			ReporteModuloDia.usua_UsuarioModificacion, 
-			rdet_FechaModificacion, 
-			rdet_Estado 
-	FROM	Prod.tbReporteModuloDiaDetalle ReporteModuloDia
-			INNER JOIN Prod.tbOrdenCompraDetalles ordencompradetalle  	ON  ReporteModuloDia.code_Id = ordencompradetalle.code_Id 
-			INNER JOIN Prod.tbEstilos			estilos					ON ordencompradetalle.esti_Id = estilos.esti_Id
-			INNER JOIN Prod.tbOrdenCompra		OrdenCompra				ON	ordencompradetalle.orco_Id = OrdenCompra.orco_Id
-			INNER JOIN Prod.tbClientes			clientes				ON  OrdenCompra.orco_IdCliente = clientes.clie_Id
-			INNER JOIN Prod.tbColores			colores					ON	ordencompradetalle.code_Id	= colores.colr_Id
-			WHERE ReporteModuloDia.remo_Id = @remo_Id AND rdet_Estado = 1
+	SELECT    rdet_Id, 
+            remo_Id, 
+            rdet_TotalDia, 
+            rdet_TotalDanado, 
+            OrdenCompra.orco_Id,
+            colores.colr_Nombre,
+            case ordencompradetalle.code_Sexo 
+            when 'M' then 'Masculino'
+            when 'F' then 'Femenino'
+            else ordencompradetalle.code_Sexo end as Sexo,
+            clientes.[clie_Nombre_Contacto],
+            clientes.[clie_RTN],
+             ReporteModuloDia.code_Id, 
+            ordencompradetalle.esti_Id,
+            estilos.esti_Descripcion,
+            ReporteModuloDia.usua_UsuarioCreacion, 
+            rdet_FechaCreacion, 
+            ReporteModuloDia.usua_UsuarioModificacion, 
+            rdet_FechaModificacion, 
+            rdet_Estado 
+    FROM    Prod.tbReporteModuloDiaDetalle ReporteModuloDia
+            INNER JOIN Prod.tbOrdenCompraDetalles ordencompradetalle      ON  ReporteModuloDia.code_Id = ordencompradetalle.code_Id 
+            INNER JOIN Prod.tbEstilos            estilos                    ON ordencompradetalle.esti_Id = estilos.esti_Id
+            INNER JOIN Prod.tbOrdenCompra        OrdenCompra                ON    ordencompradetalle.orco_Id = OrdenCompra.orco_Id
+            INNER JOIN Prod.tbClientes            clientes                ON  OrdenCompra.orco_IdCliente = clientes.clie_Id
+            left JOIN Prod.tbColores            colores                    ON    ordencompradetalle.code_Id    = colores.colr_Id
+            WHERE ReporteModuloDia.remo_Id = @remo_Id AND rdet_Estado = 1
 
 	
 END
@@ -14209,7 +14431,7 @@ BEGIN
 					   @prod_FechaCreacion
 			        )
 		
-		SELECT SCOPE_IDENTITY() AS Resultado
+		SELECT 1
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
@@ -14239,7 +14461,7 @@ BEGIN
                usua_UsuarioModificacion = @usua_UsuarioModificacion,
                prod_FechaModificacion = @prod_FechaModificacion
 		 WHERE prod_Id = @prod_Id
-		SELECT SCOPE_IDENTITY() AS Resultado
+		SELECT 1
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
@@ -14247,9 +14469,27 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE Prod.UDP_tbPedidosOrdenDetalle_Eliminar
+	@prod_Id                    INT	
+AS
+BEGIN
+	BEGIN TRY 
+		UPDATE Prod.tbPedidosOrdenDetalle
+		   SET prod_Estado = 0
+		 WHERE prod_Id = @prod_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE() 
+	END CATCH
+END
+
+GO
 ----------------------------UDPS tbPODetallePorPedidoOrdenDetalle-----------------------------
 --LISTAR
 CREATE OR ALTER PROCEDURE Prod.UDP_tbPODetallePorPedidoOrdenDetalle_Listar
+@prod_Id INT
 AS
 BEGIN
   SELECT    ocpo.ocpo_Id,
@@ -14279,6 +14519,7 @@ BEGIN
 			LEFT JOIN Prod.tbTallas talla					ON code.tall_Id = talla.tall_Id
 			LEFT JOIN Prod.tbColores colr					ON code.colr_Id = colr.colr_Id
 			LEFT JOIN Acce.tbUsuarios usu					ON usu.usua_Id = ocpo.usua_UsuarioCreacion 
+			WHERe prod_Id =@prod_Id
 END 
 GO
 
@@ -14410,7 +14651,7 @@ SELECT
 	   esti.esti_Descripcion,
 
 	   --INFO DUCA (PENDIENTE)
-	   pedidos.peor_No_Duca,
+	   pedidos.duca_Id,
 	   UsuCreacion.usua_Nombre        AS UsuarioCreacionNombre,
 	   lotes.usua_UsuarioCreacion,
 	   lotes.lote_FechaCreacion, 
@@ -14435,7 +14676,7 @@ SELECT
 	   LEFT JOIN Prod.tbColores							AS colr				 ON poDetalle.colr_Id			   = colr.colr_Id
 	   LEFT JOIN Prod.tbOrdenCompra						AS po				 ON poDetpedidoDet.orco_Id		   = po.orco_Id
 	   LEFT JOIN Gral.tbProveedores						AS prov				 ON pedidos.prov_Id			       = prov.prov_Id
-	   LEFT JOIN Adua.tbDuca							AS duca				 ON pedidos.peor_No_Duca		   = duca.duca_No_Duca
+	   LEFT JOIN Adua.tbDuca							AS duca				 ON pedidos.duca_Id				   = duca.duca_Id
 	   LEFT JOIN Acce.tbUsuarios						AS UsuCreacion       ON lotes.usua_UsuarioCreacion     = UsuCreacion.usua_Id
 	   LEFT JOIN Acce.tbUsuarios						AS UsuModificacion   ON lotes.usua_UsuarioModificacion = UsuModificacion.usua_Id
 	   LEFT JOIN Acce.tbUsuarios						AS UsuEliminacion    ON lotes.usua_UsuarioEliminacion  = UsuEliminacion.usua_Id
@@ -15429,10 +15670,30 @@ BEGIN
 	END CATCH
 END
 GO
+
+
+
+--*********************************************************************--
+--------------------- PROC DE DUCA INICIAR --------------------------------------
+CREATE OR ALTER PROC Adua.UDP_tbDUCA_PreInsertarListado
+AS
+BEGIN
+    SELECT
+        DEVA.deva_Id, 
+        ADUAIngreso.adua_Codigo + ' ' + ADUAIngreso.adua_Nombre AS 'adua_IngresoNombre', 
+        ADUADespacho.adua_Codigo + ' ' + ADUADespacho.adua_Nombre AS 'adua_DespachoNombre',
+        DEVA.deva_FechaAceptacion
+    FROM [Adua].[tbDeclaraciones_Valor] DEVA
+    INNER JOIN [Adua].[tbAduanas] ADUAIngreso ON DEVA.deva_AduanaIngresoId = ADUAIngreso.adua_Id
+    INNER JOIN [Adua].[tbAduanas] ADUADespacho ON DEVA.deva_AduanaDespachoId = ADUADespacho.adua_Id
+    LEFT JOIN [Adua].[tbItemsDEVAPorDuca] ITEMSDEVAPorDuca ON DEVA.deva_Id = ITEMSDEVAPorDuca.deva_Id
+    WHERE ITEMSDEVAPorDuca.deva_Id IS NULL; -- Excluir registros que existen en la otra tabla
+END
+
+--------------------- PROC DE DUCA FINALIZAR --------------------------------------
 --*********************************************************************--
 
 -------****************** FILTRADO  DE DATOS ***************----------
-
 
 
 /*------------ PROVINCIAS POR PAIS --------------*/
@@ -15633,4 +15894,171 @@ BEGIN
     SET lote_Stock = lote_Stock + D.ppde_Cantidad 
     FROM Prod.tbLotes L
     INNER JOIN deleted D ON L.lote_Id = D.lote_Id
-END;
+END
+GO 
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbItemsDEVAPorDuca_ListadoDevasPorduca_Id
+	@duca_Id	INT
+AS
+BEGIN
+	 SELECT dedu_Id, 
+			duca_Id, 
+			deva_Id, 
+			usua_UsuarioCreacion, 
+			dedu_FechaCreacion, 
+			usua_UsuarioModificacion, 
+			dedu_FechaModificacion
+	   FROM Adua.tbItemsDEVAPorDuca
+	  WHERE duca_Id = @duca_Id
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UPD_tbItemsDEVAPorDuca_DEVAsPorDUCANo
+	@duca_Id INT
+AS
+BEGIN
+	SELECT [dedu_Id]
+			,DPD.[deva_Id]
+			,DPD.[usua_UsuarioCreacion]
+			,DPD.[dedu_FechaCreacion]
+			,DPD.[usua_UsuarioModificacion]
+			,DPD.[dedu_FechaModificacion]
+			,DPD.duca_Id
+			,deva.deva_Id, 
+			deva.deva_AduanaIngresoId, 
+			aduaIngreso.adua_Nombre				AS adua_IngresoNombre,
+			deva.deva_AduanaDespachoId, 
+			aduaDespacho.adua_Nombre			AS adua_DespachoNombre,
+			deva.deva_DeclaracionMercancia, 
+			deva.deva_FechaAceptacion, 
+			deva.deva_Finalizacion,
+			deva.deva_PagoEfectuado, 
+			deva.pais_ExportacionId, 
+			paix.pais_Codigo + ' - ' + paix.pais_Nombre as pais_ExportacionNombre,
+			deva.deva_FechaExportacion, 
+			deva.mone_Id, 
+			mone.mone_Codigo + ' - ' + mone.mone_Descripcion as monedaNombre,
+			deva.mone_Otra, 
+			deva.deva_ConversionDolares, 
+
+			--Lugares de embarque
+			deva.emba_Id,
+			emba.emba_Codigo,
+			emba.emba_Codigo +' - '+ emba.emba_Descripcion as LugarEmbarque,
+
+			--Nivel comercial del importador
+			impo.nico_Id,
+			nico.nico_Descripcion,
+
+			--datos del importador de la tabla de importador
+			impo.impo_Id, 
+			impo.impo_NumRegistro,
+			impo.impo_RTN				        AS impo_RTN,
+			impo.impo_NivelComercial_Otro,
+
+			--Datos del importador pero de la tabla de declarantes
+			declaImpo.decl_Nombre_Raso			AS impo_Nombre_Raso,
+			declaImpo.decl_Direccion_Exacta		AS impo_Direccion_Exacta,
+			declaImpo.decl_Correo_Electronico	AS impo_Correo_Electronico,
+			declaImpo.decl_Telefono				AS impo_Telefono,
+			declaImpo.decl_Fax					AS impo_Fax,			
+			provimpo.pvin_Id					AS impo_ciudId,
+			provimpo.pvin_Codigo + ' - ' + provimpo.pvin_Nombre AS impo_CiudadNombre,
+			provimpo.pais_Id					AS impo_paisId,
+			impoPais.pais_Codigo + ' - ' + impoPais.pais_Nombre AS impo_PaisNombre,
+			
+
+			--Condiciones comerciales del proveedor
+			prov.coco_Id,			
+			coco.coco_Descripcion,
+
+			--Proveedor 		
+			deva.pvde_Id,		
+			declaProv.decl_NumeroIdentificacion AS prov_NumeroIdentificacion,
+			declaProv.decl_Nombre_Raso			AS prov_Nombre_Raso,
+			declaProv.decl_Direccion_Exacta		AS prov_Direccion_Exacta,
+			declaProv.decl_Correo_Electronico	AS prov_Correo_Electronico,
+			declaProv.decl_Telefono				AS prov_Telefono,
+			declaProv.decl_Fax					AS prov_Fax,
+			prov.pvde_Condicion_Otra,
+			provprove.pvin_Id					AS prov_ciudId,
+			provprove.pvin_Codigo + ' - ' + provprove.pvin_Nombre AS prov_CiudadNombre,
+			provprove.pais_Id					AS prov_paisId,
+			provPais.pais_Codigo + ' - ' + provPais.pais_Nombre AS prov_PaisNombre,
+			
+					
+			--Tipo intermediario 
+			inte.tite_Id,
+			tite.tite_Codigo +' - '+ tite.tite_Descripcion as TipoIntermediario,
+			 
+			  --Datos intermediario tabla intermediario
+			inte.inte_Id, 
+			provInte.pvin_Id					AS inte_ciudId,
+			provInte.pvin_Codigo + ' - ' + provInte.pvin_Nombre AS inte_CiudadNombre,
+			provInte.pais_Id					AS inte_paisId,
+			intePais.pais_Codigo + ' - ' + intePais.pais_Nombre AS inte_PaisNombre,
+			inte.inte_Tipo_Otro,
+
+			 --Datos intermediario tabla declarante
+			declaInte.decl_NumeroIdentificacion AS inte_NumeroIdentificacion,
+			declaInte.decl_Nombre_Raso			AS inte_Nombre_Raso,
+			declaInte.decl_Direccion_Exacta		AS inte_Direccion_Exacta,
+			declaInte.decl_Correo_Electronico	AS inte_Correo_Electronico,
+			declaInte.decl_Telefono				AS inte_Telefono,
+			declaInte.decl_Fax					AS inte_Fax,			
+			
+
+
+			deva.deva_LugarEntrega, 
+			deva.pais_EntregaId, 
+			pais.pais_Codigo + ' - ' + pais.pais_Nombre as pais_EntregaNombre,
+			inco.inco_Id, 
+			inco.inco_Descripcion,
+			deva.inco_Version, 
+			deva.deva_NumeroContrato, 
+			deva.deva_FechaContrato, 
+
+			--Datos forma de envio
+			foen.foen_Id, 
+			foen.foen_Descripcion,
+			deva.deva_FormaEnvioOtra, 
+
+			--Datos forma de pago
+			deva.fopa_Id, 
+			fopa.fopa_Descripcion,
+			deva.deva_FormaPagoOtra 			
+			
+		FROM [Adua].[tbItemsDEVAPorDuca] DPD 
+			INNER JOIN Adua.tbDeclaraciones_Valor deva		ON DPD.deva_Id = deva.deva_Id 
+			LEFT JOIN Adua.tbAduanas aduaIngreso			ON deva.deva_AduanaIngresoId = aduaIngreso.adua_Id
+			LEFT JOIN Adua.tbAduanas aduaDespacho			ON deva.deva_AduanaDespachoId = aduaDespacho.adua_Id
+			LEFT JOIN Adua.tbImportadores impo				ON deva.impo_Id = impo.impo_Id
+			LEFT JOIN Adua.tbDeclarantes declaImpo			ON impo.decl_Id = declaImpo.decl_Id
+			LEFT JOIN Gral.tbProvincias provimpo            ON declaImpo.ciud_Id = provimpo.pvin_Id
+			LEFT JOIN Gral.tbPaises impoPais                ON provimpo.pais_Id = impoPais.pais_Id
+			LEFT JOIN Gral.tbMonedas mone                   ON deva.mone_Id = mone.mone_Id
+			
+			
+			LEFT JOIN Adua.tbNivelesComerciales nico		ON impo.nico_Id = nico.nico_Id
+			LEFT JOIN Adua.tbProveedoresDeclaracion prov	ON prov.pvde_Id = deva.pvde_Id
+			LEFT JOIN Adua.tbDeclarantes declaProv			ON prov.decl_Id = declaProv.decl_Id
+			LEFT JOIN Gral.tbProvincias provprove           ON declaProv.ciud_Id = provprove.pvin_Id
+			LEFT JOIN Gral.tbPaises provPais                ON provprove.pais_Id = provPais.pais_Id
+
+
+			LEFT JOIN Adua.tbCondicionesComerciales coco	ON prov.coco_Id = coco.coco_Id
+			LEFT JOIN Adua.tbIntermediarios inte			ON inte.inte_Id = deva.inte_Id
+			LEFT JOIN Adua.tbTipoIntermediario tite			ON inte.tite_Id = tite.tite_Id
+			LEFT JOIN Adua.tbDeclarantes declaInte			ON declaInte.decl_Id = inte.decl_Id
+			LEFT JOIN Gral.tbProvincias provInte            ON declaInte.ciud_Id = provInte.pvin_Id
+			LEFT JOIN Gral.tbPaises intePais                ON provInte.pais_Id = intePais.pais_Id
+
+			LEFT JOIN Adua.tbIncoterm inco					ON deva.inco_Id = inco.inco_Id
+			LEFT JOIN Gral.tbFormas_Envio foen				ON deva.foen_Id = foen.foen_Id 
+			LEFT JOIN Adua.tbFormasdePago fopa				ON deva.fopa_Id = fopa.fopa_Id
+			LEFT JOIN Gral.tbPaises	pais					ON deva.pais_EntregaId = pais.pais_Id
+			LEFT JOIN Gral.tbPaises	paix					ON deva.pais_ExportacionId	 = paix.pais_Id
+			LEFT JOIN Adua.tbLugaresEmbarque emba			ON deva.emba_Id = emba.emba_Id 
+			WHERE DPD.duca_Id = @duca_Id			
+END
+GO

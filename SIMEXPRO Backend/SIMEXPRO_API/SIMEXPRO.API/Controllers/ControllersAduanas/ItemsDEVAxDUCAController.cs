@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿    using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SIMEXPRO.API.Models.ModelsAduana;
 using SIMEXPRO.BussinessLogic.Services.EventoServices;
@@ -22,6 +22,21 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
         {
             _aduanaServices = AduanaServices;
             _mapper = mapper;
+        }
+
+        [HttpGet("ListarDevaPorDucaNo")]
+        public IActionResult ListarDevaPorDucaNo(int duca_Id)
+        {
+            var listado = _aduanaServices.ListarDeclaraciones_ValorPorDucaNo(duca_Id);
+            return Ok(listado);
+        }
+
+        [HttpGet("ListadoDevasPorducaId")]
+        public IActionResult ListadoDevas(int duca_Id)
+        {
+            var listado = _aduanaServices.ListadoDevasPorducaId(duca_Id);
+
+            return Ok(listado);
         }
 
         [HttpPost("Insertar")]

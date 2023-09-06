@@ -10,6 +10,9 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public int item_Id { get; set; }
         public int fact_Id { get; set; }
         public int item_Cantidad { get; set; }
+        public int item_Cantidad_Bultos { get; set; }
+        public string item_ClaseBulto { get; set; }
+        public string item_Acuerdo { get; set; }
         public decimal? item_PesoNeto { get; set; }
         public decimal? item_PesoBruto { get; set; }
         public int unme_Id { get; set; }
