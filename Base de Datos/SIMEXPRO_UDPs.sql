@@ -11281,7 +11281,7 @@ INSERT INTO [Prod].[tbAsignacionesOrdenDetalle]
 					,adet_Cantidad INT
 				) 
 
-	SELECT 1
+	SELECT SCOPE_IDENTITY() 
 	COMMIT TRAN
 	END TRY
 	BEGIN CATCH

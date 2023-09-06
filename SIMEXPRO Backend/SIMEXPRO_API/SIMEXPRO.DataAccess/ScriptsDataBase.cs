@@ -763,6 +763,11 @@ namespace SIMEXPRO.DataAccess
         public static string Importaciones_Anio = "Adua.UDP_Importaciones_Anio";
         public static string RegimenesAduaneros_CantidadPorcentaje = "Adua.UDP_RegimenesAduaneros_CantidadPorcentaje";
         #endregion
+
+        #region Reportes
+        public static string MaquinasTiempos = "Prod.UPD_Reporte_TiemposMaquinas";
+        #endregion
+
     }
 }
 
