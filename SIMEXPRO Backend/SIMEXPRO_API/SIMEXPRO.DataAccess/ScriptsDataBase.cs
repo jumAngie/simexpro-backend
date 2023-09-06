@@ -411,6 +411,7 @@ namespace SIMEXPRO.DataAccess
         public static string ListarPersonaNatural = "Adua.UDP_tbPersonaNatural_Listar";
         public static string InsertarPersonaNatural = "Adua.UDP_tbPersonaNatural_Insertar";
         public static string EditarPersonaNatural = "Adua.UDP_tbPersonaNatural_Editar";
+        public static string FinalizarPersonaNatural = "Adua.UDP_tbPersonaNatural_Finalizado";
         #endregion
 
         #region Personas

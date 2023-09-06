@@ -82,5 +82,17 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             result.MessageStatus = answer;
             return result;
         }
+        public RequestStatus Finalizar(tbPersonaNatural item)
+        {
+            RequestStatus result = new();
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@pena_Id", item.pena_Id, DbType.Int32, ParameterDirection.Input);
+         
+            var answer = db.QueryFirst<string>(ScriptsDataBase.FinalizarPersonaNatural, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
+        }
     }
 }

@@ -2931,6 +2931,27 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+        public ServiceResult FinalizarPersonaNatural(tbPersonaNatural item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _personaNaturalRepository.Finalizar(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+
+                    return result.Error(map);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region Personas

@@ -3161,7 +3161,8 @@ BEGIN
 				tbpn.usua_UsuarioModificacion			, 
 				usu2.usua_Nombre						AS usuarioModificacion,
 				tbpn.pena_FechaModificacion				, 
-				tbpn.pena_Estado
+				tbpn.pena_Estado						,
+				tbpn.pena_Finalizado
 		FROM	Adua.tbPersonaNatural  tbpn			
 				INNER JOIN Acce.tbUsuarios usu			ON 	tbpn.usua_UsuarioCreacion		= usu.usua_Id 
 				LEFT  JOIN Acce.tbUsuarios usu2			ON	tbpn.usua_UsuarioModificacion	= usu2.usua_Id
@@ -3281,6 +3282,25 @@ BEGIN
 END
 GO
 
+
+--*****Finalizar*****--
+
+CREATE OR ALTER  PROCEDURE [Adua].[UDP_tbPersonaNatural_Finalizado]
+	@pena_Id	INT
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE [Adua].[tbPersonaNatural]
+		SET	   [pena_Finalizado] = 1
+		WHERE  pena_Id = @pena_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error:' + ERROR_MESSAGE()
+	END CATCH
+END
+GO
 --*************** UDPS Para Tabla Persona Juridica ************--
 
 /*Listar Persona Juridica*/
