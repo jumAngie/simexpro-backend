@@ -3646,7 +3646,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
 
         #region ItemsDEVAxDUCA
 
-        public ServiceResult ListarDeclaraciones_ValorPorDucaNo(string DucaNo)
+        public ServiceResult ListarDeclaraciones_ValorPorDucaNo(int DucaNo)
         {
             var result = new ServiceResult();
             try

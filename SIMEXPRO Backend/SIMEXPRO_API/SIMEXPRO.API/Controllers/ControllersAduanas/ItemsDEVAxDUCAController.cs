@@ -25,7 +25,7 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
         }
 
         [HttpGet("ListarDevaPorDucaNo")]
-        public IActionResult ListarDevaPorDucaNo(string DucaNo)
+        public IActionResult ListarDevaPorDucaNo(int DucaNo)
         {
             var listado = _aduanaServices.ListarDeclaraciones_ValorPorDucaNo(DucaNo);
             return Ok(listado);

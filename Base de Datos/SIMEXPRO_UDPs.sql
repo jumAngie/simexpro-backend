@@ -15871,7 +15871,7 @@ END;
 GO 
 
 CREATE OR ALTER PROCEDURE Adua.UPD_tbItemsDEVAPorDuca_DEVAsPorDUCANo
-@duca_No_DUCA NVARCHAR(100)
+@duca_Id INT
 AS
 BEGIN
 	SELECT [dedu_Id]
@@ -15880,7 +15880,7 @@ BEGIN
 			,DPD.[dedu_FechaCreacion]
 			,DPD.[usua_UsuarioModificacion]
 			,DPD.[dedu_FechaModificacion]
-			,DPD.[duca_No_DUCA]
+			,DPD.[duca_Id]
 			,deva.deva_Id, 
 			deva.deva_AduanaIngresoId, 
 			aduaIngreso.adua_Nombre				AS adua_IngresoNombre,
@@ -16016,7 +16016,7 @@ BEGIN
 			LEFT JOIN Gral.tbPaises	pais					ON deva.pais_EntregaId = pais.pais_Id
 			LEFT JOIN Gral.tbPaises	paix					ON deva.pais_ExportacionId	 = paix.pais_Id
 			LEFT JOIN Adua.tbLugaresEmbarque emba			ON deva.emba_Id = emba.emba_Id 
-			WHERE DPD.[duca_No_DUCA] = @duca_No_DUCA
+			WHERE DPD.[duca_Id] = @duca_Id
 			
 			END
 			
