@@ -766,6 +766,7 @@ namespace SIMEXPRO.DataAccess
 
         #region Reportes
         public static string MaquinasTiempos = "Prod.UPD_Reporte_TiemposMaquinas";
+        public static string ModuloProduccion = "Prod.UDP_Reporte_ProduccionPorModulo";
         #endregion
 
     }

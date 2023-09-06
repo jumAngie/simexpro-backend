@@ -30,6 +30,14 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             var listado = _produccionServices.TiemposMaquinas(data);
             return Ok(listado);
         }
+        
+        [HttpPost("ProduccionPorModulo")]
+        public IActionResult ModuloProduccion(ReportesViewModel reporte)
+        {
+            var data = _mapper.Map<tbReportes>(reporte);
+            var listado = _produccionServices.ModuloProduccion(data);
+            return Ok(listado);
+        }
 
     }
 }

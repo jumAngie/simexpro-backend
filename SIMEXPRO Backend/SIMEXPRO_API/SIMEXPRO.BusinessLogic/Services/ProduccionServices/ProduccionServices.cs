@@ -3700,6 +3700,20 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
                 return result.Error(ex.Message);
             }
         }
+        
+        public ServiceResult ModuloProduccion(tbReportes reportes)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _reportesRepository.ModuloProduccion(reportes);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
 
 
         #endregion
