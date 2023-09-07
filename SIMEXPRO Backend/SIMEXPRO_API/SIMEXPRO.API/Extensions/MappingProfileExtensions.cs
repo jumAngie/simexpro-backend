@@ -135,6 +135,10 @@ namespace SIMEXPRO.API.Extentions
             #region Graficas
             CreateMap<GraficasViewModel, tbGraficas>().ReverseMap();
             #endregion
+
+            #region
+            CreateMap<ReportesViewModel, tbReportes>().ReverseMap();
+            #endregion
         }
     }
 }

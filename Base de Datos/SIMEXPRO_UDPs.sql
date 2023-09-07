@@ -3346,11 +3346,6 @@ BEGIN
 			,personaJuridica.peju_CorreoElectronico 
 			,personaJuridica.peju_CorreoElectronicoAlternativo
 
-			,personaJuridica.peju_DNIRepresentante
-			,personaJuridica.peju_RTNSociedadMercantil                --Tab 5
-			,personaJuridica.peju_EscrituraPublica
-			,personaJuridica.peju_RTNReprsentanteLegal
-
 			,personaJuridica.usua_UsuarioCreacion
 			,usuarioCreacion.usua_Nombre				as usuarioCreacionNombre
 			,personaJuridica.peju_FechaCreacion
@@ -3358,6 +3353,7 @@ BEGIN
 			,usuarioModificacion.usua_Nombre			as usuarioModificaNombre
 			,personaJuridica.peju_FechaModificacion
 			,personaJuridica.peju_Estado
+			,personaJuridica.peju_ContratoFinalizado
 			FROM	    Adua.tbPersonaJuridica			personaJuridica
 			LEFT JOIN	Adua.tbPersonas					personas								ON personaJuridica.pers_Id						= personas.pers_Id
 			LEFT JOIN	Gral.tbOficinas					oficina									ON personas.ofic_Id								= oficina.ofic_Id
@@ -3381,7 +3377,7 @@ END
 GO
 
 /*Insertar Persona Juridica*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab1 
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab1 --'18042001059874',2,2,1,2,'09-06-2023'
 
   @pers_RTN                 NVARCHAR(40),
   @ofic_Id                  INT,
@@ -3419,7 +3415,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab2
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab2 --45,2,2,2,'Local Numero 10','Frente a Comercial Pineda'
 (
   @peju_Id                          INT,
   @ciud_Id					        INT,
@@ -3453,7 +3449,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab3
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab3 --45,1,2,2,'Departamento 11','Frente a Pollos Wicho'
 (
   @peju_Id                            INT,
   @peju_CiudadIdRepresentante	      INT,
@@ -3486,7 +3482,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab4
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab4 --45,'+504 8895-6574','+504 8569-8514', '+504 2365-8574','ianh8902@gmail.com', 'ianalex2210@gmail.com'
 ( 
   @peju_Id                                INT,
   @peju_TelefonoEmpresa                   NVARCHAR(200),
@@ -3524,29 +3520,6 @@ BEGIN
     INSERT INTO [Adua].[tbDocumentosContratos]([peju_Id],[doco_Numero_O_Referencia], [doco_TipoDocumento], [usua_UsuarioCreacion], [doco_FechaCreacion],[doco_URLImagen], [doco_NombreImagen])
 	VALUES (@peju_Id,@doco_Numero_O_Referencia,@doco_TipoDocumento,@usua_UsuarioCreacion,@doco_FechaCreacion, @doco_URLImagen, @doco_NombreImagen)
 END;
-GO
-
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab5
-( 
-  @peju_Id                                INT,
-  @peju_RTNSociedadMercantil              NVARCHAR(20),
-  @peju_DNIRepresentante                  NVARCHAR(20),
-  @peju_RTNReprsentanteLegal              NVARCHAR(20),
-  @peju_EscrituraPublica                  NVARCHAR(20)
-)
-AS
-BEGIN
-	BEGIN TRY
-	  UPDATE [Adua].[tbPersonaJuridica]
-	     SET  [peju_RTNSociedadMercantil] = @peju_RTNSociedadMercantil , peju_DNIRepresentante = @peju_DNIRepresentante,
-		     [peju_EscrituraPublica] = @peju_EscrituraPublica, peju_RTNReprsentanteLegal = @peju_RTNReprsentanteLegal
-      WHERE peju_Id =  @peju_Id
-	   SELECT 1
-	END TRY
-	BEGIN CATCH
-		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
-	END CATCH
-END
 GO
 
 /*Editar Persona Juridica*/
@@ -3591,6 +3564,23 @@ BEGIN
         ROLLBACK TRANSACTION;
         SELECT 'Mensaje de error: ' + ERROR_MESSAGE() AS Resultado;
     END CATCH
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_ContratoFinalizado 
+	@peju_Id	INT
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE Adua.tbPersonaJuridica
+		SET	   [peju_ContratoFinalizado] = 1
+		WHERE  peju_Id = @peju_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error:' + ERROR_MESSAGE()
+	END CATCH
 END
 GO
 --**********LUGARES EMBARQUE**********--
@@ -7999,6 +7989,7 @@ BEGIN
 		  duca.usua_UsuarioModificacion, 
 		  usu2.usua_Nombre,
 		  duca_FechaModificacion, 
+		  duca_Finalizado
 		  duca_Estado
 	 FROM Adua.tbDuca duca 
 LEFT JOIN Acce.tbUsuarios				AS usu1		ON duca.usua_UsuarioCreacion = usu1.usua_Id
@@ -8386,6 +8377,23 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_Finalizado
+	@duca_Id		INT
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE [Adua].[tbDuca]
+		  SET  [duca_Finalizado] = 1
+		  WHERE [duca_Id] = @duca_Id
+
+		  SELECT 1
+ 	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE()	
+	END CATCH
+END 
+
+GO
 
 --************ARCELES******************--
 /*Listar Aranceles Todos*/
@@ -11281,7 +11289,7 @@ INSERT INTO [Prod].[tbAsignacionesOrdenDetalle]
 					,adet_Cantidad INT
 				) 
 
-	SELECT 1
+	SELECT SCOPE_IDENTITY() 
 	COMMIT TRAN
 	END TRY
 	BEGIN CATCH
@@ -14430,7 +14438,7 @@ BEGIN
 					   @prod_FechaCreacion
 			        )
 		
-		SELECT SCOPE_IDENTITY() AS Resultado
+		SELECT 1
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
@@ -14460,7 +14468,7 @@ BEGIN
                usua_UsuarioModificacion = @usua_UsuarioModificacion,
                prod_FechaModificacion = @prod_FechaModificacion
 		 WHERE prod_Id = @prod_Id
-		SELECT SCOPE_IDENTITY() AS Resultado
+		SELECT 1
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
@@ -14468,9 +14476,27 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE Prod.UDP_tbPedidosOrdenDetalle_Eliminar
+	@prod_Id                    INT	
+AS
+BEGIN
+	BEGIN TRY 
+		UPDATE Prod.tbPedidosOrdenDetalle
+		   SET prod_Estado = 0
+		 WHERE prod_Id = @prod_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE() 
+	END CATCH
+END
+
+GO
 ----------------------------UDPS tbPODetallePorPedidoOrdenDetalle-----------------------------
 --LISTAR
 CREATE OR ALTER PROCEDURE Prod.UDP_tbPODetallePorPedidoOrdenDetalle_Listar
+@prod_Id INT
 AS
 BEGIN
   SELECT    ocpo.ocpo_Id,
@@ -14500,6 +14526,7 @@ BEGIN
 			LEFT JOIN Prod.tbTallas talla					ON code.tall_Id = talla.tall_Id
 			LEFT JOIN Prod.tbColores colr					ON code.colr_Id = colr.colr_Id
 			LEFT JOIN Acce.tbUsuarios usu					ON usu.usua_Id = ocpo.usua_UsuarioCreacion 
+			WHERe prod_Id =@prod_Id
 END 
 GO
 
@@ -15292,36 +15319,6 @@ GO
 
 --Listar Modelos Maquina
 
-/*Ejecutar procedimiento de listar ModelosMaquina*/
-CREATE OR ALTER PROCEDURE Prod.UDP_tbModelosMaquina_Listar
-AS
-BEGIN
-	SELECT	moma.mmaq_Id,
-		    moma.mmaq_Nombre,
-		    moma.mmaq_Imagen,
-			moma.marq_Id,       
-		    mrqu.marq_Nombre ,                         
-			moma.func_Id,
-		    fuma.func_Nombre      ,                    
-			moma.usua_UsuarioCreacion,
-			usu.usua_Nombre         ,                  
-			moma.mmaq_FechaCreacion,
-			moma.usua_UsuarioModificacion,
-			usu1.usua_Nombre                          AS UsuarioModificacion,
-			moma.mmaq_FechaModificacion,
-			moma.usua_UsuarioEliminacion,
-			usuEli.usua_Nombre                        AS usuarioEliminacionNombre,
-			moma.mmaq_FechaEliminacion,
-            moma.mmaq_Estado
-  FROM	    Prod.tbModelosMaquina moma  
-            INNER JOIN Prod.tbFuncionesMaquina fuma    ON moma.func_Id                  = fuma.func_Id 
-			INNER JOIN Acce.tbUsuarios usu             ON usu.usua_Id                   = moma.usua_UsuarioCreacion 
-			LEFT JOIN Acce.tbUsuarios usu1             ON usu1.usua_UsuarioModificacion = moma.usua_UsuarioModificacion
-			LEFT JOIN Acce.tbUsuarios usuEli           ON usuEli.usua_Id                = moma.usua_UsuarioEliminacion
-			INNER JOIN Prod.tbMarcasMaquina	mrqu       ON mrqu.marq_Id                  = moma.marq_Id 
-			WHERE moma.mmaq_Estado                                                      = 1
-END
-GO
 
 /*Insertar procedimiento de listar ModelosMaquina*/
 CREATE OR ALTER PROCEDURE Prod.UDP_tbModelosMaquina_Insertar 
@@ -15657,23 +15654,23 @@ GO
 --------------------- PROC DE DUCA INICIAR --------------------------------------
 CREATE OR ALTER PROC Adua.UDP_tbDUCA_PreInsertarListado
 AS
-	BEGIN
-		SELECT	deva_Id, 
-				ADUAIngreso.adua_Codigo + ' ' +  ADUAIngreso.adua_Nombre AS 'AduanaIngreso', 
-				ADUADespacho.adua_Codigo + ' ' +  ADUADespacho.adua_Nombre AS 'AduanaDespacho',
-				DEVA.deva_FechaAceptacion
-		FROM [Adua].[tbDeclaraciones_Valor] DEVA					INNER JOIN [Adua].[tbAduanas] ADUAIngreso
-		ON	 DEVA.deva_AduanaIngresoId = ADUAIngreso.adua_Id		INNER JOIN [Adua].[tbAduanas] ADUADespacho
-		ON	 DEVA.deva_AduanaDespachoId = ADUADespacho.adua_Id
+BEGIN
+    SELECT
+        DEVA.deva_Id, 
+        ADUAIngreso.adua_Codigo + ' ' + ADUAIngreso.adua_Nombre AS 'adua_IngresoNombre', 
+        ADUADespacho.adua_Codigo + ' ' + ADUADespacho.adua_Nombre AS 'adua_DespachoNombre',
+        DEVA.deva_FechaAceptacion
+    FROM [Adua].[tbDeclaraciones_Valor] DEVA
+    INNER JOIN [Adua].[tbAduanas] ADUAIngreso ON DEVA.deva_AduanaIngresoId = ADUAIngreso.adua_Id
+    INNER JOIN [Adua].[tbAduanas] ADUADespacho ON DEVA.deva_AduanaDespachoId = ADUADespacho.adua_Id
+    LEFT JOIN [Adua].[tbItemsDEVAPorDuca] ITEMSDEVAPorDuca ON DEVA.deva_Id = ITEMSDEVAPorDuca.deva_Id
+    WHERE ITEMSDEVAPorDuca.deva_Id IS NULL; -- Excluir registros que existen en la otra tabla
 END
+
 --------------------- PROC DE DUCA FINALIZAR --------------------------------------
 --*********************************************************************--
 
-
-
-
 -------****************** FILTRADO  DE DATOS ***************----------
-
 
 
 /*------------ PROVINCIAS POR PAIS --------------*/

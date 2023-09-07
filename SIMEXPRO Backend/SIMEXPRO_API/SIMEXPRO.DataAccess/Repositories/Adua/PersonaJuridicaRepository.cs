@@ -91,10 +91,10 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
             parametros.Add("@peju_Id", item.peju_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@peju_RTNSociedadMercantil", item.peju_RTNSociedadMercantil, DbType.String, ParameterDirection.Input);
-            parametros.Add("@peju_RTNReprsentanteLegal", item.peju_RTNReprsentanteLegal, DbType.String, ParameterDirection.Input);
-            parametros.Add("@peju_DNIRepresentante", item.peju_DNIRepresentante, DbType.String, ParameterDirection.Input);
-            parametros.Add("@peju_EscrituraPublica", item.peju_EscrituraPublica, DbType.String, ParameterDirection.Input);
+            parametros.Add("@doco_URLImagen", item.doco_URLImagen, DbType.String, ParameterDirection.Input);
+            parametros.Add("@doco_NombreImagen", item.doco_NombreImagen, DbType.String, ParameterDirection.Input);
+            parametros.Add("@doco_Numero_O_Referencia", item.doco_Numero_O_Referencia, DbType.String, ParameterDirection.Input);
+            parametros.Add("@doco_TipoDocumento", item.doco_TipoDocumento, DbType.String, ParameterDirection.Input);
 
             var respuesta = db.QueryFirst<string>(ScriptsDataBase.InsertarPersonaJuridicaTap5, parametros, commandType: CommandType.StoredProcedure);
             return new RequestStatus()
@@ -128,6 +128,16 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return db.Query<tbPersonaJuridica>(ScriptsDataBase.ListarPersonaJuridica, null, commandType: CommandType.StoredProcedure);
         }
 
+        public RequestStatus FinalizarContrato(tbPersonaJuridica item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@peju_Id", item.peju_Id, DbType.Int32, ParameterDirection.Input);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.FinalizarPersonaJuridica, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
+        }
         public RequestStatus Update(tbPersonaJuridica item)
         {
             RequestStatus result = new();

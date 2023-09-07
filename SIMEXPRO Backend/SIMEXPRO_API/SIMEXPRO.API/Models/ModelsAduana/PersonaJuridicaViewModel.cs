@@ -52,21 +52,15 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public string doco_URLImagen { get; set; }
         public string doco_NombreImagen { get; set; }
         public string doco_Numero_O_Referencia { get; set; }
-        public string @doco_TipoDocumento { get; set; }
-        public string peju_RTNReprsentanteLegal { get; set; }
-        public string peju_RTNSociedadMercantil { get; set; }
-        public string peju_DNIRepresentante { get; set; }
-        public string peju_EscrituraPublica { get; set; }
+        public string doco_TipoDocumento { get; set; }
+        public bool peju_ContratoFinalizado { get; set; }
         public string peju_NumeroLocalApart { get; set; }
-
         public int usua_UsuarioCreacion { get; set; }
-      
         public string usuarioCreacionNombre { get; set; }
         public DateTime peju_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }
         public string usuarioModificaNombre { get; set; }
         public DateTime? peju_FechaModificacion { get; set; }
         public bool? peju_Estado { get; set; }
-
     }
 }

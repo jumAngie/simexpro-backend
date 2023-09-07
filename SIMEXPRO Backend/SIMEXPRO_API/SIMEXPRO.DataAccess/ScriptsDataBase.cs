@@ -283,6 +283,7 @@ namespace SIMEXPRO.DataAccess
 
         #region Duca
         public static string ListarDuca = "Adua.UDP_tbDuca_Listar";
+        public static string ListarDevaNoDuca = "Adua.UDP_tbDUCA_PreInsertarListado";
 
         public static string PreInsertDuca = "Adua.UDP_tbDuca_PreInsertar";
 
@@ -294,6 +295,8 @@ namespace SIMEXPRO.DataAccess
 
         public static string InsertarDucaTAP3 = "Adua.UDP_tbDuca_InsertarTab3";
         public static string EditarDucaTAP3 = "Adua.UDP_tbDuca_EditarTab3";
+
+        public static string FinalizarDuca = "Adua.UDP_tbDuca_Finalizado";
         #endregion
 
         #region Estado Boletin
@@ -404,6 +407,7 @@ namespace SIMEXPRO.DataAccess
         public static string InsertarPersonaJuridicaTap4 = "Adua.UDP_tbPersonaJuridica_InsertarTab4";
         public static string InsertarPersonaJuridicaTap5 = "Adua.UDP_tbPersonaJuridica_InsertarTab5";
         public static string EditarPersonaJuridica = "Adua.UDP_tbPersonaJuridica_Editar";
+        public static string FinalizarPersonaJuridica = "Adua.UDP_tbPersonaJuridica_ContratoFinalizado";
         #endregion
 
         #region Persona Natural
@@ -684,6 +688,7 @@ namespace SIMEXPRO.DataAccess
         public static string InsertarPedidosOrdenDetalles = "Prod.UDP_tbPedidosOrdenDetalle_Insertar";
         public static string EditarPedidosOrdenDetalles = "Prod.UDP_tbPedidosOrdenDetalle_Editar";
         public static string PedidosOrdenDetallesFind = "Prod.UDP_tbPedidosOrdenDetalle_Find";
+        public static string PedidosOrdenDetallesEliminar = "Prod.UDP_tbPedidosOrdenDetalle_Eliminar";
         #endregion
 
         #region Pedidos Produccion
@@ -763,6 +768,12 @@ namespace SIMEXPRO.DataAccess
         public static string Importaciones_Anio = "Adua.UDP_Importaciones_Anio";
         public static string RegimenesAduaneros_CantidadPorcentaje = "Adua.UDP_RegimenesAduaneros_CantidadPorcentaje";
         #endregion
+
+        #region Reportes
+        public static string MaquinasTiempos = "Prod.UPD_Reporte_TiemposMaquinas";
+        public static string ModuloProduccion = "Prod.UDP_Reporte_ProduccionPorModulo";
+        #endregion
+
     }
 }
 

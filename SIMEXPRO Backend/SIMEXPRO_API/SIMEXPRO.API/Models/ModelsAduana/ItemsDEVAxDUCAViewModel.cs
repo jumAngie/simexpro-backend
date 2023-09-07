@@ -8,7 +8,7 @@ namespace SIMEXPRO.API.Models.ModelsAduana
     public class ItemsDEVAxDUCAViewModel
     {
         public int dedu_Id { get; set; }
-        public string duca_No_DUCA { get; set; }
+        public int duca_Id { get; set; }
         public int? deva_Id { get; set; }
         public int? usua_UsuarioCreacion { get; set; }
         public DateTime? dedu_FechaCreacion { get; set; }

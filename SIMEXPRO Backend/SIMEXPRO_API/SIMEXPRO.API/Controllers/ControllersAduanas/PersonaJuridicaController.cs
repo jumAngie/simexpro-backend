@@ -79,6 +79,14 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(respuesta);
         }
 
+        [HttpPost("FinalizarContratoJuridica")]
+        public IActionResult FinalizarContratoJuridica(PersonaJuridicaViewModel personaJuridica)
+        {
+            var mapped = _mapper.Map<tbPersonaJuridica>(personaJuridica);
+            var datos = _aduanaServices.FinalizarContrato(mapped);
+            return Ok(datos);
+        }
+
         [HttpPost("Eliminar")]
         public IActionResult Delete(PersonaJuridicaViewModel concepto)
         {
