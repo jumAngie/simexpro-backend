@@ -42,6 +42,10 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public int Total { get; set; }
         [NotMapped]
+        public int prod_Cantidad { get; set; }
+        [NotMapped]
+        public int prod_Precio { get; set; }
+        [NotMapped]
         public string prov_NombreContacto { get; set; }
         [NotMapped]
         public int prov_Ciudad { get; set; }

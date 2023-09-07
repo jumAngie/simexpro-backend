@@ -34,6 +34,8 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public string empl_Creador { get; set; }
         public string duca_No_Duca { get; set; }
         public string prov_Telefono { get; set; }
+        public int prod_Precio { get; set; }
+        public int prod_Cantidad { get; set; }
 
         public string prov_NombreCompania { get; set; }
         public string prov_NombreContacto { get; set; }
