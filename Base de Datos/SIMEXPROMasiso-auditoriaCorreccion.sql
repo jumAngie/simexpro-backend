@@ -1767,7 +1767,11 @@ CREATE TABLE Adua.tbPersonaNatural (
   	pena_ArchivoDNI				NVARCHAR(MAX) NOT NULL,
   	pena_NumeroRecibo			VARCHAR(100) NOT NULL,
   	pena_ArchivoNumeroRecibo	NVARCHAR(MAX) NOT NULL,
-  
+
+    pena_NombreArchDNI			NVARCHAR(200),
+	pena_NombreArchRTN			NVARCHAR(200),
+	pena_NombreArchRecibo		NVARCHAR(200),
+
   	usua_UsuarioCreacion       	INT NOT NULL,
   	pena_FechaCreacion         	DATETIME NOT NULL,
   	usua_UsuarioModificacion   	INT DEFAULT NULL,
