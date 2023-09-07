@@ -37,6 +37,9 @@ namespace SIMEXPRO.Entities.Entities
         public DateTime? pena_FechaModificacion { get; set; }
         public bool? pena_Estado { get; set; }
         public bool? pena_Finalizado { get; set; }
+        public string pena_NombreArchRTN { get; set; }
+        public string pena_NombreArchRecibo { get; set; }
+        public string pena_NombreArchDNI { get; set; }
 
         [NotMapped]
         public string usuarioCreacion { get; set; }

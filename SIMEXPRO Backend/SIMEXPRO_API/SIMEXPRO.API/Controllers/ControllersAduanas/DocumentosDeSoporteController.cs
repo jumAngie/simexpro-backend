@@ -39,5 +39,13 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             var respuesta = _aduanaServices.InsertarDocumentosdeSoporte(item);
             return Ok(respuesta);
         }
+
+        [HttpPost("Eliminar")]
+        public IActionResult Eliminar(int doso_Id)
+        {
+            var respuesta = _aduanaServices.EliminarDocumentosdeSoporte(doso_Id);
+
+            return Ok(respuesta);
+        }
     }
 }

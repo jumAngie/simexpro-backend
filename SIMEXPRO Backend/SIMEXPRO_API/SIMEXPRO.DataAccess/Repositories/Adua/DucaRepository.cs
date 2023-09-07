@@ -255,15 +255,18 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             };
         }
 
-        public RequestStatus FinalizarDuca(tbDuca item)
+        public RequestStatus FinalizarDuca(int duca_Id)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
-            RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
-            parametros.Add("@duca_Id", item.duca_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@duca_Id", duca_Id, DbType.Int32, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.FinalizarDuca, parametros, commandType: CommandType.StoredProcedure);
-            result.MessageStatus = answer;
-            return result;
+            
+            return new RequestStatus() 
+            { 
+                CodeStatus = answer != "1" ? 0 : int.Parse(answer),
+                MessageStatus = answer
+            };
         }
     }
 }

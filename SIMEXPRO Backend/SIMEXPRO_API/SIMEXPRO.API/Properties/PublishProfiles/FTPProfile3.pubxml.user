@@ -7,7 +7,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAPAsVh3vlXk223Q51rwUbYgAAAAACAAAAAAAQZgAAAAEAACAAAABdUEP3ngJ1V/CgmIa2Zp/oDwpSOclOZIjRU8NzVotgOwAAAAAOgAAAAAIAACAAAAA8YHEuTg0fnuzSlLNNYEiarwyAeby7HKumUocPjY6pgSAAAACnHdVgXz+UlukBVh58FYfgCZA2hpMz/DRoBGnW4xQER0AAAAAS5gO1jzOl6bm6GY6Q7b3w+RntpMJlOLiNBvYQtSJ4kQlNzhCntiluGVXuLNmjiK+WY+1ZTyTGBvQop98Y2Wnf</EncryptedPassword>
-    <History>True|2023-09-07T05:44:56.2675546Z;True|2023-09-06T23:42:28.2736379-06:00;True|2023-09-06T23:40:24.0267433-06:00;False|2023-09-06T23:38:46.1143120-06:00;False|2023-09-06T23:35:47.1551332-06:00;False|2023-09-06T23:33:09.7838614-06:00;True|2023-09-06T21:31:57.5281294-06:00;False|2023-09-06T21:28:00.7436313-06:00;True|2023-09-06T14:29:38.6475592-06:00;True|2023-09-06T14:27:41.7928300-06:00;False|2023-09-06T14:26:25.5037663-06:00;False|2023-09-06T14:24:19.8165297-06:00;</History>
+    <History>True|2023-09-07T15:06:18.0565693Z;True|2023-09-06T23:44:56.2675546-06:00;True|2023-09-06T23:42:28.2736379-06:00;True|2023-09-06T23:40:24.0267433-06:00;False|2023-09-06T23:38:46.1143120-06:00;False|2023-09-06T23:35:47.1551332-06:00;False|2023-09-06T23:33:09.7838614-06:00;True|2023-09-06T21:31:57.5281294-06:00;False|2023-09-06T21:28:00.7436313-06:00;True|2023-09-06T14:29:38.6475592-06:00;True|2023-09-06T14:27:41.7928300-06:00;False|2023-09-06T14:26:25.5037663-06:00;False|2023-09-06T14:24:19.8165297-06:00;</History>
     <_PublishTargetUrl>ftp://155.254.244.28/www.practicaAcademia.somee.com</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
@@ -15,10 +15,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/31/2023 03:21:55</publishTime>
     </File>
     <File Include="AutoMapper.dll">
-      <publishTime>01/05/2022 09:27:54</publishTime>
+      <publishTime>05/01/2022 09:27:54</publishTime>
     </File>
     <File Include="AutoMapper.Extensions.Microsoft.DependencyInjection.dll">
-      <publishTime>08/12/2019 07:19:42</publishTime>
+      <publishTime>12/08/2019 07:19:42</publishTime>
     </File>
     <File Include="Dapper.dll">
       <publishTime>06/20/2023 06:37:10</publishTime>
@@ -30,10 +30,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>04/15/2022 16:18:12</publishTime>
     </File>
     <File Include="Microsoft.Azure.KeyVault.dll">
-      <publishTime>02/03/2020 13:31:18</publishTime>
+      <publishTime>03/02/2020 13:31:18</publishTime>
     </File>
     <File Include="Microsoft.Azure.KeyVault.WebKey.dll">
-      <publishTime>02/03/2020 13:31:14</publishTime>
+      <publishTime>03/02/2020 13:31:14</publishTime>
     </File>
     <File Include="Microsoft.Azure.Services.AppAuthentication.dll">
       <publishTime>06/13/2018 11:39:42</publishTime>
@@ -174,37 +174,37 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/15/2019 02:53:46</publishTime>
     </File>
     <File Include="SIMEXPRO.API.deps.json">
-      <publishTime>09/06/2023 23:43:21</publishTime>
+      <publishTime>09/07/2023 09:04:36</publishTime>
     </File>
     <File Include="SIMEXPRO.API.dll">
-      <publishTime>09/06/2023 23:43:19</publishTime>
+      <publishTime>09/07/2023 09:04:33</publishTime>
     </File>
     <File Include="SIMEXPRO.API.exe">
-      <publishTime>09/06/2023 23:43:19</publishTime>
+      <publishTime>09/07/2023 09:04:33</publishTime>
     </File>
     <File Include="SIMEXPRO.API.pdb">
-      <publishTime>09/06/2023 23:43:18</publishTime>
+      <publishTime>09/07/2023 09:04:33</publishTime>
     </File>
     <File Include="SIMEXPRO.API.runtimeconfig.json">
       <publishTime>08/31/2023 03:53:19</publishTime>
     </File>
     <File Include="SIMEXPRO.BusinessLogic.dll">
-      <publishTime>09/06/2023 23:31:42</publishTime>
+      <publishTime>09/07/2023 09:04:31</publishTime>
     </File>
     <File Include="SIMEXPRO.BusinessLogic.pdb">
-      <publishTime>06/09/2023 23:31:42</publishTime>
+      <publishTime>09/07/2023 09:04:31</publishTime>
     </File>
     <File Include="SIMEXPRO.DataAccess.dll">
-      <publishTime>09/06/2023 23:31:42</publishTime>
+      <publishTime>09/07/2023 09:04:31</publishTime>
     </File>
     <File Include="SIMEXPRO.DataAccess.pdb">
-      <publishTime>06/09/2023 23:31:42</publishTime>
+      <publishTime>09/07/2023 09:04:31</publishTime>
     </File>
     <File Include="SIMEXPRO.Entities.dll">
-      <publishTime>09/06/2023 23:24:21</publishTime>
+      <publishTime>09/07/2023 09:04:30</publishTime>
     </File>
     <File Include="SIMEXPRO.Entities.pdb">
-      <publishTime>06/09/2023 23:24:20</publishTime>
+      <publishTime>09/07/2023 09:04:30</publishTime>
     </File>
     <File Include="Swashbuckle.AspNetCore.Swagger.dll">
       <publishTime>09/23/2020 06:47:20</publishTime>
@@ -240,7 +240,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/18/2022 10:32:24</publishTime>
     </File>
     <File Include="web.config">
-      <publishTime>09/06/2023 23:43:21</publishTime>
+      <publishTime>09/07/2023 09:04:36</publishTime>
     </File>
   </ItemGroup>
 </Project>

@@ -41,6 +41,9 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@pena_ArchivoDNI", item.pena_ArchivoDNI, DbType.String, ParameterDirection.Input);
             parametros.Add("@pena_NumeroRecibo", item.pena_NumeroRecibo, DbType.String, ParameterDirection.Input);
             parametros.Add("@pena_ArchivoNumeroRecibo", item.pena_ArchivoNumeroRecibo, DbType.String, ParameterDirection.Input);
+            parametros.Add("@pena_NombreArchRTN", item.pena_NombreArchRTN, DbType.String, ParameterDirection.Input);
+            parametros.Add("@pena_NombreArchRecibo", item.pena_NombreArchRecibo, DbType.String, ParameterDirection.Input);
+            parametros.Add("@pena_NombreArchDNI", item.pena_ArchivoNumeroRecibo, DbType.String, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@pena_FechaCreacion", item.pena_FechaCreacion, DbType.String, ParameterDirection.Input);
 
@@ -75,6 +78,9 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@pena_ArchivoDNI", item.pena_ArchivoDNI, DbType.String, ParameterDirection.Input);
             parametros.Add("@pena_NumeroRecibo", item.pena_NumeroRecibo, DbType.String, ParameterDirection.Input);
             parametros.Add("@pena_ArchivoNumeroRecibo", item.pena_ArchivoNumeroRecibo, DbType.String, ParameterDirection.Input);
+            parametros.Add("@pena_NombreArchRTN", item.pena_NombreArchRTN, DbType.String, ParameterDirection.Input);
+            parametros.Add("@pena_NombreArchRecibo", item.pena_NombreArchRecibo, DbType.String, ParameterDirection.Input);
+            parametros.Add("@pena_NombreArchDNI", item.pena_ArchivoNumeroRecibo, DbType.String, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@pena_FechaModificacion", item.pena_FechaModificacion, DbType.String, ParameterDirection.Input);
 

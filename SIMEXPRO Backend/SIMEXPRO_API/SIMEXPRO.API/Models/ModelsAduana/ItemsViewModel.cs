@@ -36,14 +36,14 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public string item_ReglasAccesorias { get; set; }
         public string item_CriterioCertificarOrigen { get; set; }
         public int usua_UsuarioCreacion { get; set; }
-
-         public string usuarioCreacionNombre { get; set; }
+        public string NombrePaisOrigen { get; set; }
+        public string usuarioCreacionNombre { get; set; }
         public DateTime item_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }
 
-         public string usuarioModificacionNombre { get; set; }
+        public string usuarioModificacionNombre { get; set; }
 
-         public int? usua_UsuarioEliminacion { get; set; }
+        public int? usua_UsuarioEliminacion { get; set; }
         public DateTime item_FechaEliminacion { get; set; }
 
         public DateTime? item_FechaModificacion { get; set; }
