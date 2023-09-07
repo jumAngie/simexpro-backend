@@ -14,6 +14,9 @@ namespace SIMEXPRO.Entities.Entities
         public int diasInactiva { get; set; }
         public int diasTotalesInactiva { get; set; }
         public string mahi_Observaciones { get; set; }
+        public string maqu_NumeroSerie { get; set; }
+        public string marq_Nombre { get; set; }
+
 
         //Reportes Produccion por Modulo
 

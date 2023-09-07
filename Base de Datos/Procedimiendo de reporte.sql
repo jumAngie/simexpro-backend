@@ -1,18 +1,22 @@
 
 
---CREATE OR ALTER PROCEDURE Prod.UPD_Reporte_TiemposMaquinas 
---@maqu_Id INT
---AS
---BEGIN
---	SELECT	maqu.maqu_Id
---			,DATEDIFF(day, maqu.maqu_FechaCreacion, GETDATE()) AS diasActiva
---			,DATEDIFF(day, mahi.mahi_FechaInicio, mahi.mahi_FechaFin) AS diasInactiva
---			,(SELECT SUM(DATEDIFF(day, mahia.mahi_FechaInicio, mahia.mahi_FechaFin)) FROM [Prod].[tbMaquinaHistorial] mahia WHERE mahia.maqu_Id = maqu.maqu_Id ) as diasTotalesInactiva
---			,mahi.mahi_Observaciones
---	FROM [Prod].[tbMaquinas] maqu LEFT JOIN [Prod].[tbMaquinaHistorial] mahi
---	ON maqu.maqu_Id = mahi.maqu_Id 
---	WHERE maqu.maqu_Id = @maqu_Id
---END
+CREATE OR ALTER PROCEDURE Prod.UPD_Reporte_TiemposMaquinas
+@maqu_Id INT
+AS
+BEGIN
+	SELECT	 maqu.maqu_Id
+			,maqu.maqu_NumeroSerie
+			,mmq.marq_Nombre
+			,DATEDIFF(day, maqu.maqu_FechaCreacion, GETDATE()) AS diasActiva
+			,DATEDIFF(day, mahi.mahi_FechaInicio, mahi.mahi_FechaFin) AS diasInactiva
+			,(SELECT SUM(DATEDIFF(day, mahia.mahi_FechaInicio, mahia.mahi_FechaFin)) FROM [Prod].[tbMaquinaHistorial] mahia WHERE mahia.maqu_Id = maqu.maqu_Id ) as diasTotalesInactiva
+			,mahi.mahi_Observaciones
+	FROM [Prod].[tbMaquinas] maqu LEFT JOIN [Prod].[tbMaquinaHistorial] mahi
+	ON maqu.maqu_Id = mahi.maqu_Id 
+	LEFT JOIN [Prod].[tbMarcasMaquina] mmq 
+	ON maqu.mmaq_Id = mmq.marq_Id
+	WHERE maqu.maqu_Id = @maqu_Id
+END
 
 
 
