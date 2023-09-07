@@ -1256,7 +1256,21 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
-      
+        public ServiceResult FinalizarDuca(tbDuca item)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var respuesta = _ducaRepository.FinalizarDuca(item);
+                return resultado.Ok(respuesta);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
+
         #endregion
 
         #region EstadoBoletin

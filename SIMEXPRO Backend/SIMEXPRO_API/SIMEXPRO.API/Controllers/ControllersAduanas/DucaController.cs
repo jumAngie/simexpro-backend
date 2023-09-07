@@ -98,5 +98,13 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
 
             return Ok(result);
         }
+
+        [HttpPost("FinalizarDuca")]
+        public IActionResult FinalizarDuca(DucaViewModel item)
+        {
+            var mapped = _mapper.Map<tbDuca>(item);
+            var datos = _aduanaServices.FinalizarDuca(mapped);
+            return Ok(datos);
+        }
     }
 }

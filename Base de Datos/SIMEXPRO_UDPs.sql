@@ -8377,6 +8377,23 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_Finalizado
+	@duca_Id		INT
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE [Adua].[tbDuca]
+		  SET  [duca_Finalizado] = 1
+		  WHERE [duca_Id] = @duca_Id
+
+		  SELECT 1
+ 	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE()	
+	END CATCH
+END 
+
+GO
 
 --************ARCELES******************--
 /*Listar Aranceles Todos*/

@@ -295,6 +295,8 @@ namespace SIMEXPRO.DataAccess
 
         public static string InsertarDucaTAP3 = "Adua.UDP_tbDuca_InsertarTab3";
         public static string EditarDucaTAP3 = "Adua.UDP_tbDuca_EditarTab3";
+
+        public static string FinalizarDuca = "Adua.UDP_tbDuca_Finalizado";
         #endregion
 
         #region Estado Boletin
