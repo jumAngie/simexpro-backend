@@ -43,6 +43,21 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return result;
         }
 
+        public RequestStatus EliminarDocumento(int doso_Id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@doso_Id", doso_Id, DbType.Int32, ParameterDirection.Input);
+
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.EliminarDocumentosSoporte, parametros, commandType: CommandType.StoredProcedure);
+
+            return new RequestStatus() { 
+                CodeStatus = respuesta != "1" ? 0 : int.Parse(respuesta), 
+                MessageStatus = respuesta
+            };
+           
+        }
+
         public IEnumerable<tbDocumentosDeSoporte> List()
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);

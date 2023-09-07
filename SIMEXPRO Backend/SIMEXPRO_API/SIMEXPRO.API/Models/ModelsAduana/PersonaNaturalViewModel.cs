@@ -36,6 +36,9 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public string pena_ArchivoDNI { get; set; }
         public string pena_NumeroRecibo { get; set; }
         public string pena_ArchivoNumeroRecibo { get; set; }
+        public string pena_NombreArchRTN { get; set; }
+        public string pena_NombreArchRecibo { get; set; }
+        public string pena_NombreArchDNI { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         public DateTime pena_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }
