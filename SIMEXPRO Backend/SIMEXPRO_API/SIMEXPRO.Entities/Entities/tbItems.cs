@@ -30,7 +30,6 @@ namespace SIMEXPRO.Entities.Entities
         public int merc_Id { get; set; }
         public int? pais_IdOrigenMercancia { get; set; }
         public string item_ClasificacionArancelaria { get; set; }
-        public int? aran_Id { get; set; }
         public decimal? item_ValorUnitario { get; set; }
         public decimal? item_GastosDeTransporte { get; set; }
         public decimal? item_ValorTransaccion { get; set; }
@@ -41,7 +40,12 @@ namespace SIMEXPRO.Entities.Entities
         public string item_ReglasAccesorias { get; set; }
         public string item_CriterioCertificarOrigen { get; set; }
         public int usua_UsuarioCreacion { get; set; }
-
+        [NotMapped]
+        public int? aran_Id { get; set; }
+        [NotMapped]
+        public string aran_Descripcion { get; set; }
+        [NotMapped]
+        public string aran_Codigo { get; set; }
         [NotMapped]
         public string usuarioCreacionNombre { get; set; }
         public DateTime item_FechaCreacion { get; set; }
