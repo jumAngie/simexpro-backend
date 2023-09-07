@@ -30,17 +30,9 @@ namespace SIMEXPRO.Entities.Entities
         public bool? peor_Estado { get; set; }
         [NotMapped]
         public bool peor_finalizacion { get; set; }
-        [NotMapped]
-        public int Total { get; set; }
 
         [NotMapped]
-        public string prov_NombreCompania { get; set; }  
-        [NotMapped]
-        public string empl_Creador { get; set; }  
-        [NotMapped]
-        public string prov_Telefono { get; set; }
-        [NotMapped]
-        public string duca_No_Duca { get; set; }
+        public string prov_NombreCompania { get; set; }
         [NotMapped]
         public string prov_NombreContacto { get; set; }
         [NotMapped]
@@ -51,8 +43,6 @@ namespace SIMEXPRO.Entities.Entities
         public string UsuarioCreacionNombre { get; set; }
         [NotMapped]
         public string UsuarioModificacionNombre { get; set; }
-        [NotMapped]
-        public string mate_Descripcion { get; set; }
         [NotMapped]
         public string DadoCliente { get; set; }
         [NotMapped]
