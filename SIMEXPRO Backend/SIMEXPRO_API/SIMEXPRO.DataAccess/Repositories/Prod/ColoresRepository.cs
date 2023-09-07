@@ -43,6 +43,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
             parametros.Add("@colr_Nombre",          item.colr_Nombre,           DbType.String,      ParameterDirection.Input);
+            parametros.Add("@colr_Codigo",          item.colr_Codigo,           DbType.String,      ParameterDirection.Input);
+            parametros.Add("@colr_CodigoHtml",      item.colr_CodigoHtml,       DbType.String,      ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion,  DbType.Int32,       ParameterDirection.Input);
             parametros.Add("@colr_FechaCreacion",   item.colr_FechaCreacion,    DbType.DateTime,    ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.InsertarColores, parametros, commandType: CommandType.StoredProcedure);
@@ -57,6 +59,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             var parametros = new DynamicParameters();
             parametros.Add("@colr_Id",                      item.colr_Id,                   DbType.Int32,       ParameterDirection.Input);
             parametros.Add("@colr_Nombre",                  item.colr_Nombre,               DbType.String,      ParameterDirection.Input);
+            parametros.Add("@colr_Codigo",                  item.colr_Codigo,               DbType.String,      ParameterDirection.Input);
+            parametros.Add("@colr_CodigoHtml",              item.colr_CodigoHtml,           DbType.String,      ParameterDirection.Input);
             parametros.Add("@usua_UsuarioModificacion",     item.usua_UsuarioModificacion,  DbType.Int32,       ParameterDirection.Input);
             parametros.Add("@colr_FechaModificacion",       item.colr_FechaModificacion,    DbType.DateTime,    ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.EditarColores, parametros, commandType: CommandType.StoredProcedure);

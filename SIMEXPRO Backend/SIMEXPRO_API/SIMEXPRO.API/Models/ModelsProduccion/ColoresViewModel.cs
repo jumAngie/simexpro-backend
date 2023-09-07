@@ -10,6 +10,8 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
     {
         public int colr_Id { get; set; }
         public string colr_Nombre { get; set; }
+        public string colr_Codigo { get; set; }
+        public string colr_CodigoHtml { get; set; }
         public int? usua_UsuarioCreacion { get; set; }
         [NotMapped]
         public string UsuarioNombreCreacion { get; set; }
