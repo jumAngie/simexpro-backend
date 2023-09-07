@@ -9757,6 +9757,25 @@ BEGIN TRY
 
 END
 
+GO
+
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosDeSoporte_Eliminar
+		@doso_Id		INT
+AS
+BEGIN
+	BEGIN TRY
+			DELETE FROM [Adua].[tbDocumentosDeSoporte]
+			WHERE doso_Id = @doso_Id
+
+			SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE()
+	END CATCH
+
+END
+
 
 -------------------------------------------------------
 
