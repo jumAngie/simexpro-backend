@@ -169,6 +169,7 @@ namespace SIMEXPRO.DataAccess
         #region Aranceles
         public static string ListarAranceles = "Adua.UDP_tbAranceles_Listar";
         public static string ListarArancelesFiltrado = "Adua.UDP_tbAranceles_ListarByCodigo";
+        public static string ListarArancelById = "Adua.UDP_tbAranceles_ListarById";
         public static string InsertarAranceles = "Adua.UDP_tbAranceles_Insertar";
         public static string EditarAranceles = "Adua.UDP_tbAranceles_Editar";
         #endregion
@@ -295,6 +296,8 @@ namespace SIMEXPRO.DataAccess
 
         public static string InsertarDucaTAP3 = "Adua.UDP_tbDuca_InsertarTab3";
         public static string EditarDucaTAP3 = "Adua.UDP_tbDuca_EditarTab3";
+
+        public static string FinalizarDuca = "Adua.UDP_tbDuca_Finalizado";
         #endregion
 
         #region Estado Boletin
@@ -405,6 +408,7 @@ namespace SIMEXPRO.DataAccess
         public static string InsertarPersonaJuridicaTap4 = "Adua.UDP_tbPersonaJuridica_InsertarTab4";
         public static string InsertarPersonaJuridicaTap5 = "Adua.UDP_tbPersonaJuridica_InsertarTab5";
         public static string EditarPersonaJuridica = "Adua.UDP_tbPersonaJuridica_Editar";
+        public static string FinalizarPersonaJuridica = "Adua.UDP_tbPersonaJuridica_ContratoFinalizado";
         #endregion
 
         #region Persona Natural
@@ -769,6 +773,7 @@ namespace SIMEXPRO.DataAccess
         #region Reportes
         public static string MaquinasTiempos = "Prod.UPD_Reporte_TiemposMaquinas";
         public static string ModuloProduccion = "Prod.UDP_Reporte_ProduccionPorModulo";
+        public static string PedidosCliente = "Prod.UDP_Reporte_PedidosCliente";
         #endregion
 
     }

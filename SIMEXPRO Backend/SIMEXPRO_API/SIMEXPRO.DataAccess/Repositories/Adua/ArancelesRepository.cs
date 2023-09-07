@@ -52,6 +52,14 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return db.Query<tbAranceles>(ScriptsDataBase.ListarArancelesFiltrado, parametros, commandType: CommandType.StoredProcedure);
         }
 
+        public IEnumerable<tbAranceles> ListarArancelById(int aran_Id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@aran_Id", aran_Id, DbType.Int32, ParameterDirection.Input);
+            return db.Query<tbAranceles>(ScriptsDataBase.ListarArancelById, parametros, commandType: CommandType.StoredProcedure);
+        }
+
         public RequestStatus Update(tbAranceles item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);

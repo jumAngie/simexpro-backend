@@ -14,6 +14,8 @@ namespace SIMEXPRO.Entities.Entities
         {
             tbDocumentosContratos = new HashSet<tbDocumentosContratos>();
         }
+
+        public bool peju_ContratoFinalizado { get; set; }
         //tab1
         public int peju_Id { get; set; }
         public int pers_Id { get; set; }
@@ -69,6 +71,7 @@ namespace SIMEXPRO.Entities.Entities
         public string ProvinciaRepresentante { get; set; }
         public string peju_NumeroLocalRepresentante { get; set; }
         public string peju_PuntoReferenciaRepresentante { get; set; }
+        public string peju_NumeroLocalApart { get; set; }
 
         //tab4
         public string peju_TelefonoEmpresa { get; set; }
@@ -85,12 +88,7 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string doco_Numero_O_Referencia { get; set; }
         [NotMapped]
-        public string @doco_TipoDocumento { get; set; }
-        public string peju_RTNReprsentanteLegal { get; set; }
-        public string peju_RTNSociedadMercantil { get; set; }
-        public string peju_DNIRepresentante { get; set; }
-        public string peju_EscrituraPublica { get; set; }
-        public string peju_NumeroLocalApart { get; set; } 
+        public string doco_TipoDocumento { get; set; }
 
         public int usua_UsuarioCreacion { get; set; }
         [NotMapped]

@@ -200,6 +200,21 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult ListarArancelById(int aran_Id)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _arancelesRepository.ListarArancelById(aran_Id);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
+
         public ServiceResult InsertarAranceles(tbAranceles item)
         {
             var result = new ServiceResult();
@@ -1256,7 +1271,21 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
-      
+        public ServiceResult FinalizarDuca(tbDuca item)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var respuesta = _ducaRepository.FinalizarDuca(item);
+                return resultado.Ok(respuesta);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
+
         #endregion
 
         #region EstadoBoletin
@@ -2355,6 +2384,21 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             catch (Exception ex)
             {
                 return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult FinalizarContrato(tbPersonaJuridica item)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _personaJuridicaRepository.FinalizarContrato(item);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
             }
         }
         #endregion

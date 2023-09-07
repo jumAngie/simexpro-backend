@@ -1198,8 +1198,18 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.ToTable("tbColores", "Prod");
 
+                entity.HasIndex(e => e.colr_Codigo, "UQ_Prod_tbColores_colr_Codigo")
+                    .IsUnique();
+
+                entity.HasIndex(e => e.colr_CodigoHtml, "UQ_Prod_tbColores_colr_CodigoHtml")
+                    .IsUnique();
+
                 entity.HasIndex(e => e.colr_Nombre, "UQ_Prod_tbColores_colr_Nombre")
                     .IsUnique();
+
+                entity.Property(e => e.colr_Codigo).HasMaxLength(50);
+
+                entity.Property(e => e.colr_CodigoHtml).HasMaxLength(50);
 
                 entity.Property(e => e.colr_Estado).HasDefaultValueSql("((1))");
 
@@ -3004,6 +3014,11 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.item_ValorUnitario).HasColumnType("decimal(18, 2)");
 
+                entity.HasOne(d => d.aran)
+                    .WithMany(p => p.tbItems)
+                    .HasForeignKey(d => d.aran_Id)
+                    .HasConstraintName("FK_Adua_tbItems_Adua_tbAranceles_aran_Id");
+
                 entity.HasOne(d => d.fact)
                     .WithMany(p => p.tbItems)
                     .HasForeignKey(d => d.fact_Id)
@@ -4347,10 +4362,6 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.peju_CorreoElectronicoAlternativo).HasMaxLength(200);
 
-                entity.Property(e => e.peju_DNIRepresentante).HasMaxLength(20);
-
-                entity.Property(e => e.peju_EscrituraPublica).HasMaxLength(200);
-
                 entity.Property(e => e.peju_Estado).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.peju_FechaCreacion).HasColumnType("datetime");
@@ -4364,10 +4375,6 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.Property(e => e.peju_PuntoReferencia).HasMaxLength(200);
 
                 entity.Property(e => e.peju_PuntoReferenciaRepresentante).HasMaxLength(200);
-
-                entity.Property(e => e.peju_RTNReprsentanteLegal).HasMaxLength(20);
-
-                entity.Property(e => e.peju_RTNSociedadMercantil).HasMaxLength(20);
 
                 entity.Property(e => e.peju_TelefonoEmpresa).HasMaxLength(200);
 
