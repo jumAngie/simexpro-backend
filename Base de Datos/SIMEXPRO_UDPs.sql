@@ -15461,7 +15461,8 @@ AS BEGIN
 
 SELECT colr_Id,
 	   colr_Nombre,
-	   --colr_Codigo,
+	   colr_Codigo,
+	   colr_CodigoHtml,
 	   colores.usua_UsuarioCreacion, 
 	   Creacion.usua_Nombre AS UsuarioNombreCreacion,
 	   colores.colr_FechaCreacion,
@@ -15486,20 +15487,23 @@ GO
 
 
 /*Insertar Colores*/
-CREATE OR ALTER PROC Prod.UDP_tbColores_Insertar --'verde','22', 1,'10.16-2004'
-@colr_Nombre NVARCHAR(100),
---@colr_Codigo NVARCHAR(100),
-@usua_UsuarioCreacion INT,
-@colr_FechaCreacion DATETIME
+CREATE OR ALTER PROC Prod.UDP_tbColores_Insertar 
+@colr_Nombre			NVARCHAR(100),
+@colr_Codigo			NVARCHAR(50),
+@colr_CodigoHtml		NVARCHAR(50),
+@usua_UsuarioCreacion   INT,
+@colr_FechaCreacion		DATETIME
 AS BEGIN
 
 BEGIN TRY
 		INSERT INTO Prod.tbColores(colr_Nombre, 
-					       --colr_Codigo,
+					       colr_Codigo,
+						   colr_CodigoHtml,
 						   usua_UsuarioCreacion, 
 						   colr_FechaCreacion)
 		VALUES (@colr_Nombre, 
-				--@colr_Codigo,
+				@colr_Codigo,
+				@colr_CodigoHtml,
 				@usua_UsuarioCreacion, 
 				@colr_FechaCreacion)
 
@@ -15516,9 +15520,10 @@ GO
 
 /*Editar Colores*/
 CREATE OR ALTER PROC Prod.UDP_tbColores_Editar
-	@colr_Id INT,
-	@colr_Nombre NVARCHAR(100),
-	--@colr_Codigo NVARCHAR(100),
+	@colr_Id				INT,
+	@colr_Nombre			NVARCHAR(100),
+	@colr_Codigo			NVARCHAR(50),
+    @colr_CodigoHtml		NVARCHAR(50),
 	@usua_UsuarioModificacion INT,
 	@colr_FechaModificacion DATETIME
 AS BEGIN
@@ -15526,7 +15531,8 @@ AS BEGIN
 BEGIN TRY
 
 UPDATE Prod.tbColores SET colr_Nombre = @colr_Nombre,
-						  --colr_Codigo = @colr_Codigo,  
+						  colr_Codigo = @colr_Codigo,
+						  colr_CodigoHtml = @colr_CodigoHtml,
 						  usua_UsuarioModificacion = @usua_UsuarioModificacion,
 						  colr_FechaModificacion = @colr_FechaModificacion
 					  WHERE colr_Id = @colr_Id
