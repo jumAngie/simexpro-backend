@@ -29,6 +29,14 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             var answer = db.Query<tbReportes>(ScriptsDataBase.ModuloProduccion, parametros, commandType: CommandType.StoredProcedure);
             return answer;
         }
+            public IEnumerable<tbReportes> PedidosCliente(tbReportes item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters(); 
+            parametros.Add("@clie_Id", item.clie_Id, DbType.Int32, ParameterDirection.Input);   
+            var answer = db.Query<tbReportes>(ScriptsDataBase.PedidosCliente, parametros, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
 
 
 
