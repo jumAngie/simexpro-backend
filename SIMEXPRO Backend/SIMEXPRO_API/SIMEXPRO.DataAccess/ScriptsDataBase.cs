@@ -273,6 +273,7 @@ namespace SIMEXPRO.DataAccess
         #region Documentos de Soporte
         public static string ListarDocumentosSoporte = "Adua.UDP_tbDocumentosDeSoporte_Listar";
         public static string InsertarDocumentosSoporte = "Adua.UDP_tbDocumentosDeSoporte_Insertar";
+        public static string EliminarDocumentosSoporte = "Adua.UDP_tbDocumentosDeSoporte_Eliminar";
         #endregion
 
         #region Documentos PDF

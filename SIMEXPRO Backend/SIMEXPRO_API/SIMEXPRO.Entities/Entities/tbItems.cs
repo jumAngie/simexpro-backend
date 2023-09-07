@@ -41,6 +41,8 @@ namespace SIMEXPRO.Entities.Entities
         public string item_CriterioCertificarOrigen { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         [NotMapped]
+        public string NombrePaisOrigen { get; set; }
+        [NotMapped]
         public int? aran_Id { get; set; }
         [NotMapped]
         public string aran_Descripcion { get; set; }

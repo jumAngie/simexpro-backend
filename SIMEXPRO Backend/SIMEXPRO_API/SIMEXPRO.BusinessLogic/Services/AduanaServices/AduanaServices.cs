@@ -1032,12 +1032,12 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
-        public ServiceResult EliminarDocumentosdeSoporte(tbDocumentosDeSoporte item)
+        public ServiceResult EliminarDocumentosdeSoporte(int doso_Id)
         {
             var result = new ServiceResult();
             try
             {
-                var map = _documentosdeSoporteRepository.Delete(item);
+                var map = _documentosdeSoporteRepository.EliminarDocumento(doso_Id);
                 return result.Ok(map);
             }
             catch (Exception ex)
@@ -1271,13 +1271,13 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
-        public ServiceResult FinalizarDuca(tbDuca item)
+        public ServiceResult FinalizarDuca(int duca_Id)
         {
             var resultado = new ServiceResult();
 
             try
             {
-                var respuesta = _ducaRepository.FinalizarDuca(item);
+                var respuesta = _ducaRepository.FinalizarDuca(duca_Id);
                 return resultado.Ok(respuesta);
             }
             catch (Exception ex)
