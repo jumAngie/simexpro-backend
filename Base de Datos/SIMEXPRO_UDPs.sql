@@ -6736,7 +6736,6 @@ BEGIN
 END
 
 GO
-
 CREATE OR ALTER PROCEDURE Adua.UDP_tbFacturas_Insertar
 	@deva_Id					INT,
 	@fact_Numero				NVARCHAR(4000),
@@ -6874,7 +6873,7 @@ END
 
 GO
 /* LISTAR items*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbItems_Listar 
+CREATE OR ALTER PROCEDURE Adua.UDP_tbItems_Listar
 	@fact_Id				INT
 AS
 BEGIN
@@ -6890,7 +6889,10 @@ BEGIN
 		   item_Modelo, 
 		   merc_Id, 
 		   pais_IdOrigenMercancia, 
-		   item_ClasificacionArancelaria, 
+		   item_ClasificacionArancelaria,
+		   item.aran_Id,
+		   aran.aran_Codigo,
+		   aran.aran_Descripcion,
 		   item_ValorUnitario, 
 		   item_GastosDeTransporte, 
 		   item_ValorTransaccion, 
@@ -6910,6 +6912,7 @@ BEGIN
 	FROM Adua.tbItems item 
 	INNER JOIN Acce.tbUsuarios usuaCrea		ON item.usua_UsuarioCreacion = usuaCrea.usua_Id 
 	LEFT JOIN Acce.tbUsuarios usuaModifica  ON item.usua_UsuarioModificacion = usuaModifica.usua_Id
+	LEFT JOIN Adua.tbAranceles	aran		ON item.aran_Id	= aran.aran_Id
 	WHERE fact_Id = @fact_Id
 END
 
@@ -6928,6 +6931,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbItems_Insertar
 	@merc_Id									INT, 
 	@pais_IdOrigenMercancia						INT, 
 	@item_ClasificacionArancelaria				CHAR(16), 
+	@aran_Id									INT,
 	@item_ValorUnitario							DECIMAL(18,2), 
 	@item_GastosDeTransporte					DECIMAL(18,2), 
 	@item_ValorTransaccion						DECIMAL(18,2), 
@@ -6954,7 +6958,8 @@ BEGIN
 									 item_Modelo, 
 									 merc_Id, 
 									 pais_IdOrigenMercancia, 
-									 item_ClasificacionArancelaria, 
+									 item_ClasificacionArancelaria,
+									 aran_Id,
 									 item_ValorUnitario, 
 									 item_GastosDeTransporte, 
 									 item_ValorTransaccion, 
@@ -6978,9 +6983,10 @@ BEGIN
 				@merc_Id, 
 				@pais_IdOrigenMercancia, 
 				@item_ClasificacionArancelaria, 
+				@aran_Id,
 				@item_ValorUnitario, 
 				@item_GastosDeTransporte, 
-				@item_ValorTransaccion, 
+				@item_ValorUnitario * @item_Cantidad, 
 				@item_Seguro, 
 				@item_OtrosGastos, 
 				@item_ValorAduana, 
@@ -7069,6 +7075,7 @@ CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbItems_Editar]
 	@merc_Id									INT, 
 	@pais_IdOrigenMercancia						INT, 
 	@item_ClasificacionArancelaria				CHAR(16), 
+	@aran_Id									INT,
 	@item_ValorUnitario							DECIMAL(18,2), 
 	@item_GastosDeTransporte					DECIMAL(18,2), 
 	@item_ValorTransaccion						DECIMAL(18,2), 
@@ -7097,9 +7104,10 @@ BEGIN
 			merc_Id = @merc_Id, 
 			pais_IdOrigenMercancia = @pais_IdOrigenMercancia, 
 			item_ClasificacionArancelaria = @item_ClasificacionArancelaria, 
+			aran_Id = @aran_Id,
 			item_ValorUnitario = @item_ValorUnitario, 
 			item_GastosDeTransporte = @item_GastosDeTransporte, 
-			item_ValorTransaccion = @item_ValorTransaccion, 
+			item_ValorTransaccion = @item_ValorUnitario * @item_Cantidad , 
 			item_Seguro = @item_Seguro, 
 			item_OtrosGastos = @item_OtrosGastos, 
 			item_ValorAduana = @item_ValorAduana, 
@@ -8121,7 +8129,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbDuca_InsertarTab2]
+CREATE OR ALTER PROCEDURE [Adua].[UDP_tbDuca_InsertarTab2]
 	@duca_Id							INT,
 	@duca_Codigo_Declarante				NVARCHAR(200),
 	@duca_Numero_Id_Declarante			NVARCHAR(200),
@@ -8150,8 +8158,6 @@ CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbDuca_InsertarTab2]
 	@tran_FechaCreacion					DATETIME
 AS	
 BEGIN
-	BEGIN TRANSACTION 
-	SET @tran_FechaCreacion = GETDATE();
 	BEGIN TRY
 		BEGIN TRAN
 			IF @pais_Id > 0
@@ -8478,6 +8484,21 @@ BEGIN
    WHERE ara.aran_Codigo LIKE '%'+ @aran_Codigo + '%' AND aram_Estado = 1
    ORDER BY DATALENGTH(aran_Codigo) 
 
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbAranceles_ListarById
+	@aran_Id	INT
+AS
+BEGIN
+	SELECT	aran_Id,
+			aran_Codigo,
+			aran_Descripcion
+ 
+   FROM	Adua.tbAranceles ara
+   INNER JOIN Acce.tbUsuarios usu ON ara.usua_UsuarioCreacion = usu.usua_Id
+   LEFT JOIN Acce.tbUsuarios usu1 ON usu1.usua_Id = ara.usua_UsuarioModificacion 
+   WHERE aran_Id = @aran_Id
 END
 GO
 

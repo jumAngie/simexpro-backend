@@ -39,5 +39,13 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             return Ok(listado);
         }
 
+        [HttpPost("PedidosCliente")]
+        public IActionResult PedidosCliente(ReportesViewModel reporte)
+        {
+            var data = _mapper.Map<tbReportes>(reporte);
+            var listado = _produccionServices.PedidosCliente(data);
+            return Ok(listado);
+        }
+
     }
 }

@@ -1351,7 +1351,7 @@ CREATE TABLE Adua.tbItems(
 	item_Seguro                               DECIMAL(18,2),
 	item_OtrosGastos                          DECIMAL(18,2),
 	item_ValorAduana                          DECIMAL(18,2),
-
+	aran_Id									  INT,
 	item_CuotaContingente                     DECIMAL(18,2),
 	item_ReglasAccesorias                     NVARCHAR(MAX),
 	item_CriterioCertificarOrigen             NVARCHAR(MAX),
@@ -1367,6 +1367,7 @@ CREATE TABLE Adua.tbItems(
 	CONSTRAINT PK_Adua_tbItems_item_Id												PRIMARY KEY (item_Id),
 	CONSTRAINT PK_Adua_tbItems_Adua_tbFactura_fact_Id								FOREIGN KEY (fact_Id)					REFERENCES Adua.tbFacturas (fact_Id),
 	CONSTRAINT FK_Adua_tbItems_unme_Id_Adua_tbUnidadesdeMedida_unme_Id				FOREIGN KEY (unme_Id)					REFERENCES gral.tbUnidadMedidas(unme_Id),
+	CONSTRAINT FK_Adua_tbItems_Adua_tbAranceles_aran_Id								FOREIGN KEY(aran_Id)					REFERENCES Adua.tbAranceles(aran_Id),
 	CONSTRAINT FK_Adua_tbItems_merc_Id_Adua_tbMercancias_merc_Id					FOREIGN KEY (merc_Id)					REFERENCES Adua.tbEstadoMercancias(merc_Id),
 	CONSTRAINT FK_Adua_tbItems_pais_IdOrigenMercancia_Adua_tbPais_pais_Id			FOREIGN KEY (pais_IdOrigenMercancia)	REFERENCES Gral.tbPaises(pais_Id),
     CONSTRAINT FK_Adua_tbItems_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id			FOREIGN KEY (usua_UsuarioCreacion)		REFERENCES Acce.tbUsuarios(usua_Id),
@@ -1374,7 +1375,6 @@ CREATE TABLE Adua.tbItems(
 	--CONSTRAINT FK_Adua_tbItems_usua_UsuarioEliminacion_Acce_tbUsuarios_usua_Id		FOREIGN KEY (usua_UsuarioEliminacion)	REFERENCES Acce.tbUsuarios(usua_Id)
 );
 GO
-
 
 
 CREATE TABLE Adua.tbItemsHistorial(

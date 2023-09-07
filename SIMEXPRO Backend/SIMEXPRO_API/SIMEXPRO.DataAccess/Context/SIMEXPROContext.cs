@@ -3014,6 +3014,11 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.item_ValorUnitario).HasColumnType("decimal(18, 2)");
 
+                entity.HasOne(d => d.aran)
+                    .WithMany(p => p.tbItems)
+                    .HasForeignKey(d => d.aran_Id)
+                    .HasConstraintName("FK_Adua_tbItems_Adua_tbAranceles_aran_Id");
+
                 entity.HasOne(d => d.fact)
                     .WithMany(p => p.tbItems)
                     .HasForeignKey(d => d.fact_Id)

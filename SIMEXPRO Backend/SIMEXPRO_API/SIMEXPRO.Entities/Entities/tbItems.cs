@@ -40,7 +40,12 @@ namespace SIMEXPRO.Entities.Entities
         public string item_ReglasAccesorias { get; set; }
         public string item_CriterioCertificarOrigen { get; set; }
         public int usua_UsuarioCreacion { get; set; }
-
+        [NotMapped]
+        public int? aran_Id { get; set; }
+        [NotMapped]
+        public string aran_Descripcion { get; set; }
+        [NotMapped]
+        public string aran_Codigo { get; set; }
         [NotMapped]
         public string usuarioCreacionNombre { get; set; }
         public DateTime item_FechaCreacion { get; set; }
@@ -57,6 +62,7 @@ namespace SIMEXPRO.Entities.Entities
         public bool? item_Estado { get; set; }
 
         public virtual tbFacturas fact { get; set; }
+        public virtual tbAranceles aran { get; set; }
         public virtual tbEstadoMercancias merc { get; set; }
         public virtual tbPaises pais_IdOrigenMercanciaNavigation { get; set; }
         public virtual tbUnidadMedidas unme { get; set; }
