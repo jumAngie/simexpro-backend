@@ -6855,7 +6855,7 @@ END
 
 GO
 /* LISTAR items*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbItems_Listar 
+CREATE OR ALTER PROCEDURE Adua.UDP_tbItems_Listar
 	@fact_Id				INT
 AS
 BEGIN
@@ -6871,7 +6871,10 @@ BEGIN
 		   item_Modelo, 
 		   merc_Id, 
 		   pais_IdOrigenMercancia, 
-		   item_ClasificacionArancelaria, 
+		   item_ClasificacionArancelaria,
+		   item.aran_Id,
+		   aran.aran_Codigo,
+		   aran.aran_Descripcion,
 		   item_ValorUnitario, 
 		   item_GastosDeTransporte, 
 		   item_ValorTransaccion, 
@@ -6891,6 +6894,7 @@ BEGIN
 	FROM Adua.tbItems item 
 	INNER JOIN Acce.tbUsuarios usuaCrea		ON item.usua_UsuarioCreacion = usuaCrea.usua_Id 
 	LEFT JOIN Acce.tbUsuarios usuaModifica  ON item.usua_UsuarioModificacion = usuaModifica.usua_Id
+	LEFT JOIN Adua.tbAranceles	aran		ON item.aran_Id	= aran.aran_Id
 	WHERE fact_Id = @fact_Id
 END
 
@@ -6909,6 +6913,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbItems_Insertar
 	@merc_Id									INT, 
 	@pais_IdOrigenMercancia						INT, 
 	@item_ClasificacionArancelaria				CHAR(16), 
+	@aran_Id									INT,
 	@item_ValorUnitario							DECIMAL(18,2), 
 	@item_GastosDeTransporte					DECIMAL(18,2), 
 	@item_ValorTransaccion						DECIMAL(18,2), 
@@ -6935,7 +6940,8 @@ BEGIN
 									 item_Modelo, 
 									 merc_Id, 
 									 pais_IdOrigenMercancia, 
-									 item_ClasificacionArancelaria, 
+									 item_ClasificacionArancelaria,
+									 aran_Id,
 									 item_ValorUnitario, 
 									 item_GastosDeTransporte, 
 									 item_ValorTransaccion, 
@@ -6959,9 +6965,10 @@ BEGIN
 				@merc_Id, 
 				@pais_IdOrigenMercancia, 
 				@item_ClasificacionArancelaria, 
+				@aran_Id,
 				@item_ValorUnitario, 
 				@item_GastosDeTransporte, 
-				@item_ValorTransaccion, 
+				@item_ValorUnitario * @item_Cantidad, 
 				@item_Seguro, 
 				@item_OtrosGastos, 
 				@item_ValorAduana, 
@@ -7050,6 +7057,7 @@ CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbItems_Editar]
 	@merc_Id									INT, 
 	@pais_IdOrigenMercancia						INT, 
 	@item_ClasificacionArancelaria				CHAR(16), 
+	@aran_Id									INT,
 	@item_ValorUnitario							DECIMAL(18,2), 
 	@item_GastosDeTransporte					DECIMAL(18,2), 
 	@item_ValorTransaccion						DECIMAL(18,2), 
@@ -7078,9 +7086,10 @@ BEGIN
 			merc_Id = @merc_Id, 
 			pais_IdOrigenMercancia = @pais_IdOrigenMercancia, 
 			item_ClasificacionArancelaria = @item_ClasificacionArancelaria, 
+			aran_Id = @aran_Id,
 			item_ValorUnitario = @item_ValorUnitario, 
 			item_GastosDeTransporte = @item_GastosDeTransporte, 
-			item_ValorTransaccion = @item_ValorTransaccion, 
+			item_ValorTransaccion = @item_ValorUnitario * @item_Cantidad , 
 			item_Seguro = @item_Seguro, 
 			item_OtrosGastos = @item_OtrosGastos, 
 			item_ValorAduana = @item_ValorAduana, 

@@ -51,6 +51,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@merc_Id", item.merc_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@pais_IdOrigenMercancia", item.pais_IdOrigenMercancia, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@item_ClasificacionArancelaria", item.item_ClasificacionArancelaria, DbType.String, ParameterDirection.Input);
+            parametros.Add("@aran_Id", item.aran_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@item_ValorUnitario", item.item_ValorUnitario, DbType.Decimal, ParameterDirection.Input);
             parametros.Add("@item_GastosDeTransporte", item.item_GastosDeTransporte, DbType.Decimal, ParameterDirection.Input);
             parametros.Add("@item_ValorTransaccion", item.item_ValorTransaccion, DbType.Decimal, ParameterDirection.Input);
@@ -131,6 +132,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@merc_Id", item.merc_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@pais_IdOrigenMercancia", item.pais_IdOrigenMercancia, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@item_ClasificacionArancelaria", item.item_ClasificacionArancelaria, DbType.String, ParameterDirection.Input);
+            parametros.Add("@aran_Id", item.aran_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@item_ValorUnitario", item.item_ValorUnitario, DbType.Decimal, ParameterDirection.Input);
             parametros.Add("@item_GastosDeTransporte", item.item_GastosDeTransporte, DbType.Decimal, ParameterDirection.Input);
             parametros.Add("@item_ValorTransaccion", item.item_ValorTransaccion, DbType.Decimal, ParameterDirection.Input);

@@ -6,13 +6,13 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAhM0O6Y2X5ESjSf7+Pzin/wAAAAACAAAAAAAQZgAAAAEAACAAAAAQdrUWxOO0G+gs/I9FPAR4Gkgw9c1veijgArLo9tDlmgAAAAAOgAAAAAIAACAAAACdQ6TOtm1/F2uCFroaPYwSefJCMJL3dbTBVNo2NI3tfjAAAAAMi5Fc+3FJh/U0WW1FwciyPKzm/qFODIta5ghZGdk3PBbLg5LaQzWrjeKW4DobuldAAAAAifZs8njDwyj7AEaaii8jolvaeds4lZigk1WyUBAR8SGjbZA8ymHuKlkPm/H356wGb7dh4sxoF66NnaXlLw63hA==</EncryptedPassword>
-    <_PublishTargetUrl>ftp://198.37.116.30/www.simexpro.somee.com</_PublishTargetUrl>
-    <History>True|2023-09-06T02:28:22.0403622Z;True|2023-09-05T04:13:12.0461119-06:00;False|2023-09-05T04:12:03.2295385-06:00;False|2023-09-05T04:10:18.2148995-06:00;True|2023-09-05T01:34:11.0042293-06:00;True|2023-09-05T01:17:59.2613504-06:00;True|2023-09-04T08:01:09.7294227-06:00;True|2023-09-04T02:18:38.5477605-06:00;True|2023-09-04T01:45:21.0563760-06:00;True|2023-09-04T01:24:41.6456592-06:00;True|2023-09-04T00:06:55.4394014-06:00;True|2023-09-03T22:11:04.7425435-06:00;False|2023-08-31T03:58:57.3456389-06:00;False|2023-08-28T23:29:02.9420346-06:00;True|2023-08-28T02:14:53.7841752-06:00;True|2023-08-28T00:16:09.4921393-06:00;True|2023-08-28T00:02:58.3462118-06:00;True|2023-08-27T19:03:51.5864188-06:00;True|2023-08-27T18:41:22.6803590-06:00;True|2023-08-27T08:19:27.2126712-06:00;True|2023-08-25T21:56:46.6591116-06:00;False|2023-08-25T13:37:16.8984514-06:00;True|2023-08-22T00:04:26.9271408-06:00;True|2023-08-21T21:59:33.4781325-06:00;False|2023-08-21T21:53:27.1906370-06:00;False|2023-08-21T21:51:58.6781676-06:00;False|2023-08-21T21:29:53.9044404-06:00;False|2023-08-21T13:35:14.2096293-06:00;False|2023-08-21T13:28:05.0388141-06:00;False|2023-08-21T13:21:45.0749695-06:00;False|2023-08-21T13:17:02.4479896-06:00;True|2023-08-21T13:09:11.0999395-06:00;False|2023-08-20T22:54:05.4376264-06:00;False|2023-08-20T22:49:19.0543892-06:00;False|2023-08-20T22:42:18.3027605-06:00;False|2023-08-20T22:33:45.1918699-06:00;False|2023-08-20T22:28:11.3214157-06:00;False|2023-08-20T18:47:11.9880706-06:00;False|2023-08-20T18:35:49.2931428-06:00;False|2023-08-20T18:30:20.5501333-06:00;False|2023-08-20T18:25:35.6624003-06:00;False|2023-08-20T17:25:43.4294408-06:00;False|2023-08-20T13:43:41.3475900-06:00;True|2023-08-20T00:11:20.2718802-06:00;True|2023-08-19T17:47:59.0160154-06:00;True|2023-08-18T23:41:44.7677243-06:00;False|2023-08-18T16:11:55.6979057-06:00;True|2023-08-18T15:43:52.6168039-06:00;False|2023-08-18T13:40:18.8963767-06:00;False|2023-08-18T10:54:32.7085207-06:00;False|2023-08-18T08:47:15.3394521-06:00;False|2023-08-18T08:43:11.4648773-06:00;False|2023-08-18T08:42:01.4440581-06:00;False|2023-08-18T08:39:19.6786158-06:00;False|2023-08-18T08:33:59.1978390-06:00;False|2023-08-18T08:29:06.1982034-06:00;False|2023-08-18T08:24:48.3027678-06:00;True|2023-08-17T14:06:44.4263434-06:00;False|2023-08-17T13:55:17.2868822-06:00;False|2023-08-17T13:52:16.3140972-06:00;False|2023-08-17T13:48:43.8585733-06:00;True|2023-08-17T13:15:19.3687720-06:00;False|2023-08-17T12:31:57.3271381-06:00;False|2023-08-17T12:28:28.6308882-06:00;False|2023-08-17T09:41:19.6852275-06:00;True|2023-08-17T08:24:59.9580394-06:00;</History>
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAVTsarOjH+ESfTjumQ9udcgAAAAACAAAAAAAQZgAAAAEAACAAAABvZ6BCniY31sVAyAnLhowGe3ACaboRI1QEhRst0A0WKwAAAAAOgAAAAAIAACAAAAD4QzSNlLNY5IU/FpchVMF1zbcys4S5exbkUzRd8m5V6SAAAADV5ZPYPgiUVzx0XvFo5MpRSEZfPINp1K4iBu7ihzFaykAAAACgVOEIJMCr796H2aa2dmn8afj2NiL70X1+0saiHXwwrx8Se6rL1JqHy5F9K8hM6L04TOQ5kPcNfc+C915g8iKV</EncryptedPassword>
+    <_PublishTargetUrl>ftp://155.254.244.28/www.practicaAcademia.somee.com</_PublishTargetUrl>
+    <History>True|2023-09-07T07:37:35.4635068Z;False|2023-09-07T01:37:07.3429181-06:00;True|2023-09-05T20:28:22.0403622-06:00;True|2023-09-05T04:13:12.0461119-06:00;False|2023-09-05T04:12:03.2295385-06:00;False|2023-09-05T04:10:18.2148995-06:00;True|2023-09-05T01:34:11.0042293-06:00;True|2023-09-05T01:17:59.2613504-06:00;True|2023-09-04T08:01:09.7294227-06:00;True|2023-09-04T02:18:38.5477605-06:00;True|2023-09-04T01:45:21.0563760-06:00;True|2023-09-04T01:24:41.6456592-06:00;True|2023-09-04T00:06:55.4394014-06:00;True|2023-09-03T22:11:04.7425435-06:00;False|2023-08-31T03:58:57.3456389-06:00;False|2023-08-28T23:29:02.9420346-06:00;True|2023-08-28T02:14:53.7841752-06:00;True|2023-08-28T00:16:09.4921393-06:00;True|2023-08-28T00:02:58.3462118-06:00;True|2023-08-27T19:03:51.5864188-06:00;True|2023-08-27T18:41:22.6803590-06:00;True|2023-08-27T08:19:27.2126712-06:00;True|2023-08-25T21:56:46.6591116-06:00;False|2023-08-25T13:37:16.8984514-06:00;True|2023-08-22T00:04:26.9271408-06:00;True|2023-08-21T21:59:33.4781325-06:00;False|2023-08-21T21:53:27.1906370-06:00;False|2023-08-21T21:51:58.6781676-06:00;False|2023-08-21T21:29:53.9044404-06:00;False|2023-08-21T13:35:14.2096293-06:00;False|2023-08-21T13:28:05.0388141-06:00;False|2023-08-21T13:21:45.0749695-06:00;False|2023-08-21T13:17:02.4479896-06:00;True|2023-08-21T13:09:11.0999395-06:00;False|2023-08-20T22:54:05.4376264-06:00;False|2023-08-20T22:49:19.0543892-06:00;False|2023-08-20T22:42:18.3027605-06:00;False|2023-08-20T22:33:45.1918699-06:00;False|2023-08-20T22:28:11.3214157-06:00;False|2023-08-20T18:47:11.9880706-06:00;False|2023-08-20T18:35:49.2931428-06:00;False|2023-08-20T18:30:20.5501333-06:00;False|2023-08-20T18:25:35.6624003-06:00;False|2023-08-20T17:25:43.4294408-06:00;False|2023-08-20T13:43:41.3475900-06:00;True|2023-08-20T00:11:20.2718802-06:00;True|2023-08-19T17:47:59.0160154-06:00;True|2023-08-18T23:41:44.7677243-06:00;False|2023-08-18T16:11:55.6979057-06:00;True|2023-08-18T15:43:52.6168039-06:00;False|2023-08-18T13:40:18.8963767-06:00;False|2023-08-18T10:54:32.7085207-06:00;False|2023-08-18T08:47:15.3394521-06:00;False|2023-08-18T08:43:11.4648773-06:00;False|2023-08-18T08:42:01.4440581-06:00;False|2023-08-18T08:39:19.6786158-06:00;False|2023-08-18T08:33:59.1978390-06:00;False|2023-08-18T08:29:06.1982034-06:00;False|2023-08-18T08:24:48.3027678-06:00;True|2023-08-17T14:06:44.4263434-06:00;False|2023-08-17T13:55:17.2868822-06:00;False|2023-08-17T13:52:16.3140972-06:00;False|2023-08-17T13:48:43.8585733-06:00;True|2023-08-17T13:15:19.3687720-06:00;False|2023-08-17T12:31:57.3271381-06:00;False|2023-08-17T12:28:28.6308882-06:00;False|2023-08-17T09:41:19.6852275-06:00;True|2023-08-17T08:24:59.9580394-06:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="appsettings.json">
-      <publishTime>08/31/2023 03:21:55</publishTime>
+      <publishTime>08/23/2023 00:03:21</publishTime>
     </File>
     <File Include="AutoMapper.dll">
       <publishTime>05/01/2022 09:27:54</publishTime>
@@ -33,7 +33,7 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>03/02/2020 13:31:18</publishTime>
     </File>
     <File Include="Microsoft.Azure.KeyVault.WebKey.dll">
-      <publishTime>03/02/2020 13:31:14</publishTime>
+      <publishTime>02/03/2020 13:31:14</publishTime>
     </File>
     <File Include="Microsoft.Azure.Services.AppAuthentication.dll">
       <publishTime>06/13/2018 11:39:42</publishTime>
@@ -63,7 +63,7 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>10/18/2022 10:19:46</publishTime>
     </File>
     <File Include="Microsoft.Extensions.Configuration.AzureKeyVault.dll">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>03/30/2022 03:10:00</publishTime>
     </File>
     <File Include="Microsoft.Extensions.Configuration.dll">
       <publishTime>10/18/2022 10:30:14</publishTime>
@@ -168,37 +168,37 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>11/15/2019 02:53:46</publishTime>
     </File>
     <File Include="SIMEXPRO.API.deps.json">
-      <publishTime>09/05/2023 20:26:30</publishTime>
+      <publishTime>09/07/2023 01:37:19</publishTime>
     </File>
     <File Include="SIMEXPRO.API.dll">
       <publishTime>09/05/2023 20:26:18</publishTime>
     </File>
     <File Include="SIMEXPRO.API.exe">
-      <publishTime>09/05/2023 20:26:18</publishTime>
+      <publishTime>09/07/2023 01:37:19</publishTime>
     </File>
     <File Include="SIMEXPRO.API.pdb">
-      <publishTime>09/05/2023 20:26:18</publishTime>
+      <publishTime>09/07/2023 01:37:18</publishTime>
     </File>
     <File Include="SIMEXPRO.API.runtimeconfig.json">
-      <publishTime>08/31/2023 03:53:19</publishTime>
+      <publishTime>09/06/2023 14:04:30</publishTime>
     </File>
     <File Include="SIMEXPRO.BusinessLogic.dll">
-      <publishTime>09/05/2023 20:26:17</publishTime>
+      <publishTime>09/07/2023 01:24:49</publishTime>
     </File>
     <File Include="SIMEXPRO.BusinessLogic.pdb">
-      <publishTime>09/05/2023 20:26:17</publishTime>
+      <publishTime>09/07/2023 01:24:49</publishTime>
     </File>
     <File Include="SIMEXPRO.DataAccess.dll">
-      <publishTime>09/05/2023 20:26:16</publishTime>
+      <publishTime>09/07/2023 01:24:48</publishTime>
     </File>
     <File Include="SIMEXPRO.DataAccess.pdb">
-      <publishTime>09/05/2023 20:26:16</publishTime>
+      <publishTime>09/07/2023 01:24:48</publishTime>
     </File>
     <File Include="SIMEXPRO.Entities.dll">
-      <publishTime>09/05/2023 20:26:15</publishTime>
+      <publishTime>09/07/2023 01:24:46</publishTime>
     </File>
     <File Include="SIMEXPRO.Entities.pdb">
-      <publishTime>09/05/2023 20:26:15</publishTime>
+      <publishTime>09/07/2023 01:24:46</publishTime>
     </File>
     <File Include="Swashbuckle.AspNetCore.Swagger.dll">
       <publishTime>09/23/2020 06:47:20</publishTime>
@@ -234,7 +234,7 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>10/18/2022 10:32:24</publishTime>
     </File>
     <File Include="web.config">
-      <publishTime>09/05/2023 20:26:30</publishTime>
+      <publishTime>09/07/2023 01:37:20</publishTime>
     </File>
   </ItemGroup>
 </Project>

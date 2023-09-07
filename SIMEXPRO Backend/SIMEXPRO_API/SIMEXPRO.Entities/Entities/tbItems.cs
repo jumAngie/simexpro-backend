@@ -30,6 +30,7 @@ namespace SIMEXPRO.Entities.Entities
         public int merc_Id { get; set; }
         public int? pais_IdOrigenMercancia { get; set; }
         public string item_ClasificacionArancelaria { get; set; }
+        public int? aran_Id { get; set; }
         public decimal? item_ValorUnitario { get; set; }
         public decimal? item_GastosDeTransporte { get; set; }
         public decimal? item_ValorTransaccion { get; set; }
@@ -57,6 +58,7 @@ namespace SIMEXPRO.Entities.Entities
         public bool? item_Estado { get; set; }
 
         public virtual tbFacturas fact { get; set; }
+        public virtual tbAranceles aran { get; set; }
         public virtual tbEstadoMercancias merc { get; set; }
         public virtual tbPaises pais_IdOrigenMercanciaNavigation { get; set; }
         public virtual tbUnidadMedidas unme { get; set; }
