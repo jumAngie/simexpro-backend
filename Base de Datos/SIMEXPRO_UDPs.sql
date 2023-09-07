@@ -8110,7 +8110,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbDuca_InsertarTab2]
+CREATE OR ALTER PROCEDURE [Adua].[UDP_tbDuca_InsertarTab2]
 	@duca_Id							INT,
 	@duca_Codigo_Declarante				NVARCHAR(200),
 	@duca_Numero_Id_Declarante			NVARCHAR(200),
@@ -8139,8 +8139,6 @@ CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbDuca_InsertarTab2]
 	@tran_FechaCreacion					DATETIME
 AS	
 BEGIN
-	BEGIN TRANSACTION 
-	SET @tran_FechaCreacion = GETDATE();
 	BEGIN TRY
 		BEGIN TRAN
 			IF @pais_Id > 0
