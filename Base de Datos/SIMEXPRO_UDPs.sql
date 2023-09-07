@@ -11805,7 +11805,7 @@ FROM	Prod.tbReporteModuloDia rmd
 		INNER JOIN Prod.tbModulos modu				ON rmd.modu_Id = modu.modu_Id 
 		INNER JOIN Acce.tbUsuarios crea				ON crea.usua_Id = rmd.usua_UsuarioCreacion 
 		LEFT JOIN  Acce.tbUsuarios modi				ON modi.usua_Id = rmd.usua_UsuarioModificacion 	
-ORDER BY remo_Fecha desc
+ORDER BY rmd.remo_FechaCreacion desc
 END
 GO
 
@@ -14837,7 +14837,7 @@ AS BEGIN
 		   ppro_FechaModificacion,
 		   ppro_Finalizado,
 		   ppro_Estado,
-	   	      (SELECT ppde_Id,
+	   	      (SELECT tbdetalles.ppro_Id,ppde_Id,
 		   		   tbdetalles.lote_Id,
 		   		   ppde_Cantidad,
 		   		   mate_Descripcion,
