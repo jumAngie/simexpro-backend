@@ -27,6 +27,14 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         //public bool? peor_Est { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         public DateTime peor_FechaCreacion { get; set; }
+
+        public string prov_Telefono { get; set; }
+        public string duca_No_Duca { get; set; }
+        public string empl_Creador { get; set; }
+        public string mate_Descripcion { get; set; }
+        public int Total { get; set; }
+
+
         public int? usua_UsuarioModificacion { get; set; }
         public DateTime? peor_FechaModificacion { get; set; }
         public bool? peor_Estado { get; set; }
