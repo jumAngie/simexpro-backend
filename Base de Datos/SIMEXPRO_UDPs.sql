@@ -2895,7 +2895,7 @@ GO
 
 
 /*Insertar Comersiante Individual*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap1 --'1548-1458-145789', 2, 1, 2,0,null,null,1, '2023-08-30 10:26:59.900'
+CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap1 
 (
 	@pers_RTN							NVARCHAR(40),
 	@ofic_Id							INT,
@@ -3090,49 +3090,68 @@ GO
 
 
 /*Editar Comersiante Individual*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Editar
-(
-	@coin_Id							INT,
+CREATE OR ALTER PROCEDURE [Adua].[UDP_tbComercianteIndividual_Editar]
+(	@coin_Id							INT,
   	@pers_Id                           	INT,
-  	@fopr_Id                           	BIT,
-  	@colo_Id                           	INT,
-  	@coin_PuntoReferencia			  	NVARCHAR(200),
-  	@coin_ColoniaRepresentante		  	INT,
-  	@coin_NumeroLocalReprentante	    NVARCHAR(200),
-  	@coin_PuntoReferenciaReprentante   	NVARCHAR(200),
-  	@coin_TelefonoCelular			    NVARCHAR(20),
-  	@coin_TelefonoFijo				    NVARCHAR(20),
-  	@coin_CorreoElectronico		    	NVARCHAR(30),
-  	@coin_CorreoElectronicoAlternativo 	NVARCHAR(30),
-  	@usua_UsuarioModificacion   		INT,
-  	@coin_FechaModificacion     		DATETIME 
+	@pers_RTN							NVARCHAR(40),
+	@ofic_Id							INT,
+	@escv_Id							INT,
+	@ofpr_Id							INT,
+	@pers_FormaRepresentacion			BIT,
+	@pers_escvRepresentante				INT,
+	@pers_OfprRepresentante				INT,
+  	@usua_UsuarioModificacion       	INT,
+	@pers_FechaModificacion       		DATETIME 
 )
 AS
 BEGIN
 	BEGIN TRY
-		 UPDATE Adua.tbComercianteIndividual 
-			SET pers_Id								= @pers_Id,                           	
-				pers_FormaRepresentacion			= @fopr_Id,                           	
-				colo_Id								= @colo_Id,                           	
-				coin_PuntoReferencia				= @coin_PuntoReferencia,			  	
-				--coin_ColoniaRepresentante			= @coin_ColoniaRepresentante,		  	
-				--coin_NumeroLocalReprentante			= @coin_NumeroLocalReprentante,	    
-				coin_PuntoReferenciaReprentante		= @coin_PuntoReferenciaReprentante,   	
-				coin_TelefonoCelular				= @coin_TelefonoCelular,			    
-				coin_TelefonoFijo					= @coin_TelefonoFijo,				    
-				coin_CorreoElectronico				= @coin_CorreoElectronico,		    	
-				coin_CorreoElectronicoAlternativo	= @coin_CorreoElectronicoAlternativo, 	
-				usua_UsuarioCreacion				= @usua_UsuarioModificacion,       		
-				coin_FechaCreacion					= @coin_FechaModificacion
-		  WHERE coin_Id = @coin_Id
+	BEGIN TRANSACTION
+		DECLARE @coin_Modificacion DATETIME = @pers_FechaModificacion;
+		DECLARE @estadoCivilRep INT;
+		DECLARE @oficioRep	INT;
 
-		SELECT 1 AS Resultado
+	IF(@pers_escvRepresentante = 0 AND @pers_OfprRepresentante = 0 )
+	BEGIN
+		SET @estadoCivilRep = NULL;
+		SET @oficioRep = NULL
+	END
+	ELSE
+	BEGIN
+	SET @estadoCivilRep = @pers_escvRepresentante;
+	SET @oficioRep = @pers_OfprRepresentante;
+	END
+
+
+		UPDATE Adua.tbPersonas SET  [pers_RTN]= @pers_RTN,
+									[ofic_Id]= @ofic_Id,
+									[escv_Id]=@escv_Id,
+									[ofpr_Id] = @ofpr_Id, 
+									[pers_escvRepresentante] = @estadoCivilRep,
+									[pers_OfprRepresentante] = @oficioRep, 
+									usua_UsuarioModificacion = @usua_UsuarioModificacion,
+									pers_FechaModificacion = @pers_FechaModificacion
+							WHERE   pers_Id = @pers_Id
+
+
+
+		UPDATE Adua.tbComercianteIndividual 
+					 SET pers_FormaRepresentacion = @pers_FormaRepresentacion,
+					     usua_UsuarioModificacion = @usua_UsuarioModificacion,
+					     coin_FechaCreacion = @coin_Modificacion
+						WHERE coin_Id = @coin_Id AND pers_Id = @pers_Id
+		
+
+		SELECT  1
+	COMMIT TRAN
 	END TRY
 	BEGIN CATCH
+	ROLLBACK TRAN
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
 	END CATCH
 END
 GO
+
 
 --*************** UDPS Para Tabla Persona Natural ************--
 
