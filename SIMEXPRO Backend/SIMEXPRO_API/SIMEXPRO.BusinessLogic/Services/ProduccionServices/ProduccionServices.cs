@@ -1946,6 +1946,20 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             {
                 return resultado.Error(ex.Message);
             }
+        }        
+        
+        public ServiceResult PO_ExportData()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _ordenCompraRepository.ExportData();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
         }
 
         #endregion

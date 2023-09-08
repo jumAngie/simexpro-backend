@@ -94,6 +94,13 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             return db.Query<tbOrdenCompra>(ScriptsDataBase.ObtenerOrdenCompraPorIdParaLineaTiempo, parametros, commandType: CommandType.StoredProcedure);
         }
 
+        public IEnumerable<tbOrdenCompra> ExportData()
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            return db.Query<tbOrdenCompra>(ScriptsDataBase.PO_ExportData, parametros, commandType: CommandType.StoredProcedure);
+        }
+
 
         public RequestStatus FinalizarOrdenCompra(tbOrdenCompra item)
         {

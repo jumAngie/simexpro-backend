@@ -74,5 +74,13 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             var datos = _produccionServices.FinalizarOrden(mapped);
             return Ok(datos);
         }
+
+        [HttpGet("ExportData")]
+        public IActionResult PO_ExportData()
+        {
+            var listado = _produccionServices.PO_ExportData();
+            listado.Data = _mapper.Map<IEnumerable<OrdenCompraViewModel>>(listado.Data);
+            return Ok(listado);
+        }
     }
 }

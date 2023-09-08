@@ -31,11 +31,9 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public string clie_Numero_Contacto { get; set; }
         public string clie_Correo_Electronico { get; set; }
         public string clie_FAX { get; set; }
-
         public string tiem_Descripcion { get; set; }
-
         public string usuarioCreacionNombre { get; set; }
         public string usuarioModificacionNombre { get; set; }
-
+        public string Detalles { get; set; }
     }
 }

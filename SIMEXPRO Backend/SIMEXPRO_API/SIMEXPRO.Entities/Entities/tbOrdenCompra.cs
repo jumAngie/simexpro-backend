@@ -58,6 +58,9 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string usuarioModificacionNombre { get; set; }        
 
+        [NotMapped]
+        public string Detalles { get; set; }
+
         public virtual tbClientes orco_IdClienteNavigation { get; set; }
         public virtual tbTipoEmbalaje orco_IdEmbalajeNavigation { get; set; }
         public virtual tbFormasdePago orco_MetodoPagoNavigation { get; set; }
