@@ -16,6 +16,7 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public DateTime adet_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }
         public DateTime? adet_FechaModificacion { get; set; }
+        public string detalles { get; set; }
 
     }
 }

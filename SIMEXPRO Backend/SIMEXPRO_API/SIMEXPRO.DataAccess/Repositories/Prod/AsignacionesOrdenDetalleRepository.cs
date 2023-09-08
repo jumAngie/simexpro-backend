@@ -62,6 +62,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             parametros.Add("@asor_Id",                   item.asor_Id,                   DbType.Int32,       ParameterDirection.Input);
             parametros.Add("@usua_UsuarioModificacion",  item.usua_UsuarioModificacion,  DbType.Int32,       ParameterDirection.Input);
             parametros.Add("@adet_FechaModificacion",    item.adet_FechaModificacion,    DbType.DateTime,    ParameterDirection.Input);
+            parametros.Add("@jsonParameter",             item.detalles,                  DbType.String,      ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.EditarAsignacionesOrdenDetalle, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
             return result;
