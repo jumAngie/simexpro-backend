@@ -10927,7 +10927,6 @@ BEGIN
 			,usuarioModificacion.usua_Nombre AS usuarioModificacionNombre
 			,ordenCompraDetalle.code_FechaModificacion
 			,ordenCompraDetalle.code_Estado
-			,ordenCompraDetalle.code_CodigoDetalle
 	  FROM	Prod.tbOrdenCompraDetalles			    ordenCompraDetalle
 			INNER JOIN	Prod.tbEstilos				estilo						ON	ordenCompraDetalle.esti_Id						= estilo.esti_Id
 			INNER JOIN	Prod.tbTallas				talla						ON	ordenCompraDetalle.tall_Id						= talla.tall_Id
@@ -10948,7 +10947,6 @@ BEGIN
 	SELECT	 ordenCompraDetalle.code_Id
 			,ordenCompraDetalle.orco_Id
 			,ordenCompraDetalle.esti_Id
-			,ordenCompraDetalle.code_CodigoDetalle
 			,estilo.esti_Descripcion
 			,ordenCompraDetalle.tall_Id
 			,CONCAT(talla.tall_Codigo, ' (', talla.tall_Nombre, ')') AS tall_Nombre
@@ -10973,18 +10971,14 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbOrdenCompraDetalles_Insertar
 	@tall_Id						INT,
 	@code_Sexo						CHAR(1),
 	@colr_Id						INT,
-	--@code_Documento					NVARCHAR(250),
-	--@code_Medidas					NVARCHAR(250),
 	@proc_IdComienza				INT,
 	@proc_IdActual					INT,
 	@code_Unidad					DECIMAL(18,2),
 	@code_Valor						DECIMAL(18,2),
 	@code_Impuesto					DECIMAL(18,2),
-	--@code_Descuento					DECIMAL(18,2),
 	@code_EspecificacionEmbalaje	NVARCHAR(200),
 	@usua_UsuarioCreacion       	INT,
-	@code_FechaCreacion         	DATETIME,
-	--@code_CodigoDetalle				NVARCHAR(100)
+	@code_FechaCreacion         	DATETIME
 )
 AS
 BEGIN
