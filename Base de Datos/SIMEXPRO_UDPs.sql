@@ -12180,7 +12180,7 @@ CREATE OR ALTER   PROCEDURE [Prod].[UDP_tbProcesos_Insertar]
 AS
 BEGIN
 	BEGIN TRY
-			INSERT INTO Prod.tbProcesos(proc_Descripcion,usua_UsuarioCreacion,proc_FechaCreacion)
+			INSERT INTO Prod.tbProcesos(proc_Descripcion,proc_CodigoHtml,usua_UsuarioCreacion,proc_FechaCreacion)
 			VALUES (
 			@proc_Descripcion,
 			@proc_CodigoHtml,
