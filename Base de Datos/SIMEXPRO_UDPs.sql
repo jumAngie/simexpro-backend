@@ -10626,6 +10626,7 @@ BEGIN
 	
 	SELECT	 ordenCompra.orco_Id
 	-- Informacion del cliente
+			,ordenCompra.orco_Codigo
 			,ordenCompra.orco_IdCliente
 			,cliente.clie_Nombre_O_Razon_Social
 			,cliente.clie_Direccion
@@ -10675,7 +10676,8 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbOrdenCompra_Insertar
 	@orco_EstadoOrdenCompra		CHAR(1),
 	@orco_DireccionEntrega		NVARCHAR(250),
 	@usua_UsuarioCreacion       INT,
-	@orco_FechaCreacion         DATETIME
+	@orco_FechaCreacion         DATETIME,
+	@orco_Codigo				NVARCHAR(100)
 )
 AS
 BEGIN
@@ -10690,7 +10692,8 @@ BEGIN
 					orco_EstadoOrdenCompra,		
 					orco_DireccionEntrega,		
 					usua_UsuarioCreacion,       
-					orco_FechaCreacion)
+					orco_FechaCreacion,
+					orco_Codigo)
 			VALUES (@orco_IdCliente,				
 					@orco_FechaEmision,			
 					@orco_FechaLimite,			
@@ -10700,7 +10703,8 @@ BEGIN
 					@orco_EstadoOrdenCompra,		
 					@orco_DireccionEntrega,		
 					@usua_UsuarioCreacion,       
-					@orco_FechaCreacion)
+					@orco_FechaCreacion,
+					@orco_Codigo)
 			
 		SELECT SCOPE_IDENTITY() AS Resultado
 	END TRY
@@ -10980,7 +10984,7 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbOrdenCompraDetalles_Insertar
 	@code_EspecificacionEmbalaje	NVARCHAR(200),
 	@usua_UsuarioCreacion       	INT,
 	@code_FechaCreacion         	DATETIME,
-	@code_CodigoDetalle				NVARCHAR(100)
+	--@code_CodigoDetalle				NVARCHAR(100)
 )
 AS
 BEGIN
@@ -11002,8 +11006,7 @@ BEGIN
 					--code_Descuento,					
 					code_EspecificacionEmbalaje,	
 					usua_UsuarioCreacion,       	
-					code_FechaCreacion,
-					code_CodigoDetalle)
+					code_FechaCreacion)
 			 VALUES (@orco_Id,						
 					@code_CantidadPrenda,			
 					@esti_Id,						
@@ -11020,8 +11023,7 @@ BEGIN
 					--@code_Descuento,					
 					@code_EspecificacionEmbalaje,	
 					@usua_UsuarioCreacion,       	
-					@code_FechaCreacion,
-					@code_CodigoDetalle)
+					@code_FechaCreacion)
 		
 		SELECT SCOPE_IDENTITY() AS Resultado
 	END TRY
@@ -11030,6 +11032,7 @@ BEGIN
 	END CATCH
 END
 GO
+
 
 CREATE OR ALTER PROCEDURE Prod.UDP_tbOrdenCompraDetalles_Editar
 (
