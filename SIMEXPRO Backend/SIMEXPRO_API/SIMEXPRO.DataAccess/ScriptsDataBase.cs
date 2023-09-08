@@ -360,6 +360,7 @@ namespace SIMEXPRO.DataAccess
 
         #region Importadores
         public static string ListarImportadores = "Adua.UDP_tbImportadores_Listar";
+        public static string ListarImportadoresById = "Adua.UDP_tbImportadores_ById";
         #endregion
 
         #region Liquidacion General

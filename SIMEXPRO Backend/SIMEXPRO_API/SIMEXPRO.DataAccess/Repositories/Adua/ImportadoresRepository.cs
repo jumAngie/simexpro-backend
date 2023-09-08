@@ -34,6 +34,15 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return db.Query<tbImportadores>(ScriptsDataBase.ListarImportadores, null, commandType: CommandType.StoredProcedure);
         }
 
+        public IEnumerable<tbImportadores> ListarImportadoresById(int Id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+
+            var parametros = new DynamicParameters();
+            parametros.Add("@impo_Id", Id, DbType.Int32, ParameterDirection.Input);
+            return db.Query<tbImportadores>(ScriptsDataBase.ListarImportadoresById, parametros, commandType: CommandType.StoredProcedure);
+        }
+
         public RequestStatus Update(tbImportadores item)
         {
             throw new NotImplementedException();
