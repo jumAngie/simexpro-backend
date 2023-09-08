@@ -17,7 +17,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
-            parametros.Add("@adet_Id", item.adet_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@lote_Id", item.lote_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@adet_Cantidad", item.adet_Cantidad, DbType.Int32, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.EliminarAsignacionesOrdenDetalle, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
             return result;
