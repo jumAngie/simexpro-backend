@@ -8393,7 +8393,7 @@ GO
 CREATE OR ALTER PROCEDURE Adua.UDP_tbAranceles_Listar
 AS
 BEGIN
-	SELECT	aran_Id,
+	SELECT	50 aran_Id,
 			aran_Codigo,
 			DATALENGTH(aran_Codigo) AS tamaño, 
 			CASE 
