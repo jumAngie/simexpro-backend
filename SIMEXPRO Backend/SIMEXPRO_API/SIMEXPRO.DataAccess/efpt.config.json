@@ -458,6 +458,10 @@
          "ObjectType": 3
       },
       {
+         "Name": "[Adua].[VW_tbDuca_GenerarDuca]",
+         "ObjectType": 3
+      },
+      {
          "Name": "[Prod].[VW_tbOrdenCompraDetalle_LineaTiempo]",
          "ObjectType": 3
       }

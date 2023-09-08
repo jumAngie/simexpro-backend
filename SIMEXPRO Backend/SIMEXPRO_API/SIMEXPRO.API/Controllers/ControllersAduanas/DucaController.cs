@@ -34,6 +34,13 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(list);
         }
 
+        [HttpGet("GenerarDuca")]
+        public IActionResult Genera(int duca_Id)
+        {
+            var listado = _aduanaServices.GenerarDuca(duca_Id);
+            return Ok(listado);
+        }
+
         [HttpGet("ListaDevaNoDuca")]
         public IActionResult ListaDevaNoDuca()
         {

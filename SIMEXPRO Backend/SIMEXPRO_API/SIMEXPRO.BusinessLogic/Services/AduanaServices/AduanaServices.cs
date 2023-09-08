@@ -1121,6 +1121,20 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult GenerarDuca(int duca_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _ducaRepository.generarDuca( duca_Id);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
         public ServiceResult ListaDevaNoDuca()
         {
             var result = new ServiceResult();
