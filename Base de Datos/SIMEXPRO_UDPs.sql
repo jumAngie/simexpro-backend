@@ -12146,11 +12146,12 @@ GO
 
 --************PROCESO******************--
 /*Listar Proceso*/
-CREATE OR ALTER PROCEDURE Prod.UDP_tbProcesos_Listar
+CREATE OR ALTER   PROCEDURE [Prod].[UDP_tbProcesos_Listar]
 AS
 BEGIN
 SELECT	proc_Id								,
 		proc_Descripcion					,
+		proc_CodigoHtml						,
 		pro.usua_UsuarioCreacion				,
 		crea.usua_Nombre					AS usarioCreacion,			 
 		proc_FechaCreacion					,
@@ -12167,10 +12168,13 @@ FROM	Prod.tbProcesos pro
 		LEFT JOIN Acce.tbUsuarios elim		ON elim.usua_Id = pro.usua_UsuarioEliminacion 
 WHERE	proc_Estado = 1
 END
+
+
 GO
 /*Insertar Proceso*/
-CREATE OR ALTER PROCEDURE Prod.UDP_tbProcesos_Insertar
+CREATE OR ALTER   PROCEDURE [Prod].[UDP_tbProcesos_Insertar]
 @proc_Descripcion		NVARCHAR(200),
+@proc_CodigoHtml		NVARCHAR(50),
 @usua_UsuarioCreacion	INT,
 @proc_FechaCreacion		DATETIME
 AS
@@ -12178,7 +12182,8 @@ BEGIN
 	BEGIN TRY
 			INSERT INTO Prod.tbProcesos(proc_Descripcion,usua_UsuarioCreacion,proc_FechaCreacion)
 			VALUES (
-			@proc_Descripcion,		
+			@proc_Descripcion,
+			@proc_CodigoHtml,
 			@usua_UsuarioCreacion,	
 			@proc_FechaCreacion
 			)
@@ -12188,20 +12193,23 @@ BEGIN
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
 	END CATCH
 END
+
 GO
 /*Editar Proceso*/
-CREATE OR ALTER PROCEDURE Prod.UDP_tbProcesos_Editar
+ALTER   PROCEDURE [Prod].[UDP_tbProcesos_Editar]
 @proc_ID					INT,
 @proc_Descripcion			NVARCHAR(200),
+@proc_CodigoHtml			NVARCHAR(50),
 @usua_UsuarioModificacion	INT,
-@proc_FechaCreacion			DATETIME
+@proc_FechaModificacion		DATETIME
 AS
 BEGIN
 	BEGIN TRY
 			UPDATE Prod.tbProcesos
 			SET proc_Descripcion = @proc_Descripcion,
-			usua_UsuarioModificacion = @usua_UsuarioModificacion,
-			proc_FechaModificacion = @proc_FechaCreacion
+				proc_CodigoHtml = @proc_CodigoHtml,
+				usua_UsuarioModificacion = @usua_UsuarioModificacion,
+				proc_FechaModificacion = @proc_FechaModificacion
 			WHERE proc_ID = @proc_ID
 			SELECT 1
 	END TRY

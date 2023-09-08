@@ -10,6 +10,7 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
     {
         public int proc_Id { get; set; }
         public string proc_Descripcion { get; set; }
+        public string proc_CodigoHtml { get; set; }
         public int modu_Id { get; set; }
         public string modu_Nombre { get; set; }
         public int? usua_UsuarioCreacion { get; set; }

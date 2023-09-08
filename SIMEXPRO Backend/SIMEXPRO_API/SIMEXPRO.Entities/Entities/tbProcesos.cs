@@ -21,6 +21,8 @@ namespace SIMEXPRO.Entities.Entities
         public int proc_Id { get; set; }
         public string proc_Descripcion { get; set; }
         [NotMapped]
+        public string proc_CodigoHtml { get; set; }
+        [NotMapped]
         public int modu_Id { get; set; }
         [NotMapped]
         public string modu_Nombre { get; set; }
