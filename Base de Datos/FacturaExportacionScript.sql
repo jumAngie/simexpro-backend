@@ -112,8 +112,8 @@ BEGIN
 		IF @prev_orco_Id != @orco_Id
 			BEGIN
 
-				/* Debido a que el usuario cambio de órden de compra en el encabezado,
-				los items añadidos con la orden de compra previa serán eliminados */
+				/* Debido a que el usuario cambio de ï¿½rden de compra en el encabezado,
+				los items aï¿½adidos con la orden de compra previa serï¿½n eliminados */
 				DELETE FROM Prod.tbFacturasExportacionDetalles
 				WHERE faex_Id = @faex_Id
 
@@ -337,7 +337,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 			SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END CATCH
+	ENDï¿½CATCH
 END
 GO
 

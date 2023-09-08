@@ -94,7 +94,7 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
         [HttpPost("EditarPart3")]
         public IActionResult EditarPart3(DocumentosDeSoporteViewModel item)
         {
-            var result = _aduanaServices.InsertarDucaTap3(_mapper.Map<tbDocumentosDeSoporte>(item));
+            var result = _aduanaServices.ActualizarDucaTap3(_mapper.Map<tbDocumentosDeSoporte>(item));
 
             return Ok(result);
         }

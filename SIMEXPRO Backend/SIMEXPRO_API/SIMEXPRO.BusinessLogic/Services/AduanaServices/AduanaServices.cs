@@ -1592,6 +1592,20 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+
+        public ServiceResult ListarImportadoresById(int Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _importadoresRepository.ListarImportadoresById(Id);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region ImpuestosPorArancel

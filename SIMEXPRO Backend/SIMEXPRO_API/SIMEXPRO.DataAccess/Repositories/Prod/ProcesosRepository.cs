@@ -27,6 +27,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
             parametros.Add("@proc_Descripcion", item.proc_Descripcion, DbType.String, ParameterDirection.Input);
+            parametros.Add("@proc_CodigoHtml", item.proc_CodigoHtml, DbType.String, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@proc_FechaCreacion", item.proc_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
 
@@ -42,8 +43,9 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             var parametros = new DynamicParameters();
             parametros.Add("@proc_Id", item.proc_Id, DbType.String, ParameterDirection.Input);
             parametros.Add("@proc_Descripcion", item.proc_Descripcion, DbType.String, ParameterDirection.Input);
+            parametros.Add("@proc_CodigoHtml", item.proc_CodigoHtml, DbType.String, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@proc_FechaCreacion", item.proc_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
+            parametros.Add("@proc_FechaModificacion", item.proc_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
 
             var answer = db.QueryFirst<string>(ScriptsDataBase.EditaProcesos, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;

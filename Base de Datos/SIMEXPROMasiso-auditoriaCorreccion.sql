@@ -1188,6 +1188,7 @@ GO
 CREATE TABLE Prod.tbProcesos(
 	proc_Id						INT  IDENTITY(1,1), 
 	proc_Descripcion			NVARCHAR(200) NOT NULL,
+	proc_CodigoHtml				NVARCHAR(50) NOT NULL,
 	usua_UsuarioCreacion 		INT,
 	proc_FechaCreacion			DATETIME NOT NULL,  
 	usua_UsuarioModificacion	INT, 

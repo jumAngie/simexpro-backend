@@ -28,5 +28,12 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             list.Data = _mapper.Map<IEnumerable<tbImportadores>>(list.Data);
             return Ok(list);
         }
+        [HttpGet("ListarById")]
+        public IActionResult ListById(int Id)
+        {
+            var list = _aduanaServices.ListarImportadoresById(Id);
+            return Ok(list);
+        }
+
     }
 }
