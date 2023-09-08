@@ -51,7 +51,6 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             parametros.Add("@code_EspecificacionEmbalaje", item.code_EspecificacionEmbalaje, DbType.String, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@code_FechaCreacion", item.code_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
-            parametros.Add("@code_CodigoDetalle", item.code_CodigoDetalle, DbType.String, ParameterDirection.Input);
 
             var answer = db.QueryFirst<string>(ScriptsDataBase.InsertarOrdenCompraDetalles, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;

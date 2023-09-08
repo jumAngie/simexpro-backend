@@ -50,6 +50,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             parametros.Add("@orco_DireccionEntrega", item.orco_DireccionEntrega, DbType.String, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@orco_FechaCreacion", item.orco_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
+            parametros.Add("@orco_Codigo", item.orco_Codigo, DbType.String, ParameterDirection.Input);
 
             var answer = db.QueryFirst<string>(ScriptsDataBase.InsertarOrdenCompra, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;

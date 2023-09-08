@@ -52,6 +52,9 @@ namespace SIMEXPRO.Entities.Entities
         public bool duca_Finalizado { get; set; }
 
         [NotMapped]
+        public string emba_Codigo { get; set; }
+
+        [NotMapped]
         public string tran_IdUnidadTransporte { get; set; }
 
         [NotMapped]

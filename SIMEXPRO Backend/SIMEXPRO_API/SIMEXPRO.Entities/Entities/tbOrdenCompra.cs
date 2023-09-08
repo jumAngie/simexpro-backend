@@ -21,6 +21,7 @@ namespace SIMEXPRO.Entities.Entities
         public DateTime orco_FechaEmision { get; set; }
         public DateTime orco_FechaLimite { get; set; }
         public int orco_MetodoPago { get; set; }
+        public string orco_Codigo { get; set; }
         public bool orco_Materiales { get; set; }
         public int orco_IdEmbalaje { get; set; }
         public string orco_EstadoOrdenCompra { get; set; }

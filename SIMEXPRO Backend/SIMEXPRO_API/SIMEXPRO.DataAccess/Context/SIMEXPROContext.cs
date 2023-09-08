@@ -20,6 +20,7 @@ namespace SIMEXPRO.DataAccess.Context
         }
 
         public virtual DbSet<VW_tbDeclaraciones_ValorCompleto> VW_tbDeclaraciones_ValorCompleto { get; set; }
+        public virtual DbSet<VW_tbDuca_GenerarDuca> VW_tbDuca_GenerarDuca { get; set; }
         public virtual DbSet<VW_tbOrdenCompraDetalle_LineaTiempo> VW_tbOrdenCompraDetalle_LineaTiempo { get; set; }
         public virtual DbSet<tbAduanas> tbAduanas { get; set; }
         public virtual DbSet<tbAldeas> tbAldeas { get; set; }
@@ -310,6 +311,106 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.Property(e => e.pvde_Condicion_Otra).HasMaxLength(300);
 
                 entity.Property(e => e.usua_CreacionNombre).HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<VW_tbDuca_GenerarDuca>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("VW_tbDuca_GenerarDuca", "Adua");
+
+                entity.Property(e => e.adua_IngresoNombre).HasMaxLength(506);
+
+                entity.Property(e => e.adua_SalidaNombre).HasMaxLength(506);
+
+                entity.Property(e => e.conductorNombres)
+                    .IsRequired()
+                    .HasMaxLength(401);
+
+                entity.Property(e => e.cont_Licencia).HasMaxLength(50);
+
+                entity.Property(e => e.cont_NoIdentificacion)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.deva_FechaAceptacion).HasColumnType("datetime");
+
+                entity.Property(e => e.duca_AduanaDestino).HasMaxLength(506);
+
+                entity.Property(e => e.duca_AduanaRegistro).HasMaxLength(506);
+
+                entity.Property(e => e.duca_CanalAsignado)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.duca_Codigo_Declarante).HasMaxLength(200);
+
+                entity.Property(e => e.duca_Codigo_Transportista).HasMaxLength(200);
+
+                entity.Property(e => e.duca_FechaVencimiento).HasColumnType("date");
+
+                entity.Property(e => e.duca_Lugar_Desembarque).HasMaxLength(207);
+
+                entity.Property(e => e.duca_Lugar_Embarque).HasMaxLength(215);
+
+                entity.Property(e => e.duca_ModoTransporte).HasMaxLength(75);
+
+                entity.Property(e => e.duca_No_Duca).HasMaxLength(100);
+
+                entity.Property(e => e.duca_Numero_Id_Declarante).HasMaxLength(200);
+
+                entity.Property(e => e.duca_PaisDestino).HasMaxLength(154);
+
+                entity.Property(e => e.duca_PaisExportacion).HasMaxLength(154);
+
+                entity.Property(e => e.duca_PaisExportador)
+                    .HasMaxLength(2)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.duca_PaisImportador)
+                    .HasMaxLength(2)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
+
+                entity.Property(e => e.duca_PaisProcedencia).HasMaxLength(154);
+
+                entity.Property(e => e.duca_RegimenAduanero).HasMaxLength(512);
+
+                entity.Property(e => e.duca_TipoIdentificacionExportador).HasMaxLength(75);
+
+                entity.Property(e => e.impo_Nombre_Raso).HasMaxLength(250);
+
+                entity.Property(e => e.impo_NumRegistro).HasMaxLength(40);
+
+                entity.Property(e => e.marc_Descripcion).HasMaxLength(20);
+
+                entity.Property(e => e.pais_Expedicion).HasMaxLength(154);
+
+                entity.Property(e => e.pais_Transporte).HasMaxLength(154);
+
+                entity.Property(e => e.prov_Nombre_Raso).HasMaxLength(250);
+
+                entity.Property(e => e.prov_NumeroIdentificacion).HasMaxLength(50);
+
+                entity.Property(e => e.tran_Chasis).HasMaxLength(100);
+
+                entity.Property(e => e.tran_Equipamiento).HasMaxLength(200);
+
+                entity.Property(e => e.tran_IdContenedor).HasMaxLength(100);
+
+                entity.Property(e => e.tran_IdUnidadTransporte)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.tran_Remolque).HasMaxLength(50);
+
+                entity.Property(e => e.tran_TamanioEquipamiento)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.tran_TipoCarga).HasMaxLength(200);
             });
 
             modelBuilder.Entity<VW_tbOrdenCompraDetalle_LineaTiempo>(entity =>
@@ -3998,11 +4099,6 @@ namespace SIMEXPRO.DataAccess.Context
                     .HasName("PK_Prod_tbOrdenCompraDetalles_code_Id");
 
                 entity.ToTable("tbOrdenCompraDetalles", "Prod");
-
-                entity.HasIndex(e => e.code_CodigoDetalle, "UQ_Prod_tbOrdenCompraDetalles_code_CodigoDetalle")
-                    .IsUnique();
-
-                entity.Property(e => e.code_CodigoDetalle).HasMaxLength(100);
 
                 entity.Property(e => e.code_EspecificacionEmbalaje)
                     .IsRequired()

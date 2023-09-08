@@ -152,6 +152,14 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return db.Query<tbDuca>(ScriptsDataBase.ListarDuca, null, commandType: System.Data.CommandType.StoredProcedure);
         }
 
+
+        public IEnumerable<VW_tbDuca_GenerarDuca> generarDuca(int duca_Id)
+        {
+            var con = new SIMEXPRO();
+            return con.VW_tbDuca_GenerarDuca.Where(x => x.duca_Id == duca_Id);
+        }
+
+
         public RequestStatus Update(tbDuca item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);

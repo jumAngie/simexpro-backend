@@ -16,6 +16,10 @@
       {
          "Name": "[Adua].[VW_tbDeclaraciones_ValorCompleto]",
          "ObjectType": 3
+      },
+      {
+         "Name": "[Adua].[VW_tbDuca_GenerarDuca]",
+         "ObjectType": 3
       }
    ],
    "UiHint": "simexpro.SIMEXPRO",
