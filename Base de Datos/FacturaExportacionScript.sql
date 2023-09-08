@@ -354,10 +354,6 @@ END
 GO
 
 
-SELECT * FROM Prod.tbFacturasExportacion WHERE faex_Id= 25
-SELECT * FROM Prod.tbFacturasExportacionDetalles WHERE faex_Id= 25
-
-
 -- PROCEDIMIENTO PARA LISTAR LAS DUCAS 
 CREATE OR ALTER PROCEDURE Prod.UDP_DUCAsDDL
 AS
@@ -420,17 +416,6 @@ BEGIN
 	END CATCH
 END
 GO
-
---SELECT * FROM Adua.tbDuca
---SELECT * FROM Prod.tbColores
---SELECT * FROM Prod.tbTallas
---SELECT * FROM Prod.tbOrdenCompraDetalles WHERE orco_Id = 1
---SELECT * FROM Prod.tbOrdenCompra
---SELECT * FROM Prod.tbFacturasExportacion 
-
---SELECT * FROM Prod.tbFacturasExportacion WHERE faex_Id = 162
---SELECT * FROM Prod.tbFacturasExportacionDetalles WHERE faex_Id = 162
---GO
 
 
 CREATE OR ALTER PROCEDURE Prod.UDP_OrdenCompraDataToExport
