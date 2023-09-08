@@ -3999,11 +3999,6 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.ToTable("tbOrdenCompraDetalles", "Prod");
 
-                entity.HasIndex(e => e.code_CodigoDetalle, "UQ_Prod_tbOrdenCompraDetalles_code_CodigoDetalle")
-                    .IsUnique();
-
-                entity.Property(e => e.code_CodigoDetalle).HasMaxLength(100);
-
                 entity.Property(e => e.code_EspecificacionEmbalaje)
                     .IsRequired()
                     .HasMaxLength(200);

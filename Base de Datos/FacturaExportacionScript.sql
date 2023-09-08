@@ -121,7 +121,8 @@ BEGIN
 				UPDATE Prod.tbFacturasExportacion
 				SET	duca_Id = @duca_Id, 
 					faex_Fecha = @faex_Fecha, 
-					orco_Id = @orco_Id, 
+					orco_Id = @orco_Id,
+					faex_Total = 0,
 					usua_UsuarioModificacion = @usua_UsuarioModificacion, 
 					faex_FechaModificacion = @faex_FechaModificacion
 				WHERE faex_Id = @faex_Id
@@ -312,7 +313,7 @@ GO
 
 
 -- PROCEDIMIENTO PARA BORRAR LAS FACTURAS EXPORTACION DETALLES (ITEMS)
-CREATE OR ALTER PROC Prod.UDP_tbFacturasExportacionDetalle_Eliminar --31
+CREATE OR ALTER PROC Prod.UDP_tbFacturasExportacionDetalle_Eliminar
 (@fede_Id  INT)
 AS
 BEGIN
@@ -328,19 +329,29 @@ BEGIN
 		-- Hacer la nueva sumatoria con los items que le quedan a esa factura
 		DECLARE @faex_Total DECIMAL(18,2) = (SELECT SUM(fede_TotalDetalle) FROM Prod.tbFacturasExportacionDetalles WHERE faex_Id = @faex_Id)
 
-		-- Actualizar el total del encabezado de factura
-		UPDATE Prod.tbFacturasExportacion 
-		SET faex_Total = @faex_Total
-		WHERE faex_Id = @faex_Id
+		IF(@faex_Total IS NULL)
+			BEGIN
+				UPDATE Prod.tbFacturasExportacion 
+				SET faex_Total = 0
+				WHERE faex_Id = @faex_Id
+								
+				SELECT 1
+			END
+		ELSE
+			BEGIN
+				UPDATE Prod.tbFacturasExportacion 
+				SET faex_Total = @faex_Total
+				WHERE faex_Id = @faex_Id
+				
+				SELECT 1
+		END
 
-		SELECT 1
 	END TRY
 	BEGIN CATCH
 			SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END�CATCH
+	END CATCH
 END
 GO
-
 
 
 -- PROCEDIMIENTO PARA LISTAR LAS DUCAS 
@@ -404,17 +415,6 @@ BEGIN
 			SELECT 'Error Message: ' + ERROR_MESSAGE()
 	END CATCH
 END
-GO
-
-SELECT * FROM Adua.tbDuca
-SELECT * FROM Prod.tbColores
-SELECT * FROM Prod.tbTallas
-SELECT * FROM Prod.tbOrdenCompraDetalles WHERE orco_Id = 1
-SELECT * FROM Prod.tbOrdenCompra
-SELECT * FROM Prod.tbFacturasExportacion 
-
-SELECT * FROM Prod.tbFacturasExportacion WHERE faex_Id = 162
-SELECT * FROM Prod.tbFacturasExportacionDetalles WHERE faex_Id = 162
 GO
 
 
