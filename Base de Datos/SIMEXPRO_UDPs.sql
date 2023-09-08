@@ -6898,6 +6898,9 @@ BEGIN
 	SELECT item_Id, 
 	       fact_Id, 
 		   item_Cantidad, 
+		   item_Cantidad_Bultos,
+		   item_ClaseBulto,
+		   item_Acuerdo,
 		   item_PesoNeto, 
 		   item_PesoBruto, 
 		   unme_Id, 
@@ -9736,49 +9739,41 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosDeSoporte_Insertar
 	@doso_Monto				           	NVARCHAR(50),
 	@usua_UsuarioCreacion				INT,
 	@doso_FechaCreacion					DATETIME
-
 AS
 BEGIN 
+	BEGIN TRY
+		INSERT INTO Adua.tbDocumentosDeSoporte
+					(tido_Id
+					,duca_Id
+					,doso_NumeroDocumento
+					,doso_FechaEmision
+					,doso_FechaVencimiento
+					,doso_PaisEmision
+					,doso_LineaAplica
+					,doso_EntidadEmitioDocumento
+					,doso_Monto
+					,usua_UsuarioCreacion
+					,doso_FechaCreacion)
+				VALUES
+					(@tido_Id
+					,@duca_Id
+					,UPPER(@doso_NumeroDocumento)
+					,@doso_FechaEmision
+					,@doso_FechaVencimiento
+					,@doso_PaisEmision
+					,@doso_LineaAplica
+					,@doso_EntidadEmitioDocumento
+					,@doso_Monto
+					,@usua_UsuarioCreacion
+					,@doso_FechaCreacion)
 
-BEGIN TRY
-
-	INSERT INTO Adua.tbDocumentosDeSoporte
-			   (tido_Id
-			   ,duca_Id
-			   ,doso_NumeroDocumento
-			   ,doso_FechaEmision
-			   ,doso_FechaVencimiento
-			   ,doso_PaisEmision
-			   ,doso_LineaAplica
-			   ,doso_EntidadEmitioDocumento
-			   ,doso_Monto
-
-			   ,usua_UsuarioCreacion
-			   ,doso_FechaCreacion)
-		 VALUES
-			   (@tido_Id
-			   ,@duca_Id
-			   ,UPPER(@doso_NumeroDocumento)
-			   ,@doso_FechaEmision
-			   ,@doso_FechaVencimiento
-			   ,@doso_PaisEmision
-			   ,@doso_LineaAplica
-			   ,@doso_EntidadEmitioDocumento
-			   ,@doso_Monto
-
-			   ,@usua_UsuarioCreacion
-			   ,@doso_FechaCreacion)
-
-			   SELECT 1
-			   END TRY
+			SELECT 1
+	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
 	END CATCH 
-
 END
-
 GO
-
 
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosDeSoporte_Eliminar
 	@doso_Id		INT

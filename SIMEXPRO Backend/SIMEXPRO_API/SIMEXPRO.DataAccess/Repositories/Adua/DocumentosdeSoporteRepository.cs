@@ -25,7 +25,6 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
         public RequestStatus Insert(tbDocumentosDeSoporte item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
-            RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
             parametros.Add("@tido_Id", item.tido_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@duca_Id", item.duca_Id, DbType.Int32, ParameterDirection.Input);
@@ -39,8 +38,12 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@doso_FechaCreacion", item.doso_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.InsertarDocumentosSoporte, parametros, commandType: CommandType.StoredProcedure);
-            result.MessageStatus = answer;
-            return result;
+            
+            return new RequestStatus()
+            {
+                CodeStatus = answer != "1" ? 0 : int.Parse(answer),
+                MessageStatus = answer
+            };
         }
 
         public RequestStatus EliminarDocumento(int doso_Id)
