@@ -7962,6 +7962,7 @@ BEGIN
 		  
 		  --23.1 Conductor 
 		  duca_Conductor_Id,
+		  cond.cont_NoIdentificacion,
 		  cond.cont_Licencia,
 		  paisc.pais_Nombre						AS 'Nombre_pais_conductor',
 		  cond.cont_Nombre,
@@ -7971,6 +7972,8 @@ BEGIN
 		  
 		  --Identificacion de la Declaracion parte V
 		  trns.tran_Id,
+		  trns.tran_IdUnidadTransporte,
+		  trns.tran_TamanioEquipamiento,
 		  trns.pais_Id							AS 'Id_pais_transporte',
 		  paist.pais_Nombre						AS 'Nombre_pais_transporte',
 		  trns.marca_Id							AS 'Transporte_marca_Id',
@@ -8023,7 +8026,6 @@ END
 GO
 
  
-
 /* Preinsert DUCA*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_PreInsertar
 AS
