@@ -34,7 +34,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             RequestStatus result = new();
             var parametros = new DynamicParameters();
-            parametros.Add("@duca_Id", item.duca_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@duca_No_Duca", item.duca_No_Duca, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@faex_Fecha", item.faex_Fecha, DbType.DateTime, ParameterDirection.Input);
             parametros.Add("@orco_Id", item.orco_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
@@ -59,7 +59,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             var parametros = new DynamicParameters();
 
             parametros.Add("@faex_Id", item.faex_Id, DbType.String, ParameterDirection.Input);
-            parametros.Add("@duca_Id", item.duca_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@duca_No_Duca", item.duca_No_Duca, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@faex_Fecha", item.faex_Fecha, DbType.DateTime, ParameterDirection.Input);
             parametros.Add("@orco_Id", item.orco_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
@@ -101,7 +101,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             RequestStatus result = new();
             var parametros = new DynamicParameters();
-            parametros.Add("@duca_Id", item.duca_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@duca_No_Duca", item.duca_No_Duca, DbType.Int32, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.ComprobarNoDUCA, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
             return result;
