@@ -7903,7 +7903,6 @@ END
 go
 --****************************************** DUCA ******************************************--
 
-
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_Listar
 AS
 BEGIN
@@ -7945,7 +7944,8 @@ BEGIN
 		  duca_Pais_Destino,
 		  paisD.pais_Nombre						AS 'Nombre_pais_destino', 
 		  duca_Deposito_Aduanero,
-		  duca_Lugar_Desembarque, 
+		  duca_Lugar_Desembarque,
+		  embarque.emba_Codigo,
 		  duca_Manifiesto, 
 		  duca_Titulo, 
 		  
@@ -8014,6 +8014,7 @@ LEFT JOIN Gral.tbPaises					AS paisEE	ON duca.duca_Pais_Emision_Exportador = pai
 LEFT JOIN Gral.tbPaises					AS paisEI	ON duca.duca_Pais_Emision_Importador = paisEI.pais_Id
 LEFT JOIN Gral.tbPaises					AS paisE	ON duca.duca_Pais_Exportacion = paisE.pais_Id
 LEFT JOIN Gral.tbPaises					AS paisP	ON duca.duca_Pais_Procedencia = paisP.pais_Id
+LEFT JOIN Adua.tbLugaresEmbarque		AS embarque ON duca.duca_Lugar_Desembarque = embarque.emba_Id
 LEFT JOIN Adua.tbModoTransporte			AS modoT	ON duca.motr_id = modoT.motr_Id
 LEFT JOIN Adua.tbAduanas				AS adua1	ON duca.duca_AduanaRegistro = adua1.adua_Id
 LEFT JOIN Adua.tbAduanas				AS adua2	ON duca.duca_AduanaDestino = adua2.adua_Id

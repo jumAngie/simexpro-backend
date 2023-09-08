@@ -22,6 +22,7 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public int duca_Regimen_Aduanero { get; set; }
         public string tran_IdUnidadTransporte { get; set; }
 
+        public string emba_Codigo { get; set; }
         public string tran_TamanioEquipamiento { get; set; }
         public string duca_Modalidad { get; set; }
         public string duca_Clase { get; set; }
