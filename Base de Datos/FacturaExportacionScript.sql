@@ -439,7 +439,8 @@ BEGIN
 			,ordenCompra.orco_DireccionEntrega
 			,(
 			
-			SELECT	 ordenCompraDetalle.code_Id
+			SELECT	 ordenCompraDetalle.code_Id,
+					ordenCompraDetalle.orco_Id
 					,ordenCompraDetalle.code_CantidadPrenda
 					,estilo.esti_Descripcion
 					,talla.tall_Nombre
