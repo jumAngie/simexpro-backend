@@ -2772,7 +2772,7 @@ GO
 -----------------Factura de exportación-------------------
 CREATE TABLE Prod.tbFacturasExportacion(
 	faex_Id						INT IDENTITY(1,1), 
-	duca_Id						INT NOT NULL,
+	duca_Id						INT NULL,
 	faex_Fecha					DATETIME	  NOT NULL,
 	orco_Id						INT			  NOT NULL,
 	faex_Total					DECIMAL		  NOT NULL,
@@ -2791,6 +2791,7 @@ CREATE TABLE Prod.tbFacturasExportacion(
 	CONSTRAINT FK_Prod_tbFacturasExportacion_Acce_tbUsuarios_usua_UsuarioModificacion	FOREIGN KEY(usua_UsuarioModificacion)  REFERENCES Acce.tbUsuarios   (usua_Id)
 );
 GO
+
 
 CREATE TABLE Prod.tbFacturasExportacionDetalles(
 	fede_Id						INT IDENTITY(1,1),

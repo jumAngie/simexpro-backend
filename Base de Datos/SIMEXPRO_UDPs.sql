@@ -16139,15 +16139,17 @@ END
 GO
 
 
-/* PROCEDIMIENTOS tb.FacturasExportacion*/
+
+
+
 
  -- PROCEDIMIENTO PARA LISTAR LAS FACTURAS EXPORTACION
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Listar
 AS
 	BEGIN
 		SELECT	FactExport.faex_Id, 
-				FactExport.duca_Id,
-				Duca.duca_No_Duca,
+				ISNULL(FactExport.duca_Id, '') AS duca_Id,
+				ISNULL(Duca.duca_No_Duca, 'N/A') AS duca_No_Duca,
 				FactExport.faex_Fecha, 
 				FactExport.orco_Id, 
 				CONCAT('No. ', PO.orco_Id, ' - ', Clie.clie_Nombre_O_Razon_Social, ' - ', CONVERT(DATE, PO.orco_FechaEmision)) AS orco_Descripcion,
@@ -16185,7 +16187,7 @@ AS
 						FactExportDetails.fede_Cantidad, 
 						FactExportDetails.fede_PrecioUnitario, 
 						FactExportDetails.fede_TotalDetalle,
-						CONCAT('#: ', PODetail.code_CodigoDetalle, ' - ',Style.esti_Descripcion,' - ',Talla.tall_Codigo,' - ',PODetail.code_Sexo,' - ',Color.colr_Nombre) AS code_Descripcion 
+						CONCAT('#: ', PODetail.code_Id, ' - ',Style.esti_Descripcion,' - ',Talla.tall_Codigo,' - ',PODetail.code_Sexo,' - ',Color.colr_Nombre) AS code_Descripcion 
 				FROM Prod.tbFacturasExportacionDetalles AS FactExportDetails
 				INNER JOIN Prod.tbOrdenCompraDetalles AS PODetail ON FactExportDetails.code_Id = PODetail.code_Id
 				INNER JOIN Prod.tbEstilos AS Style ON PODetail.esti_Id = Style.esti_Id
@@ -16197,10 +16199,16 @@ AS
 		INNER JOIN Prod.tbOrdenCompra		AS PO			ON FactExport.orco_Id = PO.orco_Id
 		INNER JOIN Prod.tbClientes			AS Clie			ON PO.orco_IdCliente = Clie.clie_Id
 		INNER JOIN Acce.tbUsuarios			AS UserCrea		ON FactExport.usua_UsuarioCreacion = UserCrea.usua_Id
-		INNER JOIN Adua.tbDuca				AS Duca			ON FactExport.duca_Id = Duca.duca_Id
+		LEFT JOIN Adua.tbDuca				AS Duca			ON FactExport.duca_Id = Duca.duca_Id
 		LEFT JOIN Acce.tbUsuarios			AS UserModifica ON FactExport.usua_UsuarioModificacion = UserModifica.usua_Id
 		WHERE FactExport.faex_Estado = 1
 	END
+GO
+
+SELECT * FROM Prod.tbOrdenCompraDetalles
+SELECT *FROM Prod.tbOrdenCompra
+
+SELECT * FROM Prod.tbFacturasExportacion
 GO
 
 -- PROCEDIMIENTO PARA INSERTAR LAS FACTURAS EXPORTACION (ENCABEZADO)
@@ -16229,7 +16237,6 @@ BEGIN
 	END CATCH
 END
 GO
-
 
 -- PROCEDIMIENTO PARA EDITAR LAS FACTURAS EXPORTACION (ENCABEZADO)
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Editar
@@ -16286,7 +16293,6 @@ BEGIN
 END
 GO
 
-
 -- PROCEDIMIENTO PARA ESTABLECER EL ESTADO DE LAS FACTURAS EXPORTACION A 0 (DESHABILITADO)
 CREATE OR ALTER PROC Prod.UDP_tbFacturasExportacion_Eliminar
 	@faex_Id  		INT
@@ -16294,23 +16300,20 @@ AS
 BEGIN
 	BEGIN TRY
 		DECLARE @respuesta INT
-			EXEC dbo.UDP_ValidarReferencias 'faex_Id  ', @faex_Id  , 'Prod.tbFacturasExportacion', @respuesta OUTPUT
+			
+			DELETE FROM Prod.tbFacturasExportacionDetalles
+			WHERE faex_Id = @faex_Id
 
-			IF(@respuesta) = 1
-					BEGIN
-				UPDATE [Prod].[tbFacturasExportacion]
-				SET	   faex_Estado = 0
-				WHERE  faex_Id = @faex_Id  
+			DELETE FROM Prod.tbFacturasExportacion
+			WHERE faex_Id = @faex_Id
 
-				END
-			SELECT @respuesta AS Resultado
+			SELECT 1
 	END TRY	
 	BEGIN CATCH
-		SELECT 0
+			SELECT 'Error:' + ERROR_MESSAGE()
 	END CATCH
 END
 GO
-
 
 -- PROCEDIMIENTO PARA FINALIZAR LAS FACTURAS EXPORTACION (faex_Finalizado = 1)
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Finalizado
@@ -16361,7 +16364,7 @@ BEGIN
 			Detail.fede_Cantidad, 
 			Detail.fede_PrecioUnitario, 
 			Detail.fede_TotalDetalle,
-			CONCAT('#: ', PODetail.code_CodigoDetalle, ' - ',Style.esti_Descripcion,' - ',Talla.tall_Codigo,' - ',PODetail.code_Sexo,' - ',Color.colr_Nombre) AS code_Descripcion 
+			CONCAT('#: ', PODetail.code_Id, ' - ',Style.esti_Descripcion,' - ',Talla.tall_Codigo,' - ',PODetail.code_Sexo,' - ',Color.colr_Nombre) AS code_Descripcion 
 	FROM Prod.tbFacturasExportacionDetalles AS Detail
 	INNER JOIN Prod.tbOrdenCompraDetalles AS PODetail ON Detail.code_Id = PODetail.code_Id
 	INNER JOIN Prod.tbEstilos AS Style ON PODetail.esti_Id = Style.esti_Id
@@ -16513,6 +16516,11 @@ BEGIN
 END
 GO
 
+SELECT DISTINCT(PO.orco_Id) FROM Prod.tbOrdenCompra AS PO
+
+INNER JOIN Prod.tbOrdenCompraDetalles AS details ON PO.orco_Id = details.orco_Id
+
+GO
 
 -- PROCEDIMIENTO PARA LISTAR LOS DETALLES (ITEMS) DE LA ORDEN DE COMPRA SELECCIONADA EN EL ENCABEZADO DE LA FACTURA EXPORTACION
 CREATE OR ALTER PROCEDURE Prod.UDP_PODetallesByID 
@@ -16521,7 +16529,7 @@ AS
 BEGIN 
 	DECLARE @orco_Id INT = (SELECT orco_Id FROM Prod.tbFacturasExportacion WHERE faex_Id = @faex_Id)
 
-	SELECT code.code_Id ,CONCAT('#: ', code.code_CodigoDetalle, ' - ',esti.esti_Descripcion,' - ',tall.tall_Codigo,' - ',code.code_Sexo,' - ',colr.colr_Nombre) AS code_Descripcion 
+	SELECT code.code_Id ,CONCAT('#: ', code.code_Id, ' - ',esti.esti_Descripcion,' - ',tall.tall_Codigo,' - ',code.code_Sexo,' - ',colr.colr_Nombre) AS code_Descripcion 
 	FROM Prod.tbOrdenCompraDetalles code
 	INNER JOIN Prod.tbEstilos AS esti ON code.esti_Id = esti.esti_Id
 	INNER JOIN Prod.tbTallas AS tall ON code.tall_Id = tall.tall_Id
