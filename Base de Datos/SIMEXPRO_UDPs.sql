@@ -8042,7 +8042,7 @@ BEGIN
 		  duca.usua_UsuarioModificacion, 
 		  usu2.usua_Nombre,
 		  duca_FechaModificacion, 
-		  duca_Finalizado
+		  duca_Finalizado,
 		  duca_Estado
 	 FROM Adua.tbDuca duca 
 LEFT JOIN Acce.tbUsuarios				AS usu1		ON duca.usua_UsuarioCreacion = usu1.usua_Id
