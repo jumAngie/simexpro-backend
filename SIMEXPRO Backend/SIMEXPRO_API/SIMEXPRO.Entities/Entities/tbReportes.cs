@@ -30,6 +30,7 @@ namespace SIMEXPRO.Entities.Entities
 
         //Reportes Pedidos Cliente
 
+        public int orco_Id { get; set; }
         public int clie_Id { get; set; }
         public int PedidosTerminados { get; set; }
         public int PedidosCurso { get; set; }
@@ -43,6 +44,7 @@ namespace SIMEXPRO.Entities.Entities
         public string clie_Nombre_Contacto { get; set; }
         public string clie_Numero_Contacto { get; set; }
         public string clie_Correo_Electronico { get; set; }
+        public string detalles { get; set; }
 
     }
 }
