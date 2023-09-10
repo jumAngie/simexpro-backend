@@ -943,6 +943,21 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult CargarDocumentosComerciante(int Id)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _documentosContratosRepository.CargarDocumetosComerciante(Id);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
+
         public ServiceResult ActualizarDocumentosComerciante(tbDocumentosContratos item)
         {
             var result = new ServiceResult();

@@ -268,7 +268,8 @@ namespace SIMEXPRO.DataAccess
         public static string EliminarDocumentosContratos = "Adua.UDP_tbDocumentosContratos_Eliminar";
 
         public static string InsertarDocumentosComerciante = "Adua.UDP_tbDocumentosContrato_ComercianteInsertar";
-        public static string EditarDocumentosComerciante = "Adua.UDP_tbDocumentosContrato_ComercianteInsertar";
+        public static string CargarDocuemntosComerciante = "Adua.UDP_tbDocumentosContrato_CargarDocuComerciante";
+        public static string EditarDocumentosComerciante = "Adua.UDP_tbDocumentosContrato_ComercianteEditar";
 
         #endregion
 

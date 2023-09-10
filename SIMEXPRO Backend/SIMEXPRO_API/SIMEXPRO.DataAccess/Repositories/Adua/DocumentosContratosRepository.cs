@@ -58,6 +58,15 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
         }
 
+
+        public IEnumerable<tbDocumentosContratos> CargarDocumetosComerciante(int id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@coin_Id", id, DbType.Int32, ParameterDirection.Input);
+            return db.Query<tbDocumentosContratos>(ScriptsDataBase.CargarDocuemntosComerciante, parametros, commandType: CommandType.StoredProcedure);
+        }
+
         public RequestStatus EditarDocumentosComerciante(tbDocumentosContratos item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);

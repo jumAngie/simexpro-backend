@@ -41,6 +41,14 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(respuesta);
         }
 
+        [HttpGet("CargarDocumentosComerciante")]
+        public IActionResult CargarDocumentos(int coin_Id)
+        {
+            var listado = _aduanaServices.CargarDocumentosComerciante(coin_Id);
+            listado.Data = _mapper.Map<IEnumerable<tbDocumentosContratos>>(listado.Data);
+            return Ok(listado);
+        }
+
         [HttpPost("EditarDocuComerciante")]
         public IActionResult Update(DocumentosContratosViewModel documentosContratosViewModel)
         {
@@ -56,6 +64,7 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             var respuesta = _aduanaServices.EliminarDocumentosContratos(item);
             return Ok(respuesta);
         }
+
     }
 
 }
