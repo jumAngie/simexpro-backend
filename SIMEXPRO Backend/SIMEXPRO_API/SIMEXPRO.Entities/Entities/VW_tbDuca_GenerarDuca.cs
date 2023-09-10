@@ -59,6 +59,8 @@ namespace SIMEXPRO.Entities.Entities
         public string tran_TamanioEquipamiento { get; set; }
         public string tran_TipoCarga { get; set; }
         public string tran_IdContenedor { get; set; }
+        public string inco_Codigo { get; set; }
+        public decimal deva_ConversionDolares { get; set; }
         public string ValoresTotales { get; set; }
         public string LiquidacionGeneral { get; set; }
         public string Mercancias { get; set; }
