@@ -205,9 +205,9 @@ namespace SIMEXPRO.DataAccess
         public static string InsertarComercianteIndividualTap2 = "Adua.UDP_tbComercianteIndividual_InsertarTap2";
         public static string InsertarComercianteIndividualTap3 = "Adua.UDP_tbComercianteIndividual_InsertarTap3";
         public static string InsertarComercianteIndividualTap4 = "Adua.UDP_tbComercianteIndividual_InsertarTap4";
-        public static string InsertarComercianteIndividualTap5= "Adua.UDP_tbComercianteIndividual_InsertarTap5";
 
         public static string EditarComercianteIndividual = "Adua.UDP_tbComercianteIndividual_Editar";
+
         #endregion
 
         #region Concepto  de Pago 
@@ -265,9 +265,11 @@ namespace SIMEXPRO.DataAccess
 
         #region Documentos Contrato
         public static string ListarDocumentosContratos = "Adua.UDP_tbDocumentosContratos_Listar";
-        public static string InsertarDocumentosContratos = "Adua.UDP_tbDocumentosContratos_Insertar";
-        public static string EditarDocumentosContratos = "Adua.UDP_tbDocumentosContratos_Editar";
         public static string EliminarDocumentosContratos = "Adua.UDP_tbDocumentosContratos_Eliminar";
+
+        public static string InsertarDocumentosComerciante = "Adua.UDP_tbDocumentosContrato_ComercianteInsertar";
+        public static string EditarDocumentosComerciante = "Adua.UDP_tbDocumentosContrato_ComercianteInsertar";
+
         #endregion
 
         #region Documentos de Soporte
