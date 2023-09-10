@@ -2957,6 +2957,7 @@ BEGIN
 					 @pers_FormaRepresentacion, 	
 					 @usua_UsuarioCreacion,       		
 					 @coin_FechaCreacion)
+
 			SET @coin_Id =  SCOPE_IDENTITY()
 
 		SELECT  @coin_Id AS coin_Id
@@ -2992,7 +2993,7 @@ BEGIN
 		UPDATE Adua.tbComercianteIndividual
 		SET ciud_Id = @ciud_Id, alde_Id = @aldea, coin_PuntoReferencia = @coin_PuntoReferencia,
 		    colo_Id = @colo_Id, coin_NumeroLocalApart = @coin_NumeroLocalApart
-		WHERE coin_Id = @coin_Id
+		WHERE coin_Id = @coin_Id AND [coin_Estado] = 1
 		SELECT 1
 END TRY
 BEGIN CATCH
@@ -3029,7 +3030,7 @@ BEGIN
 		coin_PuntoReferenciaReprentante = @coin_PuntoReferenciaReprentante,
 		coin_coloniaIdRepresentante = @coin_coloniaIdRepresentante,
 		coin_NumeroLocaDepartRepresentante = @coin_NumeroLocaDepartRepresentante
-		WHERE coin_Id = @coin_Id
+		WHERE coin_Id = @coin_Id AND [coin_Estado] = 1
 		SELECT 1
 END TRY
 BEGIN CATCH
@@ -3052,7 +3053,7 @@ AS
 			coin_TelefonoFijo = @coin_TelefonoFijo,
 			coin_CorreoElectronico = @coin_CorreoElectronico,
 			coin_CorreoElectronicoAlternativo = @coin_CorreoElectronicoAlternativo
-		WHERE coin_Id = @coin_Id
+		WHERE coin_Id = @coin_Id AND [coin_Estado] = 1
 		SELECT 1
 	END TRY
 
@@ -3062,30 +3063,89 @@ AS
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap5
-	@coin_Id							INT,
-	@doco_URLImagen                     NVARCHAR(MAX),
-	@doco_NombreImagen					NVARCHAR(350),
-	@doco_Numero_O_Referencia			NVARCHAR(50),
-	@doco_TipoDocumento					NVARCHAR(6),
-
-	@usua_UsuarioCreacion               INT, 
-	@coin_FechaCreacion                 DATETIME
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_ComercianteInsertar
+    @coin_Id INT,
+    @doco_URLImagen NVARCHAR(MAX),
+    @usua_UsuarioCreacion INT,
+    @coin_FechaCreacion DATETIME
 AS
 BEGIN
-	BEGIN TRY
-			INSERT INTO Adua.tbDocumentosContratos([coin_Id],[doco_Numero_O_Referencia], [doco_TipoDocumento], [usua_UsuarioCreacion], [doco_FechaCreacion],[doco_URLImagen], [doco_NombreImagen]) 
-			VALUES (@coin_Id,@doco_Numero_O_Referencia,@doco_TipoDocumento,@usua_UsuarioCreacion,@coin_FechaCreacion,@doco_URLImagen,@doco_NombreImagen)
-		 SELECT 1
-	END TRY
-BEGIN CATCH
-	SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
-END CATCH
+    BEGIN TRY
+        -- Insertar los datos desde el JSON sin modificar @usua_UsuarioCreacion
+        INSERT INTO Adua.tbDocumentosContratos ([coin_Id],
+                                                [doco_URLImagen],
+                                                [usua_UsuarioCreacion],
+                                                [doco_FechaCreacion],
+                                                [doco_Numero_O_Referencia],
+                                                [doco_TipoDocumento])
+        SELECT @coin_Id,
+               [doco_URLImagen],
+               @usua_UsuarioCreacion, -- Asignar directamente el valor del parámetro
+               @coin_FechaCreacion,
+               [doco_Numero_O_Referencia],
+               [doco_TipoDocumento]
+        FROM OPENJSON(@doco_URLImagen, '$.documentos')
+        WITH (
+            doco_TipoDocumento NVARCHAR(6),
+            doco_Numero_O_Referencia NVARCHAR(50),
+            doco_URLImagen NVARCHAR(MAX)
+        )
 
+        -- Seleccionar 1 si la inserción fue exitosa
+        SELECT 1
+    END TRY
+    BEGIN CATCH
+        SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+    END CATCH
 END
 GO
 
 
+--PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA
+
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_ComercianteEditar
+    @coin_Id						INT,
+    @doco_URLImagen					NVARCHAR(MAX),
+    @usua_UsuarioCreacion			INT,
+    @coin_FechaCreacion				DATETIME
+AS
+BEGIN
+    BEGIN TRY
+    BEGIN TRANSACTION
+
+		DELETE FROM Adua.tbDocumentosContratos 
+		WHERE [coin_Id] = @coin_Id
+
+
+        INSERT INTO Adua.tbDocumentosContratos ([coin_Id],
+                                                [doco_URLImagen],
+                                                [usua_UsuarioCreacion],
+                                                [doco_FechaCreacion],
+                                                [doco_Numero_O_Referencia],
+                                                [doco_TipoDocumento])
+        SELECT @coin_Id,
+               [doco_URLImagen],
+               @usua_UsuarioCreacion,
+               @coin_FechaCreacion,
+               [doco_Numero_O_Referencia],
+               [doco_TipoDocumento]
+        FROM OPENJSON(@doco_URLImagen, '$.documentos')
+        WITH (
+            doco_TipoDocumento NVARCHAR(6),
+            doco_Numero_O_Referencia NVARCHAR(50),
+            doco_URLImagen NVARCHAR(MAX)
+        )
+
+        SELECT 1
+	COMMIT TRAN	
+    END TRY
+    BEGIN CATCH
+       	ROLLBACK TRAN
+		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+    END CATCH
+END
+GO
 
 
 
@@ -3094,41 +3154,42 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Editar
 (
 	@coin_Id							INT,
   	@pers_Id                           	INT,
-  	@fopr_Id                           	BIT,
-  	@colo_Id                           	INT,
-  	@coin_PuntoReferencia			  	NVARCHAR(200),
-  	@coin_ColoniaRepresentante		  	INT,
-  	@coin_NumeroLocalReprentante	    NVARCHAR(200),
-  	@coin_PuntoReferenciaReprentante   	NVARCHAR(200),
-  	@coin_TelefonoCelular			    NVARCHAR(20),
-  	@coin_TelefonoFijo				    NVARCHAR(20),
-  	@coin_CorreoElectronico		    	NVARCHAR(30),
-  	@coin_CorreoElectronicoAlternativo 	NVARCHAR(30),
+	@pers_RTN							NVARCHAR(40),
+  	@ofpr_Id                           	INT,
+	@ofic_Id							INT,
+	@escv_Id							INT,
+	@pers_escvRepresentante				INT,
+	@pers_OfprRepresentante				INT,
+	@pers_FormaRepresentacion			BIT,
   	@usua_UsuarioModificacion   		INT,
   	@coin_FechaModificacion     		DATETIME 
 )
 AS
 BEGIN
 	BEGIN TRY
-		 UPDATE Adua.tbComercianteIndividual 
-			SET pers_Id								= @pers_Id,                           	
-				pers_FormaRepresentacion			= @fopr_Id,                           	
-				colo_Id								= @colo_Id,                           	
-				coin_PuntoReferencia				= @coin_PuntoReferencia,			  	
-				--coin_ColoniaRepresentante			= @coin_ColoniaRepresentante,		  	
-				--coin_NumeroLocalReprentante			= @coin_NumeroLocalReprentante,	    
-				coin_PuntoReferenciaReprentante		= @coin_PuntoReferenciaReprentante,   	
-				coin_TelefonoCelular				= @coin_TelefonoCelular,			    
-				coin_TelefonoFijo					= @coin_TelefonoFijo,				    
-				coin_CorreoElectronico				= @coin_CorreoElectronico,		    	
-				coin_CorreoElectronicoAlternativo	= @coin_CorreoElectronicoAlternativo, 	
-				usua_UsuarioCreacion				= @usua_UsuarioModificacion,       		
-				coin_FechaCreacion					= @coin_FechaModificacion
-		  WHERE coin_Id = @coin_Id
+	BEGIN TRANSACTION
 
-		SELECT 1 AS Resultado
+		 UPDATE Adua.tbComercianteIndividual 
+			SET [pers_FormaRepresentacion] = @pers_FormaRepresentacion,
+				[usua_UsuarioModificacion] = @usua_UsuarioModificacion,
+				[coin_FechaModificacion] = @coin_FechaModificacion
+		  WHERE coin_Id = @coin_Id AND [coin_Estado] = 1
+
+		 UPDATE Adua.tbPersonas
+			SET [pers_RTN] = @pers_RTN,
+				[ofic_Id] = @ofic_Id, 
+				[escv_Id] = @escv_Id,
+				[ofpr_Id] = @ofpr_Id, 
+				[pers_escvRepresentante] = @pers_escvRepresentante,
+				[pers_OfprRepresentante] = @pers_OfprRepresentante,
+				[usua_UsuarioModificacion] = @usua_UsuarioModificacion,
+				[pers_FechaModificacion] = @coin_FechaModificacion
+			WHERE [pers_Id] = @pers_Id AND [pers_Estado] = 1
+
+	COMMIT TRAN	
 	END TRY
 	BEGIN CATCH
+		ROLLBACK TRAN
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
 	END CATCH
 END
@@ -9948,81 +10009,6 @@ BEGIN
 END
 GO
 
-/* INSERTAR DOCUMENTOS CONTRATOS */
-CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContratos_Insertar
-@coin_Id					INT,
-@peju_Id					INT,
-@doco_Numero_O_Referencia	NVARCHAR(50),
-@doco_TipoDocumento			NVARCHAR(6),
-@usua_UsuarioCreacion		INT,
-@doco_FechaCreacion			DATETIME
-   
-AS
-BEGIN
-	BEGIN TRY
- 
-
-		INSERT INTO Adua.tbDocumentosContratos
-				   (coin_Id
-				   ,peju_Id
-				   ,doco_Numero_O_Referencia
-				   ,doco_TipoDocumento
-				   ,usua_UsuarioCreacion
-				   ,doco_FechaCreacion )
-			 VALUES
-				   (@coin_Id					
-				   ,@peju_Id					
-				   ,@doco_Numero_O_Referencia	 
-				   ,@doco_TipoDocumento			 
-				   ,@usua_UsuarioCreacion		
-				   ,@doco_FechaCreacion	)
- 
- 				   SELECT 1
-	END TRY
-	BEGIN CATCH
-		SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END CATCH 
-END
-
-
-GO
-
-
-/* EDITAR DOCUMENTOS CONTRATOS */
-CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContratos_Editar
-@doco_Id					INT,
-@coin_Id					INT,
-@peju_Id					INT,
-@doco_Numero_O_Referencia	NVARCHAR(50),
-@doco_TipoDocumento			NVARCHAR(6),
-@usua_UsuarioModificacion	INT,
-@doco_FechaModificacion		DATETIME
-AS
-BEGIN
- 
- 	BEGIN TRY
-
-		UPDATE	 Adua.tbDocumentosContratos
-		   SET	 coin_Id = @coin_Id
-				,peju_Id = @peju_Id
-				,doco_Numero_O_Referencia =	@doco_Numero_O_Referencia
-				,doco_TipoDocumento =			@doco_TipoDocumento
- 				,usua_UsuarioModificacion =	@usua_UsuarioModificacion
-				,doco_FechaModificacion =		@doco_FechaModificacion
- 		 WHERE	doco_Id = @doco_Id
- 
-  				   SELECT 1
-	END TRY
-	BEGIN CATCH
-		SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END CATCH 
-
-
-END
-
-
-GO
-
 
 /* ELIMINAR DOCUMENTOS CONTRATOS */
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContratos_Eliminar
@@ -10032,8 +10018,7 @@ BEGIN
   	BEGIN TRY
 
 
-		UPDATE Adua.tbDocumentosContratos
-		   SET doco_Estado = 0
+		DELETE FROM Adua.tbDocumentosContratos
 		   WHERE	doco_Id = @doco_Id
  
   				   SELECT 1

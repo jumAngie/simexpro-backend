@@ -33,19 +33,19 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(listado);
         }
 
-        [HttpPost("Insertar")]
+        [HttpPost("InsertarDocuComerciante")]
         public IActionResult Insert(DocumentosContratosViewModel documentosContratosViewModel)
         {
             var item = _mapper.Map<tbDocumentosContratos>(documentosContratosViewModel);
-            var respuesta = _aduanaServices.InsertarDocumentosContratos(item);
+            var respuesta = _aduanaServices.InsertarDocumentosComerciante(item);
             return Ok(respuesta);
         }
 
-        [HttpPost("Editar")]
+        [HttpPost("EditarDocuComerciante")]
         public IActionResult Update(DocumentosContratosViewModel documentosContratosViewModel)
         {
             var item = _mapper.Map<tbDocumentosContratos>(documentosContratosViewModel);
-            var respuesta = _aduanaServices.ActualizarDocumentosContratos(item);
+            var respuesta = _aduanaServices.ActualizarDocumentosComerciante(item);
             return Ok(respuesta);
         }
 
