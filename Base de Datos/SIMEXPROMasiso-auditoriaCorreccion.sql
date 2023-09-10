@@ -3014,6 +3014,26 @@ CREATE TABLE Adua.tbDocumentosDeSoporte(
 GO
 
 
+CREATE TABLE Prod.tbRevisionDeCalidadErrores(
+		rcer_Id						   INT 				IDENTITY(1,1),
+		rcer_Nombre 				   NVARCHAR(150) 		NOT NULL,
+		usua_UsuarioCreacion 		   INT					NOT NULL,
+		rcer_FechaCreacion 			   DATETIME 			NOT NULL,
+		usua_UsuarioModificacion	   INT					DEFAULT NULL,
+		rcer_FechaModificacion		   DATETIME 			DEFAULT NULL,	
+		usua_UsuarioEliminacion 	   INT					DEFAULT NULL,
+		rcer_FechaEliminacion		   DATETIME 			DEFAULT NULL,
+		rcer_Estado					   BIT					DEFAULT 1,
+		
+	CONSTRAINT PK_Prod_tbRevisionDeCalidadErros_rcer_Id PRIMARY KEY (rcer_Id),
+	CONSTRAINT FK_Prod_tbRevisionDeCalidadErros_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id 	 FOREIGN KEY(usua_UsuarioCreacion)     REFERENCES Acce.tbUsuarios (usua_Id),
+	CONSTRAINT FK_Prod_tbRevisionDeCalidadErros_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id FOREIGN KEY(usua_UsuarioModificacion) REFERENCES Acce.tbUsuarios (usua_Id),
+	CONSTRAINT FK_Prod_tbRevisionDeCalidadErros_usua_UsuarioEliminacion_Acce_tbUsuarios_usua_Id  FOREIGN KEY(usua_UsuarioEliminacion)  REFERENCES Acce.tbUsuarios (usua_Id)
+	
+);
+GO
+
+
 --**********************************************************************************************
 --********** TABLA PAISES / procedimientos tomando en cuenta los uniques ***********************
 ALTER TABLE Acce.tbUsuarios

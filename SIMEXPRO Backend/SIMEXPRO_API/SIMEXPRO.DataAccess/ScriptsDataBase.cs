@@ -501,8 +501,10 @@ namespace SIMEXPRO.DataAccess
 
         #region Revision de Calidad
         public static string ListarRevisionDeCalidad = "Prod.UDP_tbRevisionDeCalidad_Listar";
+        public static string NuevoListarRevisionDeCalidad = "Prod.UDP_tbRevisionCalidad_NuevoListar";
         public static string InsertaRevisionDeCalidad = "Prod.UDP_tbRevisionDeCalidad_Insertar";
         public static string EditarRevisionDeCalidad = "Prod.UDP_tbRevisionDeCalidad_Editar";
+        public static string EliminarRevisionDeCalidad = "Prod.UDP_tbRevisionDeCalidad_Eliminar";
         #endregion
 
         #region Sub Categoria

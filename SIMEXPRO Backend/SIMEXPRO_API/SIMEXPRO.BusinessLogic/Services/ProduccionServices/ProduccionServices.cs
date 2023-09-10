@@ -2837,6 +2837,20 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
+        public ServiceResult NuevoListarRevisionDeCalidad(int ensa_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _revisionDeCalidadRepository.NewList(ensa_Id);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
         public ServiceResult InsertarRevisionDeCalidad(tbRevisionDeCalidad item)
         {
             var result = new ServiceResult();

@@ -12004,6 +12004,8 @@ BEGIN
 		   revi.reca_FechaRevision, 
 		   revi.reca_Imagen, 
 		   revi.usua_UsuarioCreacion, 
+		   revi.rcer_Id,
+		   rcer.rcer_Nombre,
 		   usuaCrea.usua_Nombre                       AS usuarioCreacionNombre,
 		   revi.reca_FechaCreacion, 
 		   revi.usua_UsuarioModificacion,
@@ -12014,8 +12016,75 @@ BEGIN
 	       LEFT JOIN  Acce.tbUsuarios usuaCrea		  ON revi.usua_UsuarioCreacion     = usuaCrea.usua_Id 
 		   LEFT JOIN  Acce.tbUsuarios usuaModifica	  ON revi.usua_UsuarioModificacion = usuaModifica.usua_Id
 		   INNER JOIN Prod.tbOrde_Ensa_Acab_Etiq ensa ON revi.ensa_Id                  = ensa.ensa_Id
+		   LEFT JOIN [Prod].[tbRevisionDeCalidadErrores] rcer ON revi.rcer_Id = rcer.rcer_Id 
 	 WHERE reca_Estado = 1
 END
+GO
+
+
+
+/*NuevoListar revision de calidad*/
+CREATE OR ALTER PROCEDURE Prod.UDP_tbRevisionCalidad_NuevoListar
+@ensa_id INT
+AS
+BEGIN
+SELECT	ensa_Id, 
+		ensa_Cantidad, 
+		emp.empl_Id, 
+		CONCAT(emp.empl_Nombres ,' ',emp.empl_Apellidos) AS empl_NombreCompleto,
+		ocd.code_Id,
+		ocd.code_Sexo,
+		est.esti_Id,
+		est.esti_Descripcion,
+		ensa_FechaInicio, 
+		ensa_FechaLimite, 
+		pp.ppro_Id, 
+		modu.modu_Id,
+		modu.modu_Nombre,
+		modu.proc_Id,
+		pro.proc_Descripcion,
+		crea.usua_Nombre							AS UsurioCreacionNombre, 
+		ensa_FechaCreacion,							
+		modi.usua_Nombre							AS UsuarioModificacionNombre, 
+		ensa_FechaModificacion, 
+		ensa_Estado,
+		(SELECT m.* 
+				FROM 
+				(	SELECT ROW_NUMBER() OVER(ORDER BY revi.reca_Id DESC) AS [key],
+						   revi.reca_Id,
+						   revi.ensa_Id, 
+						   revi.reca_Descripcion, 
+						   revi.reca_Cantidad, 
+						   revi.reca_Scrap, 
+						   revi.reca_FechaRevision, 
+						   revi.reca_Imagen, 
+						   revi.usua_UsuarioCreacion, 
+						   rcer.rcer_Id,
+						   rcer.rcer_Id, 
+						   usuaCrea.usua_Nombre                       AS usuarioCreacionNombre,
+						   revi.reca_FechaCreacion, 
+						   revi.usua_UsuarioModificacion,
+						   usuaModifica.usua_Nombre                   AS usuarioModificacionNombre,
+						   revi.reca_FechaModificacion, 
+						   revi.reca_Estado
+					  FROM Prod.tbRevisionDeCalidad revi
+						   LEFT JOIN  Acce.tbUsuarios usuaCrea		  ON revi.usua_UsuarioCreacion     = usuaCrea.usua_Id 
+						   LEFT JOIN  Acce.tbUsuarios usuaModifica	  ON revi.usua_UsuarioModificacion = usuaModifica.usua_Id
+						   LEFT JOIN [Prod].[tbRevisionDeCalidadErrores] rcer ON revi.rcer_Id = rcer.rcer_Id 
+					  WHERE revi.ensa_id = ensa.ensa_Id) AS m
+			  FOR JSON AUTO) as detalles
+		FROM	Prod.tbOrde_Ensa_Acab_Etiq ensa
+		INNER JOIN Gral.tbEmpleados emp				ON emp.empl_Id  = ensa.empl_Id
+		INNER JOIN Prod.tbOrdenCompraDetalles ocd	ON ocd.code_Id  = ensa.code_Id
+		INNER JOIN Prod.tbEstilos est				ON est.esti_Id	= ocd.esti_Id
+		INNER JOIN Prod.tbPedidosProduccion pp		ON pp.ppro_Id   = ensa.ppro_Id
+		INNER JOIN Prod.tbModulos			modu	ON ensa.modu_Id = modu.modu_Id
+		INNER JOIN Prod.tbProcesos	pro				ON modu.proc_Id = pro.proc_Id
+		INNER JOIN Acce.tbUsuarios crea				ON crea.usua_Id = ensa.usua_UsuarioCreacion 
+		LEFT JOIN  Acce.tbUsuarios modi				ON modi.usua_Id = ensa.usua_UsuarioModificacion 
+		WHERE ensa.ensa_Id = @ensa_Id OR @ensa_Id = 0
+END
+
 GO
 
 
@@ -12090,6 +12159,25 @@ BEGIN
 	END CATCH
 END
 GO
+
+
+/*Eliminar revision de calidad*/
+CREATE OR ALTER PROCEDURE Prod.UDP_tbRevisionDeCalidad_Eliminar
+	@reca_Id                  INT
+AS
+BEGIN
+	BEGIN TRY
+		DELETE FROM Prod.tbRevisionDeCalidad
+		WHERE	reca_Id                  = @reca_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE()
+	END CATCH
+END
+GO
+
 
 --************PROCESO******************--
 /*Listar Proceso*/
@@ -15044,7 +15132,7 @@ END
 
 GO
 
-CREATE OR ALTER   PROCEDURE [Prod].[UDP_tbPedidosProduccionDetalle_Filtrar_Estado] --208
+CREATE OR ALTER PROCEDURE [Prod].[UDP_tbPedidosProduccionDetalle_Filtrar_Estado] --219
 (
 @ppro_Id INT
 )
@@ -15056,24 +15144,25 @@ BEGIN
 		PPD.ppde_Cantidad,
 		pp.[ppro_Estados],
 		PPD.lote_Id, 
-		lot.[lote_Stock],
 		lot.lote_CodigoLote,
+		lot.[lote_Stock],
+		col.colr_Codigo,
+		col.colr_Nombre,
 		mat.mate_Id,
 		mat.mate_Descripcion
 
 		FROM Prod.tbPedidosProduccionDetalles PPD
-			INNER JOIN Prod.tbPedidosProduccion pp 
-			ON ppd.ppro_Id = pp.ppro_Id
-			INNER JOIN Prod.tbLotes lot 
-			ON PPD.lote_Id = lot.lote_Id
-			INNER JOIN Prod.tbMateriales mat 
-			ON lot.mate_Id = mat.mate_Id
+			INNER JOIN Prod.tbPedidosProduccion pp ON ppd.ppro_Id = pp.ppro_Id
+			INNER JOIN Prod.tbLotes lot ON PPD.lote_Id = lot.lote_Id
+			INNER JOIN Prod.tbMateriales mat ON lot.mate_Id = mat.mate_Id
+			LEFT  JOIN Prod.tbColores col ON lot.colr_Id = col.colr_Id
 			WHERE ppd.ppro_Id = @ppro_Id
 
+		
 	END TRY
 	BEGIN CATCH
 			SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END CATCH
+	END CATCH
 END
 
 GO
@@ -16559,5 +16648,30 @@ BEGIN
 	BEGIN CATCH
 			SELECT 'Error Message: ' + ERROR_MESSAGE()
 	END CATCH
+END
+GO
+
+
+
+/*Listar Revision de calidad errores */
+CREATE OR ALTER PROCEDURE Prod.UDP_tbRevisionDeCalidadErrores_Listar
+AS
+BEGIN
+	SELECT [rcer_Id]
+		  ,[rcer_Nombre]
+		   ,usuaCrea.usua_Nombre			AS usuarioCreacionNombre,
+		   rcer_FechaCreacion, 
+		   reca.usua_UsuarioModificacion, 
+		   usuaModifica.usua_Nombre		AS usuarioModificacionNombre,
+		   rcer_FechaModificacion, 
+		   reca.usua_UsuarioEliminacion, 
+		   usuaElimina.usua_Nombre		AS usuarioEliminacionNombre,
+		   rcer_FechaEliminacion
+		  ,[rcer_Estado]
+	  FROM [Prod].[tbRevisionDeCalidadErrores] reca
+	INNER JOIN Acce.tbUsuarios usuaCrea		ON reca.usua_UsuarioCreacion = usuaCrea.usua_Id 
+	LEFT JOIN Acce.tbUsuarios usuaModifica  ON reca.usua_UsuarioModificacion = usuaModifica.usua_Id 
+	LEFT JOIN Acce.tbUsuarios usuaElimina   ON reca.usua_UsuarioEliminacion = usuaElimina.usua_Id
+	WHERE [rcer_Estado] = 1 
 END
 GO

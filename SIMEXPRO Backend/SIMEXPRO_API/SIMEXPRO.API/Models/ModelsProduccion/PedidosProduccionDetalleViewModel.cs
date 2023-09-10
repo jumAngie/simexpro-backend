@@ -16,6 +16,8 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public int ppde_Cantidad { get; set; }
         public int mate_Id { get; set; }
         public string mate_Descripcion { get; set; }
+        public string colr_Codigo { get; set; }
+        public string colr_Nombre { get; set; }
         public int tipa_Id { get; set; }
         public string tipa_area { get; set; }
         public string ppro_Estados { get; set; }
