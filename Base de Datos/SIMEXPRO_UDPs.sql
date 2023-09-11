@@ -15040,8 +15040,7 @@ INNER JOIN Acce.tbUsuarios Creacion
 END
 GO
 
-
-CREATE OR ALTER PROC Prod.UDP_tbPedidosProduccion_Find 
+CREATE OR ALTER PROC Prod.UDP_tbPedidosProduccion_Find 212
 @ppro_Id INT
 AS
 BEGIN
