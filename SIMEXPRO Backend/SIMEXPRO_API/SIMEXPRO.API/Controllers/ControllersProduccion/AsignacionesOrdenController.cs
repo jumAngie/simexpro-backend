@@ -33,7 +33,7 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
         }
 
         [HttpGet("Find")]
-        public IActionResult Find(int id)
+        public IActionResult Find(string id)
         {
             var listado = _produccionServices.FindOrdenCompraDetalles(id);
             listado.Data = _mapper.Map<AsignacionesOrdenViewModel>(listado.Data);

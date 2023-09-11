@@ -16729,3 +16729,14 @@ BEGIN
 	WHERE [rcer_Estado] = 1 
 END
 GO
+
+CREATE OR ALTER PROCEDURE Prod.UDP_CostosMaterialesNoBrindados
+AS
+BEGIN
+	SELECT	mate.mate_Descripcion,
+		    (SUM(peod.prod_Cantidad)) as TotalCantidad,
+			CONVERT( DECIMAL(18,2), (CONVERT(DECIMAL(18,2), SUM(peod.prod_Cantidad) * 100)) / CONVERT(DECIMAL(18,2),(SELECT SUM(prod_Cantidad)FROM Prod.tbPedidosOrdenDetalle))) AS PorcentajeProductos,
+			AVG(peod.prod_Precio) AS PrecioPromedioMaterial
+		FROM Prod.tbPedidosOrdenDetalle peod  LEFT JOIN Prod.tbMateriales mate ON peod.mate_Id = mate.mate_Id
+		GROUP BY mate.mate_Descripcion;
+END

@@ -313,12 +313,12 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
-        public ServiceResult FindOrdenCompraDetalles(int id)
+        public ServiceResult FindOrdenCompraDetalles(string id)
         {
             var result = new ServiceResult();
             try
             {
-                var list = _asignacionesOrdenRepository.Find(id);
+                var list = _asignacionesOrdenRepository.FindAsignacion(id);
                 return result.Ok(list);
             }
             catch (Exception e)
