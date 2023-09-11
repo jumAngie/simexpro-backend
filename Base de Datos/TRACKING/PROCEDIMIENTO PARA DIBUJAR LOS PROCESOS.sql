@@ -12,6 +12,7 @@ ON		procxorder.proc_Id = proce.proc_Id					INNER JOIN [Prod].[tbOrdenCompraDetal
 ON		procxorder.code_Id = orderdet.code_Id				INNER JOIN [Prod].[tbOrdenCompra] orderhead
 ON		orderdet.orco_Id = orderhead.orco_Id
 WHERE	orco_Codigo = @orco_Codigo
+ORDER BY procxorder.proc_Id DESC;
 END
 
 
