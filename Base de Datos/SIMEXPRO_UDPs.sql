@@ -3571,42 +3571,97 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab5
-   @peju_Id                    INT,
-   @doco_URLImagen             NVARCHAR(MAX),
-   @doco_NombreImagen		   NVARCHAR(350),
-   @doco_Numero_O_Referencia   NVARCHAR(50),
-   @doco_TipoDocumento         NVARCHAR(6),
-
-   @usua_UsuarioCreacion       INT,
-   @doco_FechaCreacion         DATETIME
-AS
-BEGIN 
-    INSERT INTO [Adua].[tbDocumentosContratos]([peju_Id],[doco_Numero_O_Referencia], [doco_TipoDocumento], [usua_UsuarioCreacion], [doco_FechaCreacion],[doco_URLImagen], [doco_NombreImagen])
-	VALUES (@peju_Id,@doco_Numero_O_Referencia,@doco_TipoDocumento,@usua_UsuarioCreacion,@doco_FechaCreacion, @doco_URLImagen, @doco_NombreImagen)
-END;
-GO
-
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab5
-( 
-  @peju_Id                                INT,
-  @peju_RTNSociedadMercantil              NVARCHAR(20),
-  @peju_DNIRepresentante                  NVARCHAR(20),
-  @peju_RTNReprsentanteLegal              NVARCHAR(20),
-  @peju_EscrituraPublica                  NVARCHAR(20)
-)
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_JuridicaInsertar
+    @peju_Id INT,
+    @doco_URLImagen NVARCHAR(MAX),
+    @usua_UsuarioCreacion INT,
+    @peju_FechaCreacion DATETIME
 AS
 BEGIN
-	BEGIN TRY
-	  UPDATE [Adua].[tbPersonaJuridica]
-	     SET  [peju_RTNSociedadMercantil] = @peju_RTNSociedadMercantil , peju_DNIRepresentante = @peju_DNIRepresentante,
-		     [peju_EscrituraPublica] = @peju_EscrituraPublica, peju_RTNReprsentanteLegal = @peju_RTNReprsentanteLegal
-      WHERE peju_Id =  @peju_Id
-	   SELECT 1
-	END TRY
-	BEGIN CATCH
+    BEGIN TRY
+        INSERT INTO Adua.tbDocumentosContratos ([coin_Id],
+                                                [doco_URLImagen],
+                                                [usua_UsuarioCreacion],
+                                                [doco_FechaCreacion],
+                                                [doco_Numero_O_Referencia],
+                                                [doco_TipoDocumento])
+        SELECT @peju_Id,
+               [doco_URLImagen],
+               @usua_UsuarioCreacion, 
+               @peju_FechaCreacion,
+               [doco_Numero_O_Referencia],
+               [doco_TipoDocumento]
+        FROM OPENJSON(@doco_URLImagen, '$.documentos')
+        WITH (
+            doco_TipoDocumento NVARCHAR(6),
+            doco_Numero_O_Referencia NVARCHAR(50),
+            doco_URLImagen NVARCHAR(MAX)
+        )
+
+        SELECT 1
+    END TRY
+    BEGIN CATCH
+        SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+    END CATCH
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_PersonaJuridicaEditar
+    @peju_Id						INT,
+    @doco_URLImagen					NVARCHAR(MAX),
+    @usua_UsuarioCreacion			INT,
+    @peju_FechaCreacion				DATETIME
+AS
+BEGIN
+    BEGIN TRY
+    BEGIN TRANSACTION
+
+		DELETE FROM Adua.tbDocumentosContratos 
+		WHERE [peju_Id] = @peju_Id
+
+
+        INSERT INTO Adua.tbDocumentosContratos ([coin_Id],
+                                                [doco_URLImagen],
+                                                [usua_UsuarioCreacion],
+                                                [doco_FechaCreacion],
+                                                [doco_Numero_O_Referencia],
+                                                [doco_TipoDocumento])
+        SELECT @peju_Id,
+               [doco_URLImagen],
+               @usua_UsuarioCreacion,
+               @peju_FechaCreacion,
+               [doco_Numero_O_Referencia],
+               [doco_TipoDocumento]
+        FROM OPENJSON(@doco_URLImagen, '$.documentos')
+        WITH (
+            doco_TipoDocumento NVARCHAR(6),
+            doco_Numero_O_Referencia NVARCHAR(50),
+            doco_URLImagen NVARCHAR(MAX)
+        )
+
+        SELECT 1
+	COMMIT TRAN	
+    END TRY
+    BEGIN CATCH
+       	ROLLBACK TRAN
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
-	END CATCH
+    END CATCH
+END
+GO
+
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_CargarDocuJuridica
+    @peju_Id				INT
+AS
+BEGIN
+		SELECT 
+		[doco_Id], [peju_Id], [doco_Numero_O_Referencia], [doco_TipoDocumento], 
+		[usua_UsuarioCreacion],[doco_FechaCreacion], 
+		[usua_UsuarioModificacion], [doco_FechaModificacion], [doco_Estado], 
+		[doco_URLImagen], [doco_NombreImagen]
+		
+		FROM [Adua].[tbDocumentosContratos]
+		WHERE [peju_Id] = @peju_Id
 END
 GO
 

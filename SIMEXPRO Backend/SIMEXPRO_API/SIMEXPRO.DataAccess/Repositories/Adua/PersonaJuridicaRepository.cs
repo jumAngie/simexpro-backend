@@ -85,25 +85,6 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
         }
 
-        public RequestStatus InsertTap5(tbPersonaJuridica item)
-        {
-            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
-            RequestStatus result = new RequestStatus();
-            var parametros = new DynamicParameters();
-            parametros.Add("@peju_Id", item.peju_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@doco_URLImagen", item.doco_URLImagen, DbType.String, ParameterDirection.Input);
-            parametros.Add("@doco_NombreImagen", item.doco_NombreImagen, DbType.String, ParameterDirection.Input);
-            parametros.Add("@doco_Numero_O_Referencia", item.doco_Numero_O_Referencia, DbType.String, ParameterDirection.Input);
-            parametros.Add("@doco_TipoDocumento", item.doco_TipoDocumento, DbType.String, ParameterDirection.Input);
-
-            var respuesta = db.QueryFirst<string>(ScriptsDataBase.InsertarPersonaJuridicaTap5, parametros, commandType: CommandType.StoredProcedure);
-            return new RequestStatus()
-            {
-                MessageStatus = respuesta
-            };
-
-        }
-
         public RequestStatus Insert(tbPersonaJuridica item)
         {
             RequestStatus result = new();

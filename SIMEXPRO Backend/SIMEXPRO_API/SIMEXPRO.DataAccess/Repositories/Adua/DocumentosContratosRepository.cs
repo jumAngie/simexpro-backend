@@ -58,6 +58,32 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
         }
 
+        public RequestStatus InsertDocumentosPersonaJuridica(tbDocumentosContratos item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@peju_Id", item.peju_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@doco_URLImagen", item.doco_URLImagen, DbType.String, ParameterDirection.Input);
+            parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@peju_FechaCreacion", item.doco_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
+
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.InsertDocumentosPersonaJuridica, parametros, commandType: CommandType.StoredProcedure);
+            return new RequestStatus()
+            {
+                MessageStatus = respuesta
+            };
+
+        }
+
+        public IEnumerable<tbDocumentosContratos> CargarDocumentosJuridica(int id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@peju_Id", id, DbType.Int32, ParameterDirection.Input);
+            return db.Query<tbDocumentosContratos>(ScriptsDataBase.CargarDocumentosPersonaJuridica, parametros, commandType: CommandType.StoredProcedure);
+        }
 
         public IEnumerable<tbDocumentosContratos> CargarDocumetosComerciante(int id)
         {
@@ -79,6 +105,25 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@coin_FechaCreacion", item.doco_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
 
             var respuesta = db.QueryFirst<string>(ScriptsDataBase.EditarDocumentosComerciante, parametros, commandType: CommandType.StoredProcedure);
+            return new RequestStatus()
+            {
+                MessageStatus = respuesta
+            };
+
+        }
+
+        public RequestStatus EditarDocuJuridica(tbDocumentosContratos item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@peju_Id", item.peju_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@doco_URLImagen", item.doco_URLImagen, DbType.String, ParameterDirection.Input);
+            parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@peju_FechaCreacion", item.doco_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
+
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.EditarDocumentosPersonaJuridica, parametros, commandType: CommandType.StoredProcedure);
             return new RequestStatus()
             {
                 MessageStatus = respuesta
