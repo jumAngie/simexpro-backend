@@ -101,8 +101,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
             parametros.Add("@coin_Id", item.coin_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@doco_URLImagen", item.doco_URLImagen, DbType.String, ParameterDirection.Input);
-            parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@coin_FechaCreacion", item.doco_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
+            parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@doco_FechaModificacion	", item.doco_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
 
             var respuesta = db.QueryFirst<string>(ScriptsDataBase.EditarDocumentosComerciante, parametros, commandType: CommandType.StoredProcedure);
             return new RequestStatus()
