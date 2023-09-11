@@ -1981,6 +1981,22 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
+        public ServiceResult DibujadoProcesos(string orco_Codigo)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _procesoPorOrdenCompraDetalleRepository.DibujarProcesos(orco_Codigo);
+                return result.Ok(list);
+
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+
+            }
+        }
+
         public ServiceResult InsertarProcesoOrdenCompraDetalles(tbProcesoPorOrdenCompraDetalle item)
         {
             var result = new ServiceResult();

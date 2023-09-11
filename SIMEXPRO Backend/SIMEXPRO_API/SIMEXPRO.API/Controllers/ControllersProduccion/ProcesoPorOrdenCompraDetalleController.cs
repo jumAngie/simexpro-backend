@@ -31,6 +31,14 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             return Ok(listado);
         }
 
+        [HttpGet("DibujarProcesos")]
+        public IActionResult Dibujar(string orco_Codigo)
+        {
+            var listado = _produccionServices.DibujadoProcesos(orco_Codigo);
+            listado.Data = _mapper.Map<IEnumerable<ProcesoPorOrdenCompraDetalleViewModel>>(listado.Data);
+            return Ok(listado);
+        }
+
         [HttpPost("Insertar")]
         public IActionResult Insert(ProcesoPorOrdenCompraDetalleViewModel procesoPorOrdenCompraDetalleViewModel)
         {
