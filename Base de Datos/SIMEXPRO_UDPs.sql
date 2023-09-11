@@ -3103,12 +3103,26 @@ GO
 
 --PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA
 
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_CargarDocuComerciante
+@coin_Id				INT
+AS
+BEGIN
+		SELECT 
+		[doco_Id], [coin_Id], [doco_Numero_O_Referencia], [doco_TipoDocumento], 
+		[usua_UsuarioCreacion],[doco_FechaCreacion], 
+		[usua_UsuarioModificacion], [doco_FechaModificacion], [doco_Estado], 
+		[doco_URLImagen], [doco_NombreImagen]
+		
+		FROM [Adua].[tbDocumentosContratos]
+		WHERE [coin_Id] = @coin_Id
+END
+GO
 
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_ComercianteEditar
     @coin_Id						INT,
     @doco_URLImagen					NVARCHAR(MAX),
-    @usua_UsuarioCreacion			INT,
-    @coin_FechaCreacion				DATETIME
+    @usua_UsuarioModificacion		INT,
+    @doco_FechaModificacion			DATETIME
 AS
 BEGIN
     BEGIN TRY
@@ -3120,14 +3134,14 @@ BEGIN
 
         INSERT INTO Adua.tbDocumentosContratos ([coin_Id],
                                                 [doco_URLImagen],
-                                                [usua_UsuarioCreacion],
-                                                [doco_FechaCreacion],
+                                                [usua_UsuarioModificacion],
+                                                [doco_FechaModificacion],
                                                 [doco_Numero_O_Referencia],
                                                 [doco_TipoDocumento])
         SELECT @coin_Id,
                [doco_URLImagen],
-               @usua_UsuarioCreacion,
-               @coin_FechaCreacion,
+               @usua_UsuarioModificacion,
+               @doco_FechaModificacion,
                [doco_Numero_O_Referencia],
                [doco_TipoDocumento]
         FROM OPENJSON(@doco_URLImagen, '$.documentos')
@@ -3575,7 +3589,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_JuridicaInsertar
     @peju_Id INT,
     @doco_URLImagen NVARCHAR(MAX),
     @usua_UsuarioCreacion INT,
-    @peju_FechaCreacion DATETIME
+    @doco_FechaCreacion DATETIME
 AS
 BEGIN
     BEGIN TRY
@@ -3588,7 +3602,7 @@ BEGIN
         SELECT @peju_Id,
                [doco_URLImagen],
                @usua_UsuarioCreacion, 
-               @peju_FechaCreacion,
+               @doco_FechaCreacion,
                [doco_Numero_O_Referencia],
                [doco_TipoDocumento]
         FROM OPENJSON(@doco_URLImagen, '$.documentos')
@@ -3623,7 +3637,7 @@ BEGIN
         INSERT INTO Adua.tbDocumentosContratos ([coin_Id],
                                                 [doco_URLImagen],
                                                 [usua_UsuarioCreacion],
-                                                [doco_FechaCreacion],
+                                                [doco_FechaModificacion],
                                                 [doco_Numero_O_Referencia],
                                                 [doco_TipoDocumento])
         SELECT @peju_Id,
