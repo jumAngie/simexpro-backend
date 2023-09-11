@@ -29,7 +29,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             var answer = db.Query<tbReportes>(ScriptsDataBase.ModuloProduccion, parametros, commandType: CommandType.StoredProcedure);
             return answer;
         }
-            public IEnumerable<tbReportes> PedidosCliente(tbReportes item)
+        public IEnumerable<tbReportes> PedidosCliente(tbReportes item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             var parametros = new DynamicParameters(); 
@@ -38,7 +38,14 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             return answer;
         }
 
-
+        public IEnumerable<tbReportes> PlanificacionPO(int orco_Id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@orco_Id", Convert.ToInt32(orco_Id), DbType.Int32, ParameterDirection.Input);
+            var answer = db.Query<tbReportes>(ScriptsDataBase.PlanificacionPO, parametros, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
 
     }
 }
