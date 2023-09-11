@@ -3589,7 +3589,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_JuridicaInsertar
     @peju_Id INT,
     @doco_URLImagen NVARCHAR(MAX),
     @usua_UsuarioCreacion INT,
-    @peju_FechaCreacion DATETIME
+    @doco_FechaCreacion DATETIME
 AS
 BEGIN
     BEGIN TRY
@@ -3602,7 +3602,7 @@ BEGIN
         SELECT @peju_Id,
                [doco_URLImagen],
                @usua_UsuarioCreacion, 
-               @peju_FechaCreacion,
+               @doco_FechaCreacion,
                [doco_Numero_O_Referencia],
                [doco_TipoDocumento]
         FROM OPENJSON(@doco_URLImagen, '$.documentos')
