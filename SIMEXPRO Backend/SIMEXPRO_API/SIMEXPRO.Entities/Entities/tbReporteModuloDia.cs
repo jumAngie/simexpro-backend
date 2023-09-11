@@ -14,6 +14,8 @@ namespace SIMEXPRO.Entities.Entities
             tbReporteModuloDiaDetalle = new HashSet<tbReporteModuloDiaDetalle>();
         }
 
+        [NotMapped]
+        public string Empleado { get; set; }
         public int remo_Id { get; set; }
         public int modu_Id { get; set; }
         [NotMapped]
