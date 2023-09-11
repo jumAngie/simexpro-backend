@@ -3593,7 +3593,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_JuridicaInsertar
 AS
 BEGIN
     BEGIN TRY
-        INSERT INTO Adua.tbDocumentosContratos ([coin_Id],
+        INSERT INTO Adua.tbDocumentosContratos ([peju_Id],
                                                 [doco_URLImagen],
                                                 [usua_UsuarioCreacion],
                                                 [doco_FechaCreacion],
