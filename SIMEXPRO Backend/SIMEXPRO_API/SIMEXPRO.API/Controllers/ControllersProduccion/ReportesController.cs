@@ -47,5 +47,12 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             return Ok(listado);
         }
 
+        [HttpPost("PlanificacionPO")]
+        public IActionResult PlanificacionPO(ReportesViewModel reporte)
+        {
+            var listado = _produccionServices.PlanificacionPO(reporte.orco_Id);
+            return Ok(listado);
+        }
+
     }
 }
