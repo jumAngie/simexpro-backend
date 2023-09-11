@@ -25,6 +25,7 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public DateTime? ppro_FechaModificacion { get; set; }
         public bool? ppro_Estado { get; set; }
         public string detalles { get; set; }
+        public string mensaje { get; set; }
 
     }
 }

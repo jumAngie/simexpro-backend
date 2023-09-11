@@ -65,6 +65,15 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             return result;
         }
 
+        public IEnumerable<tbPedidosProduccion> Find(int id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@ppro_Id", id, DbType.Int32, ParameterDirection.Input);
+            var result = db.Query<tbPedidosProduccion>(ScriptsDataBase.BuscarPedidosProduccion, parametros, commandType: System.Data.CommandType.StoredProcedure);
+            return result;
+        }
+
         public RequestStatus Update(tbPedidosProduccion item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);

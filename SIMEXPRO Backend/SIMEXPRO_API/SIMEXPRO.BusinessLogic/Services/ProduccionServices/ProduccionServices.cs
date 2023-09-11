@@ -2359,6 +2359,19 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
                 return result.Error(ex.Message);
             }
         }
+        public ServiceResult FindPedidosProduccion(int id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _pedidosProduccionRepository.Find(id);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
 
         public ServiceResult InsertarPedidosProduccion(tbPedidosProduccion item)
         {

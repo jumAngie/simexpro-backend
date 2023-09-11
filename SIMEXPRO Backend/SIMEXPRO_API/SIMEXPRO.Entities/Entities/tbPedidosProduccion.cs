@@ -44,6 +44,8 @@ namespace SIMEXPRO.Entities.Entities
         public string UsuarioModificacionNombre { get; set; }
         [NotMapped]
         public string detalles { get; set; }
+        [NotMapped]
+        public string mensaje { get; set; }
 
 
         public virtual tbEmpleados empl { get; set; }

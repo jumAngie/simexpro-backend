@@ -14914,6 +14914,60 @@ INNER JOIN Acce.tbUsuarios Creacion
 END
 GO
 
+
+CREATE OR ALTER PROC Prod.UDP_tbPedidosProduccion_Find 
+@ppro_Id INT
+AS
+BEGIN
+IF NOT EXISTS (SELECT * FROM Prod.tbPedidosProduccion WHERE ppro_Finalizado = 1 AND ppro_Id = @ppro_Id )
+	BEGIN
+	SELECT ppro_Id,
+		   pediproduccion.empl_Id,
+		   CONCAT(empl_Nombres, ' ', empl_Apellidos)					AS empl_NombreCompleto,
+		   ppro_Fecha,
+		   ppro_Estados, 
+		   ppro_Observaciones, 
+		   Creacion.usua_Nombre											AS UsuarioCreacionNombre,
+		   pediproduccion.usua_UsuarioCreacion,
+		   ppro_FechaCreacion,
+		   Modificacion.usua_Nombre										AS UsuarioModificacionNombre,
+		   pediproduccion.usua_UsuarioModificacion, 
+		   ppro_FechaModificacion,
+		   ppro_Finalizado,
+		   ppro_Estado,
+	   	      (SELECT ppro_Id,
+					ppde_Id,
+		   		   tbdetalles.lote_Id,
+		   		   ppde_Cantidad,
+		   		   mate_Descripcion,
+				   tblotes.lote_Stock,
+				   tbarea.tipa_area,
+				   tblotes.lote_CodigoLote
+		   	  FROM Prod.tbPedidosProduccionDetalles tbdetalles
+					INNER JOIN Prod.tbLotes tblotes			ON tbdetalles.lote_Id = tblotes.lote_Id
+					INNER JOIN Prod.tbMateriales tbmats		ON tblotes.mate_Id = tbmats.mate_Id
+					INNER JOIN Prod.tbArea	tbarea			ON tblotes.tipa_Id = tbarea.tipa_Id
+			  WHERE pediproduccion.ppro_Id = tbdetalles.ppro_Id
+				  FOR JSON PATH)										AS Detalles,
+				  'Esta bien'  AS mensaje
+	  FROM Prod.tbPedidosProduccion pediproduccion
+INNER JOIN Gral.tbEmpleados emples
+		ON pediproduccion.empl_Id = emples.empl_Id
+INNER JOIN Acce.tbUsuarios Creacion
+		ON pediproduccion.usua_UsuarioCreacion = Creacion.usua_Id
+ LEFT JOIN Acce.tbUsuarios Modificacion
+		ON pediproduccion.usua_UsuarioModificacion = Modificacion.usua_Id
+
+		WHERE [ppro_Estado] = 1
+		AND ppro_Id = @ppro_Id
+	END
+		ELSE
+	BEGIN
+		SELECT 'Este pedido ya esta finalizado'  AS mensaje
+	END
+END
+GO
+
 CREATE OR ALTER  PROC [Prod].[UDP_tbPedidosProduccion_Eliminar]
 	@ppro_Id		INT
 AS
