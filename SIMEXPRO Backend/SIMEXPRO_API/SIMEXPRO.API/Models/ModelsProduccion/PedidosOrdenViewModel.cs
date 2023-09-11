@@ -10,7 +10,7 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
     {
         public int peor_Id { get; set; }
         public int? prov_Id { get; set; }
-        public int duca_Id { get; set; }
+        public int? duca_Id { get; set; }
         public bool?peor_finalizacion { get; set; }
         public int ciud_Id { get; set; }
         public string ciud_Nombre { get; set; }

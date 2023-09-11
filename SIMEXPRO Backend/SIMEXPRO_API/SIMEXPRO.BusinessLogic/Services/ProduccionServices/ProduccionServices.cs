@@ -1711,6 +1711,22 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
+        public ServiceResult DibujarDetalles(string orco_Codigo)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _ordenCompraDetallesRepository.DibujarDetalles(orco_Codigo);
+                return result.Ok(list);
+
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+
+            }
+        }
+
         public ServiceResult InsertarOrdenCompraDetalles(tbOrdenCompraDetalles item)
         {
             var result = new ServiceResult();

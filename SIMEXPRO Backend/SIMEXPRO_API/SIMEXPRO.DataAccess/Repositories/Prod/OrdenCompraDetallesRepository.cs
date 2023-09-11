@@ -71,6 +71,15 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             return result;
         }
 
+        public IEnumerable<tbOrdenCompraDetalles> DibujarDetalles(string orco_Codigo)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@orco_Codigo", orco_Codigo, DbType.String, ParameterDirection.Input);
+            var result = db.Query<tbOrdenCompraDetalles>(ScriptsDataBase.DibujarDetalles, parametros, commandType: System.Data.CommandType.StoredProcedure);
+            return result;
+        }
+
         public RequestStatus Update(tbOrdenCompraDetalles item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);

@@ -57,6 +57,9 @@ namespace SIMEXPRO.Entities.Entities
         public int? usua_UsuarioModificacion { get; set; }
         [NotMapped]
         public string usuarioModificacionNombre { get; set; }
+
+        [NotMapped]
+        public string proc_Descripcion { get; set; }
         public DateTime? code_FechaModificacion { get; set; }
         public bool? code_Estado { get; set; }
 

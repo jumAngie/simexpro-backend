@@ -15,6 +15,7 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         [NotMapped]
         public string esti_Descripcion { get; set; }
 
+        public string proc_Descripcion { get; set; }
 
         [NotMapped]
         public string tall_Nombre { get; set; }

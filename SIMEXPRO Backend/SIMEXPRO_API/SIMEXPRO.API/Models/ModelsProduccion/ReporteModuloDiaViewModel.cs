@@ -7,6 +7,8 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
 {
     public class ReporteModuloDiaViewModel
     {
+
+        public string Empleado { get; set; }
         public int remo_Id { get; set; }
         public int modu_Id { get; set; }
         public string modu_Nombre { get; set; }

@@ -12659,7 +12659,8 @@ GO
 CREATE OR ALTER PROCEDURE Prod.UDP_tbOrde_Ensa_Acab_Etiq_Listar
 AS
 BEGIN
-SELECT    ensa_Id, 
+SELECT    
+		ensa_Id, 
         ensa_Cantidad, 
         emp.empl_Id, 
         CONCAT(emp.empl_Nombres ,' ',emp.empl_Apellidos) AS empl_NombreCompleto,
@@ -12674,6 +12675,7 @@ SELECT    ensa_Id,
         modu.modu_Nombre,
         modu.proc_Id,
         ordenCompra.orco_Codigo,
+        estilos.esti_Descripcion,
         pro.proc_Descripcion,
         crea.usua_Nombre                            AS UsurioCreacionNombre, 
         ensa_FechaCreacion,
@@ -12688,8 +12690,9 @@ SELECT    ensa_Id,
         INNER JOIN Prod.tbModulos            modu    ON ensa.modu_Id = modu.modu_Id
         INNER JOIN Prod.tbProcesos    pro                ON modu.proc_Id = pro.proc_Id
         INNER JOIN Prod.tbOrdenCompra ordenCompra    ON ocd.orco_Id  = ordenCompra.orco_Id 
+        INNER JOIN Prod.tbEstilos            estilos ON ocd.esti_Id  = estilos.esti_Id
         INNER JOIN Acce.tbUsuarios crea                ON crea.usua_Id = ensa.usua_UsuarioCreacion 
-        LEFT JOIN  Acce.tbUsuarios modi                ON modi.usua_Id = ensa.usua_UsuarioModificacion 
+        LEFT JOIN  Acce.tbUsuarios modi                ON modi.usua_Id = ensa.usua_UsuarioModificacion
 END
 
 GO
@@ -13986,22 +13989,51 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbReporteModuloDia_Listar
 AS
 BEGIN
 SELECT	remo_Id, 
-		rmd.modu_Id, 
+		modu.modu_Id, 
 		modu.modu_Nombre,
-		remo_Fecha, 
+		empleados.empl_Nombres + ' ' + empleados.empl_Apellidos as Empleado,
+		remo_Fecha,
+		remo_TotalDia - remo_TotalDanado as CantidadTotal,
 		remo_TotalDia, 
 		remo_TotalDanado, 
-		rmd.usua_UsuarioCreacion,
-		crea.usua_Nombre usua_UsuarioCrea, 
+		(SELECT	rdet_Id, 
+			remo_Id, 
+			rdet_TotalDia, 
+			rdet_TotalDanado, 
+			OrdenCompra.orco_Id,
+			Isnull(colores.colr_Nombre,'N/A') as colr_Nombre,
+			case ordencompradetalle.code_Sexo 
+			when 'M' then 'Masculino'
+			when 'F' then 'Femenino'
+			when 'U' then 'Unisex'
+			else ordencompradetalle.code_Sexo end as Sexo,
+			clientes.[clie_Nombre_Contacto],
+			clientes.[clie_RTN],
+ 			ReporteModuloDia.code_Id, 
+			ordencompradetalle.esti_Id,
+			estilos.esti_Descripcion
+	FROM	Prod.tbReporteModuloDiaDetalle ReporteModuloDia
+			INNER JOIN Prod.tbOrdenCompraDetalles ordencompradetalle  	ON  ReporteModuloDia.code_Id = ordencompradetalle.code_Id 
+			INNER JOIN Prod.tbEstilos			estilos					ON ordencompradetalle.esti_Id = estilos.esti_Id
+			INNER JOIN Prod.tbOrdenCompra		OrdenCompra				ON	ordencompradetalle.orco_Id = OrdenCompra.orco_Id
+			INNER JOIN Prod.tbClientes			clientes				ON  OrdenCompra.orco_IdCliente = clientes.clie_Id
+			left JOIN Prod.tbColores			colores					ON	ordencompradetalle.colr_Id	= colores.colr_Id
+			WHERE rmd.remo_Id = remo_Id AND rdet_Estado = 1 
+			FOR JSON PATH) as detalles,
+		rmd.usua_UsuarioCreacion, 
+		crea.usua_Nombre AS usua_NombreUsuarioCreacion, 
 		remo_FechaCreacion, 
 		rmd.usua_UsuarioModificacion,
-		modi.usua_Nombre usua_UsuarioModifica, 
+		modi.usua_Nombre AS usua_NombreUsuarioModificacion, 
 		remo_FechaModificacion, 
-		remo_Estado 
+		remo_Estado,
+		remo_Finalizado 
 FROM	Prod.tbReporteModuloDia rmd 
-		LEFT JOIN Prod.tbModulos modu				ON rmd.modu_Id = modu.modu_Id 
+		INNER JOIN Prod.tbModulos modu				ON rmd.modu_Id = modu.modu_Id 
+		INNER JOIN Gral.tbEmpleados  empleados		ON modu.empr_Id	= empleados.empl_Id
 		INNER JOIN Acce.tbUsuarios crea				ON crea.usua_Id = rmd.usua_UsuarioCreacion 
 		LEFT JOIN  Acce.tbUsuarios modi				ON modi.usua_Id = rmd.usua_UsuarioModificacion 	
+ORDER BY rmd.remo_FechaCreacion desc
 END
 GO
 
@@ -14798,6 +14830,8 @@ SELECT
 	   lotes.tipa_id,
 	   lotes.colr_Id,
 	   color.colr_Nombre,
+	   color.colr_Codigo,
+	   color.colr_CodigoHtml,
 	   --PEDIDOS DE MATERIALES
 	   pedidos.peor_Id,
 	   pedidosDetalle.prod_Id,
@@ -15674,9 +15708,10 @@ GO
 CREATE OR ALTER PROC Prod.UDP_tbColores_Listar
 AS BEGIN
 
-SELECT colr_Id,
-	   colr_Nombre,
-	   --colr_Codigo,
+SELECT colores.colr_Id,
+	   colores.colr_Nombre,
+	   colores.colr_Codigo,
+	   colores.colr_CodigoHtml,
 	   colores.usua_UsuarioCreacion, 
 	   Creacion.usua_Nombre AS UsuarioNombreCreacion,
 	   colores.colr_FechaCreacion,
