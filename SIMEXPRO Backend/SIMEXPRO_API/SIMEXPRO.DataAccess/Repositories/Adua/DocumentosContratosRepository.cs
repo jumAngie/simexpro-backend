@@ -67,7 +67,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@peju_Id", item.peju_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@doco_URLImagen", item.doco_URLImagen, DbType.String, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@peju_FechaCreacion", item.doco_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
+            parametros.Add("@peju_FechaCreacion", item.doco_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
 
             var respuesta = db.QueryFirst<string>(ScriptsDataBase.InsertDocumentosPersonaJuridica, parametros, commandType: CommandType.StoredProcedure);
             return new RequestStatus()
