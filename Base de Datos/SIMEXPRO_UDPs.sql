@@ -12659,35 +12659,37 @@ GO
 CREATE OR ALTER PROCEDURE Prod.UDP_tbOrde_Ensa_Acab_Etiq_Listar
 AS
 BEGIN
-SELECT	ensa_Id, 
-		ensa_Cantidad, 
-		emp.empl_Id, 
-		CONCAT(emp.empl_Nombres ,' ',emp.empl_Apellidos) AS empl_NombreCompleto,
-		ocd.code_Id,
-		ocd.code_Sexo,
-		est.esti_Id,
-		est.esti_Descripcion,
-		ensa_FechaInicio, 
-		ensa_FechaLimite, 
-		pp.ppro_Id, 
-		modu.modu_Id,
-		modu.modu_Nombre,
-		modu.proc_Id,
-		pro.proc_Descripcion,
-		crea.usua_Nombre							AS UsurioCreacionNombre, 
-		ensa_FechaCreacion,							
-		modi.usua_Nombre							AS UsuarioModificacionNombre, 
-		ensa_FechaModificacion, 
-		ensa_Estado
-		FROM	Prod.tbOrde_Ensa_Acab_Etiq ensa
-		INNER JOIN Gral.tbEmpleados emp				ON emp.empl_Id  = ensa.empl_Id
-		INNER JOIN Prod.tbOrdenCompraDetalles ocd	ON ocd.code_Id  = ensa.code_Id
-		INNER JOIN Prod.tbEstilos est				ON est.esti_Id	= ocd.esti_Id
-		INNER JOIN Prod.tbPedidosProduccion pp		ON pp.ppro_Id   = ensa.ppro_Id
-		INNER JOIN Prod.tbModulos			modu	ON ensa.modu_Id = modu.modu_Id
-		INNER JOIN Prod.tbProcesos	pro				ON modu.proc_Id = pro.proc_Id
-		INNER JOIN Acce.tbUsuarios crea				ON crea.usua_Id = ensa.usua_UsuarioCreacion 
-		LEFT JOIN  Acce.tbUsuarios modi				ON modi.usua_Id = ensa.usua_UsuarioModificacion 
+SELECT    ensa_Id, 
+        ensa_Cantidad, 
+        emp.empl_Id, 
+        CONCAT(emp.empl_Nombres ,' ',emp.empl_Apellidos) AS empl_NombreCompleto,
+        ocd.code_Id,
+        ocd.code_Sexo,
+        est.esti_Id,
+        est.esti_Descripcion,
+        ensa_FechaInicio, 
+        ensa_FechaLimite, 
+        pp.ppro_Id, 
+        modu.modu_Id,
+        modu.modu_Nombre,
+        modu.proc_Id,
+        ordenCompra.orco_Codigo,
+        pro.proc_Descripcion,
+        crea.usua_Nombre                            AS UsurioCreacionNombre, 
+        ensa_FechaCreacion,
+        modi.usua_Nombre                            AS UsuarioModificacionNombre, 
+        ensa_FechaModificacion, 
+        ensa_Estado
+        FROM    Prod.tbOrde_Ensa_Acab_Etiq ensa
+        INNER JOIN Gral.tbEmpleados emp                ON emp.empl_Id  = ensa.empl_Id
+        INNER JOIN Prod.tbOrdenCompraDetalles ocd    ON ocd.code_Id  = ensa.code_Id
+        INNER JOIN Prod.tbEstilos est                ON est.esti_Id    = ocd.esti_Id
+        INNER JOIN Prod.tbPedidosProduccion pp        ON pp.ppro_Id   = ensa.ppro_Id
+        INNER JOIN Prod.tbModulos            modu    ON ensa.modu_Id = modu.modu_Id
+        INNER JOIN Prod.tbProcesos    pro                ON modu.proc_Id = pro.proc_Id
+        INNER JOIN Prod.tbOrdenCompra ordenCompra    ON ocd.orco_Id  = ordenCompra.orco_Id 
+        INNER JOIN Acce.tbUsuarios crea                ON crea.usua_Id = ensa.usua_UsuarioCreacion 
+        LEFT JOIN  Acce.tbUsuarios modi                ON modi.usua_Id = ensa.usua_UsuarioModificacion 
 END
 
 GO
