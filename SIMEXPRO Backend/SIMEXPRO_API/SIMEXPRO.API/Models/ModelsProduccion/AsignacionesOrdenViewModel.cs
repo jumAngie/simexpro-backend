@@ -36,6 +36,12 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         [NotMapped]
         public string esti_Descripcion { get; set; }
 
+        [NotMapped]
+        public DateTime orco_FechaEmision { get; set; }
+        [NotMapped]
+        public DateTime orco_FechaLimite { get; set; }
+        [NotMapped]
+        public int cantidad_Items { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         [NotMapped]
         public string usuarioCreacionNombre { get; set; }

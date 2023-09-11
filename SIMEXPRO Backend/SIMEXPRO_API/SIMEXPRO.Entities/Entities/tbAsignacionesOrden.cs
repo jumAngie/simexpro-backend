@@ -49,6 +49,12 @@ namespace SIMEXPRO.Entities.Entities
         public string colr_Nombre { get; set; }
         [NotMapped]
         public string esti_Descripcion { get; set; }
+        [NotMapped]
+        public DateTime orco_FechaEmision { get; set; }
+        [NotMapped]
+        public DateTime orco_FechaLimite { get; set; }
+        [NotMapped]
+        public int cantidad_Items { get; set; }
 
         public virtual tbOrdenCompraDetalles asor_OrdenDet { get; set; }
         public virtual tbEmpleados empl { get; set; }
