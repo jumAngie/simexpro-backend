@@ -1918,12 +1918,12 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
-        public ServiceResult LineaTiempoOrdenCompra(int orco_Id)
+        public ServiceResult LineaTiempoOrdenCompra(string orco_Codigo)
         {
             var result = new ServiceResult();
             try
             {
-                var respuesta = _ordenCompraRepository.LineaTiempo(orco_Id);
+                var respuesta = _ordenCompraRepository.LineaTiempo(orco_Codigo);
 
                 return result.Ok(respuesta);
             }
