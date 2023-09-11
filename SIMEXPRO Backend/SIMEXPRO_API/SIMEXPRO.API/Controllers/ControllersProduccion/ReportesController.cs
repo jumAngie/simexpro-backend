@@ -54,5 +54,12 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             return Ok(listado);
         }
 
+        [HttpPost("CostosMaterialesNoBrindados")]
+        public IActionResult CostosMaterialesNoBrindados(ReportesViewModel reporte)
+        {
+            var data = _mapper.Map<tbReportes>(reporte);
+            var listado = _produccionServices.CostosMaterialesNoBrindados(data);
+            return Ok(listado);
+        }
     }
 }

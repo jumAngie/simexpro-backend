@@ -3770,7 +3770,19 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
                 return result.Error(ex.Message);
             }
         }
-
+        public ServiceResult CostosMaterialesNoBrindados(tbReportes reportes)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _reportesRepository.CostosMaterialesNoBrindados(reportes);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
 
         #endregion
     }

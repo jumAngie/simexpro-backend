@@ -16730,7 +16730,9 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Prod.UDP_CostosMaterialesNoBrindados
+CREATE OR ALTER PROCEDURE Prod.UDP_CostosMaterialesNoBrindados 
+	@mate_FechaInicio		DATE,
+	@mate_FechaLimite			DATE
 AS
 BEGIN
 	SELECT	mate.mate_Descripcion,
@@ -16738,5 +16740,6 @@ BEGIN
 			CONVERT( DECIMAL(18,2), (CONVERT(DECIMAL(18,2), SUM(peod.prod_Cantidad) * 100)) / CONVERT(DECIMAL(18,2),(SELECT SUM(prod_Cantidad)FROM Prod.tbPedidosOrdenDetalle))) AS PorcentajeProductos,
 			AVG(peod.prod_Precio) AS PrecioPromedioMaterial
 		FROM Prod.tbPedidosOrdenDetalle peod  LEFT JOIN Prod.tbMateriales mate ON peod.mate_Id = mate.mate_Id
+		WHERE peod.prod_FechaCreacion BETWEEN @mate_FechaInicio AND @mate_FechaLimite
 		GROUP BY mate.mate_Descripcion;
 END
