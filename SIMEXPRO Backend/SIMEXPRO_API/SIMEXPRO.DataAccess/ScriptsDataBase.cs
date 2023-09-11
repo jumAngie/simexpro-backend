@@ -787,6 +787,8 @@ namespace SIMEXPRO.DataAccess
         public static string PedidosCliente = "Prod.UDP_Reporte_PedidosCliente";
         public static string PlanificacionPO = "Prod.UDP_Reporte_Planificación_Produccion";
         public static string CostosMaterialesNoBrindados = "Prod.UDP_CostosMaterialesNoBrindados";
+        public static string Consumo_Materiales = "Prod.UDP_Reporte_Consumo_Materiales";
+
         #endregion
 
     }

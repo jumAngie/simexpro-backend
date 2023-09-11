@@ -3784,6 +3784,20 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
+        public ServiceResult Consumo_Materiales(tbReportes reportes)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _reportesRepository.Consumo_Materiales(reportes);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
         #endregion
     }
 }

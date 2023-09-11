@@ -67,5 +67,10 @@ namespace SIMEXPRO.Entities.Entities
         public decimal PorcentajeProductos { get; set; }
         public decimal PrecioPromedioMaterial { get; set; }
 
+        //Reportes Consumo Materiales
+        public int TotalMaterial { get; set; }
+        public int PromedioMaterial { get; set; }
+        public decimal PorcentajeMaterial { get; set; }
+
     }
 }
