@@ -59,5 +59,18 @@ namespace SIMEXPRO.Entities.Entities
         public string proc_Descripcion { get; set; }
         public string empl_NombreCompleto { get; set; }
 
+        //Reportes Costos Materiales No Brindados
+        public DateTime mate_FechaInicio { get; set; }
+        public DateTime mate_FechaLimite { get; set; }
+        public string mate_Descripcion { get; set; }
+        public int TotalCantidad { get; set; }
+        public decimal PorcentajeProductos { get; set; }
+        public decimal PrecioPromedioMaterial { get; set; }
+
+        //Reportes Consumo Materiales
+        public int TotalMaterial { get; set; }
+        public int PromedioMaterial { get; set; }
+        public decimal PorcentajeMaterial { get; set; }
+
     }
 }

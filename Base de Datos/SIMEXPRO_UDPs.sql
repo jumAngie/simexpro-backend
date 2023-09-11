@@ -3589,11 +3589,11 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_JuridicaInsertar
     @peju_Id INT,
     @doco_URLImagen NVARCHAR(MAX),
     @usua_UsuarioCreacion INT,
-    @peju_FechaCreacion DATETIME
+    @doco_FechaCreacion DATETIME
 AS
 BEGIN
     BEGIN TRY
-        INSERT INTO Adua.tbDocumentosContratos ([coin_Id],
+        INSERT INTO Adua.tbDocumentosContratos ([peju_Id],
                                                 [doco_URLImagen],
                                                 [usua_UsuarioCreacion],
                                                 [doco_FechaCreacion],
@@ -3602,7 +3602,7 @@ BEGIN
         SELECT @peju_Id,
                [doco_URLImagen],
                @usua_UsuarioCreacion, 
-               @peju_FechaCreacion,
+               @doco_FechaCreacion,
                [doco_Numero_O_Referencia],
                [doco_TipoDocumento]
         FROM OPENJSON(@doco_URLImagen, '$.documentos')
@@ -16711,3 +16711,17 @@ BEGIN
 	WHERE [rcer_Estado] = 1 
 END
 GO
+
+CREATE OR ALTER PROCEDURE Prod.UDP_CostosMaterialesNoBrindados 
+	@mate_FechaInicio		DATE,
+	@mate_FechaLimite			DATE
+AS
+BEGIN
+	SELECT	mate.mate_Descripcion,
+		    (SUM(peod.prod_Cantidad)) as TotalCantidad,
+			CONVERT( DECIMAL(18,2), (CONVERT(DECIMAL(18,2), SUM(peod.prod_Cantidad) * 100)) / CONVERT(DECIMAL(18,2),(SELECT SUM(prod_Cantidad)FROM Prod.tbPedidosOrdenDetalle))) AS PorcentajeProductos,
+			AVG(peod.prod_Precio) AS PrecioPromedioMaterial
+		FROM Prod.tbPedidosOrdenDetalle peod  LEFT JOIN Prod.tbMateriales mate ON peod.mate_Id = mate.mate_Id
+		WHERE peod.prod_FechaCreacion BETWEEN @mate_FechaInicio AND @mate_FechaLimite
+		GROUP BY mate.mate_Descripcion;
+END

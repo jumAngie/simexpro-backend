@@ -47,5 +47,25 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             return answer;
         }
 
+        public IEnumerable<tbReportes> CostosMaterialesNoBrindados(tbReportes item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@mate_FechaInicio", item.mate_FechaInicio, DbType.Date, ParameterDirection.Input);
+            parametros.Add("@mate_FechaLimite", item.mate_FechaLimite, DbType.Date, ParameterDirection.Input);
+            var answer = db.Query<tbReportes>(ScriptsDataBase.CostosMaterialesNoBrindados, parametros, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
+
+        public IEnumerable<tbReportes> Consumo_Materiales(tbReportes item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@fecha_inicio", item.fecha_inicio, DbType.Date, ParameterDirection.Input);
+            parametros.Add("@fecha_fin", item.fecha_fin, DbType.Date, ParameterDirection.Input);
+            var answer = db.Query<tbReportes>(ScriptsDataBase.Consumo_Materiales, parametros, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
+
     }
 }

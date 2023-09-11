@@ -12,6 +12,7 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public int asor_OrdenDetId { get; set; }
         [NotMapped]
         public int orco_Id { get; set; }
+        public string orco_Codigo { get; set; }
         [NotMapped]
         public string Validacion { get; set; }
         public string Detalles { get; set; }

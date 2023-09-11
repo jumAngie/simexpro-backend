@@ -11,6 +11,7 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public int code_Id { get; set; }
         public int proc_Id { get; set; }
         public string proc_Descripcion { get; set; }
+        public string proc_CodigoHTML { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         public DateTime poco_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }

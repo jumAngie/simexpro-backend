@@ -313,12 +313,12 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
-        public ServiceResult FindOrdenCompraDetalles(int id)
+        public ServiceResult FindOrdenCompraDetalles(string id)
         {
             var result = new ServiceResult();
             try
             {
-                var list = _asignacionesOrdenRepository.Find(id);
+                var list = _asignacionesOrdenRepository.FindAsignacion(id);
                 return result.Ok(list);
             }
             catch (Exception e)
@@ -1918,12 +1918,12 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
-        public ServiceResult LineaTiempoOrdenCompra(int orco_Id)
+        public ServiceResult LineaTiempoOrdenCompra(string orco_Codigo)
         {
             var result = new ServiceResult();
             try
             {
-                var respuesta = _ordenCompraRepository.LineaTiempo(orco_Id);
+                var respuesta = _ordenCompraRepository.LineaTiempo(orco_Codigo);
 
                 return result.Ok(respuesta);
             }
@@ -1971,6 +1971,22 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             try
             {
                 var list = _procesoPorOrdenCompraDetalleRepository.Listar(cade_Id);
+                return result.Ok(list);
+
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+
+            }
+        }
+
+        public ServiceResult DibujadoProcesos(string orco_Codigo)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _procesoPorOrdenCompraDetalleRepository.DibujarProcesos(orco_Codigo);
                 return result.Ok(list);
 
             }
@@ -3770,7 +3786,33 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
                 return result.Error(ex.Message);
             }
         }
+        public ServiceResult CostosMaterialesNoBrindados(tbReportes reportes)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _reportesRepository.CostosMaterialesNoBrindados(reportes);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
 
+        public ServiceResult Consumo_Materiales(tbReportes reportes)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _reportesRepository.Consumo_Materiales(reportes);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
 
         #endregion
     }

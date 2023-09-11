@@ -59,9 +59,9 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
         }
 
         [HttpGet("LineaTiempoOrdenCompra")]
-        public IActionResult LineaTiempo(int orco_Id)
+        public IActionResult LineaTiempo(string orco_Codigo)
         {
-            var resultado = _produccionServices.LineaTiempoOrdenCompra(orco_Id);
+            var resultado = _produccionServices.LineaTiempoOrdenCompra(orco_Codigo);
             resultado.Data = _mapper.Map<IEnumerable<OrdenCompraViewModel>>(resultado.Data);
 
             return Ok(resultado);

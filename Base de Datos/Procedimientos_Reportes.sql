@@ -1,4 +1,4 @@
-CREATE OR ALTER PROC Prod.UDP_Reporte_ProduccionPorModulo
+CREATE OR ALTER PROC Prod.UDP_Reporte_ProduccionPorModulo 
 @fecha_inicio   DATE,
 @fecha_fin      DATE
 AS
@@ -44,5 +44,40 @@ BEGIN
 				INNER JOIN Prod.tbOrdenCompra orco ON code.orco_Id = orco.orco_Id
 				INNER JOIN Prod.tbClientes clie ON orco.orco_IdCliente = clie.clie_Id
 		WHERE orco.orco_Id = @orco_Id
+		ORDER BY asor_OrdenDetId
+END
 
+GO
+
+CREATE OR ALTER PROCEDURE Prod.UDP_CostosMaterialesNoBrindados --'01-01-2023','11-08-2023'
+	@mate_FechaInicio			DATE,
+	@mate_FechaLimite			DATE
+AS
+BEGIN
+	SELECT		mate.mate_Descripcion,
+				(SUM(peod.prod_Cantidad)) as TotalCantidad,
+				CONVERT( DECIMAL(18,2), (CONVERT(DECIMAL(18,2), SUM(peod.prod_Cantidad) * 100)) / CONVERT(DECIMAL(18,2),(SELECT SUM(prod_Cantidad)FROM Prod.tbPedidosOrdenDetalle))) AS PorcentajeProductos,
+				AVG(peod.prod_Precio) AS PrecioPromedioMaterial
+		FROM	Prod.tbPedidosOrdenDetalle peod  LEFT JOIN Prod.tbMateriales mate ON peod.mate_Id = mate.mate_Id
+		WHERE	peod.prod_FechaCreacion BETWEEN @mate_FechaInicio AND @mate_FechaLimite
+		GROUP BY mate.mate_Descripcion;
+END
+
+GO
+
+CREATE OR ALTER PROC Prod.UDP_Reporte_Consumo_Materiales --'01-01-2023','11-08-2023'
+@fecha_inicio   DATE,
+@fecha_fin      DATE
+AS
+BEGIN
+	SELECT		mat.[mate_Descripcion],
+				SUM(pep.[ppde_Cantidad]) AS TotalMaterial,
+				AVG(pep.[ppde_Cantidad]) AS PromedioMaterial,
+				CAST(CAST(SUM(pep.[ppde_Cantidad]) AS DECIMAL(18,2)) / SUM(SUM(pep.[ppde_Cantidad])) OVER () * 100 AS DECIMAL(18,2)) AS PorcentajeMaterial
+	FROM		[Prod].[tbPedidosProduccionDetalles] pep 
+	INNER JOIN	[Prod].[tbLotes] lot ON pep.[lote_Id] = lot.[lote_Id]
+	INNER JOIN	[Prod].[tbMateriales] mat ON lot.[mate_Id] = mat.[mate_Id]
+	WHERE		pep.[ppde_FechaCreacion] BETWEEN @fecha_inicio AND @fecha_fin
+	GROUP BY	mat.[mate_Descripcion]
+	ORDER BY	TotalMaterial;
 END
