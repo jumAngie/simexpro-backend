@@ -3757,6 +3757,20 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
+        public ServiceResult PlanificacionPO(int orco_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _reportesRepository.PlanificacionPO(orco_Id);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
 
         #endregion
     }

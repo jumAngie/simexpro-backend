@@ -23,10 +23,10 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public DateTime fecha_inicio { get; set; }
         public DateTime fecha_fin { get; set; }
         public string modu_Nombre { get; set; }
-        public int TotalProduccion { get; set; }
-        public int PromedioCantidad { get; set; }
-        public int PromedioDanio { get; set; }
-        public int PromedioProduccion { get; set; }
+        public string TotalProduccion { get; set; }
+        public string PromedioCantidad { get; set; }
+        public string PromedioDanio { get; set; }
+        public string PromedioProduccion { get; set; }
 
 
         //Reportes Pedidos Cliente
@@ -37,7 +37,7 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public int PedidosCurso { get; set; }
         public int PedidosPendientes { get; set; }
         public int CantidadCompletada { get; set; }
-        public int ProcentajeCompletado { get; set; }
+        public string ProcentajeCompletado { get; set; }
         public int code_CantidadPrenda { get; set; }
         public string code_Sexo { get; set; }
         public string clie_Nombre_O_Razon_Social { get; set; }
@@ -47,6 +47,19 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public string clie_Correo_Electronico { get; set; }
         public string detalles { get; set; }
 
+
+        //Reportes Planificación PO
+
+        public int asor_Id { get; set; }
+        public int asor_OrdenDetId { get; set; }
+        public string esti_Descripcion { get; set; }
+        public string colr_Nombre { get; set; }
+        public string tall_Nombre { get; set; }
+        public DateTime asor_FechaInicio { get; set; }
+        public DateTime asor_FechaLimite { get; set; }
+        public int asor_Cantidad { get; set; }
+        public string proc_Descripcion { get; set; }
+        public string empl_NombreCompleto { get; set; }
 
     }
 }

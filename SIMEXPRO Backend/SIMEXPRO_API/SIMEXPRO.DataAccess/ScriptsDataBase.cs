@@ -271,6 +271,9 @@ namespace SIMEXPRO.DataAccess
         public static string CargarDocuemntosComerciante = "Adua.UDP_tbDocumentosContrato_CargarDocuComerciante";
         public static string EditarDocumentosComerciante = "Adua.UDP_tbDocumentosContrato_ComercianteEditar";
 
+        public static string InsertDocumentosPersonaJuridica = "Adua.UDP_tbDocumentosContrato_JuridicaInsertar";
+        public static string CargarDocumentosPersonaJuridica = "Adua.UDP_tbDocumentosContrato_CargarDocuJuridica";
+        public static string EditarDocumentosPersonaJuridica = "Adua.UDP_tbDocumentosContrato_PersonaJuridicaEditar";
         #endregion
 
         #region Documentos de Soporte
@@ -411,7 +414,6 @@ namespace SIMEXPRO.DataAccess
         public static string InsertarPersonaJuridicaTap2 = "Adua.UDP_tbPersonaJuridica_InsertarTab2";
         public static string InsertarPersonaJuridicaTap3 = "Adua.UDP_tbPersonaJuridica_InsertarTab3";
         public static string InsertarPersonaJuridicaTap4 = "Adua.UDP_tbPersonaJuridica_InsertarTab4";
-        public static string InsertarPersonaJuridicaTap5 = "Adua.UDP_tbPersonaJuridica_InsertarTab5";
         public static string EditarPersonaJuridica = "Adua.UDP_tbPersonaJuridica_Editar";
         public static string FinalizarPersonaJuridica = "Adua.UDP_tbPersonaJuridica_ContratoFinalizado";
         #endregion
@@ -783,6 +785,7 @@ namespace SIMEXPRO.DataAccess
         public static string MaquinasTiempos = "Prod.UPD_Reporte_TiemposMaquinas";
         public static string ModuloProduccion = "Prod.UDP_Reporte_ProduccionPorModulo";
         public static string PedidosCliente = "Prod.UDP_Reporte_PedidosCliente";
+        public static string PlanificacionPO = "Prod.UDP_Reporte_Planificación_Produccion";
         #endregion
 
     }
