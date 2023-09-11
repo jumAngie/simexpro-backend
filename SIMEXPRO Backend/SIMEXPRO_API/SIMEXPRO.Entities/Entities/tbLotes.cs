@@ -36,6 +36,10 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string colr_Nombre { get; set; }
         [NotMapped]
+        public string colr_Codigo { get; set; }
+        [NotMapped]
+        public string colr_CodigoHtml { get; set; }
+        [NotMapped]
         public string unme_Descripcion { get; set; }
         [NotMapped]
         public string mate_Descripcion { get; set; }

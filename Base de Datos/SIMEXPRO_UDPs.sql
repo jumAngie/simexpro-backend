@@ -14798,6 +14798,8 @@ SELECT
 	   lotes.tipa_id,
 	   lotes.colr_Id,
 	   color.colr_Nombre,
+	   color.colr_Codigo,
+	   color.colr_CodigoHtml,
 	   --PEDIDOS DE MATERIALES
 	   pedidos.peor_Id,
 	   pedidosDetalle.prod_Id,
