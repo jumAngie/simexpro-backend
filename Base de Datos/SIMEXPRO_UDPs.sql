@@ -16327,6 +16327,7 @@ AS
 		LEFT JOIN Adua.tbDuca				AS Duca			ON FactExport.duca_Id = Duca.duca_Id
 		LEFT JOIN Acce.tbUsuarios			AS UserModifica ON FactExport.usua_UsuarioModificacion = UserModifica.usua_Id
 		WHERE FactExport.faex_Estado = 1
+		ORDER BY faex_FechaCreacion DESC
 	END
 GO
 
@@ -16637,7 +16638,7 @@ BEGIN
 	FROM Prod.tbOrdenCompra AS PO
 	INNER JOIN Prod.tbClientes AS Clie ON PO.orco_IdCliente = Clie.clie_Id
 	INNER JOIN Prod.tbOrdenCompraDetalles AS POdetail ON PO.orco_Id = POdetail.orco_Id
-	WHERE PO.orco_Estado = 1
+	WHERE PO.orco_Estado = 1 AND PO.orco_EstadoFinalizado = 1
 END
 GO
 
