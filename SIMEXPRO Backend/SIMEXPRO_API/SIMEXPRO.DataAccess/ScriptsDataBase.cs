@@ -680,13 +680,14 @@ namespace SIMEXPRO.DataAccess
         public static string InsertarOrdenCompraDetalles = "Prod.UDP_tbOrdenCompraDetalles_Insertar";
         public static string EditarOrdenCompraDetalles = "Prod.UDP_tbOrdenCompraDetalles_Editar";
         public static string EliminarOrdenCompraDetalles = "Prod.UDP_tbOrdenCompraDetalles_Eliminar";
+        public static string DibujarDetalles = "Prod.UDP_DibujarDetalles";
         #endregion
 
         #region Proceso por Orden de compra detalle
         public static string ListarProcesoPorOrdenCompraDetalle = "Prod.UDP_tbProcesoPorOrdenCompraDetalle_Listado_PorDetalle";
         public static string InsertarProcesoPorOrdenCompraDetalle = "Prod.UDP_tbProcesoPorOrdenCompraDetalle_Insertar";
         public static string EliminarProcesoPorOrdenCompraDetalle = "Prod.UDP_tbProcesoPorOrdenCompraDetalle_Eliminar";
-        public static string DibujarProcesos = "Prod.UPD_DibujarProcesos";
+        public static string DibujarProcesos = "Prod.UDP_DibujarProcesos";
         #endregion
 
         #region Orden de Pedido

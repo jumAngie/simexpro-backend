@@ -65,5 +65,13 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
 
             return Ok(resultado);
         }
+
+        [HttpGet("DibujarDetalles")]
+        public IActionResult DibujarDetalles(string orco_Codigo)
+        {
+            var resultado = _produccionServices.DibujarDetalles(orco_Codigo);
+
+            return Ok(resultado);
+        }
     }
 }
