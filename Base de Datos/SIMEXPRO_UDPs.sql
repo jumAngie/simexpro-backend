@@ -3637,7 +3637,7 @@ BEGIN
         INSERT INTO Adua.tbDocumentosContratos ([coin_Id],
                                                 [doco_URLImagen],
                                                 [usua_UsuarioCreacion],
-                                                [doco_FechaCreacion],
+                                                [doco_FechaModificacion],
                                                 [doco_Numero_O_Referencia],
                                                 [doco_TipoDocumento])
         SELECT @peju_Id,
