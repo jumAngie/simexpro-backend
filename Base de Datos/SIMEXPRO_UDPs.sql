@@ -15675,9 +15675,10 @@ GO
 CREATE OR ALTER PROC Prod.UDP_tbColores_Listar
 AS BEGIN
 
-SELECT colr_Id,
-	   colr_Nombre,
-	   --colr_Codigo,
+SELECT colores.colr_Id,
+	   colores.colr_Nombre,
+	   colores.colr_Codigo,
+	   colores.colr_CodigoHtml,
 	   colores.usua_UsuarioCreacion, 
 	   Creacion.usua_Nombre AS UsuarioNombreCreacion,
 	   colores.colr_FechaCreacion,
