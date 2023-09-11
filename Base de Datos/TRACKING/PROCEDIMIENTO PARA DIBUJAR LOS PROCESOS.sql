@@ -1,5 +1,5 @@
 
-CREATE OR ALTER PROC Prod.UPD_DibujarProcesos
+CREATE OR ALTER PROC Prod.UDP_DibujarProcesos
 	@orco_Codigo NVARCHAR(100)
 AS
 BEGIN
@@ -17,7 +17,7 @@ END
 
 -- ///
 go
-CREATE OR ALTER PROC Prod.UPD_DibujarDetalles
+CREATE OR ALTER PROC Prod.UDP_DibujarDetalles
 	@orco_Codigo NVARCHAR(100)
 AS
 BEGIN
