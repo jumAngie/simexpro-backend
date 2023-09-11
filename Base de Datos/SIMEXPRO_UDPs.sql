@@ -3067,7 +3067,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_ComercianteInsertar
     @coin_Id INT,
     @doco_URLImagen NVARCHAR(MAX),
     @usua_UsuarioCreacion INT,
-    @coin_FechaCreacion DATETIME
+    @doco_FechaCreacion DATETIME
 AS
 BEGIN
     BEGIN TRY
@@ -3081,7 +3081,7 @@ BEGIN
         SELECT @coin_Id,
                [doco_URLImagen],
                @usua_UsuarioCreacion, -- Asignar directamente el valor del parámetro
-               @coin_FechaCreacion,
+               @doco_FechaCreacion,
                [doco_Numero_O_Referencia],
                [doco_TipoDocumento]
         FROM OPENJSON(@doco_URLImagen, '$.documentos')
@@ -10044,36 +10044,18 @@ BEGIN
 
 END
 GO
-
 /* LISTAR DOCUMENTOS CONTRATOS */
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContratos_Listar
 AS
 BEGIN
  
 
-	SELECT	 doco.doco_Id
-			,comi.coin_Id
-			,comi.pers_Id
-			,pers.pers_RTN
-			,comi.coin_CorreoElectronico
- 			,comi.coin_TelefonoFijo
-			,comi.coin_PuntoReferencia
-			,juri.peju_Id
-			,doco.doco_Numero_O_Referencia
-			,doco.doco_TipoDocumento
-			,doco.usua_UsuarioCreacion
-			,crea.usua_Nombre
-			,doco.doco_FechaCreacion
-			,doco.usua_UsuarioModificacion
-			,modi.usua_Nombre
-			,doco.doco_FechaModificacion
-			,doco.doco_Estado
-	 FROM	Adua.tbDocumentosContratos					doco
-			INNER JOIN	adua.tbComercianteIndividual	comi	ON	doco.coin_Id					= comi.coin_Id
-			INNER JOIN	adua.tbPersonaJuridica			juri	ON	doco.peju_Id					= juri.peju_Id
-			INNER JOIN	adua.tbPersonas					pers	ON	comi.pers_Id					= pers.pers_Id
-			INNER JOIN	Acce.tbUsuarios					crea	ON	doco.usua_UsuarioCreacion		= crea.usua_Id
-			INNER JOIN	Acce.tbUsuarios					modi	ON	doco.usua_UsuarioModificacion	= modi.usua_Id
+	SELECT	 [doco_Id], [coin_Id], [peju_Id],
+	[doco_Numero_O_Referencia], [doco_TipoDocumento],
+	[usua_UsuarioCreacion], [doco_FechaCreacion], 
+	[usua_UsuarioModificacion], [doco_FechaModificacion], 
+	[doco_Estado], [doco_URLImagen], [doco_NombreImagen]
+	 FROM	Adua.tbDocumentosContratos					
 
 END
 GO
