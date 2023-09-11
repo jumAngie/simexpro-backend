@@ -13,6 +13,9 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public int empl_Id { get; set; }
         [NotMapped]
         public string empl_NombreCompleto { get; set; }
+        public int rcer_Id { get; set; }
+        [NotMapped]
+        public string rcer_Nombre { get; set; }
         public int code_Id { get; set; }
         [NotMapped]
         public string code_Sexo { get; set; }
@@ -32,6 +35,7 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public int modu_Id { get; set; }
         [NotMapped]
         public string modu_Nombre { get; set; }
+        public string detalles { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         [NotMapped]
         public string UsurioCreacionNombre { get; set; }

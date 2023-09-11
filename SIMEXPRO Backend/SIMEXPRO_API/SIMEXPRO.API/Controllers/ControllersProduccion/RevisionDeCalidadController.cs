@@ -32,6 +32,14 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             return Ok(listado);
         }
 
+        [HttpGet("NuevoListar")]
+        public IActionResult NuevoIndex(int ensa_Id)
+        {
+            var listado = _produccionServices.NuevoListarRevisionDeCalidad(ensa_Id);
+            listado.Data = _mapper.Map<IEnumerable<OrdeEnsaAcabEtiqViewModel>>(listado.Data);
+            return Ok(listado);
+        }
+
         [HttpPost("Insertar")]
         public IActionResult Insert(RevisionDeCalidadViewModel RevisionDeCalidadViewModel)
         {
@@ -45,6 +53,13 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
         {
             var item = _mapper.Map<tbRevisionDeCalidad>(RevisionDeCalidadViewModel);
             var respuesta = _produccionServices.ActualizarRevisionDeCalidad(item);
+            return Ok(respuesta);
+        }
+        [HttpPost("Eliminar")]
+        public IActionResult Eliminar(RevisionDeCalidadViewModel RevisionDeCalidadViewModel)
+        {
+            var item = _mapper.Map<tbRevisionDeCalidad>(RevisionDeCalidadViewModel);
+            var respuesta = _produccionServices.EliminarRevisionDeCalidad(item);
             return Ok(respuesta);
         }
 

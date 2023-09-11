@@ -22,6 +22,10 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string mate_Descripcion { get; set; }
         [NotMapped]
+        public string colr_Codigo { get; set; }
+        [NotMapped]
+        public string colr_Nombre { get; set; }
+        [NotMapped]
         public int tipa_Id { get; set; }
         [NotMapped]
         public string tipa_area { get; set; }

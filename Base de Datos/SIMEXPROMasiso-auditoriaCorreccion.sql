@@ -2772,7 +2772,7 @@ GO
 -----------------Factura de exportación-------------------
 CREATE TABLE Prod.tbFacturasExportacion(
 	faex_Id						INT IDENTITY(1,1), 
-	duca_Id						INT NOT NULL,
+	duca_Id						INT NULL,
 	faex_Fecha					DATETIME	  NOT NULL,
 	orco_Id						INT			  NOT NULL,
 	faex_Total					DECIMAL		  NOT NULL,
@@ -2791,6 +2791,7 @@ CREATE TABLE Prod.tbFacturasExportacion(
 	CONSTRAINT FK_Prod_tbFacturasExportacion_Acce_tbUsuarios_usua_UsuarioModificacion	FOREIGN KEY(usua_UsuarioModificacion)  REFERENCES Acce.tbUsuarios   (usua_Id)
 );
 GO
+
 
 CREATE TABLE Prod.tbFacturasExportacionDetalles(
 	fede_Id						INT IDENTITY(1,1),
@@ -3009,6 +3010,26 @@ CREATE TABLE Adua.tbDocumentosDeSoporte(
 	CONSTRAINT FK_Adua_tbDocumentosDeSoporte_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id			FOREIGN KEY (usua_UsuarioCreacion)     		REFERENCES Acce.tbUsuarios 	(usua_Id),
 	CONSTRAINT FK_Adua_tbDocumentosDeSoporte_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id		FOREIGN KEY (usua_UsuarioModificacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id),
 	CONSTRAINT FK_Adua_tbDocumentosDeSoporte_usua_UsuarioEliminacion_Acce_tbUsuarios_usua_Id 		FOREIGN KEY (usua_UsuarioEliminacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id)
+);
+GO
+
+
+CREATE TABLE Prod.tbRevisionDeCalidadErrores(
+		rcer_Id						   INT 				IDENTITY(1,1),
+		rcer_Nombre 				   NVARCHAR(150) 		NOT NULL,
+		usua_UsuarioCreacion 		   INT					NOT NULL,
+		rcer_FechaCreacion 			   DATETIME 			NOT NULL,
+		usua_UsuarioModificacion	   INT					DEFAULT NULL,
+		rcer_FechaModificacion		   DATETIME 			DEFAULT NULL,	
+		usua_UsuarioEliminacion 	   INT					DEFAULT NULL,
+		rcer_FechaEliminacion		   DATETIME 			DEFAULT NULL,
+		rcer_Estado					   BIT					DEFAULT 1,
+		
+	CONSTRAINT PK_Prod_tbRevisionDeCalidadErros_rcer_Id PRIMARY KEY (rcer_Id),
+	CONSTRAINT FK_Prod_tbRevisionDeCalidadErros_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id 	 FOREIGN KEY(usua_UsuarioCreacion)     REFERENCES Acce.tbUsuarios (usua_Id),
+	CONSTRAINT FK_Prod_tbRevisionDeCalidadErros_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id FOREIGN KEY(usua_UsuarioModificacion) REFERENCES Acce.tbUsuarios (usua_Id),
+	CONSTRAINT FK_Prod_tbRevisionDeCalidadErros_usua_UsuarioEliminacion_Acce_tbUsuarios_usua_Id  FOREIGN KEY(usua_UsuarioEliminacion)  REFERENCES Acce.tbUsuarios (usua_Id)
+	
 );
 GO
 

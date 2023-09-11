@@ -13,6 +13,9 @@ namespace SIMEXPRO.Entities.Entities
         public int ensa_Id { get; set; }
         [NotMapped]
         public string modu_Nombre { get; set; }
+        public int rcer_Id { get; set; }
+        [NotMapped]
+        public string rcer_Nombre { get; set; }
         public string reca_Descripcion { get; set; }
         public int reca_Cantidad { get; set; }
         public bool reca_Scrap { get; set; }

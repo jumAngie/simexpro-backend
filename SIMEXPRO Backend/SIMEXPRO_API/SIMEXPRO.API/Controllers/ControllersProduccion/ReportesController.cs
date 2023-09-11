@@ -47,5 +47,27 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             return Ok(listado);
         }
 
+        [HttpPost("PlanificacionPO")]
+        public IActionResult PlanificacionPO(ReportesViewModel reporte)
+        {
+            var listado = _produccionServices.PlanificacionPO(reporte.orco_Id);
+            return Ok(listado);
+        }
+
+        [HttpPost("CostosMaterialesNoBrindados")]
+        public IActionResult CostosMaterialesNoBrindados(ReportesViewModel reporte)
+        {
+            var data = _mapper.Map<tbReportes>(reporte);
+            var listado = _produccionServices.CostosMaterialesNoBrindados(data);
+            return Ok(listado);
+        }
+
+        [HttpPost("Consumo_Materiales")]
+        public IActionResult Consumo_Materiales(ReportesViewModel reporte)
+        {
+            var data = _mapper.Map<tbReportes>(reporte);
+            var listado = _produccionServices.Consumo_Materiales(data);
+            return Ok(listado);
+        }
     }
 }

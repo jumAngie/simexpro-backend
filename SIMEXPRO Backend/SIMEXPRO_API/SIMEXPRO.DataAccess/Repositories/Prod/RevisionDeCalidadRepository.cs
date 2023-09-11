@@ -14,7 +14,14 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
     {
         public RequestStatus Delete(tbRevisionDeCalidad item)
         {
-            throw new NotImplementedException();
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@reca_Id", item.reca_Id, DbType.Int32, ParameterDirection.Input);
+         
+            var answer = db.QueryFirst<string>(ScriptsDataBase.EliminarRevisionDeCalidad, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
         }
 
         public tbRevisionDeCalidad Find(int? id)
@@ -46,6 +53,14 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             var parametros = new DynamicParameters();
             return db.Query<tbRevisionDeCalidad>(ScriptsDataBase.ListarRevisionDeCalidad, null, commandType: CommandType.StoredProcedure);
+        }
+
+        public IEnumerable<tbOrde_Ensa_Acab_Etiq> NewList(int ensa_Id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@ensa_Id", ensa_Id, DbType.Int32, ParameterDirection.Input);
+            return db.Query<tbOrde_Ensa_Acab_Etiq>(ScriptsDataBase.NuevoListarRevisionDeCalidad, parametros, commandType: CommandType.StoredProcedure);
         }
 
 

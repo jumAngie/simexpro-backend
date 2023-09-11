@@ -33,19 +33,51 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(listado);
         }
 
-        [HttpPost("Insertar")]
+        [HttpPost("InsertarDocuComerciante")]
         public IActionResult Insert(DocumentosContratosViewModel documentosContratosViewModel)
         {
             var item = _mapper.Map<tbDocumentosContratos>(documentosContratosViewModel);
-            var respuesta = _aduanaServices.InsertarDocumentosContratos(item);
+            var respuesta = _aduanaServices.InsertarDocumentosComerciante(item);
             return Ok(respuesta);
         }
 
-        [HttpPost("Editar")]
+        [HttpGet("CargarDocumentosComerciante")]
+        public IActionResult CargarDocumentos(int coin_Id)
+        {
+            var listado = _aduanaServices.CargarDocumentosComerciante(coin_Id);
+            listado.Data = _mapper.Map<IEnumerable<tbDocumentosContratos>>(listado.Data);
+            return Ok(listado);
+        }
+
+        [HttpPost("EditarDocuComerciante")]
         public IActionResult Update(DocumentosContratosViewModel documentosContratosViewModel)
         {
             var item = _mapper.Map<tbDocumentosContratos>(documentosContratosViewModel);
-            var respuesta = _aduanaServices.ActualizarDocumentosContratos(item);
+            var respuesta = _aduanaServices.ActualizarDocumentosComerciante(item);
+            return Ok(respuesta);
+        }
+
+        [HttpPost("InsertarDocuPersonaJuridica")]
+        public IActionResult Insertar(DocumentosContratosViewModel documentosContratosViewModel)
+        {
+            var item = _mapper.Map<tbDocumentosContratos>(documentosContratosViewModel);
+            var respuesta = _aduanaServices.InsertarDocumentosPersonaJuridica(item);
+            return Ok(respuesta);
+        }
+
+        [HttpGet("CargarDocumentosJuridica")]
+        public IActionResult CargarDocumentosJuridica(int peju_Id)
+        {
+            var listado = _aduanaServices.CargarDocumentosJuridica(peju_Id);
+            listado.Data = _mapper.Map<IEnumerable<tbDocumentosContratos>>(listado.Data);
+            return Ok(listado);
+        }
+
+        [HttpPost("EditarDocuJuridica")]
+        public IActionResult EditarDocuJuridica(DocumentosContratosViewModel documentosContratosViewModel)
+        {
+            var item = _mapper.Map<tbDocumentosContratos>(documentosContratosViewModel);
+            var respuesta = _aduanaServices.EditarDocuJuridica(item);
             return Ok(respuesta);
         }
 
@@ -56,6 +88,7 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             var respuesta = _aduanaServices.EliminarDocumentosContratos(item);
             return Ok(respuesta);
         }
+
     }
 
 }

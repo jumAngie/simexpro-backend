@@ -2957,6 +2957,7 @@ BEGIN
 					 @pers_FormaRepresentacion, 	
 					 @usua_UsuarioCreacion,       		
 					 @coin_FechaCreacion)
+
 			SET @coin_Id =  SCOPE_IDENTITY()
 
 		SELECT  @coin_Id AS coin_Id
@@ -2992,7 +2993,7 @@ BEGIN
 		UPDATE Adua.tbComercianteIndividual
 		SET ciud_Id = @ciud_Id, alde_Id = @aldea, coin_PuntoReferencia = @coin_PuntoReferencia,
 		    colo_Id = @colo_Id, coin_NumeroLocalApart = @coin_NumeroLocalApart
-		WHERE coin_Id = @coin_Id
+		WHERE coin_Id = @coin_Id AND [coin_Estado] = 1
 		SELECT 1
 END TRY
 BEGIN CATCH
@@ -3029,7 +3030,7 @@ BEGIN
 		coin_PuntoReferenciaReprentante = @coin_PuntoReferenciaReprentante,
 		coin_coloniaIdRepresentante = @coin_coloniaIdRepresentante,
 		coin_NumeroLocaDepartRepresentante = @coin_NumeroLocaDepartRepresentante
-		WHERE coin_Id = @coin_Id
+		WHERE coin_Id = @coin_Id AND [coin_Estado] = 1
 		SELECT 1
 END TRY
 BEGIN CATCH
@@ -3052,7 +3053,7 @@ AS
 			coin_TelefonoFijo = @coin_TelefonoFijo,
 			coin_CorreoElectronico = @coin_CorreoElectronico,
 			coin_CorreoElectronicoAlternativo = @coin_CorreoElectronicoAlternativo
-		WHERE coin_Id = @coin_Id
+		WHERE coin_Id = @coin_Id AND [coin_Estado] = 1
 		SELECT 1
 	END TRY
 
@@ -3062,30 +3063,103 @@ AS
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap5
-	@coin_Id							INT,
-	@doco_URLImagen                     NVARCHAR(MAX),
-	@doco_NombreImagen					NVARCHAR(350),
-	@doco_Numero_O_Referencia			NVARCHAR(50),
-	@doco_TipoDocumento					NVARCHAR(6),
-
-	@usua_UsuarioCreacion               INT, 
-	@coin_FechaCreacion                 DATETIME
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_ComercianteInsertar
+    @coin_Id INT,
+    @doco_URLImagen NVARCHAR(MAX),
+    @usua_UsuarioCreacion INT,
+    @doco_FechaCreacion DATETIME
 AS
 BEGIN
-	BEGIN TRY
-			INSERT INTO Adua.tbDocumentosContratos([coin_Id],[doco_Numero_O_Referencia], [doco_TipoDocumento], [usua_UsuarioCreacion], [doco_FechaCreacion],[doco_URLImagen], [doco_NombreImagen]) 
-			VALUES (@coin_Id,@doco_Numero_O_Referencia,@doco_TipoDocumento,@usua_UsuarioCreacion,@coin_FechaCreacion,@doco_URLImagen,@doco_NombreImagen)
-		 SELECT 1
-	END TRY
-BEGIN CATCH
-	SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
-END CATCH
+    BEGIN TRY
+        -- Insertar los datos desde el JSON sin modificar @usua_UsuarioCreacion
+        INSERT INTO Adua.tbDocumentosContratos ([coin_Id],
+                                                [doco_URLImagen],
+                                                [usua_UsuarioCreacion],
+                                                [doco_FechaCreacion],
+                                                [doco_Numero_O_Referencia],
+                                                [doco_TipoDocumento])
+        SELECT @coin_Id,
+               [doco_URLImagen],
+               @usua_UsuarioCreacion, -- Asignar directamente el valor del parámetro
+               @doco_FechaCreacion,
+               [doco_Numero_O_Referencia],
+               [doco_TipoDocumento]
+        FROM OPENJSON(@doco_URLImagen, '$.documentos')
+        WITH (
+            doco_TipoDocumento NVARCHAR(6),
+            doco_Numero_O_Referencia NVARCHAR(50),
+            doco_URLImagen NVARCHAR(MAX)
+        )
 
+        -- Seleccionar 1 si la inserción fue exitosa
+        SELECT 1
+    END TRY
+    BEGIN CATCH
+        SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+    END CATCH
 END
 GO
 
 
+--PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA/PRUEBA
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_CargarDocuComerciante
+@coin_Id				INT
+AS
+BEGIN
+		SELECT 
+		[doco_Id], [coin_Id], [doco_Numero_O_Referencia], [doco_TipoDocumento], 
+		[usua_UsuarioCreacion],[doco_FechaCreacion], 
+		[usua_UsuarioModificacion], [doco_FechaModificacion], [doco_Estado], 
+		[doco_URLImagen], [doco_NombreImagen]
+		
+		FROM [Adua].[tbDocumentosContratos]
+		WHERE [coin_Id] = @coin_Id
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_ComercianteEditar
+    @coin_Id						INT,
+    @doco_URLImagen					NVARCHAR(MAX),
+    @usua_UsuarioModificacion		INT,
+    @doco_FechaModificacion			DATETIME
+AS
+BEGIN
+    BEGIN TRY
+    BEGIN TRANSACTION
+
+		DELETE FROM Adua.tbDocumentosContratos 
+		WHERE [coin_Id] = @coin_Id
+
+
+        INSERT INTO Adua.tbDocumentosContratos ([coin_Id],
+                                                [doco_URLImagen],
+                                                [usua_UsuarioModificacion],
+                                                [doco_FechaModificacion],
+                                                [doco_Numero_O_Referencia],
+                                                [doco_TipoDocumento])
+        SELECT @coin_Id,
+               [doco_URLImagen],
+               @usua_UsuarioModificacion,
+               @doco_FechaModificacion,
+               [doco_Numero_O_Referencia],
+               [doco_TipoDocumento]
+        FROM OPENJSON(@doco_URLImagen, '$.documentos')
+        WITH (
+            doco_TipoDocumento NVARCHAR(6),
+            doco_Numero_O_Referencia NVARCHAR(50),
+            doco_URLImagen NVARCHAR(MAX)
+        )
+
+        SELECT 1
+	COMMIT TRAN	
+    END TRY
+    BEGIN CATCH
+       	ROLLBACK TRAN
+		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+    END CATCH
+END
+GO
 
 
 
@@ -3094,41 +3168,42 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Editar
 (
 	@coin_Id							INT,
   	@pers_Id                           	INT,
-  	@fopr_Id                           	BIT,
-  	@colo_Id                           	INT,
-  	@coin_PuntoReferencia			  	NVARCHAR(200),
-  	@coin_ColoniaRepresentante		  	INT,
-  	@coin_NumeroLocalReprentante	    NVARCHAR(200),
-  	@coin_PuntoReferenciaReprentante   	NVARCHAR(200),
-  	@coin_TelefonoCelular			    NVARCHAR(20),
-  	@coin_TelefonoFijo				    NVARCHAR(20),
-  	@coin_CorreoElectronico		    	NVARCHAR(30),
-  	@coin_CorreoElectronicoAlternativo 	NVARCHAR(30),
+	@pers_RTN							NVARCHAR(40),
+  	@ofpr_Id                           	INT,
+	@ofic_Id							INT,
+	@escv_Id							INT,
+	@pers_escvRepresentante				INT,
+	@pers_OfprRepresentante				INT,
+	@pers_FormaRepresentacion			BIT,
   	@usua_UsuarioModificacion   		INT,
   	@coin_FechaModificacion     		DATETIME 
 )
 AS
 BEGIN
 	BEGIN TRY
-		 UPDATE Adua.tbComercianteIndividual 
-			SET pers_Id								= @pers_Id,                           	
-				pers_FormaRepresentacion			= @fopr_Id,                           	
-				colo_Id								= @colo_Id,                           	
-				coin_PuntoReferencia				= @coin_PuntoReferencia,			  	
-				--coin_ColoniaRepresentante			= @coin_ColoniaRepresentante,		  	
-				--coin_NumeroLocalReprentante			= @coin_NumeroLocalReprentante,	    
-				coin_PuntoReferenciaReprentante		= @coin_PuntoReferenciaReprentante,   	
-				coin_TelefonoCelular				= @coin_TelefonoCelular,			    
-				coin_TelefonoFijo					= @coin_TelefonoFijo,				    
-				coin_CorreoElectronico				= @coin_CorreoElectronico,		    	
-				coin_CorreoElectronicoAlternativo	= @coin_CorreoElectronicoAlternativo, 	
-				usua_UsuarioCreacion				= @usua_UsuarioModificacion,       		
-				coin_FechaCreacion					= @coin_FechaModificacion
-		  WHERE coin_Id = @coin_Id
+	BEGIN TRANSACTION
 
-		SELECT 1 AS Resultado
+		 UPDATE Adua.tbComercianteIndividual 
+			SET [pers_FormaRepresentacion] = @pers_FormaRepresentacion,
+				[usua_UsuarioModificacion] = @usua_UsuarioModificacion,
+				[coin_FechaModificacion] = @coin_FechaModificacion
+		  WHERE coin_Id = @coin_Id AND [coin_Estado] = 1
+
+		 UPDATE Adua.tbPersonas
+			SET [pers_RTN] = @pers_RTN,
+				[ofic_Id] = @ofic_Id, 
+				[escv_Id] = @escv_Id,
+				[ofpr_Id] = @ofpr_Id, 
+				[pers_escvRepresentante] = @pers_escvRepresentante,
+				[pers_OfprRepresentante] = @pers_OfprRepresentante,
+				[usua_UsuarioModificacion] = @usua_UsuarioModificacion,
+				[pers_FechaModificacion] = @coin_FechaModificacion
+			WHERE [pers_Id] = @pers_Id AND [pers_Estado] = 1
+
+	COMMIT TRAN	
 	END TRY
 	BEGIN CATCH
+		ROLLBACK TRAN
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
 	END CATCH
 END
@@ -3510,42 +3585,97 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab5
-   @peju_Id                    INT,
-   @doco_URLImagen             NVARCHAR(MAX),
-   @doco_NombreImagen		   NVARCHAR(350),
-   @doco_Numero_O_Referencia   NVARCHAR(50),
-   @doco_TipoDocumento         NVARCHAR(6),
-
-   @usua_UsuarioCreacion       INT,
-   @doco_FechaCreacion         DATETIME
-AS
-BEGIN 
-    INSERT INTO [Adua].[tbDocumentosContratos]([peju_Id],[doco_Numero_O_Referencia], [doco_TipoDocumento], [usua_UsuarioCreacion], [doco_FechaCreacion],[doco_URLImagen], [doco_NombreImagen])
-	VALUES (@peju_Id,@doco_Numero_O_Referencia,@doco_TipoDocumento,@usua_UsuarioCreacion,@doco_FechaCreacion, @doco_URLImagen, @doco_NombreImagen)
-END;
-GO
-
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab5
-( 
-  @peju_Id                                INT,
-  @peju_RTNSociedadMercantil              NVARCHAR(20),
-  @peju_DNIRepresentante                  NVARCHAR(20),
-  @peju_RTNReprsentanteLegal              NVARCHAR(20),
-  @peju_EscrituraPublica                  NVARCHAR(20)
-)
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_JuridicaInsertar
+    @peju_Id INT,
+    @doco_URLImagen NVARCHAR(MAX),
+    @usua_UsuarioCreacion INT,
+    @doco_FechaCreacion DATETIME
 AS
 BEGIN
-	BEGIN TRY
-	  UPDATE [Adua].[tbPersonaJuridica]
-	     SET  [peju_RTNSociedadMercantil] = @peju_RTNSociedadMercantil , peju_DNIRepresentante = @peju_DNIRepresentante,
-		     [peju_EscrituraPublica] = @peju_EscrituraPublica, peju_RTNReprsentanteLegal = @peju_RTNReprsentanteLegal
-      WHERE peju_Id =  @peju_Id
-	   SELECT 1
-	END TRY
-	BEGIN CATCH
+    BEGIN TRY
+        INSERT INTO Adua.tbDocumentosContratos ([peju_Id],
+                                                [doco_URLImagen],
+                                                [usua_UsuarioCreacion],
+                                                [doco_FechaCreacion],
+                                                [doco_Numero_O_Referencia],
+                                                [doco_TipoDocumento])
+        SELECT @peju_Id,
+               [doco_URLImagen],
+               @usua_UsuarioCreacion, 
+               @doco_FechaCreacion,
+               [doco_Numero_O_Referencia],
+               [doco_TipoDocumento]
+        FROM OPENJSON(@doco_URLImagen, '$.documentos')
+        WITH (
+            doco_TipoDocumento NVARCHAR(6),
+            doco_Numero_O_Referencia NVARCHAR(50),
+            doco_URLImagen NVARCHAR(MAX)
+        )
+
+        SELECT 1
+    END TRY
+    BEGIN CATCH
+        SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+    END CATCH
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_PersonaJuridicaEditar
+    @peju_Id						INT,
+    @doco_URLImagen					NVARCHAR(MAX),
+    @usua_UsuarioCreacion			INT,
+    @peju_FechaCreacion				DATETIME
+AS
+BEGIN
+    BEGIN TRY
+    BEGIN TRANSACTION
+
+		DELETE FROM Adua.tbDocumentosContratos 
+		WHERE [peju_Id] = @peju_Id
+
+
+        INSERT INTO Adua.tbDocumentosContratos ([coin_Id],
+                                                [doco_URLImagen],
+                                                [usua_UsuarioCreacion],
+                                                [doco_FechaModificacion],
+                                                [doco_Numero_O_Referencia],
+                                                [doco_TipoDocumento])
+        SELECT @peju_Id,
+               [doco_URLImagen],
+               @usua_UsuarioCreacion,
+               @peju_FechaCreacion,
+               [doco_Numero_O_Referencia],
+               [doco_TipoDocumento]
+        FROM OPENJSON(@doco_URLImagen, '$.documentos')
+        WITH (
+            doco_TipoDocumento NVARCHAR(6),
+            doco_Numero_O_Referencia NVARCHAR(50),
+            doco_URLImagen NVARCHAR(MAX)
+        )
+
+        SELECT 1
+	COMMIT TRAN	
+    END TRY
+    BEGIN CATCH
+       	ROLLBACK TRAN
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
-	END CATCH
+    END CATCH
+END
+GO
+
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_CargarDocuJuridica
+    @peju_Id				INT
+AS
+BEGIN
+		SELECT 
+		[doco_Id], [peju_Id], [doco_Numero_O_Referencia], [doco_TipoDocumento], 
+		[usua_UsuarioCreacion],[doco_FechaCreacion], 
+		[usua_UsuarioModificacion], [doco_FechaModificacion], [doco_Estado], 
+		[doco_URLImagen], [doco_NombreImagen]
+		
+		FROM [Adua].[tbDocumentosContratos]
+		WHERE [peju_Id] = @peju_Id
 END
 GO
 
@@ -9914,113 +10044,20 @@ BEGIN
 
 END
 GO
-
 /* LISTAR DOCUMENTOS CONTRATOS */
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContratos_Listar
 AS
 BEGIN
  
 
-	SELECT	 doco.doco_Id
-			,comi.coin_Id
-			,comi.pers_Id
-			,pers.pers_RTN
-			,comi.coin_CorreoElectronico
- 			,comi.coin_TelefonoFijo
-			,comi.coin_PuntoReferencia
-			,juri.peju_Id
-			,doco.doco_Numero_O_Referencia
-			,doco.doco_TipoDocumento
-			,doco.usua_UsuarioCreacion
-			,crea.usua_Nombre
-			,doco.doco_FechaCreacion
-			,doco.usua_UsuarioModificacion
-			,modi.usua_Nombre
-			,doco.doco_FechaModificacion
-			,doco.doco_Estado
-	 FROM	Adua.tbDocumentosContratos					doco
-			INNER JOIN	adua.tbComercianteIndividual	comi	ON	doco.coin_Id					= comi.coin_Id
-			INNER JOIN	adua.tbPersonaJuridica			juri	ON	doco.peju_Id					= juri.peju_Id
-			INNER JOIN	adua.tbPersonas					pers	ON	comi.pers_Id					= pers.pers_Id
-			INNER JOIN	Acce.tbUsuarios					crea	ON	doco.usua_UsuarioCreacion		= crea.usua_Id
-			INNER JOIN	Acce.tbUsuarios					modi	ON	doco.usua_UsuarioModificacion	= modi.usua_Id
+	SELECT	 [doco_Id], [coin_Id], [peju_Id],
+	[doco_Numero_O_Referencia], [doco_TipoDocumento],
+	[usua_UsuarioCreacion], [doco_FechaCreacion], 
+	[usua_UsuarioModificacion], [doco_FechaModificacion], 
+	[doco_Estado], [doco_URLImagen], [doco_NombreImagen]
+	 FROM	Adua.tbDocumentosContratos					
 
 END
-GO
-
-/* INSERTAR DOCUMENTOS CONTRATOS */
-CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContratos_Insertar
-@coin_Id					INT,
-@peju_Id					INT,
-@doco_Numero_O_Referencia	NVARCHAR(50),
-@doco_TipoDocumento			NVARCHAR(6),
-@usua_UsuarioCreacion		INT,
-@doco_FechaCreacion			DATETIME
-   
-AS
-BEGIN
-	BEGIN TRY
- 
-
-		INSERT INTO Adua.tbDocumentosContratos
-				   (coin_Id
-				   ,peju_Id
-				   ,doco_Numero_O_Referencia
-				   ,doco_TipoDocumento
-				   ,usua_UsuarioCreacion
-				   ,doco_FechaCreacion )
-			 VALUES
-				   (@coin_Id					
-				   ,@peju_Id					
-				   ,@doco_Numero_O_Referencia	 
-				   ,@doco_TipoDocumento			 
-				   ,@usua_UsuarioCreacion		
-				   ,@doco_FechaCreacion	)
- 
- 				   SELECT 1
-	END TRY
-	BEGIN CATCH
-		SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END CATCH 
-END
-
-
-GO
-
-
-/* EDITAR DOCUMENTOS CONTRATOS */
-CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContratos_Editar
-@doco_Id					INT,
-@coin_Id					INT,
-@peju_Id					INT,
-@doco_Numero_O_Referencia	NVARCHAR(50),
-@doco_TipoDocumento			NVARCHAR(6),
-@usua_UsuarioModificacion	INT,
-@doco_FechaModificacion		DATETIME
-AS
-BEGIN
- 
- 	BEGIN TRY
-
-		UPDATE	 Adua.tbDocumentosContratos
-		   SET	 coin_Id = @coin_Id
-				,peju_Id = @peju_Id
-				,doco_Numero_O_Referencia =	@doco_Numero_O_Referencia
-				,doco_TipoDocumento =			@doco_TipoDocumento
- 				,usua_UsuarioModificacion =	@usua_UsuarioModificacion
-				,doco_FechaModificacion =		@doco_FechaModificacion
- 		 WHERE	doco_Id = @doco_Id
- 
-  				   SELECT 1
-	END TRY
-	BEGIN CATCH
-		SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END CATCH 
-
-
-END
-
-
 GO
 
 
@@ -10032,8 +10069,7 @@ BEGIN
   	BEGIN TRY
 
 
-		UPDATE Adua.tbDocumentosContratos
-		   SET doco_Estado = 0
+		DELETE FROM Adua.tbDocumentosContratos
 		   WHERE	doco_Id = @doco_Id
  
   				   SELECT 1
@@ -12004,6 +12040,8 @@ BEGIN
 		   revi.reca_FechaRevision, 
 		   revi.reca_Imagen, 
 		   revi.usua_UsuarioCreacion, 
+		   revi.rcer_Id,
+		   rcer.rcer_Nombre,
 		   usuaCrea.usua_Nombre                       AS usuarioCreacionNombre,
 		   revi.reca_FechaCreacion, 
 		   revi.usua_UsuarioModificacion,
@@ -12014,8 +12052,75 @@ BEGIN
 	       LEFT JOIN  Acce.tbUsuarios usuaCrea		  ON revi.usua_UsuarioCreacion     = usuaCrea.usua_Id 
 		   LEFT JOIN  Acce.tbUsuarios usuaModifica	  ON revi.usua_UsuarioModificacion = usuaModifica.usua_Id
 		   INNER JOIN Prod.tbOrde_Ensa_Acab_Etiq ensa ON revi.ensa_Id                  = ensa.ensa_Id
+		   LEFT JOIN [Prod].[tbRevisionDeCalidadErrores] rcer ON revi.rcer_Id = rcer.rcer_Id 
 	 WHERE reca_Estado = 1
 END
+GO
+
+
+
+/*NuevoListar revision de calidad*/
+CREATE OR ALTER PROCEDURE Prod.UDP_tbRevisionCalidad_NuevoListar
+@ensa_id INT
+AS
+BEGIN
+SELECT	ensa_Id, 
+		ensa_Cantidad, 
+		emp.empl_Id, 
+		CONCAT(emp.empl_Nombres ,' ',emp.empl_Apellidos) AS empl_NombreCompleto,
+		ocd.code_Id,
+		ocd.code_Sexo,
+		est.esti_Id,
+		est.esti_Descripcion,
+		ensa_FechaInicio, 
+		ensa_FechaLimite, 
+		pp.ppro_Id, 
+		modu.modu_Id,
+		modu.modu_Nombre,
+		modu.proc_Id,
+		pro.proc_Descripcion,
+		crea.usua_Nombre							AS UsurioCreacionNombre, 
+		ensa_FechaCreacion,							
+		modi.usua_Nombre							AS UsuarioModificacionNombre, 
+		ensa_FechaModificacion, 
+		ensa_Estado,
+		(SELECT m.* 
+				FROM 
+				(	SELECT ROW_NUMBER() OVER(ORDER BY revi.reca_Id DESC) AS [key],
+						   revi.reca_Id,
+						   revi.ensa_Id, 
+						   revi.reca_Descripcion, 
+						   revi.reca_Cantidad, 
+						   revi.reca_Scrap, 
+						   revi.reca_FechaRevision, 
+						   revi.reca_Imagen, 
+						   revi.usua_UsuarioCreacion, 
+						   rcer.rcer_Id,
+						   rcer.rcer_Id, 
+						   usuaCrea.usua_Nombre                       AS usuarioCreacionNombre,
+						   revi.reca_FechaCreacion, 
+						   revi.usua_UsuarioModificacion,
+						   usuaModifica.usua_Nombre                   AS usuarioModificacionNombre,
+						   revi.reca_FechaModificacion, 
+						   revi.reca_Estado
+					  FROM Prod.tbRevisionDeCalidad revi
+						   LEFT JOIN  Acce.tbUsuarios usuaCrea		  ON revi.usua_UsuarioCreacion     = usuaCrea.usua_Id 
+						   LEFT JOIN  Acce.tbUsuarios usuaModifica	  ON revi.usua_UsuarioModificacion = usuaModifica.usua_Id
+						   LEFT JOIN [Prod].[tbRevisionDeCalidadErrores] rcer ON revi.rcer_Id = rcer.rcer_Id 
+					  WHERE revi.ensa_id = ensa.ensa_Id) AS m
+			  FOR JSON AUTO) as detalles
+		FROM	Prod.tbOrde_Ensa_Acab_Etiq ensa
+		INNER JOIN Gral.tbEmpleados emp				ON emp.empl_Id  = ensa.empl_Id
+		INNER JOIN Prod.tbOrdenCompraDetalles ocd	ON ocd.code_Id  = ensa.code_Id
+		INNER JOIN Prod.tbEstilos est				ON est.esti_Id	= ocd.esti_Id
+		INNER JOIN Prod.tbPedidosProduccion pp		ON pp.ppro_Id   = ensa.ppro_Id
+		INNER JOIN Prod.tbModulos			modu	ON ensa.modu_Id = modu.modu_Id
+		INNER JOIN Prod.tbProcesos	pro				ON modu.proc_Id = pro.proc_Id
+		INNER JOIN Acce.tbUsuarios crea				ON crea.usua_Id = ensa.usua_UsuarioCreacion 
+		LEFT JOIN  Acce.tbUsuarios modi				ON modi.usua_Id = ensa.usua_UsuarioModificacion 
+		WHERE ensa.ensa_Id = @ensa_Id OR @ensa_Id = 0
+END
+
 GO
 
 
@@ -12090,6 +12195,25 @@ BEGIN
 	END CATCH
 END
 GO
+
+
+/*Eliminar revision de calidad*/
+CREATE OR ALTER PROCEDURE Prod.UDP_tbRevisionDeCalidad_Eliminar
+	@reca_Id                  INT
+AS
+BEGIN
+	BEGIN TRY
+		DELETE FROM Prod.tbRevisionDeCalidad
+		WHERE	reca_Id                  = @reca_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE()
+	END CATCH
+END
+GO
+
 
 --************PROCESO******************--
 /*Listar Proceso*/
@@ -15098,7 +15222,7 @@ END
 
 GO
 
-CREATE OR ALTER   PROCEDURE [Prod].[UDP_tbPedidosProduccionDetalle_Filtrar_Estado] --208
+CREATE OR ALTER PROCEDURE [Prod].[UDP_tbPedidosProduccionDetalle_Filtrar_Estado] --219
 (
 @ppro_Id INT
 )
@@ -15110,24 +15234,25 @@ BEGIN
 		PPD.ppde_Cantidad,
 		pp.[ppro_Estados],
 		PPD.lote_Id, 
-		lot.[lote_Stock],
 		lot.lote_CodigoLote,
+		lot.[lote_Stock],
+		col.colr_Codigo,
+		col.colr_Nombre,
 		mat.mate_Id,
 		mat.mate_Descripcion
 
 		FROM Prod.tbPedidosProduccionDetalles PPD
-			INNER JOIN Prod.tbPedidosProduccion pp 
-			ON ppd.ppro_Id = pp.ppro_Id
-			INNER JOIN Prod.tbLotes lot 
-			ON PPD.lote_Id = lot.lote_Id
-			INNER JOIN Prod.tbMateriales mat 
-			ON lot.mate_Id = mat.mate_Id
+			INNER JOIN Prod.tbPedidosProduccion pp ON ppd.ppro_Id = pp.ppro_Id
+			INNER JOIN Prod.tbLotes lot ON PPD.lote_Id = lot.lote_Id
+			INNER JOIN Prod.tbMateriales mat ON lot.mate_Id = mat.mate_Id
+			LEFT  JOIN Prod.tbColores col ON lot.colr_Id = col.colr_Id
 			WHERE ppd.ppro_Id = @ppro_Id
 
+		
 	END TRY
 	BEGIN CATCH
 			SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END CATCH
+	END CATCH
 END
 
 GO
@@ -16193,15 +16318,17 @@ END
 GO
 
 
-/* PROCEDIMIENTOS tb.FacturasExportacion*/
+
+
+
 
  -- PROCEDIMIENTO PARA LISTAR LAS FACTURAS EXPORTACION
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Listar
 AS
 	BEGIN
 		SELECT	FactExport.faex_Id, 
-				FactExport.duca_Id,
-				Duca.duca_No_Duca,
+				ISNULL(FactExport.duca_Id, '') AS duca_Id,
+				ISNULL(Duca.duca_No_Duca, 'N/A') AS duca_No_Duca,
 				FactExport.faex_Fecha, 
 				FactExport.orco_Id, 
 				CONCAT('No. ', PO.orco_Id, ' - ', Clie.clie_Nombre_O_Razon_Social, ' - ', CONVERT(DATE, PO.orco_FechaEmision)) AS orco_Descripcion,
@@ -16239,7 +16366,7 @@ AS
 						FactExportDetails.fede_Cantidad, 
 						FactExportDetails.fede_PrecioUnitario, 
 						FactExportDetails.fede_TotalDetalle,
-						CONCAT('#: ', PODetail.code_CodigoDetalle, ' - ',Style.esti_Descripcion,' - ',Talla.tall_Codigo,' - ',PODetail.code_Sexo,' - ',Color.colr_Nombre) AS code_Descripcion 
+						CONCAT('#: ', PODetail.code_Id, ' - ',Style.esti_Descripcion,' - ',Talla.tall_Codigo,' - ',PODetail.code_Sexo,' - ',Color.colr_Nombre) AS code_Descripcion 
 				FROM Prod.tbFacturasExportacionDetalles AS FactExportDetails
 				INNER JOIN Prod.tbOrdenCompraDetalles AS PODetail ON FactExportDetails.code_Id = PODetail.code_Id
 				INNER JOIN Prod.tbEstilos AS Style ON PODetail.esti_Id = Style.esti_Id
@@ -16251,10 +16378,17 @@ AS
 		INNER JOIN Prod.tbOrdenCompra		AS PO			ON FactExport.orco_Id = PO.orco_Id
 		INNER JOIN Prod.tbClientes			AS Clie			ON PO.orco_IdCliente = Clie.clie_Id
 		INNER JOIN Acce.tbUsuarios			AS UserCrea		ON FactExport.usua_UsuarioCreacion = UserCrea.usua_Id
-		INNER JOIN Adua.tbDuca				AS Duca			ON FactExport.duca_Id = Duca.duca_Id
+		LEFT JOIN Adua.tbDuca				AS Duca			ON FactExport.duca_Id = Duca.duca_Id
 		LEFT JOIN Acce.tbUsuarios			AS UserModifica ON FactExport.usua_UsuarioModificacion = UserModifica.usua_Id
 		WHERE FactExport.faex_Estado = 1
+		ORDER BY faex_FechaCreacion DESC
 	END
+GO
+
+SELECT * FROM Prod.tbOrdenCompraDetalles
+SELECT *FROM Prod.tbOrdenCompra
+
+SELECT * FROM Prod.tbFacturasExportacion
 GO
 
 -- PROCEDIMIENTO PARA INSERTAR LAS FACTURAS EXPORTACION (ENCABEZADO)
@@ -16283,7 +16417,6 @@ BEGIN
 	END CATCH
 END
 GO
-
 
 -- PROCEDIMIENTO PARA EDITAR LAS FACTURAS EXPORTACION (ENCABEZADO)
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Editar
@@ -16340,7 +16473,6 @@ BEGIN
 END
 GO
 
-
 -- PROCEDIMIENTO PARA ESTABLECER EL ESTADO DE LAS FACTURAS EXPORTACION A 0 (DESHABILITADO)
 CREATE OR ALTER PROC Prod.UDP_tbFacturasExportacion_Eliminar
 	@faex_Id  		INT
@@ -16348,23 +16480,20 @@ AS
 BEGIN
 	BEGIN TRY
 		DECLARE @respuesta INT
-			EXEC dbo.UDP_ValidarReferencias 'faex_Id  ', @faex_Id  , 'Prod.tbFacturasExportacion', @respuesta OUTPUT
+			
+			DELETE FROM Prod.tbFacturasExportacionDetalles
+			WHERE faex_Id = @faex_Id
 
-			IF(@respuesta) = 1
-					BEGIN
-				UPDATE [Prod].[tbFacturasExportacion]
-				SET	   faex_Estado = 0
-				WHERE  faex_Id = @faex_Id  
+			DELETE FROM Prod.tbFacturasExportacion
+			WHERE faex_Id = @faex_Id
 
-				END
-			SELECT @respuesta AS Resultado
+			SELECT 1
 	END TRY	
 	BEGIN CATCH
-		SELECT 0
+			SELECT 'Error:' + ERROR_MESSAGE()
 	END CATCH
 END
 GO
-
 
 -- PROCEDIMIENTO PARA FINALIZAR LAS FACTURAS EXPORTACION (faex_Finalizado = 1)
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Finalizado
@@ -16415,7 +16544,7 @@ BEGIN
 			Detail.fede_Cantidad, 
 			Detail.fede_PrecioUnitario, 
 			Detail.fede_TotalDetalle,
-			CONCAT('#: ', PODetail.code_CodigoDetalle, ' - ',Style.esti_Descripcion,' - ',Talla.tall_Codigo,' - ',PODetail.code_Sexo,' - ',Color.colr_Nombre) AS code_Descripcion 
+			CONCAT('#: ', PODetail.code_Id, ' - ',Style.esti_Descripcion,' - ',Talla.tall_Codigo,' - ',PODetail.code_Sexo,' - ',Color.colr_Nombre) AS code_Descripcion 
 	FROM Prod.tbFacturasExportacionDetalles AS Detail
 	INNER JOIN Prod.tbOrdenCompraDetalles AS PODetail ON Detail.code_Id = PODetail.code_Id
 	INNER JOIN Prod.tbEstilos AS Style ON PODetail.esti_Id = Style.esti_Id
@@ -16563,10 +16692,15 @@ BEGIN
 	FROM Prod.tbOrdenCompra AS PO
 	INNER JOIN Prod.tbClientes AS Clie ON PO.orco_IdCliente = Clie.clie_Id
 	INNER JOIN Prod.tbOrdenCompraDetalles AS POdetail ON PO.orco_Id = POdetail.orco_Id
-	WHERE PO.orco_Estado = 1
+	WHERE PO.orco_Estado = 1 AND PO.orco_EstadoFinalizado = 1
 END
 GO
 
+SELECT DISTINCT(PO.orco_Id) FROM Prod.tbOrdenCompra AS PO
+
+INNER JOIN Prod.tbOrdenCompraDetalles AS details ON PO.orco_Id = details.orco_Id
+
+GO
 
 -- PROCEDIMIENTO PARA LISTAR LOS DETALLES (ITEMS) DE LA ORDEN DE COMPRA SELECCIONADA EN EL ENCABEZADO DE LA FACTURA EXPORTACION
 CREATE OR ALTER PROCEDURE Prod.UDP_PODetallesByID 
@@ -16575,7 +16709,7 @@ AS
 BEGIN 
 	DECLARE @orco_Id INT = (SELECT orco_Id FROM Prod.tbFacturasExportacion WHERE faex_Id = @faex_Id)
 
-	SELECT code.code_Id ,CONCAT('#: ', code.code_CodigoDetalle, ' - ',esti.esti_Descripcion,' - ',tall.tall_Codigo,' - ',code.code_Sexo,' - ',colr.colr_Nombre) AS code_Descripcion 
+	SELECT code.code_Id ,CONCAT('#: ', code.code_Id, ' - ',esti.esti_Descripcion,' - ',tall.tall_Codigo,' - ',code.code_Sexo,' - ',colr.colr_Nombre) AS code_Descripcion 
 	FROM Prod.tbOrdenCompraDetalles code
 	INNER JOIN Prod.tbEstilos AS esti ON code.esti_Id = esti.esti_Id
 	INNER JOIN Prod.tbTallas AS tall ON code.tall_Id = tall.tall_Id
@@ -16607,3 +16741,42 @@ BEGIN
 	END CATCH
 END
 GO
+
+
+
+/*Listar Revision de calidad errores */
+CREATE OR ALTER PROCEDURE Prod.UDP_tbRevisionDeCalidadErrores_Listar
+AS
+BEGIN
+	SELECT [rcer_Id]
+		  ,[rcer_Nombre]
+		   ,usuaCrea.usua_Nombre			AS usuarioCreacionNombre,
+		   rcer_FechaCreacion, 
+		   reca.usua_UsuarioModificacion, 
+		   usuaModifica.usua_Nombre		AS usuarioModificacionNombre,
+		   rcer_FechaModificacion, 
+		   reca.usua_UsuarioEliminacion, 
+		   usuaElimina.usua_Nombre		AS usuarioEliminacionNombre,
+		   rcer_FechaEliminacion
+		  ,[rcer_Estado]
+	  FROM [Prod].[tbRevisionDeCalidadErrores] reca
+	INNER JOIN Acce.tbUsuarios usuaCrea		ON reca.usua_UsuarioCreacion = usuaCrea.usua_Id 
+	LEFT JOIN Acce.tbUsuarios usuaModifica  ON reca.usua_UsuarioModificacion = usuaModifica.usua_Id 
+	LEFT JOIN Acce.tbUsuarios usuaElimina   ON reca.usua_UsuarioEliminacion = usuaElimina.usua_Id
+	WHERE [rcer_Estado] = 1 
+END
+GO
+
+CREATE OR ALTER PROCEDURE Prod.UDP_CostosMaterialesNoBrindados 
+	@mate_FechaInicio		DATE,
+	@mate_FechaLimite			DATE
+AS
+BEGIN
+	SELECT	mate.mate_Descripcion,
+		    (SUM(peod.prod_Cantidad)) as TotalCantidad,
+			CONVERT( DECIMAL(18,2), (CONVERT(DECIMAL(18,2), SUM(peod.prod_Cantidad) * 100)) / CONVERT(DECIMAL(18,2),(SELECT SUM(prod_Cantidad)FROM Prod.tbPedidosOrdenDetalle))) AS PorcentajeProductos,
+			AVG(peod.prod_Precio) AS PrecioPromedioMaterial
+		FROM Prod.tbPedidosOrdenDetalle peod  LEFT JOIN Prod.tbMateriales mate ON peod.mate_Id = mate.mate_Id
+		WHERE peod.prod_FechaCreacion BETWEEN @mate_FechaInicio AND @mate_FechaLimite
+		GROUP BY mate.mate_Descripcion;
+END

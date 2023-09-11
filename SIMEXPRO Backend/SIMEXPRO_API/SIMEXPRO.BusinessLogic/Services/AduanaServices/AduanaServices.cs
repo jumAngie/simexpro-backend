@@ -542,19 +542,6 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
-        public ServiceResult InsertarComercianteIndividualTap5(tbComercianteIndividual item)
-        {
-            var result = new ServiceResult();
-            try
-            {
-                var map = _comercianteIndividualRepository.InsertTap5(item);
-                return result.Ok(map);
-            }
-            catch (Exception ex)
-            {
-                return result.Error(ex.Message);
-            }
-        }
 
 
 
@@ -941,12 +928,12 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
-        public ServiceResult InsertarDocumentosContratos(tbDocumentosContratos item)
+        public ServiceResult InsertarDocumentosComerciante(tbDocumentosContratos item)
         {
             var result = new ServiceResult();
             try
             {
-                var list = _documentosContratosRepository.Insert(item);
+                var list = _documentosContratosRepository.InsertDocumentosComerciante(item);
 
                 return result.Ok(list);
             }
@@ -956,12 +943,72 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
-        public ServiceResult ActualizarDocumentosContratos(tbDocumentosContratos item)
+        public ServiceResult InsertarDocumentosPersonaJuridica(tbDocumentosContratos item)
         {
             var result = new ServiceResult();
             try
             {
-                var list = _documentosContratosRepository.Update(item);
+                var list = _documentosContratosRepository.InsertDocumentosPersonaJuridica(item);
+
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult CargarDocumentosJuridica(int Id)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _documentosContratosRepository.CargarDocumentosJuridica(Id);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult CargarDocumentosComerciante(int Id)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _documentosContratosRepository.CargarDocumetosComerciante(Id);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult ActualizarDocumentosComerciante(tbDocumentosContratos item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _documentosContratosRepository.EditarDocumentosComerciante(item);
+
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult EditarDocuJuridica(tbDocumentosContratos item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _documentosContratosRepository.EditarDocuJuridica(item);
 
                 return result.Ok(list);
             }
@@ -2364,20 +2411,6 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _personaJuridicaRepository.InsertTap4(item);
-                return result.Ok(map);
-            }
-            catch (Exception ex)
-            {
-                return result.Error(ex.Message);
-            }
-        }
-
-        public ServiceResult InsertarPersonaJuridicaTap5(tbPersonaJuridica item)
-        {
-            var result = new ServiceResult();
-            try
-            {
-                var map = _personaJuridicaRepository.InsertTap5(item);
                 return result.Ok(map);
             }
             catch (Exception ex)

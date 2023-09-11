@@ -205,9 +205,9 @@ namespace SIMEXPRO.DataAccess
         public static string InsertarComercianteIndividualTap2 = "Adua.UDP_tbComercianteIndividual_InsertarTap2";
         public static string InsertarComercianteIndividualTap3 = "Adua.UDP_tbComercianteIndividual_InsertarTap3";
         public static string InsertarComercianteIndividualTap4 = "Adua.UDP_tbComercianteIndividual_InsertarTap4";
-        public static string InsertarComercianteIndividualTap5= "Adua.UDP_tbComercianteIndividual_InsertarTap5";
 
         public static string EditarComercianteIndividual = "Adua.UDP_tbComercianteIndividual_Editar";
+
         #endregion
 
         #region Concepto  de Pago 
@@ -265,9 +265,15 @@ namespace SIMEXPRO.DataAccess
 
         #region Documentos Contrato
         public static string ListarDocumentosContratos = "Adua.UDP_tbDocumentosContratos_Listar";
-        public static string InsertarDocumentosContratos = "Adua.UDP_tbDocumentosContratos_Insertar";
-        public static string EditarDocumentosContratos = "Adua.UDP_tbDocumentosContratos_Editar";
         public static string EliminarDocumentosContratos = "Adua.UDP_tbDocumentosContratos_Eliminar";
+
+        public static string InsertarDocumentosComerciante = "Adua.UDP_tbDocumentosContrato_ComercianteInsertar";
+        public static string CargarDocuemntosComerciante = "Adua.UDP_tbDocumentosContrato_CargarDocuComerciante";
+        public static string EditarDocumentosComerciante = "Adua.UDP_tbDocumentosContrato_ComercianteEditar";
+
+        public static string InsertDocumentosPersonaJuridica = "Adua.UDP_tbDocumentosContrato_JuridicaInsertar";
+        public static string CargarDocumentosPersonaJuridica = "Adua.UDP_tbDocumentosContrato_CargarDocuJuridica";
+        public static string EditarDocumentosPersonaJuridica = "Adua.UDP_tbDocumentosContrato_PersonaJuridicaEditar";
         #endregion
 
         #region Documentos de Soporte
@@ -408,7 +414,6 @@ namespace SIMEXPRO.DataAccess
         public static string InsertarPersonaJuridicaTap2 = "Adua.UDP_tbPersonaJuridica_InsertarTab2";
         public static string InsertarPersonaJuridicaTap3 = "Adua.UDP_tbPersonaJuridica_InsertarTab3";
         public static string InsertarPersonaJuridicaTap4 = "Adua.UDP_tbPersonaJuridica_InsertarTab4";
-        public static string InsertarPersonaJuridicaTap5 = "Adua.UDP_tbPersonaJuridica_InsertarTab5";
         public static string EditarPersonaJuridica = "Adua.UDP_tbPersonaJuridica_Editar";
         public static string FinalizarPersonaJuridica = "Adua.UDP_tbPersonaJuridica_ContratoFinalizado";
         #endregion
@@ -501,8 +506,10 @@ namespace SIMEXPRO.DataAccess
 
         #region Revision de Calidad
         public static string ListarRevisionDeCalidad = "Prod.UDP_tbRevisionDeCalidad_Listar";
+        public static string NuevoListarRevisionDeCalidad = "Prod.UDP_tbRevisionCalidad_NuevoListar";
         public static string InsertaRevisionDeCalidad = "Prod.UDP_tbRevisionDeCalidad_Insertar";
         public static string EditarRevisionDeCalidad = "Prod.UDP_tbRevisionDeCalidad_Editar";
+        public static string EliminarRevisionDeCalidad = "Prod.UDP_tbRevisionDeCalidad_Eliminar";
         #endregion
 
         #region Sub Categoria
@@ -679,6 +686,7 @@ namespace SIMEXPRO.DataAccess
         public static string ListarProcesoPorOrdenCompraDetalle = "Prod.UDP_tbProcesoPorOrdenCompraDetalle_Listado_PorDetalle";
         public static string InsertarProcesoPorOrdenCompraDetalle = "Prod.UDP_tbProcesoPorOrdenCompraDetalle_Insertar";
         public static string EliminarProcesoPorOrdenCompraDetalle = "Prod.UDP_tbProcesoPorOrdenCompraDetalle_Eliminar";
+        public static string DibujarProcesos = "Prod.UPD_DibujarProcesos";
         #endregion
 
         #region Orden de Pedido
@@ -779,6 +787,10 @@ namespace SIMEXPRO.DataAccess
         public static string MaquinasTiempos = "Prod.UPD_Reporte_TiemposMaquinas";
         public static string ModuloProduccion = "Prod.UDP_Reporte_ProduccionPorModulo";
         public static string PedidosCliente = "Prod.UDP_Reporte_PedidosCliente";
+        public static string PlanificacionPO = "Prod.UDP_Reporte_Planificación_Produccion";
+        public static string CostosMaterialesNoBrindados = "Prod.UDP_CostosMaterialesNoBrindados";
+        public static string Consumo_Materiales = "Prod.UDP_Reporte_Consumo_Materiales";
+
         #endregion
 
     }

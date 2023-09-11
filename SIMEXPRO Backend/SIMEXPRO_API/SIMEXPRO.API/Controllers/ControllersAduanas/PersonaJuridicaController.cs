@@ -63,14 +63,6 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(datos);
         }
 
-        [HttpPost("InsertarTap5")]
-        public IActionResult InsertarTap5(PersonaJuridicaViewModel personaJuridica)
-        {
-            var mapped = _mapper.Map<tbPersonaJuridica>(personaJuridica);
-            var datos = _aduanaServices.InsertarPersonaJuridicaTap5(mapped);
-            return Ok(datos);
-        }
-
         [HttpPost("Editar")]
         public IActionResult Update(PersonaJuridicaViewModel concepto)
         {
