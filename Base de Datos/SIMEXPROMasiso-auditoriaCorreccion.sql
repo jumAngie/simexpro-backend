@@ -1953,6 +1953,7 @@ CREATE TABLE Prod.tbOrdenCompraDetalles(
 	code_FechaModificacion     	DATETIME DEFAULT NULL,
 	--usua_UsuarioEliminacion		INT DEFAULT NULL,
 	--code_FechaEliminacion		DATETIME DEFAULT NULL,
+	code_FechaProcActual		DATETIME,
 	code_Estado                	BIT DEFAULT 1,
 	
 	CONSTRAINT PK_Prod_tbOrdenCompraDetalles_code_Id PRIMARY KEY(code_Id),
