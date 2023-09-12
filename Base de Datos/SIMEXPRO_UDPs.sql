@@ -11080,6 +11080,7 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbOrdenCompraDetalles_Insertar
 	@code_Impuesto					DECIMAL(18,2),
 	@code_EspecificacionEmbalaje	NVARCHAR(200),
 	@usua_UsuarioCreacion       	INT,
+	@code_FechaProcActual			DATETIME,
 	@code_FechaCreacion         	DATETIME
 )
 AS
@@ -11101,7 +11102,8 @@ BEGIN
 					code_Impuesto,					
 					--code_Descuento,					
 					code_EspecificacionEmbalaje,	
-					usua_UsuarioCreacion,       	
+					usua_UsuarioCreacion,
+					code_FechaProcActual,
 					code_FechaCreacion)
 			 VALUES (@orco_Id,						
 					@code_CantidadPrenda,			
@@ -11118,7 +11120,8 @@ BEGIN
 					@code_Impuesto,					
 					--@code_Descuento,					
 					@code_EspecificacionEmbalaje,	
-					@usua_UsuarioCreacion,       	
+					@usua_UsuarioCreacion,
+					@code_FechaProcActual,
 					@code_FechaCreacion)
 		
 		SELECT SCOPE_IDENTITY() AS Resultado
