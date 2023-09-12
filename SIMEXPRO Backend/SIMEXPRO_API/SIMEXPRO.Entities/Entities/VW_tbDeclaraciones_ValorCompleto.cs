@@ -12,7 +12,9 @@ namespace SIMEXPRO.Entities.Entities
         public int? deva_Id { get; set; }
         public int? deva_AduanaIngresoId { get; set; }
         public string? adua_IngresoNombre { get; set; }
-
+        public string? adua_IngresoCodigo { get; set; }
+        public string? adua_DespachoCodigo { get; set; }
+        public string? inco_Codigo { get; set; }
         [NotMapped]
         public string? duca_No_DUCA { get; set; }
         public int? deva_AduanaDespachoId { get; set; }

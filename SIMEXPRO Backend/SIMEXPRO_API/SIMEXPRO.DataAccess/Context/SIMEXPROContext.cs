@@ -54,6 +54,7 @@ namespace SIMEXPRO.DataAccess.Context
         public virtual DbSet<tbDocumentosOrdenCompraDetalles> tbDocumentosOrdenCompraDetalles { get; set; }
         public virtual DbSet<tbDocumentosPDF> tbDocumentosPDF { get; set; }
         public virtual DbSet<tbDocumentosPDFHistorial> tbDocumentosPDFHistorial { get; set; }
+        public virtual DbSet<tbDocumentosSanciones> tbDocumentosSanciones { get; set; }
         public virtual DbSet<tbDuca> tbDuca { get; set; }
         public virtual DbSet<tbDucaHistorial> tbDucaHistorial { get; set; }
         public virtual DbSet<tbEmpleados> tbEmpleados { get; set; }
@@ -119,6 +120,7 @@ namespace SIMEXPRO.DataAccess.Context
         public virtual DbSet<tbReporteModuloDia> tbReporteModuloDia { get; set; }
         public virtual DbSet<tbReporteModuloDiaDetalle> tbReporteModuloDiaDetalle { get; set; }
         public virtual DbSet<tbRevisionDeCalidad> tbRevisionDeCalidad { get; set; }
+        public virtual DbSet<tbRevisionDeCalidadErrores> tbRevisionDeCalidadErrores { get; set; }
         public virtual DbSet<tbRoles> tbRoles { get; set; }
         public virtual DbSet<tbRolesXPantallas> tbRolesXPantallas { get; set; }
         public virtual DbSet<tbSubcategoria> tbSubcategoria { get; set; }
@@ -147,7 +149,17 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.TipoIntermediario).HasMaxLength(155);
 
+                entity.Property(e => e.adua_DespachoCodigo)
+                    .HasMaxLength(4)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
+
                 entity.Property(e => e.adua_DespachoNombre).HasMaxLength(500);
+
+                entity.Property(e => e.adua_IngresoCodigo)
+                    .HasMaxLength(4)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
 
                 entity.Property(e => e.adua_IngresoNombre).HasMaxLength(500);
 
@@ -260,6 +272,11 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.impo_Telefono).HasMaxLength(50);
 
+                entity.Property(e => e.inco_Codigo)
+                    .HasMaxLength(3)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
+
                 entity.Property(e => e.inco_Descripcion).HasMaxLength(150);
 
                 entity.Property(e => e.inco_Version).HasMaxLength(10);
@@ -333,6 +350,8 @@ namespace SIMEXPRO.DataAccess.Context
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.deva_ConversionDolares).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.deva_FechaAceptacion).HasColumnType("datetime");
 
                 entity.Property(e => e.duca_AduanaDestino).HasMaxLength(506);
@@ -383,6 +402,11 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.Property(e => e.impo_Nombre_Raso).HasMaxLength(250);
 
                 entity.Property(e => e.impo_NumRegistro).HasMaxLength(40);
+
+                entity.Property(e => e.inco_Codigo)
+                    .HasMaxLength(3)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
 
                 entity.Property(e => e.marc_Descripcion).HasMaxLength(20);
 
@@ -733,6 +757,9 @@ namespace SIMEXPRO.DataAccess.Context
                     .HasName("PK_Prod_tbAsignacionesModuloDetalle_adet_Id");
 
                 entity.ToTable("tbAsignacionesOrdenDetalle", "Prod");
+
+                entity.HasIndex(e => new { e.lote_Id, e.asor_Id }, "UQ_tbAsignacionesOrdenDetalle_lote_Id_asor_Id")
+                    .IsUnique();
 
                 entity.Property(e => e.adet_FechaCreacion).HasColumnType("datetime");
 
@@ -1300,9 +1327,6 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.ToTable("tbColores", "Prod");
 
                 entity.HasIndex(e => e.colr_Codigo, "UQ_Prod_tbColores_colr_Codigo")
-                    .IsUnique();
-
-                entity.HasIndex(e => e.colr_CodigoHtml, "UQ_Prod_tbColores_colr_CodigoHtml")
                     .IsUnique();
 
                 entity.HasIndex(e => e.colr_Nombre, "UQ_Prod_tbColores_colr_Nombre")
@@ -2092,6 +2116,30 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.Property(e => e.hpdf_Id).ValueGeneratedOnAdd();
             });
 
+            modelBuilder.Entity<tbDocumentosSanciones>(entity =>
+            {
+                entity.HasKey(e => e.dosa_Id)
+                    .HasName("PK_Adua_tbDocumentosSanciones_dosa_Id");
+
+                entity.ToTable("tbDocumentosSanciones", "Adua");
+
+                entity.Property(e => e.dosa_FechaCreacion).HasColumnType("datetime");
+
+                entity.Property(e => e.dosa_NombreDocumento)
+                    .IsRequired()
+                    .HasMaxLength(150);
+
+                entity.Property(e => e.dosa_UrlDocumento)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.HasOne(d => d.usua_UsuarioCreacionNavigation)
+                    .WithMany(p => p.tbDocumentosSancionesua_UsuarioCreacionNavigation)
+                    .HasForeignKey(d => d.usua_UsuarioCreacion)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Adua_tbDocumentosSanciones_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id");
+            });
+
             modelBuilder.Entity<tbDuca>(entity =>
             {
                 entity.HasKey(e => e.duca_Id);
@@ -2578,12 +2626,6 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.Property(e => e.faex_Finalizado).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.faex_Total).HasColumnType("decimal(18, 0)");
-
-                entity.HasOne(d => d.duca)
-                    .WithMany(p => p.tbFacturasExportacion)
-                    .HasForeignKey(d => d.duca_Id)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Prod_tbFacturasExportacion_Adua_tbDuca_duca_Id");
 
                 entity.HasOne(d => d.orco)
                     .WithMany(p => p.tbFacturasExportacion)
@@ -4041,6 +4083,8 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.ToTable("tbOrdenCompra", "Prod");
 
+                entity.Property(e => e.orco_Codigo).HasMaxLength(100);
+
                 entity.Property(e => e.orco_DireccionEntrega)
                     .IsRequired()
                     .HasMaxLength(250);
@@ -4559,6 +4603,12 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.pena_FechaModificacion).HasColumnType("datetime");
 
+                entity.Property(e => e.pena_NombreArchDNI).HasMaxLength(200);
+
+                entity.Property(e => e.pena_NombreArchRTN).HasMaxLength(200);
+
+                entity.Property(e => e.pena_NombreArchRecibo).HasMaxLength(200);
+
                 entity.Property(e => e.pena_NumeroRecibo)
                     .IsRequired()
                     .HasMaxLength(100)
@@ -4700,8 +4750,13 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.ToTable("tbProcesos", "Prod");
 
+                entity.HasIndex(e => e.proc_CodigoHtml, "UQ_Prod_tbProcesos_proc_CodigoHtml")
+                    .IsUnique();
+
                 entity.HasIndex(e => e.proc_Descripcion, "UQ_Prod_tbProcesos_proc_Descripcion")
                     .IsUnique();
+
+                entity.Property(e => e.proc_CodigoHtml).HasMaxLength(50);
 
                 entity.Property(e => e.proc_Descripcion)
                     .IsRequired()
@@ -5061,6 +5116,11 @@ namespace SIMEXPRO.DataAccess.Context
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Prod_tbRevisionDeCalidad_reca_Orden");
 
+                entity.HasOne(d => d.rcer)
+                    .WithMany(p => p.tbRevisionDeCalidad)
+                    .HasForeignKey(d => d.rcer_Id)
+                    .HasConstraintName("FK_Prod_tbRevionDeCalidad_Prod_RevisionDeCalidad_Errores_rcer_Id");
+
                 entity.HasOne(d => d.usua_UsuarioCreacionNavigation)
                     .WithMany(p => p.tbRevisionDeCalidadusua_UsuarioCreacionNavigation)
                     .HasForeignKey(d => d.usua_UsuarioCreacion)
@@ -5071,6 +5131,42 @@ namespace SIMEXPRO.DataAccess.Context
                     .WithMany(p => p.tbRevisionDeCalidadusua_UsuarioModificacionNavigation)
                     .HasForeignKey(d => d.usua_UsuarioModificacion)
                     .HasConstraintName("FK_Prod_tbRevisionDeCalidad_tbUsuarios_reca_UsuarioModificacion");
+            });
+
+            modelBuilder.Entity<tbRevisionDeCalidadErrores>(entity =>
+            {
+                entity.HasKey(e => e.rcer_Id)
+                    .HasName("PK_Prod_tbRevisionDeCalidadErros_rcer_Id");
+
+                entity.ToTable("tbRevisionDeCalidadErrores", "Prod");
+
+                entity.Property(e => e.rcer_Estado).HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.rcer_FechaCreacion).HasColumnType("datetime");
+
+                entity.Property(e => e.rcer_FechaEliminacion).HasColumnType("datetime");
+
+                entity.Property(e => e.rcer_FechaModificacion).HasColumnType("datetime");
+
+                entity.Property(e => e.rcer_Nombre)
+                    .IsRequired()
+                    .HasMaxLength(150);
+
+                entity.HasOne(d => d.usua_UsuarioCreacionNavigation)
+                    .WithMany(p => p.tbRevisionDeCalidadErroresusua_UsuarioCreacionNavigation)
+                    .HasForeignKey(d => d.usua_UsuarioCreacion)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Prod_tbRevisionDeCalidadErros_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id");
+
+                entity.HasOne(d => d.usua_UsuarioEliminacionNavigation)
+                    .WithMany(p => p.tbRevisionDeCalidadErroresusua_UsuarioEliminacionNavigation)
+                    .HasForeignKey(d => d.usua_UsuarioEliminacion)
+                    .HasConstraintName("FK_Prod_tbRevisionDeCalidadErros_usua_UsuarioEliminacion_Acce_tbUsuarios_usua_Id");
+
+                entity.HasOne(d => d.usua_UsuarioModificacionNavigation)
+                    .WithMany(p => p.tbRevisionDeCalidadErroresusua_UsuarioModificacionNavigation)
+                    .HasForeignKey(d => d.usua_UsuarioModificacion)
+                    .HasConstraintName("FK_Prod_tbRevisionDeCalidadErros_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id");
             });
 
             modelBuilder.Entity<tbRoles>(entity =>

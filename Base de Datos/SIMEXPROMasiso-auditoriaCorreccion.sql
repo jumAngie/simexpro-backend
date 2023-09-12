@@ -3033,6 +3033,16 @@ CREATE TABLE Prod.tbRevisionDeCalidadErrores(
 );
 GO
 
+CREATE TABLE Adua.tbDocumentosSanciones(
+	dosa_Id						INT IDENTITY(1,1),
+	dosa_NombreDocumento		NVARCHAR(150) NOT NULL,
+	dosa_UrlDocumento			NVARCHAR(250) NOT NULL,
+	usua_UsuarioCreacion		INT NOT NULL,
+	dosa_FechaCreacion			DATETIME NOT NULL,
+	CONSTRAINT PK_Adua_tbDocumentosSanciones_dosa_Id PRIMARY KEY (dosa_Id),
+	CONSTRAINT FK_Adua_tbDocumentosSanciones_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id FOREIGN KEY (usua_UsuarioCreacion) REFERENCES Acce.tbUsuarios (usua_Id)
+);
+GO
 
 --**********************************************************************************************
 --********** TABLA PAISES / procedimientos tomando en cuenta los uniques ***********************

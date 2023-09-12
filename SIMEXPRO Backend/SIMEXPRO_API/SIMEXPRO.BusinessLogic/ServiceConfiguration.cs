@@ -45,6 +45,7 @@ namespace SIMEXPRO.BussinessLogic
             services.AddScoped<DocumentosContratosRepository>();
             services.AddScoped<DocumentosdeSoporteRepository>();
             services.AddScoped<DocumentosPDFRepository>();
+            services.AddScoped<DocumentosSancionesRepository>();
             services.AddScoped<DucaRepository>();
             services.AddScoped<EstadoBoletinRepository>();
             services.AddScoped<EstadoMercanciasRepository>();
