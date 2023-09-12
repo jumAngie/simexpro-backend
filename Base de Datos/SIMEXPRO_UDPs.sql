@@ -11052,6 +11052,18 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE Prod.UDP_tbOrdenCompraDetalles_FiltrarProceso
+	@code_Id		INT
+AS
+BEGIN
+	SELECT	* 
+	FROM	Prod.tbOrdenCompraDetalles ordenCompraDetalle
+	WHERE	ordenCompraDetalle.code_Id = @code_Id 
+END
+GO
+
+
+
 CREATE OR ALTER PROCEDURE Prod.UDP_tbOrdenCompraDetalles_Insertar
 (
 	@orco_Id						INT,
@@ -12728,7 +12740,13 @@ BEGIN
 		@ensa_FechaCreacion,
 		@modu_Id
 		)
+		
+		UPDATE [Prod].[tbOrdenCompraDetalles] SET
+		proc_IdActual = (SELECT proc_Id FROM Prod.tbModulos WHERE modu_Id = @modu_Id )
+		WHERE code_Id = @code_Id
+
 		SELECT 1
+		
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE() 
@@ -12761,6 +12779,10 @@ BEGIN
 				usua_UsuarioCreacion	= @usua_UsuarioModificacion,	
 				ensa_FechaCreacion		= @ensa_FechaModificacion
 		WHERE	ensa_Id					= @ensa_Id
+
+		UPDATE [Prod].[tbOrdenCompraDetalles] SET
+		proc_IdActual = (SELECT proc_Id FROM Prod.tbModulos WHERE modu_Id = @modu_Id )
+		WHERE code_Id = @code_Id
 
 		SELECT 1
 	END TRY
@@ -15074,7 +15096,7 @@ INNER JOIN Acce.tbUsuarios Creacion
 END
 GO
 
-CREATE OR ALTER PROC Prod.UDP_tbPedidosProduccion_Find 212
+CREATE OR ALTER PROC Prod.UDP_tbPedidosProduccion_Find 
 @ppro_Id INT
 AS
 BEGIN
