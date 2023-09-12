@@ -11016,6 +11016,7 @@ BEGIN
 			,usuarioModificacion.usua_Nombre AS usuarioModificacionNombre
 			,ordenCompraDetalle.code_FechaModificacion
 			,ordenCompraDetalle.code_Estado
+			,code_FechaProcActual
 	  FROM	Prod.tbOrdenCompraDetalles			    ordenCompraDetalle
 			INNER JOIN	Prod.tbEstilos				estilo						ON	ordenCompraDetalle.esti_Id						= estilo.esti_Id
 			INNER JOIN	Prod.tbTallas				talla						ON	ordenCompraDetalle.tall_Id						= talla.tall_Id

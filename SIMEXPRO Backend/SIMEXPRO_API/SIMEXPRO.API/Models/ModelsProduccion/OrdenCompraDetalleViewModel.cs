@@ -14,7 +14,7 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public int esti_Id { get; set; }
         [NotMapped]
         public string esti_Descripcion { get; set; }
-
+        public DateTime code_FechaProcActual { get; set; }
         public string proc_Descripcion { get; set; }
 
         [NotMapped]

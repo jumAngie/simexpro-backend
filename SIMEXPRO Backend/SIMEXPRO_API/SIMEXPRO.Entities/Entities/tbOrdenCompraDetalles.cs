@@ -51,6 +51,9 @@ namespace SIMEXPRO.Entities.Entities
         public decimal code_Descuento { get; set; }
         public string code_EspecificacionEmbalaje { get; set; }
         public int usua_UsuarioCreacion { get; set; }
+
+        public DateTime? code_FechaProcActual { get; set; }
+
         [NotMapped]
         public string usuarioCreacionNombre { get; set; }
         public DateTime code_FechaCreacion { get; set; }

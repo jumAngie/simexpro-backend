@@ -47,7 +47,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             parametros.Add("@code_Unidad", item.code_Unidad, DbType.Decimal, ParameterDirection.Input);
             parametros.Add("@code_Valor", item.code_Valor, DbType.Decimal, ParameterDirection.Input);
             parametros.Add("@code_Impuesto", item.code_Impuesto, DbType.Decimal, ParameterDirection.Input);
-            //parametros.Add("@code_Descuento", item.code_Descuento, DbType.Decimal, ParameterDirection.Input);
+            parametros.Add("@code_FechaProcActual", item.code_FechaProcActual, DbType.DateTime, ParameterDirection.Input);
             parametros.Add("@code_EspecificacionEmbalaje", item.code_EspecificacionEmbalaje, DbType.String, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@code_FechaCreacion", item.code_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
