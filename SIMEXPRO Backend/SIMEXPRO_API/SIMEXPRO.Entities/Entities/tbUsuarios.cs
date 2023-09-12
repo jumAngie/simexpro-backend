@@ -78,6 +78,7 @@ namespace SIMEXPRO.Entities.Entities
             tbDocumentosDeSoporteusua_UsuarioCreacionNavigation = new HashSet<tbDocumentosDeSoporte>();
             tbDocumentosDeSoporteusua_UsuarioEliminacionNavigation = new HashSet<tbDocumentosDeSoporte>();
             tbDocumentosDeSoporteusua_UsuarioModificacionNavigation = new HashSet<tbDocumentosDeSoporte>();
+            tbDocumentosSancionesua_UsuarioCreacionNavigation = new HashSet<tbDocumentosSanciones>();
             tbDocumentosPDFusua_UsuarioCreacionNavigation = new HashSet<tbDocumentosPDF>();
             tbDocumentosPDFusua_UsuarioEliminacionNavigation = new HashSet<tbDocumentosPDF>();
             tbDocumentosPDFusua_UsuarioModificacionNavigation = new HashSet<tbDocumentosPDF>();
@@ -223,6 +224,9 @@ namespace SIMEXPRO.Entities.Entities
             tbRolesusua_UsuarioCreacionNavigation = new HashSet<tbRoles>();
             tbRolesusua_UsuarioEliminacionNavigation = new HashSet<tbRoles>();
             tbRolesusua_UsuarioModificacionNavigation = new HashSet<tbRoles>();
+            tbRevisionDeCalidadErroresusua_UsuarioCreacionNavigation = new HashSet<tbRevisionDeCalidadErrores>();
+            tbRevisionDeCalidadErroresusua_UsuarioModificacionNavigation = new HashSet<tbRevisionDeCalidadErrores>();
+            tbRevisionDeCalidadErroresusua_UsuarioEliminacionNavigation = new HashSet<tbRevisionDeCalidadErrores>();
             tbSubcategoriausua_UsuarioCreacionNavigation = new HashSet<tbSubcategoria>();
             tbSubcategoriausua_UsuarioEliminacionNavigation = new HashSet<tbSubcategoria>();
             tbTallasusua_UsuarioCreacionNavigation = new HashSet<tbTallas>();
@@ -367,6 +371,7 @@ namespace SIMEXPRO.Entities.Entities
         public virtual ICollection<tbDocumentosDeSoporte> tbDocumentosDeSoporteusua_UsuarioCreacionNavigation { get; set; }
         public virtual ICollection<tbDocumentosDeSoporte> tbDocumentosDeSoporteusua_UsuarioEliminacionNavigation { get; set; }
         public virtual ICollection<tbDocumentosDeSoporte> tbDocumentosDeSoporteusua_UsuarioModificacionNavigation { get; set; }
+        public virtual ICollection<tbDocumentosSanciones> tbDocumentosSancionesua_UsuarioCreacionNavigation { get; set; }
         public virtual ICollection<tbDocumentosOrdenCompraDetalles> tbDocumentosOrdenCompraDetallesusua_UsuarioCreacionNavigation { get; set; }
         public virtual ICollection<tbDocumentosOrdenCompraDetalles> tbDocumentosOrdenCompraDetallesusua_UsuarioModificacionNavigation { get; set; }
         public virtual ICollection<tbDocumentosPDF> tbDocumentosPDFusua_UsuarioCreacionNavigation { get; set; }
@@ -511,6 +516,9 @@ namespace SIMEXPRO.Entities.Entities
         public virtual ICollection<tbRolesXPantallas> tbRolesXPantallasusua_UsuarioCreacionNavigation { get; set; }
         public virtual ICollection<tbRolesXPantallas> tbRolesXPantallasusua_UsuarioEliminacionNavigation { get; set; }
         public virtual ICollection<tbRolesXPantallas> tbRolesXPantallasusua_UsuarioModificacionNavigation { get; set; }
+        public virtual ICollection<tbRevisionDeCalidadErrores> tbRevisionDeCalidadErroresusua_UsuarioCreacionNavigation { get; set; }
+        public virtual ICollection<tbRevisionDeCalidadErrores> tbRevisionDeCalidadErroresusua_UsuarioModificacionNavigation { get; set; }
+        public virtual ICollection<tbRevisionDeCalidadErrores> tbRevisionDeCalidadErroresusua_UsuarioEliminacionNavigation { get; set; }
         public virtual ICollection<tbRoles> tbRolesusua_UsuarioCreacionNavigation { get; set; }
         public virtual ICollection<tbRoles> tbRolesusua_UsuarioEliminacionNavigation { get; set; }
         public virtual ICollection<tbRoles> tbRolesusua_UsuarioModificacionNavigation { get; set; }

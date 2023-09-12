@@ -16838,3 +16838,39 @@ BEGIN
 		WHERE peod.prod_FechaCreacion BETWEEN @mate_FechaInicio AND @mate_FechaLimite
 		GROUP BY mate.mate_Descripcion;
 END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosSanciones_Insertar
+(
+	@dosa_NombreDocumento		NVARCHAR(150),
+	@dosa_UrlDocumento			NVARCHAR(250),
+	@usua_UsuarioCreacion		INT,
+	@dosa_FechaCreacion			DATETIME
+)
+AS
+BEGIN
+	BEGIN TRY
+		INSERT INTO Adua.tbDocumentosSanciones
+		VALUES (@dosa_NombreDocumento, @dosa_UrlDocumento, @usua_UsuarioCreacion, @dosa_FechaCreacion)
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE()
+	END CATCH
+END
+GO
+
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosSanciones_Listar
+AS
+BEGIN
+	SELECT [dosa_Id],
+		   [dosa_NombreDocumento],
+		   [dosa_UrlDocumento],
+		   [usua_UsuarioCreacion],
+		   [dosa_FechaCreacion]
+	  FROM [Adua].[tbDocumentosSanciones]
+  ORDER BY [dosa_FechaCreacion] DESC 
+END
+GO

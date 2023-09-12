@@ -118,6 +118,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[Adua].[tbDocumentosSanciones]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[Adua].[tbDuca]",
          "ObjectType": 0
       },
@@ -439,6 +443,10 @@
       },
       {
          "Name": "[Prod].[tbRevisionDeCalidad]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbRevisionDeCalidadErrores]",
          "ObjectType": 0
       },
       {

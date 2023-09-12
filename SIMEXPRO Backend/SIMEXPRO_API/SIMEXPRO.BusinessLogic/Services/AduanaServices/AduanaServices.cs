@@ -26,6 +26,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         private readonly DocumentosContratosRepository _documentosContratosRepository;
         private readonly DocumentosdeSoporteRepository _documentosdeSoporteRepository;
         private readonly DocumentosPDFRepository _documentosPDFRepository;
+        private readonly DocumentosSancionesRepository _documentosSancionesRepository;
         private readonly DucaRepository _ducaRepository;
         private readonly EstadoBoletinRepository _estadoBoletinRepository;
         private readonly EstadoMercanciasRepository _estadoMercanciasRepository;
@@ -59,7 +60,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                                 CodigoImpuestoRepository CodigoImpuestoRepository, ComercianteIndividualRepository ComercianteIndividualRepository, ConceptoPagoRepository ConceptoPagoRepository, CondicionesRepository CondicionesRepository,
                                 CondicionesComercialesRepository CondicionesComercialesRepository, Declaraciones_ValorHistorialRepository Declaraciones_ValorHistorialRepository, Declaraciones_ValorRepository Declaraciones_ValorRepository,
                                 DocumentosContratosRepository DocumentosContratosRepository, DocumentosdeSoporteRepository DocumentosdeSoporteRepository, DocumentosPDFRepository DocumentosPDFRepository,
-                                DucaRepository DucaRepository, EstadoBoletinRepository EstadoBoletinRepository, EstadoMercanciasRepository EstadoMercanciasRepository, FacturasRepository FacturasRepository, FormasdePagoRepository FormasdePagoRepository, ImpuestosporAracelRepository ImpuestosporAracelRepository,
+                                DocumentosSancionesRepository documentosSancionesRepository, DucaRepository DucaRepository, EstadoBoletinRepository EstadoBoletinRepository, EstadoMercanciasRepository EstadoMercanciasRepository, FacturasRepository FacturasRepository, FormasdePagoRepository FormasdePagoRepository, ImpuestosporAracelRepository ImpuestosporAracelRepository,
                                 ImpuestosRepository ImpuestosRepository, IncotermRepository IncotermRepository, IntermediarioRepository IntermediarioRepository, ItemsRepository ItemsRepository, LiquidacionGeneralRepository LiquidacionGeneralRepository,
                                 LiquidacionPorLineaRepository LiquidacionPorLineaRepository, LugaresEmbarqueRepository LugaresEmbarqueRepository, MarcasRepository MarcasRepository, ModoTransporteRepository ModoTransporteRepository,
                                 NivelesComercialesRepository NivelesComercialesRepository, PersonaJuridicaRepository PersonaJuridicaRepository, PersonaNaturalRepository PersonaNaturalRepository, PersonasRepository PersonasRepository,
@@ -81,6 +82,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             _documentosContratosRepository = DocumentosContratosRepository;
             _documentosdeSoporteRepository = DocumentosdeSoporteRepository;
             _documentosPDFRepository = DocumentosPDFRepository;
+            _documentosSancionesRepository = documentosSancionesRepository;
             _ducaRepository = DucaRepository;
             _estadoBoletinRepository = EstadoBoletinRepository;
             _estadoMercanciasRepository = EstadoMercanciasRepository;
@@ -1144,6 +1146,38 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             {
                 var map = _documentosPDFRepository.Delete(item);
                 return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        #endregion
+
+        #region Documentos de Soporte
+        public ServiceResult InsertarDocumentoSanciones(tbDocumentosSanciones item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var resultado = _documentosSancionesRepository.Insert(item);
+
+                return result.Ok(resultado);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult ListarDocumentosSanciones()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _documentosSancionesRepository.List();
+
+                return result.Ok(list);
             }
             catch (Exception ex)
             {

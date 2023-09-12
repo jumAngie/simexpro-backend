@@ -33,6 +33,7 @@ namespace SIMEXPRO.Entities.Entities
 
         //[NotMapped]
         //public int faex_Finalizado { get; set; }
+
         [NotMapped]
         public string duca_No_Duca { get; set; }
 
@@ -69,7 +70,6 @@ namespace SIMEXPRO.Entities.Entities
 
 
         public virtual tbOrdenCompra orco { get; set; }
-        public virtual tbDuca duca { get; set; }
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }
         public virtual ICollection<tbFacturasExportacionDetalles> tbFacturasExportacionDetalles { get; set; }

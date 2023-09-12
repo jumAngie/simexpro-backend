@@ -14,12 +14,8 @@
    "SelectedToBeGenerated": 2,
    "Tables": [
       {
-         "Name": "[Adua].[VW_tbDeclaraciones_ValorCompleto]",
-         "ObjectType": 3
-      },
-      {
-         "Name": "[Adua].[VW_tbDuca_GenerarDuca]",
-         "ObjectType": 3
+         "Name": "[Prod].[tbRevisionDeCalidadErrores]",
+         "ObjectType": 0
       }
    ],
    "UiHint": "simexpro.SIMEXPRO",

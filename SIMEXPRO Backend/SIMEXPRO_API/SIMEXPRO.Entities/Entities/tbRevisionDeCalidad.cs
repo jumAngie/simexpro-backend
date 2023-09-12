@@ -33,6 +33,7 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string usuarioModificacionNombre { get; set; }
         public virtual tbOrde_Ensa_Acab_Etiq ensa { get; set; }
+        public virtual tbRevisionDeCalidadErrores rcer { get; set; }
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }
     }

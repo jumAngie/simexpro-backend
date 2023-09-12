@@ -289,6 +289,11 @@ namespace SIMEXPRO.DataAccess
         public static string EliminarDocumentosPDF = "Adua.UDP_tbDocumentosPDF_Eliminar";
         #endregion
 
+        #region Documentos de Sanciones
+        public static string InsertarDocumentodeSanciones = "Adua.UDP_tbDocumentosSanciones_Insertar";
+        public static string ListarDocumentosdeSanciones = "Adua.UDP_tbDocumentosSanciones_Listar";
+        #endregion
+
         #region Duca
         public static string ListarDuca = "Adua.UDP_tbDuca_Listar";
         public static string ListarDevaNoDuca = "Adua.UDP_tbDUCA_PreInsertarListado";
