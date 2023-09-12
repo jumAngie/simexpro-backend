@@ -53,3 +53,5 @@ DROP CONSTRAINT PK_Adua_tbDuca_duca_No_Duca
 ALTER TABLE [Adua].[tbItemsDEVAPorDuca]
 ADD CONSTRAINT FK_Adua_tbItemsDEVAPorDuca_Adua_tbDuca_duca_Id FOREIGN KEY(duca_Id) REFERENCES Adua.tbDuca([duca_Id])
 
+ALTER TABLE [Prod].[tbOrdenCompraDetalles]
+ADD code_FechaProcActual DATETIME NULL;
