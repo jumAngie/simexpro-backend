@@ -11052,13 +11052,14 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Prod.UDP_tbOrdenCompraDetalles_FiltrarProceso
+CREATE OR ALTER PROCEDURE Prod.UDP_tbOrdenCompraDetalles_FiltrarProceso 
 	@code_Id		INT
 AS
 BEGIN
-	SELECT	* 
-	FROM	Prod.tbOrdenCompraDetalles ordenCompraDetalle
-	WHERE	ordenCompraDetalle.code_Id = @code_Id 
+	SELECT	[poco_Id], [code_Id], ppcd.[proc_Id],[proc_Descripcion]
+	FROM	[Prod].[tbProcesoPorOrdenCompraDetalle] ppcd
+			INNER JOIN [Prod].[tbProcesos] prc on ppcd.proc_Id = prc.proc_Id
+	WHERE	ppcd.code_Id = @code_Id 
 END
 GO
 
@@ -12753,6 +12754,9 @@ BEGIN
 	END CATCH
 END
 GO
+
+
+
 /*Editar ORDEN ENSABLAJE ACBADO ETIQUEDATO*/
 CREATE OR ALTER PROCEDURE Prod.UDP_tbOrde_Ensa_Acab_Etiq_Editar
 @ensa_Id					INT,
