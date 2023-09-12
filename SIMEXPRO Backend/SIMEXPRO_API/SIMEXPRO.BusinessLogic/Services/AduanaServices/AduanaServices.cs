@@ -857,6 +857,21 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult CancelarDeva(int deva_Id, int fact_Id, int codi_Id, int base_Id)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _declaraciones_ValorRepository.CancelarDeclaracionValor(deva_Id, fact_Id, codi_Id, base_Id);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
+
         //public ServiceResult ActualizarDeclaraciones_ValorTab2(tbDeclaraciones_Valor item, tbDeclarantes declProv, tbDeclarantes declInte, tbProveedoresDeclaracion itemProv, tbIntermediarios itemInte)
         //{
         //    var result = new ServiceResult();

@@ -5400,6 +5400,42 @@ END
 	
 --END
 --GO
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDeclaracionValor_Eliminar
+	@deva_Id	INT,
+	@fact_Id	INT,
+	@codi_Id	INT,
+	@base_Id	INT
+AS
+BEGIN
+BEGIN TRANSACTION
+	BEGIN TRY
+		IF(@base_Id <> 0)
+			BEGIN
+				DELETE FROM [Adua].[tbBaseCalculos] WHERE base_Id = @base_Id
+			END
+		IF(@codi_Id <> 0)
+			BEGIN
+				DELETE FROM [Adua].[tbCondiciones] WHERE codi_Id = @codi_Id
+			END
+		IF(@fact_Id <> 0)
+			BEGIN
+				DELETE FROM [Adua].[tbItems] WHERE fact_Id = @fact_Id
+
+				DELETE FROM [Adua].[tbFacturas] WHERE fact_Id = @fact_Id
+			END
+
+		DELETE FROM [Adua].[tbDeclaraciones_Valor] WHERE deva_Id = @deva_Id
+
+		SELECT 1
+COMMIT TRAN
+	END TRY
+	BEGIN CATCH
+		ROLLBACK TRAN
+		SELECT 'Error Message: ' + ERROR_MESSAGE()
+	END CATCH
+END
 
 GO
 /* Listar Declarantes*/ 
