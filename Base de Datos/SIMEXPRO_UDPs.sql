@@ -12741,13 +12741,16 @@ BEGIN
 		@ensa_FechaCreacion,
 		@modu_Id
 		)
-		
-		UPDATE [Prod].[tbOrdenCompraDetalles] SET
-		proc_IdActual = (SELECT proc_Id FROM Prod.tbModulos WHERE modu_Id = @modu_Id )
-		WHERE code_Id = @code_Id
 
-		SELECT 1
-		
+		UPDATE [Prod].tbPedidosProduccion  SET
+		[ppro_Finalizado] = 1,
+		[ppro_Estados] = 'Entregada'
+		WHERE [ppro_Id] = @ppro_Id
+
+		UPDATE [Prod].[tbOrdenCompraDetalles] 
+		SET proc_IdActual = (SELECT proc_Id FROM Prod.tbModulos WHERE modu_Id = @modu_Id )
+		WHERE code_Id = @code_Id
+		SELECT 1		
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE() 
@@ -12783,6 +12786,11 @@ BEGIN
 				usua_UsuarioCreacion	= @usua_UsuarioModificacion,	
 				ensa_FechaCreacion		= @ensa_FechaModificacion
 		WHERE	ensa_Id					= @ensa_Id
+		
+		UPDATE [Prod].tbPedidosProduccion  SET
+		[ppro_Finalizado] = 1,
+		[ppro_Estados] = 'Entregada'
+		WHERE [ppro_Id] = @ppro_Id
 
 		UPDATE [Prod].[tbOrdenCompraDetalles] SET
 		proc_IdActual = (SELECT proc_Id FROM Prod.tbModulos WHERE modu_Id = @modu_Id )
