@@ -1086,29 +1086,18 @@ BEGIN
 				   WHERE ofic_Nombre = @ofic_Nombre
 				   AND ofic_Estado = 0)
 			BEGIN
-				UPDATE Gral.tbOficinas
-                   SET ofic_Estado = 0,
-						ofic_FechaEliminacion = @ofic_FechaModificacion,
-						usua_UsuarioEliminacion = @usua_UsuarioModificacion
-                 WHERE ofic_Id = @ofic_Id
+				DELETE FROM Gral.tbOficinas
+				WHERE ofic_Nombre = @ofic_Nombre
+				AND ofic_Estado = 0
+			END
 
-                UPDATE Gral.tbOficinas
-                   SET ofic_Estado = 1,
-						ofic_FechaModificacion = @ofic_FechaModificacion,
-						usua_UsuarioModificacion = @usua_UsuarioModificacion
-                 WHERE ofic_Nombre = @ofic_Nombre
-				 SELECT 1
-			END
-		ELSE
-			BEGIN
-				UPDATE  Gral.tbOficinas
-				SET		ofic_Nombre = @ofic_Nombre,
-						usua_UsuarioModificacion = @usua_UsuarioModificacion,
-						ofic_FechaModificacion = @ofic_FechaModificacion
-				WHERE	ofic_Id = @ofic_Id
+		UPDATE  Gral.tbOficinas
+		SET		ofic_Nombre = @ofic_Nombre,
+				usua_UsuarioModificacion = @usua_UsuarioModificacion,
+				ofic_FechaModificacion = @ofic_FechaModificacion
+		WHERE	ofic_Id = @ofic_Id
 				
-				SELECT 1
-			END
+		SELECT 1
 		
 	END TRY
 	BEGIN CATCH
@@ -2247,6 +2236,17 @@ CREATE OR ALTER PROCEDURE Gral.UDP_tbFormas_Envio_Editar
 AS
 BEGIN
 	BEGIN TRY
+
+		IF EXISTS (SELECT foen_Id 
+				   FROM Gral.tbFormas_Envio
+				   WHERE foen_Descripcion = @foen_Descripcion
+				   AND foen_Estado = 0)
+			BEGIN
+				DELETE FROM Gral.tbFormas_Envio
+				WHERE foen_Descripcion = @foen_Descripcion
+				AND foen_Estado = 0
+			END
+
 		UPDATE Gral.tbFormas_Envio
 		   SET foen_Codigo = @foen_Codigo,
 		       foen_Descripcion = @foen_Descripcion,
@@ -3827,12 +3827,9 @@ BEGIN
 				   WHERE emba_Codigo = @emba_Codigo
 				   AND emba_Estado = 0)
 			BEGIN
-				UPDATE Adua.tbLugaresEmbarque
-				SET emba_Estado = 1,
-					emba_Descripcion = @emba_Descripcion
+				DELETE FROM Adua.tbLugaresEmbarque
 				WHERE emba_Codigo = @emba_Codigo
-
-				SELECT 1
+				AND emba_Estado = 0
 			END
 		ELSE
 			BEGIN
@@ -4152,7 +4149,7 @@ SELECT    adu.adua_Id                            ,
         adu.adua_Estado
 FROM    Adua.tbAduanas adu 
         INNER JOIN Acce.tbUsuarios usu        ON adu.usua_UsuarioCreacion = usu.usua_Id 
-        LEFT JOIN Acce.tbUsuarios usu2        ON usu2.usua_UsuarioModificacion = adu.usua_UsuarioModificacion 
+        LEFT JOIN Acce.tbUsuarios usu2        ON usu2.usua_Id = adu.usua_UsuarioModificacion 
         LEFT JOIN Gral.tbCiudades ciud      ON ciud.ciud_Id = adu.ciud_Id
         LEFT JOIN Gral.tbProvincias prov   ON prov.pvin_Id = ciud.pvin_Id
  WHERE    adu.adua_Estado = 1
@@ -4226,6 +4223,16 @@ AS
 BEGIN 
 	BEGIN TRY   
      
+		IF EXISTS (SELECT adua_Id
+				   FROM Adua.tbAduanas
+				   WHERE adua_Codigo = @adua_Codigo
+				   AND adua_Estado = 0)
+			BEGIN
+				DELETE FROM Adua.tbAduanas
+				WHERE adua_Codigo = @adua_Codigo
+				AND adua_Estado = 0
+			END
+
 		UPDATE  Adua.tbAduanas 
 		SET    adua_Nombre = @adua_Nombre,
 			    adua_Codigo = @adua_Codigo,
@@ -8872,6 +8879,17 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbCondicionesComerciales_Editar
 AS
 BEGIN 
       BEGIN TRY
+			
+		  IF EXISTS (SELECT coco_Id
+					 FROM Adua.tbCondicionesComerciales
+					 WHERE coco_Descripcion = @coco_Descripcion
+					 AND coco_Estado = 0)
+			BEGIN
+				DELETE FROM Adua.tbCondicionesComerciales
+				WHERE coco_Descripcion = @coco_Descripcion
+				AND coco_Estado = 0
+			END
+
 	      UPDATE Adua.tbCondicionesComerciales
 		  SET	coco_Codigo = @coco_Codigo,
 				coco_Descripcion = @coco_Descripcion, 
@@ -11685,11 +11703,22 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbEstilos_Editar
 AS
 BEGIN 
    BEGIN TRY 
+	  IF EXISTS (SELECT esti_Id
+				 FROM Prod.tbEstilos
+				 WHERE esti_Descripcion = @esti_Descripcion
+				 AND esti_Estado = 0)
+		BEGIN
+			DELETE FROM Prod.tbEstilos
+			WHERE esti_Descripcion = @esti_Descripcion
+			AND esti_Estado = 0
+		END
+
       UPDATE Prod.tbEstilos
       SET esti_Descripcion = @esti_Descripcion, 
           usua_UsuarioModificacion = @usua_UsuarioModificacion,
           esti_FechaModificacion = @esti_FechaModificacion
       WHERE esti_Id = @esti_Id
+
 	  SELECT 1
    END TRY 
    BEGIN CATCH 
@@ -12678,27 +12707,22 @@ AS
 BEGIN
 	BEGIN TRY
 
-	 
-
-	IF EXISTS (SELECT * FROM Prod.tbTipoEmbalaje WHERE tiem_Descripcion = @tiem_Descripcion AND tiem_Estado = 0)
+	IF EXISTS (SELECT * FROM Prod.tbTipoEmbalaje 
+			   WHERE tiem_Descripcion = @tiem_Descripcion
+			   AND tiem_Estado = 0)
 		BEGIN
-			UPDATE Prod.tbTipoEmbalaje
-			SET tiem_Estado = 1,
-				usua_UsuarioModificacion = @usua_UsuarioModificacion,
-				tiem_FechaModificacion = @tiem_FechaModificacion
+			DELETE FROM Prod.tbTipoEmbalaje	
 			WHERE tiem_Descripcion = @tiem_Descripcion
-			SELECT 1			
+			AND tiem_Estado = 0
 		END
-	ELSE
-		BEGIN
-			UPDATE Prod.tbTipoEmbalaje
-			SET tiem_Descripcion = @tiem_Descripcion,
-			usua_UsuarioModificacion = @usua_UsuarioModificacion,
-			tiem_FechaModificacion = @tiem_FechaModificacion
-			WHERE tiem_Id = @tiem_Id
 
-			SELECT 1
-		END
+		UPDATE Prod.tbTipoEmbalaje
+		SET tiem_Descripcion = @tiem_Descripcion,
+		usua_UsuarioModificacion = @usua_UsuarioModificacion,
+		tiem_FechaModificacion = @tiem_FechaModificacion
+		WHERE tiem_Id = @tiem_Id
+
+		SELECT 1
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE() 
@@ -12949,33 +12973,21 @@ BEGIN
 				   AND	 subc_Descripcion = @subc_Descripcion
 				   AND subc_Estado = 0)
 			BEGIN
-				UPDATE Prod.tbSubcategoria
-				SET subc_Estado = 0,
-					usua_UsuarioEliminacion = @usua_UsuarioModificacion,
-					subc_FechaEliminacion = @subc_FechaModificacion
-				WHERE subc_Id = @subc_Id
-
-				UPDATE Prod.tbSubcategoria
-				SET subc_Estado = 1,
-					usua_UsuarioModificacion = @usua_UsuarioModificacion,
-					subc_FechaModificacion = @subc_FechaModificacion
+				DELETE FROM Prod.tbSubcategoria
 				WHERE cate_Id = @cate_Id
 				AND	 subc_Descripcion = @subc_Descripcion
-
-				SELECT 1
+				AND subc_Estado = 0
 
 			END
-		ELSE
-			BEGIN
-				UPDATE  Prod.tbSubcategoria
-				SET		cate_Id                  = @cate_Id,
-						subc_Descripcion         = @subc_Descripcion,
-						usua_UsuarioModificacion = @usua_UsuarioModificacion,
-						subc_FechaModificacion   = @subc_FechaModificacion
-				WHERE	subc_Id = @subc_Id
 
-				SELECT 1
-			END
+		UPDATE  Prod.tbSubcategoria
+		SET		cate_Id                  = @cate_Id,
+				subc_Descripcion         = @subc_Descripcion,
+				usua_UsuarioModificacion = @usua_UsuarioModificacion,
+				subc_FechaModificacion   = @subc_FechaModificacion
+		WHERE	subc_Id = @subc_Id
+
+		SELECT 1
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
@@ -13329,6 +13341,15 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbModulos_Editar
 AS
 BEGIN
 	BEGIN TRY
+		IF EXISTS (SELECT modu_Id
+					FROM Prod.tbModulos
+					WHERE modu_Nombre = @modu_Nombre
+					AND modu_Estado = 0)
+			BEGIN
+				DELETE FROM Prod.tbModulos
+				WHERE modu_Nombre = @modu_Nombre
+				AND modu_Estado = 0
+			END
 		UPDATE Prod.tbModulos
 		   SET modu_Nombre = @modu_Nombre
 			  ,proc_Id = @proc_Id
@@ -13529,22 +13550,23 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbMarcasMaquina_Editar
 AS
 BEGIN
 	BEGIN TRY
-	IF EXISTS(SELECT * FROM Prod.tbMarcasMaquina WHERE marq_Nombre = @marq_Nombre AND marq_Estado = 0)
+	IF EXISTS(SELECT * FROM 
+			  Prod.tbMarcasMaquina 
+			  WHERE marq_Nombre = @marq_Nombre 
+			  AND marq_Estado = 0)
 			BEGIN
-				UPDATE	Prod.tbMarcasMaquina
-				SET		marq_Estado = 1
-				WHERE   marq_Nombre = @marq_Nombre
-				SELECT 1
+				DELETE FROM Prod.tbMarcasMaquina 
+				WHERE marq_Nombre = @marq_Nombre 
+				AND marq_Estado = 0
 			END
-	ELSE
-			BEGIN
-				UPDATE	Prod.tbMarcasMaquina
-				SET		marq_Nombre = @marq_Nombre,
-						usua_UsuarioModificacion = @usua_UsuarioModificacion,
-						marq_FechaModificacion = @marq_FechaModificacion
-				WHERE	marq_Id  = @marq_Id
-				SELECT 1
-			END
+
+	UPDATE	Prod.tbMarcasMaquina
+	SET		marq_Nombre = @marq_Nombre,
+			usua_UsuarioModificacion = @usua_UsuarioModificacion,
+			marq_FechaModificacion = @marq_FechaModificacion
+	WHERE	marq_Id  = @marq_Id
+
+	SELECT 1
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
@@ -13771,6 +13793,16 @@ CREATE OR ALTER PROCEDURE prod.UDP_tbFuncionesMaquina_Editar
 AS
 BEGIN
 	BEGIN TRY
+	   IF EXISTS (SELECT func_Id
+				  FROM Prod.tbFuncionesMaquina
+				  WHERE func_Nombre = @func_Nombre
+				  AND func_Estado = 0)
+			BEGIN
+				DELETE FROM Prod.tbFuncionesMaquina
+				WHERE func_Nombre = @func_Nombre
+				AND func_Estado = 0
+			END
+
 	   UPDATE Prod.tbFuncionesMaquina
 		  SET func_Nombre = @func_Nombre,
 			  usua_UsuarioModificacion = @usua_UsuarioModificacion,
@@ -15619,6 +15651,15 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbMaquinas_Editar
 AS
 BEGIN
 	BEGIN TRY
+		IF EXISTS (SELECT maqu_Id
+				   FROM Prod.tbMaquinas
+				   WHERE maqu_NumeroSerie = @maqu_NumeroSerie
+				   AND maqu_Estado = 0)
+			BEGIN
+				DELETE FROM Prod.tbMaquinas
+				WHERE maqu_NumeroSerie = @maqu_NumeroSerie
+				AND maqu_Estado = 0
+			END
 		UPDATE Prod.tbMaquinas
 		   SET maqu_NumeroSerie         = @maqu_NumeroSerie
 			  ,modu_Id                  = @modu_Id
