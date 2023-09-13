@@ -276,6 +276,7 @@ namespace SIMEXPRO.DataAccess
         public static string InsertDocumentosPersonaJuridica = "Adua.UDP_tbDocumentosContrato_JuridicaInsertar";
         public static string CargarDocumentosPersonaJuridica = "Adua.UDP_tbDocumentosContrato_CargarDocuJuridica";
         public static string EditarDocumentosPersonaJuridica = "Adua.UDP_tbDocumentosContrato_PersonaJuridicaEditar";
+        public static string EliminarDocumentosByPeju_Id = "Adua.UDP_tbDocumentosContratos_DeleteByPeju_Id";
         #endregion
 
         #region Documentos de Soporte
