@@ -44,6 +44,93 @@ END
 --WHERE PO.orco_IdCliente = @clie_Id
 --END
 
+GO
+
+CREATE OR ALTER PROCEDURE Prod.UDP_Reporte_MaquinaUso
+@modu_Id INT
+AS 
+BEGIN 
+SELECT  maq.maqu_Id
+		,maq.maqu_NumeroSerie
+		,maq.mmaq_Id
+		,marca.marq_Nombre
+		,maq.modu_Id
+		,modulo.modu_Nombre
+		,CASE
+			WHEN hmq.mahi_Id IS NULL
+				THEN 1
+			ELSE 0
+		END AS EnUso
+		,(SELECT MAX(mahi_FechaInicio) FROM [Prod].[tbMaquinaHistorial] x WHERE x.maqu_Id = maq.maqu_Id ) deshabilitada
+		,(SELECT MAX(mahi_FechaFin) FROM [Prod].[tbMaquinaHistorial] x WHERE x.maqu_Id = maq.maqu_Id )	habilitada
+FROM [Prod].[tbMaquinas] maq LEFT JOIN [Prod].[tbMaquinaHistorial] hmq
+ON maq.maqu_Id  = hmq.maqu_Id AND GETDATE() BETWEEN hmq.mahi_FechaInicio AND hmq.mahi_FechaFin
+LEFT JOIN [Prod].[tbMarcasMaquina] marca ON maq.mmaq_Id = marca.marq_Id
+LEFT JOIN [Prod].[tbModulos] modulo ON modulo.modu_Id = maq.modu_Id
+WHERE @modu_Id = 0 OR modulo.modu_Id = @modu_Id
+
+END
+
+GO
 
 
-SELECT * FROM [Prod].[tbRevisionDeCalidad]
+CREATE OR ALTER PROCEDURE Prod.UDP_Reporte_OrdenesDeCompraFecha
+AS
+BEGIN
+
+	
+	SELECT	 ordenCompra.orco_Id
+	-- Informacion del cliente
+			,ordenCompra.orco_Codigo
+			,ordenCompra.orco_IdCliente
+			,cliente.clie_Nombre_O_Razon_Social
+			,cliente.clie_Direccion
+			,cliente.clie_RTN
+			,cliente.clie_Nombre_Contacto
+			,cliente.clie_Numero_Contacto
+			,cliente.clie_Correo_Electronico
+			,cliente.clie_FAX
+			,ordenCompra.orco_EstadoFinalizado
+			,ordenCompra.orco_FechaEmision
+			,ordenCompra.orco_FechaLimite
+			,ordenCompra.orco_Materiales
+
+			,ordenCompra.orco_MetodoPago
+			,fomapago.fopa_Descripcion
+
+	--Informacion del Embalaje
+			,ordenCompra.orco_IdEmbalaje
+			,tipoEmbajale.tiem_Descripcion
+
+			,ordenCompra.orco_EstadoOrdenCompra
+			,ordenCompra.orco_DireccionEntrega
+			,ordenCompra.usua_UsuarioCreacion
+			,usuarioCreacion.usua_Nombre		AS usuarioCreacionNombre
+			,ordenCompra.orco_FechaCreacion
+			,ordenCompra.usua_UsuarioModificacion
+			,usuarioModificacion.usua_Nombre	AS usuarioModificacionNombre
+			,ordenCompra.orco_FechaModificacion
+			,ordenCompra.orco_Estado
+		--	,(SELECT	PPOCD.[poco_Id], 
+		--		PPOCD.[code_Id], 
+		--		PPOCD.[proc_Id], 
+		--		PROCE.[proc_Descripcion],
+		--		PPOCD.[usua_UsuarioCreacion], 
+		--		PPOCD.[poco_FechaCreacion], 
+		--		PPOCD.[usua_UsuarioModificacion], 
+		--		PPOCD.[poco_FechaModificacion], 
+		--		PPOCD.[code_Estado]
+		--FROM Prod.tbProcesoPorOrdenCompraDetalle PPOCD
+		--	INNER JOIN Prod.tbOrdenCompraDetalles OCD
+		--	ON PPOCD.code_Id = OCD.code_Id
+		--	INNER JOIN Prod.tbProcesos PROCE
+		--	ON PPOCD.proc_Id = PROCE.proc_Id
+		--	WHERE PPOCD.code_Id = )
+	  FROM  Prod.tbOrdenCompra							ordenCompra
+			INNER JOIN  Prod.tbClientes					cliente				ON ordenCompra.orco_IdCliente  = cliente.clie_Id
+			INNER JOIN  Prod.tbTipoEmbalaje				tipoEmbajale		ON ordenCompra.orco_IdEmbalaje = tipoEmbajale.tiem_Id
+			INNER JOIN	Adua.tbFormasdePago				fomapago			ON ordenCompra.orco_MetodoPago = fomapago.fopa_Id
+		    INNER JOIN  Acce.tbUsuarios					usuarioCreacion		ON ordenCompra.usua_UsuarioCreacion			= usuarioCreacion.usua_Id
+			LEFT  JOIN  Acce.tbUsuarios					usuarioModificacion ON ordenCompra.usua_UsuarioModificacion		= usuarioModificacion.usua_Id
+END
+GO
