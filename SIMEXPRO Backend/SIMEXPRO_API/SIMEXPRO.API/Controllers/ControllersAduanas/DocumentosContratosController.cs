@@ -89,6 +89,13 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(respuesta);
         }
 
+        [HttpPost("EliminarByPeju_Id")]
+        public IActionResult EliminarDocumentosByPeju_Id(int id)
+        {
+            var respuesta = _aduanaServices.EliminarDocumentosByPeju_Id(id);
+            return Ok(respuesta);
+        }
+
     }
 
 }

@@ -131,6 +131,22 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
         }
 
+        public RequestStatus EliminarDocumentosByPeju_Id(int id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@peju_Id", id, DbType.Int32, ParameterDirection.Input);
+
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.EliminarDocumentosByPeju_Id, parametros, commandType: CommandType.StoredProcedure);
+            return new RequestStatus()
+            {
+                MessageStatus = respuesta
+            };
+
+        }
+
         public RequestStatus Insert(tbDocumentosContratos item)
         {
             throw new NotImplementedException();
