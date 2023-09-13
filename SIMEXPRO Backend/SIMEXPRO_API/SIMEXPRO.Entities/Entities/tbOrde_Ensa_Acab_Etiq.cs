@@ -15,6 +15,8 @@ namespace SIMEXPRO.Entities.Entities
         }
 
         [NotMapped]
+        public string orco_Codigo { get; set; }
+        [NotMapped]
         public int orco_Id { get; set; }
         public int ensa_Id { get; set; }
         public int ensa_Cantidad { get; set; }

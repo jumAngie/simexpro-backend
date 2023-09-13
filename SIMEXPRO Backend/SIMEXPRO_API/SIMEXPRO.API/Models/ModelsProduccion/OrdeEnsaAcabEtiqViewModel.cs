@@ -9,6 +9,8 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
     public class OrdeEnsaAcabEtiqViewModel
     {
         [NotMapped]
+        public string orco_Codigo { get; set; }
+        [NotMapped]
         public int orco_Id { get; set; }
         public int ensa_Id { get; set; }
         public int ensa_Cantidad { get; set; }
