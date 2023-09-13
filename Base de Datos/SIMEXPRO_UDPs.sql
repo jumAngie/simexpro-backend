@@ -632,6 +632,19 @@ CREATE OR ALTER PROCEDURE Acce.UDP_tbRoles_Editar
 AS
 BEGIN
 	BEGIN TRY
+		DECLARE @role_IdEliminar INT = (SELECT role_Id
+										FROM Acce.tbRoles
+										WHERE role_Descripcion = @role_Descripcion
+										AND role_Estado = 0)
+
+		IF (@role_IdEliminar IS NOT NULL)
+			BEGIN
+				DELETE FROM Acce.tbRolesXPantallas
+				WHERE role_Id = @role_IdEliminar
+
+				DELETE FROM Acce.tbRoles
+				WHERE role_Id = @role_IdEliminar
+			END
         
         UPDATE Acce.tbRoles
            SET role_Descripcion = @role_Descripcion             
@@ -2625,6 +2638,17 @@ CREATE OR ALTER PROCEDURE Gral.UDP_tbUnidadMedidas_Editar
 AS
 BEGIN 
 	BEGIN TRY
+
+		IF EXISTS (SELECT unme_Id
+					   FROM Gral.tbUnidadMedidas
+					   WHERE unme_Descripcion = @unme_Descripcion
+					   AND unme_Estado = 0)
+			BEGIN
+				DELETE FROM Gral.tbUnidadMedidas
+				WHERE unme_Descripcion = @unme_Descripcion
+			    AND unme_Estado = 0
+			END
+
 		UPDATE Gral.tbUnidadMedidas
 		   SET unme_Descripcion = @unme_Descripcion,
 			   usua_UsuarioModificacion = @usua_UsuarioModificacion,
@@ -12313,6 +12337,7 @@ BEGIN
 	END CATCH
 END
 GO
+
 /*Editar Proceso*/
 CREATE OR ALTER PROCEDURE Prod.UDP_tbProcesos_Editar
 @proc_ID					INT,
@@ -12322,6 +12347,16 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbProcesos_Editar
 AS
 BEGIN
 	BEGIN TRY
+			IF EXISTS (SELECT proc_Id 
+						FROM Prod.tbProcesos
+						WHERE proc_Descripcion = @proc_Descripcion
+						AND proc_Estado = 0)
+				BEGIN
+					DELETE FROM Prod.tbProcesos
+					WHERE proc_Descripcion = @proc_Descripcion 
+					AND proc_Estado = 0
+				END
+
 			UPDATE Prod.tbProcesos
 			SET proc_Descripcion = @proc_Descripcion,
 			usua_UsuarioModificacion = @usua_UsuarioModificacion,
@@ -12466,22 +12501,12 @@ BEGIN
 					  WHERE tipa_Area = @tipa_area
 					  AND tipa_Estado = 0)
 				BEGIN
-					UPDATE Prod.tbArea
-					SET   tipa_Estado = 0,
-						  usua_UsuarioModificacion = @usua_UsuarioModificacion,
-						  tipa_FechaModificacion = @tipa_FechaModificacion
-					WHERE tipa_Id = @tipa_Id	
-					
-					UPDATE Prod.tbArea
-					SET   tipa_Estado = 1,
-						  usua_UsuarioModificacion = @usua_UsuarioModificacion,
-						  tipa_FechaModificacion = @tipa_FechaModificacion
-					WHERE tipa_Area = @tipa_area	
+					DELETE FROM Prod.tbArea
+					WHERE tipa_Area = @tipa_area
+					AND tipa_Estado = 0
 
-					SELECT 1
 				END
-			ELSE
-				BEGIN
+
 					UPDATE Prod.tbArea
 					SET   tipa_area = @tipa_area,
 						  proc_Id = @proc_Id,
@@ -12490,7 +12515,6 @@ BEGIN
 					WHERE tipa_Id = @tipa_Id	
 
 					SELECT 1
-				END
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
@@ -15016,34 +15040,35 @@ GO
 
 
 CREATE OR ALTER PROC Prod.UDP_tbLotes_Editar
-@lote_Id				  INT,
-@mate_Id				  INT,
-@lote_CodigoLote          NVARCHAR(150),
-@colr_Id                  INT,
-@unme_Id				  INT,
-@prod_Id				  INT,
-@lote_Stock               INT,
-@tipa_Id				  INT,
-@lote_Observcaciones	  NVARCHAR(MAX),
-@usua_UsuarioModificacion INT,
-@lote_FechaModificacion	  DATETIME
+	@lote_Id				  INT,
+	@mate_Id				  INT,
+	@lote_CodigoLote          NVARCHAR(150),
+	@colr_Id                  INT,
+	@unme_Id				  INT,
+	@prod_Id				  INT,
+	@lote_Stock               INT,
+	@tipa_Id				  INT,
+	@lote_Observcaciones	  NVARCHAR(MAX),
+	@usua_UsuarioModificacion INT,
+	@lote_FechaModificacion	  DATETIME
 AS BEGIN
 BEGIN TRY
-	UPDATE Prod.tbLotes 
-	                    SET  mate_Id                   = @mate_Id, 
-						     lote_CodigoLote           = @lote_CodigoLote,
-							 lote_Stock                = @lote_Stock,
-							 lote_CantIngresada        = 0,
-							 colr_Id                   = @colr_Id,
-						     unme_Id                   = @unme_Id,
-							 prod_Id				   = @prod_Id,
-							 tipa_Id                   = @tipa_Id, 
-							 lote_Observaciones        = @lote_Observcaciones,
-							 usua_UsuarioModificacion  = @usua_UsuarioModificacion,
-							 lote_FechaModificacion    = @lote_FechaModificacion
-					   WHERE lote_Id                   = @lote_Id
 
-					  SELECT 1
+	UPDATE Prod.tbLotes 
+	SET  mate_Id                   = @mate_Id, 
+			lote_CodigoLote           = @lote_CodigoLote,
+			lote_Stock                = @lote_Stock,
+			lote_CantIngresada        = 0,
+			colr_Id                   = @colr_Id,
+			unme_Id                   = @unme_Id,
+			prod_Id				   = @prod_Id,
+			tipa_Id                   = @tipa_Id, 
+			lote_Observaciones        = @lote_Observcaciones,
+			usua_UsuarioModificacion  = @usua_UsuarioModificacion,
+			lote_FechaModificacion    = @lote_FechaModificacion
+	WHERE lote_Id                   = @lote_Id
+
+	SELECT 1
 END TRY
 BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
