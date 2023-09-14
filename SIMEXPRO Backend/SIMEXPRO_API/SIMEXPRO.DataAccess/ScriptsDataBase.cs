@@ -253,6 +253,8 @@ namespace SIMEXPRO.DataAccess
         public static string EncontrarDeclarantes = "Adua.tbDeclarantes_Find";
 
         public static string FinalizarDeva = "Adua.UDP_tbdeclaracion_Valor_Finalizar";
+
+        public static string CancelarDeva = "Adua.UDP_tbDeclaracionValor_Eliminar";
         #endregion
 
         #region Declarantes
@@ -274,6 +276,8 @@ namespace SIMEXPRO.DataAccess
         public static string InsertDocumentosPersonaJuridica = "Adua.UDP_tbDocumentosContrato_JuridicaInsertar";
         public static string CargarDocumentosPersonaJuridica = "Adua.UDP_tbDocumentosContrato_CargarDocuJuridica";
         public static string EditarDocumentosPersonaJuridica = "Adua.UDP_tbDocumentosContrato_PersonaJuridicaEditar";
+        public static string EliminarDocumentosByPeju_Id = "Adua.UDP_tbDocumentosContratos_DeleteByPeju_Id";
+        public static string EliminarDocumentosCoin_Id = "Adua.UDP_tbDocumentosContratos_DeleteByCoin_Id";
         #endregion
 
         #region Documentos de Soporte
@@ -797,6 +801,11 @@ namespace SIMEXPRO.DataAccess
         public static string PlanificacionPO = "Prod.UDP_Reporte_Planificación_Produccion";
         public static string CostosMaterialesNoBrindados = "Prod.UDP_CostosMaterialesNoBrindados";
         public static string Consumo_Materiales = "Prod.UDP_Reporte_Consumo_Materiales";
+        public static string MaquinasUso = "Prod.UDP_Reporte_MaquinaUso";
+        public static string OrdenesCompraFecha = "Prod.UDP_Reporte_OrdenesDeCompraFecha";
+        public static string Inventario = "Prod.UDP_Reporte_Inventaro";
+        public static string Importaciones = "adua.UDP_Reporte_Importaciones";
+        public static string DevaPendiente = "adua.UDP_Reporte_DevasPendientes";
 
         #endregion
 

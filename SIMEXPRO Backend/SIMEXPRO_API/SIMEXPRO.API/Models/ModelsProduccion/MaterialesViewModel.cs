@@ -25,5 +25,6 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public string usuarioModificaNombre { get; set; }
         public DateTime? mate_FechaModificacion { get; set; }
         public bool? mate_Estado { get; set; }
+        public decimal StockTotal { get; set; }
     }
 }

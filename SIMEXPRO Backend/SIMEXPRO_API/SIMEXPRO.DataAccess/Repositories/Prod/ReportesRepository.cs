@@ -66,6 +66,55 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             var answer = db.Query<tbReportes>(ScriptsDataBase.Consumo_Materiales, parametros, commandType: CommandType.StoredProcedure);
             return answer;
         }
+        
+        public IEnumerable<tbMaquinas> MaquinasUso(tbMaquinas item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@modu_Id", item.modu_Id, DbType.Int32, ParameterDirection.Input);
+            var answer = db.Query<tbMaquinas>(ScriptsDataBase.MaquinasUso, parametros, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
+        
+        public IEnumerable<tbOrdenCompra> OrdenesCompraFecha(tbOrdenCompra item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add ("@FechaInicio", item.orco_FechaEmision, DbType.Date, ParameterDirection.Input);
+            parametros.Add("@FechaFin", item.orco_FechaLimite, DbType.Date, ParameterDirection.Input);
+            var answer = db.Query<tbOrdenCompra>(ScriptsDataBase.OrdenesCompraFecha, parametros, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
+        
+        public IEnumerable<tbOrdenCompra> Inventario(tbMateriales item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add ("@mate_Id", item.mate_Id, DbType.Int32, ParameterDirection.Input);
+            var answer = db.Query<tbOrdenCompra>(ScriptsDataBase.Inventario, parametros, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
+
+
+        public IEnumerable<tbDeclaraciones_Valor> Importaciones(DateTime FechaI, DateTime FechaF)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@FechaInicio", FechaI, DbType.Date, ParameterDirection.Input);
+            parametros.Add("@FechaFin", FechaF, DbType.Date, ParameterDirection.Input);
+            var answer = db.Query<tbDeclaraciones_Valor>(ScriptsDataBase.Importaciones, parametros, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
+        
+        public IEnumerable<tbDeclaraciones_Valor> DevasPendientes(DateTime FechaI, DateTime FechaF)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@FechaInicio", FechaI, DbType.Date, ParameterDirection.Input);
+            parametros.Add("@FechaFin", FechaF, DbType.Date, ParameterDirection.Input);
+            var answer = db.Query<tbDeclaraciones_Valor>(ScriptsDataBase.Importaciones, parametros, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
 
     }
 }

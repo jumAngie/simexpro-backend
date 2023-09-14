@@ -857,6 +857,21 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult CancelarDeva(int deva_Id, int fact_Id, int codi_Id, int base_Id)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _declaraciones_ValorRepository.CancelarDeclaracionValor(deva_Id, fact_Id, codi_Id, base_Id);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
+
         //public ServiceResult ActualizarDeclaraciones_ValorTab2(tbDeclaraciones_Valor item, tbDeclarantes declProv, tbDeclarantes declInte, tbProveedoresDeclaracion itemProv, tbIntermediarios itemInte)
         //{
         //    var result = new ServiceResult();
@@ -1026,6 +1041,39 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var list = _documentosContratosRepository.Delete(item);
+
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+
+        }
+
+        public ServiceResult EliminarDocumentosByPeju_Id(int id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _documentosContratosRepository.EliminarDocumentosByPeju_Id(id);
+
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+
+        }
+
+
+        public ServiceResult EliminarDocumentosByCoin_Id(int id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _documentosContratosRepository.EliminarDocumentosByCoin_Id(id);
 
                 return result.Ok(list);
             }

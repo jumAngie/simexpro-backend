@@ -9,7 +9,7 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
     {
         public int ocpo_Id { get; set; }
         public int prod_Id { get; set; }
-        public int code_Id { get; set; }
+        public int? code_Id { get; set; }
         public int orco_Id { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         public DateTime ocpo_FechaCreacion { get; set; }

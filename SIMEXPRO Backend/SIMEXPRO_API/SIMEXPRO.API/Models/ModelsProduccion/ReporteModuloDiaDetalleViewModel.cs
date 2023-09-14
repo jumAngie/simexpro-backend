@@ -7,6 +7,17 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
 {
     public class ReporteModuloDiaDetalleViewModel
     {
+        public int proc_Id { get; set; }
+
+        public int ensa_Id { get; set; }
+
+        public string orco_Codigo { get; set; }
+
+        public int colr_Id { get; set; }
+
+        public string colr_Nombre { get; set; }
+
+        public string proc_Descripcion { get; set; }
         public int rdet_Id { get; set; }
         public int remo_Id { get; set; }
         public int rdet_TotalDia { get; set; }
@@ -18,10 +29,8 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
 
         public string clie_RTN { get; set; }
         public int code_Id { get; set; }
-        public string colr_Nombre { get; set; }
 
         public string esti_Descripcion { get; set; }
-
 
         public int usua_UsuarioCreacion { get; set; }
         public DateTime rdet_FechaCreacion { get; set; }

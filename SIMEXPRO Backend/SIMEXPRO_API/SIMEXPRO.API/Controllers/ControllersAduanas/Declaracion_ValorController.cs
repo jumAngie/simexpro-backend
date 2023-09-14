@@ -12,7 +12,7 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class Declaracion_ValorController : ControllerBase
+    public class Declaracion_ValorController : Controller
     {
         private readonly AduanaServices _aduanaServices;
         private readonly IMapper _mapper;
@@ -139,6 +139,13 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
         public IActionResult FinalizarPedidoOrden(string deva_Id)
         {
             var datos = _aduanaServices.FinalizarDeva(deva_Id);
+            return Ok(datos);
+        }
+
+        [HttpPost("CancelarDeclaracionValor")]
+        public IActionResult CancelarDeclaracionValor(int deva_Id, int fact_Id, int codi_Id, int base_Id)
+        {
+            var datos = _aduanaServices.CancelarDeva(deva_Id, fact_Id, codi_Id, base_Id);
             return Ok(datos);
         }
     }

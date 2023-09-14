@@ -25,7 +25,12 @@ namespace SIMEXPRO.Entities.Entities
         public int? usua_UsuarioEliminacion { get; set; }
         public DateTime? maqu_FechaEliminacion { get; set; }
         public bool? maqu_Estado { get; set; }
-
+        [NotMapped]
+        public DateTime? deshabilitada { get; set; }
+        [NotMapped]
+        public DateTime? habilitada { get; set; }
+        [NotMapped]
+        public bool EnUso { get; set; }
         [NotMapped]
         public string mmaq_Nombre { get; set; }
 
