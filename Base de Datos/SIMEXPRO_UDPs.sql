@@ -10694,9 +10694,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbCodigoImpuesto_Editar
 AS
 BEGIN
 	BEGIN TRY
-		IF EXISTS (SELECT coim_Id 
-				   FROM Adua.tbCodigoImpuesto
-				   WHERE coim_Descripcion = @coim_Descripcion)
+		IF EXISTS (SELECT coim_Id  FROM Adua.tbCodigoImpuesto WHERE coim_Descripcion = @coim_Descripcion)
 			BEGIN
 				DELETE FROM Adua.tbCodigoImpuesto
 				WHERE coim_Descripcion = @coim_Descripcion
