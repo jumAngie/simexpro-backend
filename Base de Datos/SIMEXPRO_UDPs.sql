@@ -2960,7 +2960,7 @@ BEGIN
 
 			SET @coin_Id =  SCOPE_IDENTITY()
 
-		SELECT  @coin_Id AS coin_Id
+		SELECT CONCAT(@coin_Id, '.',@pers_Id) AS coin_Id
 	COMMIT TRAN
 	END TRY
 	BEGIN CATCH
@@ -3183,6 +3183,22 @@ BEGIN
 	BEGIN TRY
 	BEGIN TRANSACTION
 
+	DECLARE @estadoCivilRep INT;
+		DECLARE @oficioRep	INT;
+
+		IF(@pers_escvRepresentante = 0 AND @pers_OfprRepresentante = 0 )
+	BEGIN
+		SET @estadoCivilRep = NULL;
+		SET @oficioRep = NULL
+	END
+	ELSE
+	BEGIN
+	SET @estadoCivilRep = @pers_escvRepresentante;
+	SET @oficioRep = @pers_OfprRepresentante;
+	END
+
+
+
 		 UPDATE Adua.tbComercianteIndividual 
 			SET [pers_FormaRepresentacion] = @pers_FormaRepresentacion,
 				[usua_UsuarioModificacion] = @usua_UsuarioModificacion,
@@ -3194,11 +3210,13 @@ BEGIN
 				[ofic_Id] = @ofic_Id, 
 				[escv_Id] = @escv_Id,
 				[ofpr_Id] = @ofpr_Id, 
-				[pers_escvRepresentante] = @pers_escvRepresentante,
-				[pers_OfprRepresentante] = @pers_OfprRepresentante,
+				[pers_escvRepresentante] = @estadoCivilRep,
+				[pers_OfprRepresentante] = @oficioRep,
 				[usua_UsuarioModificacion] = @usua_UsuarioModificacion,
 				[pers_FechaModificacion] = @coin_FechaModificacion
 			WHERE [pers_Id] = @pers_Id AND [pers_Estado] = 1
+
+			SELECT 1
 
 	COMMIT TRAN	
 	END TRY
