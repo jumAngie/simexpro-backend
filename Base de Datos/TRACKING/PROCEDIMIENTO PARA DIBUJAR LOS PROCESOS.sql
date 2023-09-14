@@ -29,4 +29,5 @@ BEGIN
 	ON		orderdet.tall_Id = tallas.tall_Id		INNER JOIN [Prod].[tbProcesos] procesos
 	ON		orderdet.proc_IdActual = procesos.proc_Id
 	WHERE	orco_Codigo = @orco_Codigo
+	ORDER BY code_FechaProcActual ASC
 END
