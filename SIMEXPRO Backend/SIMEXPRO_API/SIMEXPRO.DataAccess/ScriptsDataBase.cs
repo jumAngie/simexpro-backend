@@ -800,6 +800,9 @@ namespace SIMEXPRO.DataAccess
         public static string PlanificacionPO = "Prod.UDP_Reporte_Planificación_Produccion";
         public static string CostosMaterialesNoBrindados = "Prod.UDP_CostosMaterialesNoBrindados";
         public static string Consumo_Materiales = "Prod.UDP_Reporte_Consumo_Materiales";
+        public static string MaquinasUso = "Prod.UDP_Reporte_MaquinaUso";
+        public static string OrdenesCompraFecha = "Prod.UDP_Reporte_OrdenesDeCompraFecha";
+        public static string Inventario = "Prod.UDP_Reporte_Inventaro";
 
         #endregion
 

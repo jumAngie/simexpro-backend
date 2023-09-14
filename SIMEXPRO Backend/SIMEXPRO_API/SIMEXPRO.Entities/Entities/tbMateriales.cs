@@ -23,6 +23,8 @@ namespace SIMEXPRO.Entities.Entities
         public string subc_Descripcion { get; set; }
         [NotMapped]
         public int cate_Id { get; set; }
+        [NotMapped]
+        public decimal StockTotal { get; set; }
 
         [NotMapped]
         public string cate_Descripcion { get; set; }

@@ -7028,19 +7028,12 @@ END
 GO
 
 
-CREATE OR ALTER PROCEDURE [Adua].[UDP_tbFacturas_Eliminar]
+CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbFacturas_Eliminar]
 	@fact_Id			INT
 AS
 BEGIN
 	BEGIN TRANSACTION
 	BEGIN TRY
-
-	DECLARE @respuesta INT
-	EXEC dbo.UDP_ValidarReferencias 'fact_Id', @fact_Id,'Adua.tbFacturas',@respuesta OUTPUT
-
-	SELECT @respuesta AS Resultado
-	IF(@respuesta = 1)
-		BEGIN
 
 			DELETE FROM Adua.tbItems
 			WHERE fact_Id = @fact_Id
@@ -7050,13 +7043,12 @@ BEGIN
 
 			SELECT 1
 
-		END
 		COMMIT TRAN
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
 		ROLLBACK TRAN
-	END CATCH
+	END CATCH
 END
 
 
@@ -7687,7 +7679,7 @@ END
 
 
 GO
-CREATE OR ALTER PROCEDURE Adua.UDP_tbBaseCalculos_Editar 
+ALTER   PROCEDURE [Adua].[UDP_tbBaseCalculos_Editar] 
 	@base_Id								INT,
 	@deva_Id								INT, 
 	@base_PrecioFactura						DECIMAL(18,2), 
@@ -7719,100 +7711,221 @@ AS
 BEGIN
 	BEGIN TRANSACTION
 	BEGIN TRY
-		UPDATE Adua.tbBaseCalculos
-		SET		deva_Id = @deva_Id, 
-				base_PrecioFactura = @base_PrecioFactura, 
-				base_PagosIndirectos = @base_PagosIndirectos, 
-				base_PrecioReal = @base_PrecioReal, 
-				base_MontCondicion = @base_MontCondicion, 
-				base_MontoReversion = @base_MontoReversion, 
-				base_ComisionCorrelaje = @base_ComisionCorrelaje, 
-				base_Gasto_Envase_Embalaje = @base_Gasto_Envase_Embalaje, 
-				base_ValoresMateriales_Incorporado = @base_ValoresMateriales_Incorporado, 
-				base_Valor_Materiales_Utilizados = @base_Valor_Materiales_Utilizados, 
-				base_Valor_Materiales_Consumidos = @base_Valor_Materiales_Consumidos, 
-				base_Valor_Ingenieria_Importado = @base_Valor_Ingenieria_Importado, 
-				base_Valor_Canones = @base_Valor_Canones, 
-				base_Gasto_TransporteM_Importada = @base_Gasto_TransporteM_Importada, 
-				base_Gastos_Carga_Importada = @base_Gastos_Carga_Importada, 
-				base_Costos_Seguro = @base_Costos_Seguro, 
-				base_Total_Ajustes_Precio_Pagado = @base_Total_Ajustes_Precio_Pagado, 
-				base_Gastos_Asistencia_Tecnica = @base_Gastos_Asistencia_Tecnica, 
-				base_Gastos_Transporte_Posterior = @base_Gastos_Transporte_Posterior, 
-				base_Derechos_Impuestos = @base_Derechos_Impuestos, 
-				base_Monto_Intereses = @base_Monto_Intereses, 
-				base_Deducciones_Legales = @base_Deducciones_Legales, 
-				base_Total_Deducciones_Precio = @base_Total_Deducciones_Precio, 
-				base_Valor_Aduana = @base_Valor_Aduana, 
-				usua_UsuarioModificacion = @usua_UsuarioModificacion, 
-				base_FechaModificacion = @base_FechaModificacion
-		WHERE base_Id = @base_Id
+	IF(@base_Id <> 0 )
+		BEGIN
+			UPDATE Adua.tbBaseCalculos
+			SET		deva_Id = @deva_Id, 
+					base_PrecioFactura = @base_PrecioFactura, 
+					base_PagosIndirectos = @base_PagosIndirectos, 
+					base_PrecioReal = @base_PrecioReal, 
+					base_MontCondicion = @base_MontCondicion, 
+					base_MontoReversion = @base_MontoReversion, 
+					base_ComisionCorrelaje = @base_ComisionCorrelaje, 
+					base_Gasto_Envase_Embalaje = @base_Gasto_Envase_Embalaje, 
+					base_ValoresMateriales_Incorporado = @base_ValoresMateriales_Incorporado, 
+					base_Valor_Materiales_Utilizados = @base_Valor_Materiales_Utilizados, 
+					base_Valor_Materiales_Consumidos = @base_Valor_Materiales_Consumidos, 
+					base_Valor_Ingenieria_Importado = @base_Valor_Ingenieria_Importado, 
+					base_Valor_Canones = @base_Valor_Canones, 
+					base_Gasto_TransporteM_Importada = @base_Gasto_TransporteM_Importada, 
+					base_Gastos_Carga_Importada = @base_Gastos_Carga_Importada, 
+					base_Costos_Seguro = @base_Costos_Seguro, 
+					base_Total_Ajustes_Precio_Pagado = @base_Total_Ajustes_Precio_Pagado, 
+					base_Gastos_Asistencia_Tecnica = @base_Gastos_Asistencia_Tecnica, 
+					base_Gastos_Transporte_Posterior = @base_Gastos_Transporte_Posterior, 
+					base_Derechos_Impuestos = @base_Derechos_Impuestos, 
+					base_Monto_Intereses = @base_Monto_Intereses, 
+					base_Deducciones_Legales = @base_Deducciones_Legales, 
+					base_Total_Deducciones_Precio = @base_Total_Deducciones_Precio, 
+					base_Valor_Aduana = @base_Valor_Aduana, 
+					usua_UsuarioModificacion = @usua_UsuarioModificacion, 
+					base_FechaModificacion = @base_FechaModificacion
+			WHERE base_Id = @base_Id
 
-		INSERT INTO Adua.tbBaseCalculosHistorial(base_Id,
-													 deva_Id, 
-													 base_PrecioFactura, 
-													 base_PagosIndirectos, 
-													 base_PrecioReal, 
-													 base_MontCondicion, 
-													 base_MontoReversion, 
-													 base_ComisionCorrelaje, 
-													 base_Gasto_Envase_Embalaje, 
-													 base_ValoresMateriales_Incorporado, 
-													 base_Valor_Materiales_Utilizados, 
-													 base_Valor_Materiales_Consumidos, 
-													 base_Valor_Ingenieria_Importado, 
-													 base_Valor_Canones, 
-													 base_Gasto_TransporteM_Importada, 
-													 base_Gastos_Carga_Importada, 
-													 base_Costos_Seguro, 
-													 base_Total_Ajustes_Precio_Pagado, 
-													 base_Gastos_Asistencia_Tecnica, 
-													 base_Gastos_Transporte_Posterior, 
-													 base_Derechos_Impuestos, 
-													 base_Monto_Intereses, 
-													 base_Deducciones_Legales, 
-													 base_Total_Deducciones_Precio, 
-													 base_Valor_Aduana, 
-													 hbas_UsuarioAccion,
-													 hbas_FechaAccion,
-													 hbas_Accion)
-		VALUES (@base_Id,
-				@deva_Id, 
-				@base_PrecioFactura, 
-				@base_PagosIndirectos, 
-				@base_PrecioReal, 
-				@base_MontCondicion, 
-				@base_MontoReversion, 
-				@base_ComisionCorrelaje, 
-				@base_Gasto_Envase_Embalaje, 
-				@base_ValoresMateriales_Incorporado, 
-				@base_Valor_Materiales_Utilizados, 
-				@base_Valor_Materiales_Consumidos, 
-				@base_Valor_Ingenieria_Importado, 
-				@base_Valor_Canones, 
-				@base_Gasto_TransporteM_Importada, 
-				@base_Gastos_Carga_Importada, 
-				@base_Costos_Seguro, 
-				@base_Total_Ajustes_Precio_Pagado, 
-				@base_Gastos_Asistencia_Tecnica, 
-				@base_Gastos_Transporte_Posterior, 
-				@base_Derechos_Impuestos, 
-				@base_Monto_Intereses, 
-				@base_Deducciones_Legales, 
-				@base_Total_Deducciones_Precio, 
-				@base_Valor_Aduana, 
-				@usua_UsuarioModificacion, 
-				@base_FechaModificacion,
-				'Editar')
+			INSERT INTO Adua.tbBaseCalculosHistorial(base_Id,
+														 deva_Id, 
+														 base_PrecioFactura, 
+														 base_PagosIndirectos, 
+														 base_PrecioReal, 
+														 base_MontCondicion, 
+														 base_MontoReversion, 
+														 base_ComisionCorrelaje, 
+														 base_Gasto_Envase_Embalaje, 
+														 base_ValoresMateriales_Incorporado, 
+														 base_Valor_Materiales_Utilizados, 
+														 base_Valor_Materiales_Consumidos, 
+														 base_Valor_Ingenieria_Importado, 
+														 base_Valor_Canones, 
+														 base_Gasto_TransporteM_Importada, 
+														 base_Gastos_Carga_Importada, 
+														 base_Costos_Seguro, 
+														 base_Total_Ajustes_Precio_Pagado, 
+														 base_Gastos_Asistencia_Tecnica, 
+														 base_Gastos_Transporte_Posterior, 
+														 base_Derechos_Impuestos, 
+														 base_Monto_Intereses, 
+														 base_Deducciones_Legales, 
+														 base_Total_Deducciones_Precio, 
+														 base_Valor_Aduana, 
+														 hbas_UsuarioAccion,
+														 hbas_FechaAccion,
+														 hbas_Accion)
+			VALUES (@base_Id,
+					@deva_Id, 
+					@base_PrecioFactura, 
+					@base_PagosIndirectos, 
+					@base_PrecioReal, 
+					@base_MontCondicion, 
+					@base_MontoReversion, 
+					@base_ComisionCorrelaje, 
+					@base_Gasto_Envase_Embalaje, 
+					@base_ValoresMateriales_Incorporado, 
+					@base_Valor_Materiales_Utilizados, 
+					@base_Valor_Materiales_Consumidos, 
+					@base_Valor_Ingenieria_Importado, 
+					@base_Valor_Canones, 
+					@base_Gasto_TransporteM_Importada, 
+					@base_Gastos_Carga_Importada, 
+					@base_Costos_Seguro, 
+					@base_Total_Ajustes_Precio_Pagado, 
+					@base_Gastos_Asistencia_Tecnica, 
+					@base_Gastos_Transporte_Posterior, 
+					@base_Derechos_Impuestos, 
+					@base_Monto_Intereses, 
+					@base_Deducciones_Legales, 
+					@base_Total_Deducciones_Precio, 
+					@base_Valor_Aduana, 
+					@usua_UsuarioModificacion, 
+					@base_FechaModificacion,
+					'Editar')
 
-		SELECT 1
+			SELECT 1
+		END
+	ELSE
+		BEGIN
+			DECLARE @base_IDInsertar INT;
 
+			INSERT INTO Adua.tbBaseCalculos(deva_Id, 
+												base_PrecioFactura, 
+												base_PagosIndirectos, 
+												base_PrecioReal, 
+												base_MontCondicion, 
+												base_MontoReversion, 
+												base_ComisionCorrelaje, 
+												base_Gasto_Envase_Embalaje, 
+												base_ValoresMateriales_Incorporado, 
+												base_Valor_Materiales_Utilizados, 
+												base_Valor_Materiales_Consumidos, 
+												base_Valor_Ingenieria_Importado, 
+												base_Valor_Canones, 
+												base_Gasto_TransporteM_Importada, 
+												base_Gastos_Carga_Importada, 
+												base_Costos_Seguro, 
+												base_Total_Ajustes_Precio_Pagado, 
+												base_Gastos_Asistencia_Tecnica, 
+												base_Gastos_Transporte_Posterior, 
+												base_Derechos_Impuestos, 
+												base_Monto_Intereses, 
+												base_Deducciones_Legales, 
+												base_Total_Deducciones_Precio, 
+												base_Valor_Aduana, 
+												usua_UsuarioCreacion, 
+												base_FechaCreacion)
+			VALUES (@deva_Id, 
+					@base_PrecioFactura, 
+					@base_PagosIndirectos, 
+					@base_PrecioReal, 
+					@base_MontCondicion, 
+					@base_MontoReversion, 
+					@base_ComisionCorrelaje, 
+					@base_Gasto_Envase_Embalaje, 
+					@base_ValoresMateriales_Incorporado, 
+					@base_Valor_Materiales_Utilizados, 
+					@base_Valor_Materiales_Consumidos, 
+					@base_Valor_Ingenieria_Importado, 
+					@base_Valor_Canones, 
+					@base_Gasto_TransporteM_Importada, 
+					@base_Gastos_Carga_Importada, 
+					@base_Costos_Seguro, 
+					@base_Total_Ajustes_Precio_Pagado, 
+					@base_Gastos_Asistencia_Tecnica, 
+					@base_Gastos_Transporte_Posterior, 
+					@base_Derechos_Impuestos, 
+					@base_Monto_Intereses, 
+					@base_Deducciones_Legales, 
+					@base_Total_Deducciones_Precio, 
+					@base_Valor_Aduana, 
+					@usua_UsuarioModificacion, 
+					@base_FechaModificacion)
+
+			SET @base_IDInsertar = SCOPE_IDENTITY();
+
+			INSERT INTO Adua.tbBaseCalculosHistorial(base_Id,
+														 deva_Id, 
+														 base_PrecioFactura, 
+														 base_PagosIndirectos, 
+														 base_PrecioReal, 
+														 base_MontCondicion, 
+														 base_MontoReversion, 
+														 base_ComisionCorrelaje, 
+														 base_Gasto_Envase_Embalaje, 
+														 base_ValoresMateriales_Incorporado, 
+														 base_Valor_Materiales_Utilizados, 
+														 base_Valor_Materiales_Consumidos, 
+														 base_Valor_Ingenieria_Importado, 
+														 base_Valor_Canones, 
+														 base_Gasto_TransporteM_Importada, 
+														 base_Gastos_Carga_Importada, 
+														 base_Costos_Seguro, 
+														 base_Total_Ajustes_Precio_Pagado, 
+														 base_Gastos_Asistencia_Tecnica, 
+														 base_Gastos_Transporte_Posterior, 
+														 base_Derechos_Impuestos, 
+														 base_Monto_Intereses, 
+														 base_Deducciones_Legales, 
+														 base_Total_Deducciones_Precio, 
+														 base_Valor_Aduana, 
+														 hbas_UsuarioAccion,
+														 hbas_FechaAccion,
+														 hbas_Accion)
+			VALUES (SCOPE_IDENTITY(),
+					@deva_Id, 
+					@base_PrecioFactura, 
+					@base_PagosIndirectos, 
+					@base_PrecioReal, 
+					@base_MontCondicion, 
+					@base_MontoReversion, 
+					@base_ComisionCorrelaje, 
+					@base_Gasto_Envase_Embalaje, 
+					@base_ValoresMateriales_Incorporado, 
+					@base_Valor_Materiales_Utilizados, 
+					@base_Valor_Materiales_Consumidos, 
+					@base_Valor_Ingenieria_Importado, 
+					@base_Valor_Canones, 
+					@base_Gasto_TransporteM_Importada, 
+					@base_Gastos_Carga_Importada, 
+					@base_Costos_Seguro, 
+					@base_Total_Ajustes_Precio_Pagado, 
+					@base_Gastos_Asistencia_Tecnica, 
+					@base_Gastos_Transporte_Posterior, 
+					@base_Derechos_Impuestos, 
+					@base_Monto_Intereses, 
+					@base_Deducciones_Legales, 
+					@base_Total_Deducciones_Precio, 
+					@base_Valor_Aduana, 
+					@usua_UsuarioModificacion, 
+					@base_FechaModificacion,
+					'Insertar')
+
+			SELECT @base_IDInsertar
+
+		END
 		COMMIT TRAN
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
 		ROLLBACK TRAN
-	END CATCH
+	END CATCH
 END
 
 GO
@@ -9651,7 +9764,7 @@ END
 
 /*Editar condiciones*/
 GO
-CREATE OR ALTER PROCEDURE Adua.UDP_tbCondiciones_Editar 
+ALTER   PROCEDURE [Adua].[UDP_tbCondiciones_Editar] 
 	@codi_Id									INT,
 	@deva_Id									INT, 
 	@codi_Restricciones_Utilizacion				BIT, 
@@ -9671,64 +9784,141 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbCondiciones_Editar
 AS
 BEGIN
 	BEGIN TRY
-		UPDATE Adua.tbCondiciones
-		SET		deva_Id = @deva_Id, 
-				codi_Restricciones_Utilizacion = @codi_Restricciones_Utilizacion, 
-				codi_Indicar_Restricciones_Utilizacion = @codi_Indicar_Restricciones_Utilizacion, 
-				codi_Depende_Precio_Condicion = @codi_Depende_Precio_Condicion, 
-				codi_Indicar_Existe_Condicion = @codi_Indicar_Existe_Condicion, 
-				codi_Condicionada_Revertir = @codi_Condicionada_Revertir, 
-				codi_Vinculacion_Comprador_Vendedor = @codi_Vinculacion_Comprador_Vendedor, 
-				codi_Tipo_Vinculacion = @codi_Tipo_Vinculacion, 
-				codi_Vinculacion_Influye_Precio = @codi_Vinculacion_Influye_Precio, 
-				codi_Pagos_Descuentos_Indirectos = @codi_Pagos_Descuentos_Indirectos, 
-				codi_Concepto_Monto_Declarado = @codi_Concepto_Monto_Declarado, 
-				codi_Existen_Canones = @codi_Existen_Canones, 
-				codi_Indicar_Canones = @codi_Indicar_Canones, 
-				usua_UsuarioModificacion = @usua_UsuarioModificacion, 
-				codi_FechaModificacion = @codi_FechaModificacion
-		WHERE codi_Id = @codi_Id
+		IF(@codi_Id <> 0)
+			BEGIN
+						UPDATE Adua.tbCondiciones
+					SET		deva_Id = @deva_Id, 
+							codi_Restricciones_Utilizacion = @codi_Restricciones_Utilizacion, 
+							codi_Indicar_Restricciones_Utilizacion = @codi_Indicar_Restricciones_Utilizacion, 
+							codi_Depende_Precio_Condicion = @codi_Depende_Precio_Condicion, 
+							codi_Indicar_Existe_Condicion = @codi_Indicar_Existe_Condicion, 
+							codi_Condicionada_Revertir = @codi_Condicionada_Revertir, 
+							codi_Vinculacion_Comprador_Vendedor = @codi_Vinculacion_Comprador_Vendedor, 
+							codi_Tipo_Vinculacion = @codi_Tipo_Vinculacion, 
+							codi_Vinculacion_Influye_Precio = @codi_Vinculacion_Influye_Precio, 
+							codi_Pagos_Descuentos_Indirectos = @codi_Pagos_Descuentos_Indirectos, 
+							codi_Concepto_Monto_Declarado = @codi_Concepto_Monto_Declarado, 
+							codi_Existen_Canones = @codi_Existen_Canones, 
+							codi_Indicar_Canones = @codi_Indicar_Canones, 
+							usua_UsuarioModificacion = @usua_UsuarioModificacion, 
+							codi_FechaModificacion = @codi_FechaModificacion
+					WHERE codi_Id = @codi_Id
 
-		INSERT INTO Adua.tbCondicionesHistorial(codi_Id,
-													deva_Id, 
-													codi_Restricciones_Utilizacion, 
-													codi_Indicar_Restricciones_Utilizacion, 
-													codi_Depende_Precio_Condicion, 
-													codi_Indicar_Existe_Condicion, 
-													codi_Condicionada_Revertir, 
-													codi_Vinculacion_Comprador_Vendedor, 
-													codi_Tipo_Vinculacion, 
-													codi_Vinculacion_Influye_Precio, 
-													codi_Pagos_Descuentos_Indirectos, 
-													codi_Concepto_Monto_Declarado, 
-													codi_Existen_Canones, 
-													codi_Indicar_Canones, 
-													hcod_UsuarioAccion,
-													hcod_FechaAccion,
-													hcod_Accion)
-		VALUES (@codi_Id,
-				@deva_Id, 
-				@codi_Restricciones_Utilizacion, 
-				@codi_Indicar_Restricciones_Utilizacion, 
-				@codi_Depende_Precio_Condicion, 
-				@codi_Indicar_Existe_Condicion, 
-				@codi_Condicionada_Revertir, 
-				@codi_Vinculacion_Comprador_Vendedor, 
-				@codi_Tipo_Vinculacion, 
-				@codi_Vinculacion_Influye_Precio, 
-				@codi_Pagos_Descuentos_Indirectos, 
-				@codi_Concepto_Monto_Declarado, 
-				@codi_Existen_Canones, 
-				@codi_Indicar_Canones, 
-				@usua_UsuarioModificacion, 
-				@codi_FechaModificacion,
-				'Editar')
+					INSERT INTO Adua.tbCondicionesHistorial(codi_Id,
+																deva_Id, 
+																codi_Restricciones_Utilizacion, 
+																codi_Indicar_Restricciones_Utilizacion, 
+																codi_Depende_Precio_Condicion, 
+																codi_Indicar_Existe_Condicion, 
+																codi_Condicionada_Revertir, 
+																codi_Vinculacion_Comprador_Vendedor, 
+																codi_Tipo_Vinculacion, 
+																codi_Vinculacion_Influye_Precio, 
+																codi_Pagos_Descuentos_Indirectos, 
+																codi_Concepto_Monto_Declarado, 
+																codi_Existen_Canones, 
+																codi_Indicar_Canones, 
+																hcod_UsuarioAccion,
+																hcod_FechaAccion,
+																hcod_Accion)
+					VALUES (@codi_Id,
+							@deva_Id, 
+							@codi_Restricciones_Utilizacion, 
+							@codi_Indicar_Restricciones_Utilizacion, 
+							@codi_Depende_Precio_Condicion, 
+							@codi_Indicar_Existe_Condicion, 
+							@codi_Condicionada_Revertir, 
+							@codi_Vinculacion_Comprador_Vendedor, 
+							@codi_Tipo_Vinculacion, 
+							@codi_Vinculacion_Influye_Precio, 
+							@codi_Pagos_Descuentos_Indirectos, 
+							@codi_Concepto_Monto_Declarado, 
+							@codi_Existen_Canones, 
+							@codi_Indicar_Canones, 
+							@usua_UsuarioModificacion, 
+							@codi_FechaModificacion,
+							'Editar')							
 
-		SELECT 1
+					SELECT 1
+			END
+		ELSE
+			BEGIN
+			DECLARE @codi_IdInsert INT;
+
+					INSERT INTO Adua.tbCondiciones(deva_Id, 
+													   codi_Restricciones_Utilizacion, 
+													   codi_Indicar_Restricciones_Utilizacion, 
+													   codi_Depende_Precio_Condicion, 
+													   codi_Indicar_Existe_Condicion, 
+													   codi_Condicionada_Revertir, 
+													   codi_Vinculacion_Comprador_Vendedor, 
+													   codi_Tipo_Vinculacion, 
+													   codi_Vinculacion_Influye_Precio, 
+													   codi_Pagos_Descuentos_Indirectos, 
+													   codi_Concepto_Monto_Declarado, 
+													   codi_Existen_Canones, 
+													   codi_Indicar_Canones, 
+													   usua_UsuarioCreacion, 
+													   codi_FechaCreacion)
+					VALUES (@deva_Id, 
+							@codi_Restricciones_Utilizacion, 
+							@codi_Indicar_Restricciones_Utilizacion, 
+							@codi_Depende_Precio_Condicion, 
+							@codi_Indicar_Existe_Condicion, 
+							@codi_Condicionada_Revertir, 
+							@codi_Vinculacion_Comprador_Vendedor, 
+							@codi_Tipo_Vinculacion, 
+							@codi_Vinculacion_Influye_Precio, 
+							@codi_Pagos_Descuentos_Indirectos, 
+							@codi_Concepto_Monto_Declarado, 
+							@codi_Existen_Canones, 
+							@codi_Indicar_Canones, 
+							@usua_UsuarioModificacion, 
+							@codi_FechaModificacion)
+
+					SET @codi_IdInsert = SCOPE_IDENTITY()
+
+					INSERT INTO Adua.tbCondicionesHistorial(codi_Id,
+																deva_Id, 
+																codi_Restricciones_Utilizacion, 
+																codi_Indicar_Restricciones_Utilizacion, 
+																codi_Depende_Precio_Condicion, 
+																codi_Indicar_Existe_Condicion, 
+																codi_Condicionada_Revertir, 
+																codi_Vinculacion_Comprador_Vendedor, 
+																codi_Tipo_Vinculacion, 
+																codi_Vinculacion_Influye_Precio, 
+																codi_Pagos_Descuentos_Indirectos, 
+																codi_Concepto_Monto_Declarado, 
+																codi_Existen_Canones, 
+																codi_Indicar_Canones, 
+																hcod_UsuarioAccion,
+																hcod_FechaAccion,
+																hcod_Accion)
+					VALUES (SCOPE_IDENTITY(),
+							@deva_Id, 
+							@codi_Restricciones_Utilizacion, 
+							@codi_Indicar_Restricciones_Utilizacion, 
+							@codi_Depende_Precio_Condicion, 
+							@codi_Indicar_Existe_Condicion, 
+							@codi_Condicionada_Revertir, 
+							@codi_Vinculacion_Comprador_Vendedor, 
+							@codi_Tipo_Vinculacion, 
+							@codi_Vinculacion_Influye_Precio, 
+							@codi_Pagos_Descuentos_Indirectos, 
+							@codi_Concepto_Monto_Declarado, 
+							@codi_Existen_Canones, 
+							@codi_Indicar_Canones, 
+							@usua_UsuarioModificacion, 
+							@codi_FechaModificacion,
+							'Insertar')
+
+					SELECT @codi_IdInsert
+			END
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END CATCH
+	END CATCH
 END
 GO
 
