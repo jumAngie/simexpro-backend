@@ -23,12 +23,13 @@ namespace SIMEXPRO.Entities.Entities
         public DateTime coco_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }
         [NotMapped]
-        public string UsuarioNombreModificacion { get; set; }
+        public string UsuarioModificadorNombre { get; set; }
         public DateTime? coco_FechaModificacion { get; set; }
         public int? usua_UsuarioEliminacion { get; set; }
         [NotMapped]
         public string UsuarioNombreEliminacion { get; set; }
         public DateTime? coco_FechaEliminacion { get; set; }
+
         public bool? coco_Estado { get; set; }
 
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
