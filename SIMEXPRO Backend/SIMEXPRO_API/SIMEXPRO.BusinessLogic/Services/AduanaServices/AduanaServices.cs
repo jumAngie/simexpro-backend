@@ -1066,6 +1066,23 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
 
         }
+
+
+        public ServiceResult EliminarDocumentosByCoin_Id(int id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _documentosContratosRepository.EliminarDocumentosByCoin_Id(id);
+
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+
+        }
         #endregion
 
         #region DocumentosdeSoporte

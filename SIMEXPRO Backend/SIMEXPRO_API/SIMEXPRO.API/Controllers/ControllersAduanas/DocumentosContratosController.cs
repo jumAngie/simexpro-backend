@@ -96,6 +96,15 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(respuesta);
         }
 
+
+        [HttpPost("EliminarByCoin_Id")]
+        public IActionResult EliminarDocumentosByCoin_Id(int id)
+        {
+            var respuesta = _aduanaServices.EliminarDocumentosByCoin_Id(id);
+            return Ok(respuesta);
+        }
+
+
     }
 
 }

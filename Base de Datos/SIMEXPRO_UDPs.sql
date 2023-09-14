@@ -3188,6 +3188,22 @@ END
 GO
 
 
+CREATE OR ALTER PROCEDURE [Adua].[UDP_tbDocumentosContratos_DeleteByCoin_Id]
+@coin_Id INT
+AS
+	BEGIN
+		BEGIN TRY
+			DELETE Adua.tbDocumentosContratos WHERE coin_Id = @coin_Id
+			SELECT 1
+		END TRY
+
+		BEGIN CATCH
+			SELECT 'Error Message: ' + ERROR_MESSAGE()
+		END CATCH
+	END
+GO
+
+
 
 /*Editar Comersiante Individual*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Editar

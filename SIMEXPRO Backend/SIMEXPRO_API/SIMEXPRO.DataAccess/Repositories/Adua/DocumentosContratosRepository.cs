@@ -147,6 +147,23 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
         }
 
+
+        public RequestStatus EliminarDocumentosByCoin_Id(int id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@coin_Id", id, DbType.Int32, ParameterDirection.Input);
+
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.EliminarDocumentosCoin_Id, parametros, commandType: CommandType.StoredProcedure);
+            return new RequestStatus()
+            {
+                MessageStatus = respuesta
+            };
+
+        }
+
         public RequestStatus Insert(tbDocumentosContratos item)
         {
             throw new NotImplementedException();
