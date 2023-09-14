@@ -10468,6 +10468,13 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbCodigoImpuesto_Editar
 AS
 BEGIN
 	BEGIN TRY
+		IF EXISTS (SELECT coim_Id 
+				   FROM Adua.tbCodigoImpuesto
+				   WHERE coim_Descripcion = @coim_Descripcion)
+			BEGIN
+				DELETE FROM Adua.tbCodigoImpuesto
+				WHERE coim_Descripcion = @coim_Descripcion
+			END
 		UPDATE  Adua.tbCodigoImpuesto
 		SET		coim_Descripcion = @coim_Descripcion,
 				usua_UsuarioModificacion = @usua_UsuarioModificacion,
@@ -16033,6 +16040,16 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbRegimenesAduaneros_Editar
 AS
 BEGIN
 	BEGIN TRY
+		IF EXISTS (SELECT regi_Id 
+				   FROM Adua.tbRegimenesAduaneros
+				   WHERE regi_Descripcion = @regi_Descripcion
+				   AND regi_Estado = 0)
+			BEGIN
+				DELETE FROM Adua.tbRegimenesAduaneros
+				WHERE regi_Descripcion = @regi_Descripcion
+				AND regi_Estado = 0
+			END
+
 		UPDATE Adua.tbRegimenesAduaneros
 		   SET regi_Codigo = @regi_Codigo,
 		       regi_Descripcion = @regi_Descripcion,
