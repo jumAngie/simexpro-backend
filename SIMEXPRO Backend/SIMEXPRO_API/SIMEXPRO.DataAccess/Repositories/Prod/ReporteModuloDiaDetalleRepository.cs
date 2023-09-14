@@ -36,7 +36,9 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
+
             parametros.Add("@remo_Id", item.remo_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@ensa_Id", item.ensa_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@rdet_TotalDia", item.rdet_TotalDia, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@rdet_TotalDanado", item.rdet_TotalDanado, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@code_Id", item.code_Id, DbType.Int32, ParameterDirection.Input);
@@ -65,6 +67,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
+            parametros.Add("@ensa_Id", item.ensa_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@rdet_Id", item.rdet_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@remo_Id", item.remo_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@rdet_TotalDia", item.rdet_TotalDia, DbType.Int32, ParameterDirection.Input);

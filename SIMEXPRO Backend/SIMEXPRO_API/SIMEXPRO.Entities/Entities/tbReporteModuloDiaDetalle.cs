@@ -9,6 +9,25 @@ namespace SIMEXPRO.Entities.Entities
 {
     public partial class tbReporteModuloDiaDetalle
     {
+
+        [NotMapped]
+        public int proc_Id { get; set; }
+
+        [NotMapped]
+        public int ensa_Id { get; set; }
+
+        [NotMapped]
+        public string orco_Codigo { get; set; }
+
+        [NotMapped]
+        public int colr_Id { get; set; }
+
+        [NotMapped]
+        public string colr_Nombre { get; set; }
+
+        [NotMapped]
+        public string proc_Descripcion { get; set; }
+
         public int rdet_Id { get; set; }
         public int remo_Id { get; set; }
         public int rdet_TotalDia { get; set; }
@@ -19,9 +38,6 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string Sexo { get; set; }
 
-
-        [NotMapped]
-        public string colr_Nombre { get; set; }
         [NotMapped]
         public string clie_Nombre_Contacto { get; set; }
 

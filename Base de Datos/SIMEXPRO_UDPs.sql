@@ -12186,38 +12186,56 @@ GO
 
 --*****ReporteModuloDia*****-
 --*****Listado*****--
-CREATE OR ALTER PROCEDURE Prod.UDP_tbReporteModuloDia_Listar
+CREATE OR ALTER PROCEDURE [Prod].[UDP_tbReporteModuloDia_Listar]
 AS
 BEGIN
 SELECT	remo_Id, 
 		modu.modu_Id, 
 		modu.modu_Nombre,
+		empleados.empl_Nombres + ' ' + empleados.empl_Apellidos as Empleado,
 		remo_Fecha,
 		remo_TotalDia - remo_TotalDanado as CantidadTotal,
 		remo_TotalDia, 
 		remo_TotalDanado, 
-		(SELECT	rdet_Id, 
-			remo_Id, 
-			rdet_TotalDia, 
-			rdet_TotalDanado, 
-			OrdenCompra.orco_Id,
-			colores.colr_Nombre,
-			case ordencompradetalle.code_Sexo 
-			when 'M' then 'Masculino'
-			when 'F' then 'Femenino'
-			else ordencompradetalle.code_Sexo end as Sexo,
-			clientes.[clie_Nombre_Contacto],
-			clientes.[clie_RTN],
- 			ReporteModuloDia.code_Id, 
-			ordencompradetalle.esti_Id,
-			estilos.esti_Descripcion
-	FROM	Prod.tbReporteModuloDiaDetalle ReporteModuloDia
-			INNER JOIN Prod.tbOrdenCompraDetalles ordencompradetalle  	ON  ReporteModuloDia.code_Id = ordencompradetalle.code_Id 
-			INNER JOIN Prod.tbEstilos			estilos					ON ordencompradetalle.esti_Id = estilos.esti_Id
-			INNER JOIN Prod.tbOrdenCompra		OrdenCompra				ON	ordencompradetalle.orco_Id = OrdenCompra.orco_Id
-			INNER JOIN Prod.tbClientes			clientes				ON  OrdenCompra.orco_IdCliente = clientes.clie_Id
-			INNER JOIN Prod.tbColores			colores					ON	ordencompradetalle.code_Id	= colores.colr_Id
-			WHERE rmd.remo_Id = remo_Id AND rdet_Estado = 1 
+		(SELECT	rdet.[rdet_Id], 
+		rdet.[remo_Id], 
+		rdet.[code_Id], 
+		rdet.[ensa_Id], 
+		code.[orco_Id],
+		orco.[orco_Codigo],
+		rdet.[rdet_TotalDia], 
+		rdet.[rdet_TotalDanado], 
+		[proc].[proc_Descripcion],
+		modu.proc_Id,  
+
+		(CASE code.code_Sexo 
+			WHEN 'M' THEN 'Masculino'
+			WHEN 'F' THEN 'Femenino'
+			WHEN 'U' THEN 'Unisex'
+			ELSE code.code_Sexo 
+		END) AS Sexo,
+
+		code.esti_Id,
+		esti.esti_Descripcion, 
+
+		clie.[clie_Nombre_Contacto], 
+		clie.[clie_RTN],
+
+		colr.[colr_Id],
+		colr.[colr_Nombre],
+		rdet.[rdet_Estado] 
+
+		FROM	Prod.tbReporteModuloDiaDetalle			rdet
+				INNER JOIN Prod.tbReporteModuloDia		remo					ON rdet.remo_Id = remo.remo_Id
+				INNER JOIN Prod.tbModulos				modu					ON remo.modu_Id	= modu.modu_Id
+				INNER JOIN Prod.tbOrde_Ensa_Acab_Etiq	ensa					ON rdet.ensa_Id	= ensa.ensa_Id
+				INNER JOIN Prod.tbOrdenCompraDetalles   code				    ON ensa.code_Id	= code.code_Id
+				INNER JOIN Prod.tbOrdenCompra			orco					ON code.orco_Id	= orco.orco_Id
+				INNER JOIN Prod.tbClientes				clie					ON orco.orco_IdCliente = clie.clie_Id
+				INNER JOIN Prod.tbProcesos				[proc]					ON modu.proc_Id	= [proc].proc_Id
+				INNER JOIN Prod.tbEstilos				esti					ON code.esti_Id = esti.esti_Id
+				INNER JOIN Prod.tbColores				colr					ON code.colr_Id	= colr.colr_Id
+		WHERE rdet.remo_Id = rmd.remo_Id AND rdet_Estado = 1
 			FOR JSON PATH) as detalles,
 		rmd.usua_UsuarioCreacion, 
 		crea.usua_Nombre AS usua_NombreUsuarioCreacion, 
@@ -12229,9 +12247,10 @@ SELECT	remo_Id,
 		remo_Finalizado 
 FROM	Prod.tbReporteModuloDia rmd 
 		INNER JOIN Prod.tbModulos modu				ON rmd.modu_Id = modu.modu_Id 
+		INNER JOIN Gral.tbEmpleados  empleados		ON modu.empr_Id	= empleados.empl_Id
 		INNER JOIN Acce.tbUsuarios crea				ON crea.usua_Id = rmd.usua_UsuarioCreacion 
 		LEFT JOIN  Acce.tbUsuarios modi				ON modi.usua_Id = rmd.usua_UsuarioModificacion 	
-ORDER BY remo_Fecha desc
+ORDER BY rmd.remo_FechaCreacion desc
 END
 GO
 
@@ -14780,49 +14799,62 @@ GO
 
 --------------------------------------------------------------- TABLA REPORTE MODULO DIA DETALLE ---------------------------------------------------------------
 /* LISTAR REPORTE MODULO DIA DETALLE */
-CREATE OR ALTER PROCEDURE Prod.UDP_tbReporteModuloDiaDetalle_Listar	
+CREATE OR ALTER   PROCEDURE [Prod].[UDP_tbReporteModuloDiaDetalle_Listar]	 --246
 @remo_Id		INT
 AS
 BEGIN
-	SELECT    rdet_Id, 
-            remo_Id, 
-            rdet_TotalDia, 
-            rdet_TotalDanado, 
-            OrdenCompra.orco_Id,
-            colores.colr_Nombre,
-            case ordencompradetalle.code_Sexo 
-            when 'M' then 'Masculino'
-            when 'F' then 'Femenino'
-            else ordencompradetalle.code_Sexo end as Sexo,
-            clientes.[clie_Nombre_Contacto],
-            clientes.[clie_RTN],
-             ReporteModuloDia.code_Id, 
-            ordencompradetalle.esti_Id,
-            estilos.esti_Descripcion,
-            ReporteModuloDia.usua_UsuarioCreacion, 
-            rdet_FechaCreacion, 
-            ReporteModuloDia.usua_UsuarioModificacion, 
-            rdet_FechaModificacion, 
-            rdet_Estado 
-    FROM    Prod.tbReporteModuloDiaDetalle ReporteModuloDia
-            INNER JOIN Prod.tbOrdenCompraDetalles ordencompradetalle      ON  ReporteModuloDia.code_Id = ordencompradetalle.code_Id 
-            INNER JOIN Prod.tbEstilos            estilos                    ON ordencompradetalle.esti_Id = estilos.esti_Id
-            INNER JOIN Prod.tbOrdenCompra        OrdenCompra                ON    ordencompradetalle.orco_Id = OrdenCompra.orco_Id
-            INNER JOIN Prod.tbClientes            clientes                ON  OrdenCompra.orco_IdCliente = clientes.clie_Id
-            left JOIN Prod.tbColores            colores                    ON    ordencompradetalle.code_Id    = colores.colr_Id
-            WHERE ReporteModuloDia.remo_Id = @remo_Id AND rdet_Estado = 1
+SELECT	rdet.[rdet_Id], 
+		rdet.[remo_Id], 
+		rdet.[code_Id], 
+		rdet.[ensa_Id], 
+		code.[orco_Id],
+		orco.[orco_Codigo],
+		rdet.[rdet_TotalDia], 
+		rdet.[rdet_TotalDanado], 
+		[proc].[proc_Descripcion],
+		modu.proc_Id AS colr_Nombre,
+		--modu.proc_Id, agragar campo a la api
 
-	
+		(CASE code.code_Sexo 
+			WHEN 'M' THEN 'Masculino'
+			WHEN 'F' THEN 'Femenino'
+			WHEN 'U' THEN 'Unisex'
+
+			ELSE code.code_Sexo 
+		END) AS Sexo,
+
+		code.esti_Id,
+		esti.esti_Descripcion, 
+
+		clie.[clie_Nombre_Contacto], 
+		clie.[clie_RTN],
+
+		colr.[colr_Id],
+		colr.[colr_Nombre],
+		rdet.[rdet_Estado] 
+
+FROM	Prod.tbReporteModuloDiaDetalle			rdet
+		INNER JOIN Prod.tbReporteModuloDia		remo					ON rdet.remo_Id = remo.remo_Id
+		INNER JOIN Prod.tbModulos				modu					ON remo.modu_Id	= modu.modu_Id
+		INNER JOIN Prod.tbOrde_Ensa_Acab_Etiq	ensa					ON rdet.ensa_Id	= ensa.ensa_Id
+		INNER JOIN Prod.tbOrdenCompraDetalles   code				    ON ensa.code_Id	= code.code_Id
+		INNER JOIN Prod.tbOrdenCompra			orco					ON code.orco_Id	= orco.orco_Id
+		INNER JOIN Prod.tbClientes				clie					ON orco.orco_IdCliente = clie.clie_Id
+		INNER JOIN Prod.tbProcesos				[proc]					ON modu.proc_Id	= [proc].proc_Id
+		INNER JOIN Prod.tbEstilos				esti					ON code.esti_Id = esti.esti_Id
+		INNER JOIN Prod.tbColores				colr					ON code.colr_Id	= colr.colr_Id
+WHERE rdet.remo_Id = @remo_Id AND rdet_Estado = 1
 END
 GO
 
 
 /* INSERTAR REPORTE MODULO DETALLE  */
-CREATE OR ALTER PROCEDURE Prod.UDP_tbReporteModuloDiaDetalle_Insertar				
+CREATE OR ALTER PROCEDURE [Prod].[UDP_tbReporteModuloDiaDetalle_Insertar] --246,466,6,298,70,33				
 	@remo_Id 					INT,
 	@rdet_TotalDia				INT,
 	@rdet_TotalDanado			INT,
 	@code_Id					INT,
+    @ensa_Id					INT,
 	@usua_UsuarioCreacion		INT
 AS
 BEGIN
@@ -14831,13 +14863,15 @@ BEGIN
 		INSERT INTO Prod.tbReporteModuloDiaDetalle(	remo_Id, 
 													rdet_TotalDia, 
 													rdet_TotalDanado, 
-													code_Id, 
+													code_Id,
+													ensa_Id,
 													usua_UsuarioCreacion, 
 													rdet_FechaCreacion)
 		VALUES(	@remo_Id,
 				@rdet_TotalDia,
 				@rdet_TotalDanado,
 				@code_Id,
+				@ensa_Id,
 				@usua_UsuarioCreacion,
 				GETDATE())
 
@@ -14858,12 +14892,13 @@ GO
 
 
 /* EDITAR REPORTE MODULO DIA DETALLE */
-CREATE OR ALTER PROCEDURE Prod.UDP_tbReporteModuloDiaDetalle_Editar
+CREATE OR ALTER   PROCEDURE [Prod].[UDP_tbReporteModuloDiaDetalle_Editar] --415,246,777,7,298,70,33	
 	@rdet_Id						INT,
 	@remo_Id 						INT,
 	@rdet_TotalDia					INT,
 	@rdet_TotalDanado				INT,
 	@code_Id						INT,
+    @ensa_Id						INT,
 	@usua_UsuarioModificacion		INT
 AS
 BEGIN
@@ -14875,6 +14910,7 @@ BEGIN
 				rdet_TotalDia				=	@rdet_TotalDia, 
 				rdet_TotalDanado			=	@rdet_TotalDanado, 
 				code_Id						=	@code_Id,
+				ensa_Id						=   @ensa_Id,
 				usua_UsuarioModificacion	=	@usua_UsuarioModificacion,
 				rdet_FechaModificacion		=	GETDATE()
 		WHERE	rdet_Id						=	@rdet_Id
