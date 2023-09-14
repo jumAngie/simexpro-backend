@@ -93,5 +93,22 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             var listado = _produccionServices.Inventario(data);
             return Ok(listado);
         }
+
+
+        [HttpGet("Importaciones")]
+        public IActionResult Importaciones(DateTime fechaInicio, DateTime fechaFin)
+        {
+            //var data = _mapper.Map<tbDeclaraciones_Valor>(orden);
+            var listado = _produccionServices.Importaciones(fechaInicio, fechaFin);
+            return Ok(listado);
+        }
+
+        [HttpGet("DevasPendientes")]
+        public IActionResult DEVAPendiente(DateTime fechaInicio, DateTime fechaFin)
+        {
+            //var data = _mapper.Map<tbDeclaraciones_Valor>(orden);
+            var listado = _produccionServices.DevasPendientes(fechaInicio, fechaFin);
+            return Ok(listado);
+        }
     }
 }

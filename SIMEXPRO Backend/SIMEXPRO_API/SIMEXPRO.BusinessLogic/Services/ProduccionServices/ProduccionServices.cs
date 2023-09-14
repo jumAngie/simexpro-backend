@@ -3884,6 +3884,33 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
+        public ServiceResult Importaciones(DateTime fechaI, DateTime FechaF)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _reportesRepository.Importaciones(fechaI, FechaF);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult DevasPendientes(DateTime fechaI, DateTime FechaF)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _reportesRepository.DevasPendientes(fechaI, FechaF);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
         #endregion
     }
 }

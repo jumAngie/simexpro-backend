@@ -95,5 +95,26 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             return answer;
         }
 
+
+        public IEnumerable<tbDeclaraciones_Valor> Importaciones(DateTime FechaI, DateTime FechaF)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@FechaInicio", FechaI, DbType.Date, ParameterDirection.Input);
+            parametros.Add("@FechaFin", FechaF, DbType.Date, ParameterDirection.Input);
+            var answer = db.Query<tbDeclaraciones_Valor>(ScriptsDataBase.Importaciones, parametros, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
+        
+        public IEnumerable<tbDeclaraciones_Valor> DevasPendientes(DateTime FechaI, DateTime FechaF)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@FechaInicio", FechaI, DbType.Date, ParameterDirection.Input);
+            parametros.Add("@FechaFin", FechaF, DbType.Date, ParameterDirection.Input);
+            var answer = db.Query<tbDeclaraciones_Valor>(ScriptsDataBase.Importaciones, parametros, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
+
     }
 }
