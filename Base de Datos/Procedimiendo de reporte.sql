@@ -45,6 +45,9 @@ END
 --END
 
 GO
+-----------------------------
+
+
 
 CREATE OR ALTER PROCEDURE Prod.UDP_Reporte_MaquinaUso
 @modu_Id INT
@@ -75,14 +78,13 @@ GO
 
 
 CREATE OR ALTER PROCEDURE Prod.UDP_Reporte_OrdenesDeCompraFecha
+@FechaInicio	DATE,
+@FechaFin		DATE
 AS
 BEGIN
 
-	
-	SELECT	 ordenCompra.orco_Id
-	-- Informacion del cliente
-			,ordenCompra.orco_Codigo
-			,ordenCompra.orco_IdCliente
+	SELECT	 
+			ordenCompra.orco_Id
 			,cliente.clie_Nombre_O_Razon_Social
 			,cliente.clie_Direccion
 			,cliente.clie_RTN
@@ -90,47 +92,89 @@ BEGIN
 			,cliente.clie_Numero_Contacto
 			,cliente.clie_Correo_Electronico
 			,cliente.clie_FAX
-			,ordenCompra.orco_EstadoFinalizado
 			,ordenCompra.orco_FechaEmision
 			,ordenCompra.orco_FechaLimite
 			,ordenCompra.orco_Materiales
-
-			,ordenCompra.orco_MetodoPago
 			,fomapago.fopa_Descripcion
-
-	--Informacion del Embalaje
-			,ordenCompra.orco_IdEmbalaje
 			,tipoEmbajale.tiem_Descripcion
-
 			,ordenCompra.orco_EstadoOrdenCompra
 			,ordenCompra.orco_DireccionEntrega
-			,ordenCompra.usua_UsuarioCreacion
-			,usuarioCreacion.usua_Nombre		AS usuarioCreacionNombre
-			,ordenCompra.orco_FechaCreacion
-			,ordenCompra.usua_UsuarioModificacion
-			,usuarioModificacion.usua_Nombre	AS usuarioModificacionNombre
-			,ordenCompra.orco_FechaModificacion
-			,ordenCompra.orco_Estado
-		--	,(SELECT	PPOCD.[poco_Id], 
-		--		PPOCD.[code_Id], 
-		--		PPOCD.[proc_Id], 
-		--		PROCE.[proc_Descripcion],
-		--		PPOCD.[usua_UsuarioCreacion], 
-		--		PPOCD.[poco_FechaCreacion], 
-		--		PPOCD.[usua_UsuarioModificacion], 
-		--		PPOCD.[poco_FechaModificacion], 
-		--		PPOCD.[code_Estado]
-		--FROM Prod.tbProcesoPorOrdenCompraDetalle PPOCD
-		--	INNER JOIN Prod.tbOrdenCompraDetalles OCD
-		--	ON PPOCD.code_Id = OCD.code_Id
-		--	INNER JOIN Prod.tbProcesos PROCE
-		--	ON PPOCD.proc_Id = PROCE.proc_Id
-		--	WHERE PPOCD.code_Id = )
-	  FROM  Prod.tbOrdenCompra							ordenCompra
+			,(
+			SELECT m.* 
+				FROM 
+			(SELECT	 ordenCompraDetalle.code_Id
+					,ordenCompraDetalle.orco_Id
+					,ordenCompraDetalle.code_CantidadPrenda
+					,estilo.esti_Descripcion
+					,talla.tall_Nombre
+					,ordenCompraDetalle.code_Sexo
+					,colores.colr_Nombre
+					,ordenCompraDetalle.code_Unidad
+					,ordenCompraDetalle.code_Valor
+					,ordenCompraDetalle.code_Impuesto
+					,ordenCompraDetalle.code_EspecificacionEmbalaje
+			  FROM	Prod.tbOrdenCompraDetalles			    ordenCompraDetalle
+					INNER JOIN	Prod.tbEstilos				estilo						ON	ordenCompraDetalle.esti_Id						= estilo.esti_Id
+					INNER JOIN	Prod.tbTallas				talla						ON	ordenCompraDetalle.tall_Id						= talla.tall_Id
+					INNER JOIN  Prod.tbColores				colores						ON	ordenCompraDetalle.colr_Id						= colores.colr_Id
+					WHERE ordenCompraDetalle.orco_Id	=	ordenCompra.orco_Id) AS m
+			FOR JSON PATH ) AS Detalles
+		FROM  Prod.tbOrdenCompra							ordenCompra
 			INNER JOIN  Prod.tbClientes					cliente				ON ordenCompra.orco_IdCliente  = cliente.clie_Id
 			INNER JOIN  Prod.tbTipoEmbalaje				tipoEmbajale		ON ordenCompra.orco_IdEmbalaje = tipoEmbajale.tiem_Id
-			INNER JOIN	Adua.tbFormasdePago				fomapago			ON ordenCompra.orco_MetodoPago = fomapago.fopa_Id
-		    INNER JOIN  Acce.tbUsuarios					usuarioCreacion		ON ordenCompra.usua_UsuarioCreacion			= usuarioCreacion.usua_Id
-			LEFT  JOIN  Acce.tbUsuarios					usuarioModificacion ON ordenCompra.usua_UsuarioModificacion		= usuarioModificacion.usua_Id
+			INNER JOIN	Adua.tbFormasdePago				fomapago			ON ordenCompra.orco_MetodoPago = fomapago.fopa_Id	
+		WHERE @fechaInicio <= orco_FechaEmision AND @fechaFin >= orco_FechaEmision
+
 END
 GO
+
+
+
+CREATE OR ALTER PROCEDURE Prod.UDP_Reporte_Inventaro --0
+@mate_Id INT
+AS
+BEGIN
+
+SELECT	DISTINCT mate.mate_id
+		,mate.mate_Descripcion
+		,[mate_Imagen]
+		,subc.subc_Descripcion
+		,cate.cate_Descripcion
+		,(SELECT SUM(lote_Stock) FROM Prod.tbLotes suma WHERE suma.mate_Id = lt.mate_Id) AS StockTotal
+		,(SELECT m.* 
+				FROM 
+			(SELECT 
+				   --CAMPOS PROPIOS DE LOTES
+				   lote_Id, 
+				   lotes.prod_Id,
+				   lotes.unme_Id,
+				   UnidadesMedida.unme_Descripcion,
+				   lotes.lote_CodigoLote,
+				   lotes.lote_Observaciones,
+				   lote_Stock,
+				   lote_CantIngresada,
+				   areas.tipa_area,
+				   lotes.tipa_id,
+				   lotes.colr_Id,
+				   color.colr_Nombre,
+				   color.colr_Codigo,
+				   color.colr_CodigoHtml
+			  FROM Prod.tbLotes lotes
+				   LEFT JOIN Prod.tbArea							AS areas             ON lotes.tipa_id                  = areas.tipa_id
+				   LEFT JOIN Prod.tbColores                         AS color             ON lotes.colr_Id                  = color.colr_Id
+				   LEFT JOIN Gral.tbUnidadMedidas					AS UnidadesMedida    ON lotes.unme_Id                  = UnidadesMedida.unme_Id
+				WHERE lotes.mate_Id = mate.mate_Id) AS m
+						FOR JSON PATH ) AS Detalles
+
+FROM [Prod].[tbMateriales] mate INNER JOIN Prod.tbLotes lt
+ON lt.mate_Id = mate.mate_Id LEFT JOIN Prod.tbSubcategoria subc			
+ON mate.subc_Id = subc.subc_Id LEFT JOIN Prod.tbCategoria  cate            
+ON cate.cate_Id = subc.cate_Id
+WHERE mate.mate_Id = @mate_Id OR @mate_Id = 0
+ORDER BY mate_Descripcion
+
+END
+GO
+
+
+
