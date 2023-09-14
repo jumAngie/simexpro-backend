@@ -11912,6 +11912,7 @@ BEGIN
       BEGIN 
          UPDATE Prod.tbEstilos
          SET esti_Estado = 1
+		 WHERE esti_Descripcion = @esti_Descripcion
          SELECT 1
       END
       ELSE 
