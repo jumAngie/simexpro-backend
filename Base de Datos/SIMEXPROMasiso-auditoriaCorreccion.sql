@@ -2240,7 +2240,7 @@ CREATE TABLE Prod.tbReporteModuloDiaDetalle(
 	rdet_TotalDia				INT NOT NULL,
 	rdet_TotalDanado			INT NOT NULL,
 	code_Id                     INT NOT NULL,
-
+	[ensa_Id]					INT,
 	usua_UsuarioCreacion		INT NOT NULL,
 	rdet_FechaCreacion			DATETIME NOT NULL,
 	usua_UsuarioModificacion	INT DEFAULT NULL,
@@ -2250,6 +2250,7 @@ CREATE TABLE Prod.tbReporteModuloDiaDetalle(
 	CONSTRAINT PK_Prod_tbReporteModuloDiaDetalle_rdet_Id						PRIMARY KEY (rdet_Id)
 	CONSTRAINT FK_Prod_tbReporteModuloDiaDetalle_tbReporteModuloDia_remo_Id		FOREIGN KEY (remo_Id)		   		   REFERENCES Prod.tbReporteModuloDia (remo_Id),
 	CONSTRAINT FK_Prod_tbReporteModuloDiaDetalle_tbOrdenCompraDetalle_code_Id	FOREIGN KEY (code_Id)		   	       REFERENCES Prod.tbOrdenCompraDetalles (code_Id),
+	CONSTRAINT [FK_Prod_ReporteModuloDiaDetalle_OrdenDeProceso_ensa_Id] FOREIGN KEY ([ensa_Id]) REFERENCES  [Prod].[tbOrde_Ensa_Acab_Etiq]([ensa_Id]),
 	CONSTRAINT FK_Prod_tbReporteModuloDiaDetalle_tbUsuarios_rdet_UsuCrea		FOREIGN KEY (usua_UsuarioCreacion)     REFERENCES Acce.tbUsuarios (usua_Id),
 	CONSTRAINT FK_Prod_tbReporteModuloDiaDetalle_tbUsuarios_rdet_UsuModifica	FOREIGN KEY (usua_UsuarioModificacion) REFERENCES Acce.tbUsuarios (usua_Id),
 );
