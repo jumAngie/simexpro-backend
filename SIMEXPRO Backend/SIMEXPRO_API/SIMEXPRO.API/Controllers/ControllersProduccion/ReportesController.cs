@@ -69,5 +69,29 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             var listado = _produccionServices.Consumo_Materiales(data);
             return Ok(listado);
         }
+
+        [HttpPost("Maquina_Uso")]
+        public IActionResult Maquina_Uso(MaquinasViewModel maquina)
+        {
+            var data = _mapper.Map<tbMaquinas>(maquina);
+            var listado = _produccionServices.MaquinasUso(data);
+            return Ok(listado);
+        }
+
+        [HttpPost("OrdenesDeCompraFecha")]
+        public IActionResult OrdenesDeCompraFecha(OrdenCompraViewModel orden)
+        {
+            var data = _mapper.Map<tbOrdenCompra>(orden);
+            var listado = _produccionServices.OrdenesCompraFecha(data);
+            return Ok(listado);
+        }
+
+        [HttpPost("Inventario")]
+        public IActionResult Inventario(MaterialesViewModel orden)
+        {
+            var data = _mapper.Map<tbMateriales>(orden);
+            var listado = _produccionServices.Inventario(data);
+            return Ok(listado);
+        }
     }
 }
