@@ -10696,16 +10696,18 @@ BEGIN
 	BEGIN TRY
 		IF EXISTS (SELECT coim_Id  FROM Adua.tbCodigoImpuesto WHERE coim_Descripcion = @coim_Descripcion)
 			BEGIN
-				DELETE FROM Adua.tbCodigoImpuesto
-				WHERE coim_Descripcion = @coim_Descripcion
-			END
-		UPDATE  Adua.tbCodigoImpuesto
-		SET		coim_Descripcion = @coim_Descripcion,
-				usua_UsuarioModificacion = @usua_UsuarioModificacion,
-				coim_FechaModificacion = @coim_FechaModificacion
-		WHERE	coim_Id = @coim_Id
+			--BEGIN
+			--	DELETE FROM Adua.tbCodigoImpuesto
+			--	WHERE coim_Descripcion = @coim_Descripcion
+			--END
+				UPDATE  Adua.tbCodigoImpuesto
+				SET		coim_Descripcion = @coim_Descripcion,
+						usua_UsuarioModificacion = @usua_UsuarioModificacion,
+						coim_FechaModificacion = @coim_FechaModificacion
+				WHERE	coim_Id = @coim_Id
 
-		SELECT 1
+				SELECT 1
+			END
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
