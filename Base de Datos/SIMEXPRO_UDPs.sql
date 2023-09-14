@@ -3504,11 +3504,6 @@ BEGIN
 			,personaJuridica.peju_CorreoElectronico 
 			,personaJuridica.peju_CorreoElectronicoAlternativo
 
-			,personaJuridica.peju_DNIRepresentante
-			,personaJuridica.peju_RTNSociedadMercantil                --Tab 5
-			,personaJuridica.peju_EscrituraPublica
-			,personaJuridica.peju_RTNReprsentanteLegal
-
 			,personaJuridica.usua_UsuarioCreacion
 			,usuarioCreacion.usua_Nombre				as usuarioCreacionNombre
 			,personaJuridica.peju_FechaCreacion
@@ -9484,7 +9479,7 @@ SELECT	nico_Id								,
 		usu1.usua_Nombre					AS UsuarioCreacionNombre,
 		nico_FechaCreacion 					, 
 		nco.usua_UsuarioModificacion		,
-		usu2.usua_Nombre					AS UsuarioModificadorNombre,
+		usu2.usua_Nombre					AS usuarioModificacionNombre,
 		nico_FechaModificacion 				,
 		nco.usua_UsuarioEliminacion,
 		nico_FechaEliminacion,
