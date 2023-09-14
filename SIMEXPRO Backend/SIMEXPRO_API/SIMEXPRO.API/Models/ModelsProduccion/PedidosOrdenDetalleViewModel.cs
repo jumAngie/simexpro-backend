@@ -10,7 +10,6 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
     {
         public int prod_Id { get; set; }
 
-        public decimal? prod_Impuestos { get; set; }
         public int pedi_Id { get; set; }
         public int mate_Id { get; set; }
         public int prod_Cantidad { get; set; }

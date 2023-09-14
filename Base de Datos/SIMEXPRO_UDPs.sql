@@ -632,6 +632,19 @@ CREATE OR ALTER PROCEDURE Acce.UDP_tbRoles_Editar
 AS
 BEGIN
 	BEGIN TRY
+		DECLARE @role_IdEliminar INT = (SELECT role_Id
+										FROM Acce.tbRoles
+										WHERE role_Descripcion = @role_Descripcion
+										AND role_Estado = 0)
+
+		IF (@role_IdEliminar IS NOT NULL)
+			BEGIN
+				DELETE FROM Acce.tbRolesXPantallas
+				WHERE role_Id = @role_IdEliminar
+
+				DELETE FROM Acce.tbRoles
+				WHERE role_Id = @role_IdEliminar
+			END
         
         UPDATE Acce.tbRoles
            SET role_Descripcion = @role_Descripcion             
@@ -1073,29 +1086,18 @@ BEGIN
 				   WHERE ofic_Nombre = @ofic_Nombre
 				   AND ofic_Estado = 0)
 			BEGIN
-				UPDATE Gral.tbOficinas
-                   SET ofic_Estado = 0,
-						ofic_FechaEliminacion = @ofic_FechaModificacion,
-						usua_UsuarioEliminacion = @usua_UsuarioModificacion
-                 WHERE ofic_Id = @ofic_Id
+				DELETE FROM Gral.tbOficinas
+				WHERE ofic_Nombre = @ofic_Nombre
+				AND ofic_Estado = 0
+			END
 
-                UPDATE Gral.tbOficinas
-                   SET ofic_Estado = 1,
-						ofic_FechaModificacion = @ofic_FechaModificacion,
-						usua_UsuarioModificacion = @usua_UsuarioModificacion
-                 WHERE ofic_Nombre = @ofic_Nombre
-				 SELECT 1
-			END
-		ELSE
-			BEGIN
-				UPDATE  Gral.tbOficinas
-				SET		ofic_Nombre = @ofic_Nombre,
-						usua_UsuarioModificacion = @usua_UsuarioModificacion,
-						ofic_FechaModificacion = @ofic_FechaModificacion
-				WHERE	ofic_Id = @ofic_Id
+		UPDATE  Gral.tbOficinas
+		SET		ofic_Nombre = @ofic_Nombre,
+				usua_UsuarioModificacion = @usua_UsuarioModificacion,
+				ofic_FechaModificacion = @ofic_FechaModificacion
+		WHERE	ofic_Id = @ofic_Id
 				
-				SELECT 1
-			END
+		SELECT 1
 		
 	END TRY
 	BEGIN CATCH
@@ -2166,7 +2168,7 @@ GO
 
 --************FORMAS DE ENVIO******************--
 /*Listar FORMAS DE ENVIO*/
-CREATE OR ALTER PROCEDURE Gral.UDP_tbFormas_Envio_Listar
+CREATE OR ALTER   PROCEDURE Gral.UDP_tbFormas_Envio_Listar
 AS
 BEGIN
 SELECT	foen_Id											,
@@ -2186,7 +2188,9 @@ FROM	Gral.tbFormas_Envio formasEnvio
 		LEFT JOIN Acce.tbUsuarios usuarioModificacion	ON formasEnvio.usua_UsuarioModificacion = usuarioModificacion.usua_Id
 		LEFT JOIN Acce.tbUsuarios usuarioEliminacion	ON formasEnvio.usua_UsuarioEliminacion = usuarioEliminacion.usua_Id
 WHERE	foen_Estado = 1
+ORDER BY foen_Id DESC
 END
+
 GO
 
 /*Insertar FORMAS DE ENVIO*/
@@ -2234,6 +2238,17 @@ CREATE OR ALTER PROCEDURE Gral.UDP_tbFormas_Envio_Editar
 AS
 BEGIN
 	BEGIN TRY
+
+		IF EXISTS (SELECT foen_Id 
+				   FROM Gral.tbFormas_Envio
+				   WHERE foen_Descripcion = @foen_Descripcion
+				   AND foen_Estado = 0)
+			BEGIN
+				DELETE FROM Gral.tbFormas_Envio
+				WHERE foen_Descripcion = @foen_Descripcion
+				AND foen_Estado = 0
+			END
+
 		UPDATE Gral.tbFormas_Envio
 		   SET foen_Codigo = @foen_Codigo,
 		       foen_Descripcion = @foen_Descripcion,
@@ -2625,6 +2640,17 @@ CREATE OR ALTER PROCEDURE Gral.UDP_tbUnidadMedidas_Editar
 AS
 BEGIN 
 	BEGIN TRY
+
+		IF EXISTS (SELECT unme_Id
+					   FROM Gral.tbUnidadMedidas
+					   WHERE unme_Descripcion = @unme_Descripcion
+					   AND unme_Estado = 0)
+			BEGIN
+				DELETE FROM Gral.tbUnidadMedidas
+				WHERE unme_Descripcion = @unme_Descripcion
+			    AND unme_Estado = 0
+			END
+
 		UPDATE Gral.tbUnidadMedidas
 		   SET unme_Descripcion = @unme_Descripcion,
 			   usua_UsuarioModificacion = @usua_UsuarioModificacion,
@@ -3821,12 +3847,9 @@ BEGIN
 				   WHERE emba_Codigo = @emba_Codigo
 				   AND emba_Estado = 0)
 			BEGIN
-				UPDATE Adua.tbLugaresEmbarque
-				SET emba_Estado = 1,
-					emba_Descripcion = @emba_Descripcion
+				DELETE FROM Adua.tbLugaresEmbarque
 				WHERE emba_Codigo = @emba_Codigo
-
-				SELECT 1
+				AND emba_Estado = 0
 			END
 		ELSE
 			BEGIN
@@ -4146,7 +4169,7 @@ SELECT    adu.adua_Id                            ,
         adu.adua_Estado
 FROM    Adua.tbAduanas adu 
         INNER JOIN Acce.tbUsuarios usu        ON adu.usua_UsuarioCreacion = usu.usua_Id 
-        LEFT JOIN Acce.tbUsuarios usu2        ON usu2.usua_UsuarioModificacion = adu.usua_UsuarioModificacion 
+        LEFT JOIN Acce.tbUsuarios usu2        ON usu2.usua_Id = adu.usua_UsuarioModificacion 
         LEFT JOIN Gral.tbCiudades ciud      ON ciud.ciud_Id = adu.ciud_Id
         LEFT JOIN Gral.tbProvincias prov   ON prov.pvin_Id = ciud.pvin_Id
  WHERE    adu.adua_Estado = 1
@@ -4220,6 +4243,16 @@ AS
 BEGIN 
 	BEGIN TRY   
      
+		IF EXISTS (SELECT adua_Id
+				   FROM Adua.tbAduanas
+				   WHERE adua_Codigo = @adua_Codigo
+				   AND adua_Estado = 0)
+			BEGIN
+				DELETE FROM Adua.tbAduanas
+				WHERE adua_Codigo = @adua_Codigo
+				AND adua_Estado = 0
+			END
+
 		UPDATE  Adua.tbAduanas 
 		SET    adua_Nombre = @adua_Nombre,
 			    adua_Codigo = @adua_Codigo,
@@ -7015,19 +7048,12 @@ END
 GO
 
 
-CREATE OR ALTER PROCEDURE [Adua].[UDP_tbFacturas_Eliminar]
+CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbFacturas_Eliminar]
 	@fact_Id			INT
 AS
 BEGIN
 	BEGIN TRANSACTION
 	BEGIN TRY
-
-	DECLARE @respuesta INT
-	EXEC dbo.UDP_ValidarReferencias 'fact_Id', @fact_Id,'Adua.tbFacturas',@respuesta OUTPUT
-
-	SELECT @respuesta AS Resultado
-	IF(@respuesta = 1)
-		BEGIN
 
 			DELETE FROM Adua.tbItems
 			WHERE fact_Id = @fact_Id
@@ -7037,13 +7063,12 @@ BEGIN
 
 			SELECT 1
 
-		END
 		COMMIT TRAN
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
 		ROLLBACK TRAN
-	END CATCH
+	END CATCH
 END
 
 
@@ -7674,7 +7699,7 @@ END
 
 
 GO
-CREATE OR ALTER PROCEDURE Adua.UDP_tbBaseCalculos_Editar 
+ALTER   PROCEDURE [Adua].[UDP_tbBaseCalculos_Editar] 
 	@base_Id								INT,
 	@deva_Id								INT, 
 	@base_PrecioFactura						DECIMAL(18,2), 
@@ -7706,100 +7731,221 @@ AS
 BEGIN
 	BEGIN TRANSACTION
 	BEGIN TRY
-		UPDATE Adua.tbBaseCalculos
-		SET		deva_Id = @deva_Id, 
-				base_PrecioFactura = @base_PrecioFactura, 
-				base_PagosIndirectos = @base_PagosIndirectos, 
-				base_PrecioReal = @base_PrecioReal, 
-				base_MontCondicion = @base_MontCondicion, 
-				base_MontoReversion = @base_MontoReversion, 
-				base_ComisionCorrelaje = @base_ComisionCorrelaje, 
-				base_Gasto_Envase_Embalaje = @base_Gasto_Envase_Embalaje, 
-				base_ValoresMateriales_Incorporado = @base_ValoresMateriales_Incorporado, 
-				base_Valor_Materiales_Utilizados = @base_Valor_Materiales_Utilizados, 
-				base_Valor_Materiales_Consumidos = @base_Valor_Materiales_Consumidos, 
-				base_Valor_Ingenieria_Importado = @base_Valor_Ingenieria_Importado, 
-				base_Valor_Canones = @base_Valor_Canones, 
-				base_Gasto_TransporteM_Importada = @base_Gasto_TransporteM_Importada, 
-				base_Gastos_Carga_Importada = @base_Gastos_Carga_Importada, 
-				base_Costos_Seguro = @base_Costos_Seguro, 
-				base_Total_Ajustes_Precio_Pagado = @base_Total_Ajustes_Precio_Pagado, 
-				base_Gastos_Asistencia_Tecnica = @base_Gastos_Asistencia_Tecnica, 
-				base_Gastos_Transporte_Posterior = @base_Gastos_Transporte_Posterior, 
-				base_Derechos_Impuestos = @base_Derechos_Impuestos, 
-				base_Monto_Intereses = @base_Monto_Intereses, 
-				base_Deducciones_Legales = @base_Deducciones_Legales, 
-				base_Total_Deducciones_Precio = @base_Total_Deducciones_Precio, 
-				base_Valor_Aduana = @base_Valor_Aduana, 
-				usua_UsuarioModificacion = @usua_UsuarioModificacion, 
-				base_FechaModificacion = @base_FechaModificacion
-		WHERE base_Id = @base_Id
+	IF(@base_Id <> 0 )
+		BEGIN
+			UPDATE Adua.tbBaseCalculos
+			SET		deva_Id = @deva_Id, 
+					base_PrecioFactura = @base_PrecioFactura, 
+					base_PagosIndirectos = @base_PagosIndirectos, 
+					base_PrecioReal = @base_PrecioReal, 
+					base_MontCondicion = @base_MontCondicion, 
+					base_MontoReversion = @base_MontoReversion, 
+					base_ComisionCorrelaje = @base_ComisionCorrelaje, 
+					base_Gasto_Envase_Embalaje = @base_Gasto_Envase_Embalaje, 
+					base_ValoresMateriales_Incorporado = @base_ValoresMateriales_Incorporado, 
+					base_Valor_Materiales_Utilizados = @base_Valor_Materiales_Utilizados, 
+					base_Valor_Materiales_Consumidos = @base_Valor_Materiales_Consumidos, 
+					base_Valor_Ingenieria_Importado = @base_Valor_Ingenieria_Importado, 
+					base_Valor_Canones = @base_Valor_Canones, 
+					base_Gasto_TransporteM_Importada = @base_Gasto_TransporteM_Importada, 
+					base_Gastos_Carga_Importada = @base_Gastos_Carga_Importada, 
+					base_Costos_Seguro = @base_Costos_Seguro, 
+					base_Total_Ajustes_Precio_Pagado = @base_Total_Ajustes_Precio_Pagado, 
+					base_Gastos_Asistencia_Tecnica = @base_Gastos_Asistencia_Tecnica, 
+					base_Gastos_Transporte_Posterior = @base_Gastos_Transporte_Posterior, 
+					base_Derechos_Impuestos = @base_Derechos_Impuestos, 
+					base_Monto_Intereses = @base_Monto_Intereses, 
+					base_Deducciones_Legales = @base_Deducciones_Legales, 
+					base_Total_Deducciones_Precio = @base_Total_Deducciones_Precio, 
+					base_Valor_Aduana = @base_Valor_Aduana, 
+					usua_UsuarioModificacion = @usua_UsuarioModificacion, 
+					base_FechaModificacion = @base_FechaModificacion
+			WHERE base_Id = @base_Id
 
-		INSERT INTO Adua.tbBaseCalculosHistorial(base_Id,
-													 deva_Id, 
-													 base_PrecioFactura, 
-													 base_PagosIndirectos, 
-													 base_PrecioReal, 
-													 base_MontCondicion, 
-													 base_MontoReversion, 
-													 base_ComisionCorrelaje, 
-													 base_Gasto_Envase_Embalaje, 
-													 base_ValoresMateriales_Incorporado, 
-													 base_Valor_Materiales_Utilizados, 
-													 base_Valor_Materiales_Consumidos, 
-													 base_Valor_Ingenieria_Importado, 
-													 base_Valor_Canones, 
-													 base_Gasto_TransporteM_Importada, 
-													 base_Gastos_Carga_Importada, 
-													 base_Costos_Seguro, 
-													 base_Total_Ajustes_Precio_Pagado, 
-													 base_Gastos_Asistencia_Tecnica, 
-													 base_Gastos_Transporte_Posterior, 
-													 base_Derechos_Impuestos, 
-													 base_Monto_Intereses, 
-													 base_Deducciones_Legales, 
-													 base_Total_Deducciones_Precio, 
-													 base_Valor_Aduana, 
-													 hbas_UsuarioAccion,
-													 hbas_FechaAccion,
-													 hbas_Accion)
-		VALUES (@base_Id,
-				@deva_Id, 
-				@base_PrecioFactura, 
-				@base_PagosIndirectos, 
-				@base_PrecioReal, 
-				@base_MontCondicion, 
-				@base_MontoReversion, 
-				@base_ComisionCorrelaje, 
-				@base_Gasto_Envase_Embalaje, 
-				@base_ValoresMateriales_Incorporado, 
-				@base_Valor_Materiales_Utilizados, 
-				@base_Valor_Materiales_Consumidos, 
-				@base_Valor_Ingenieria_Importado, 
-				@base_Valor_Canones, 
-				@base_Gasto_TransporteM_Importada, 
-				@base_Gastos_Carga_Importada, 
-				@base_Costos_Seguro, 
-				@base_Total_Ajustes_Precio_Pagado, 
-				@base_Gastos_Asistencia_Tecnica, 
-				@base_Gastos_Transporte_Posterior, 
-				@base_Derechos_Impuestos, 
-				@base_Monto_Intereses, 
-				@base_Deducciones_Legales, 
-				@base_Total_Deducciones_Precio, 
-				@base_Valor_Aduana, 
-				@usua_UsuarioModificacion, 
-				@base_FechaModificacion,
-				'Editar')
+			INSERT INTO Adua.tbBaseCalculosHistorial(base_Id,
+														 deva_Id, 
+														 base_PrecioFactura, 
+														 base_PagosIndirectos, 
+														 base_PrecioReal, 
+														 base_MontCondicion, 
+														 base_MontoReversion, 
+														 base_ComisionCorrelaje, 
+														 base_Gasto_Envase_Embalaje, 
+														 base_ValoresMateriales_Incorporado, 
+														 base_Valor_Materiales_Utilizados, 
+														 base_Valor_Materiales_Consumidos, 
+														 base_Valor_Ingenieria_Importado, 
+														 base_Valor_Canones, 
+														 base_Gasto_TransporteM_Importada, 
+														 base_Gastos_Carga_Importada, 
+														 base_Costos_Seguro, 
+														 base_Total_Ajustes_Precio_Pagado, 
+														 base_Gastos_Asistencia_Tecnica, 
+														 base_Gastos_Transporte_Posterior, 
+														 base_Derechos_Impuestos, 
+														 base_Monto_Intereses, 
+														 base_Deducciones_Legales, 
+														 base_Total_Deducciones_Precio, 
+														 base_Valor_Aduana, 
+														 hbas_UsuarioAccion,
+														 hbas_FechaAccion,
+														 hbas_Accion)
+			VALUES (@base_Id,
+					@deva_Id, 
+					@base_PrecioFactura, 
+					@base_PagosIndirectos, 
+					@base_PrecioReal, 
+					@base_MontCondicion, 
+					@base_MontoReversion, 
+					@base_ComisionCorrelaje, 
+					@base_Gasto_Envase_Embalaje, 
+					@base_ValoresMateriales_Incorporado, 
+					@base_Valor_Materiales_Utilizados, 
+					@base_Valor_Materiales_Consumidos, 
+					@base_Valor_Ingenieria_Importado, 
+					@base_Valor_Canones, 
+					@base_Gasto_TransporteM_Importada, 
+					@base_Gastos_Carga_Importada, 
+					@base_Costos_Seguro, 
+					@base_Total_Ajustes_Precio_Pagado, 
+					@base_Gastos_Asistencia_Tecnica, 
+					@base_Gastos_Transporte_Posterior, 
+					@base_Derechos_Impuestos, 
+					@base_Monto_Intereses, 
+					@base_Deducciones_Legales, 
+					@base_Total_Deducciones_Precio, 
+					@base_Valor_Aduana, 
+					@usua_UsuarioModificacion, 
+					@base_FechaModificacion,
+					'Editar')
 
-		SELECT 1
+			SELECT 1
+		END
+	ELSE
+		BEGIN
+			DECLARE @base_IDInsertar INT;
 
+			INSERT INTO Adua.tbBaseCalculos(deva_Id, 
+												base_PrecioFactura, 
+												base_PagosIndirectos, 
+												base_PrecioReal, 
+												base_MontCondicion, 
+												base_MontoReversion, 
+												base_ComisionCorrelaje, 
+												base_Gasto_Envase_Embalaje, 
+												base_ValoresMateriales_Incorporado, 
+												base_Valor_Materiales_Utilizados, 
+												base_Valor_Materiales_Consumidos, 
+												base_Valor_Ingenieria_Importado, 
+												base_Valor_Canones, 
+												base_Gasto_TransporteM_Importada, 
+												base_Gastos_Carga_Importada, 
+												base_Costos_Seguro, 
+												base_Total_Ajustes_Precio_Pagado, 
+												base_Gastos_Asistencia_Tecnica, 
+												base_Gastos_Transporte_Posterior, 
+												base_Derechos_Impuestos, 
+												base_Monto_Intereses, 
+												base_Deducciones_Legales, 
+												base_Total_Deducciones_Precio, 
+												base_Valor_Aduana, 
+												usua_UsuarioCreacion, 
+												base_FechaCreacion)
+			VALUES (@deva_Id, 
+					@base_PrecioFactura, 
+					@base_PagosIndirectos, 
+					@base_PrecioReal, 
+					@base_MontCondicion, 
+					@base_MontoReversion, 
+					@base_ComisionCorrelaje, 
+					@base_Gasto_Envase_Embalaje, 
+					@base_ValoresMateriales_Incorporado, 
+					@base_Valor_Materiales_Utilizados, 
+					@base_Valor_Materiales_Consumidos, 
+					@base_Valor_Ingenieria_Importado, 
+					@base_Valor_Canones, 
+					@base_Gasto_TransporteM_Importada, 
+					@base_Gastos_Carga_Importada, 
+					@base_Costos_Seguro, 
+					@base_Total_Ajustes_Precio_Pagado, 
+					@base_Gastos_Asistencia_Tecnica, 
+					@base_Gastos_Transporte_Posterior, 
+					@base_Derechos_Impuestos, 
+					@base_Monto_Intereses, 
+					@base_Deducciones_Legales, 
+					@base_Total_Deducciones_Precio, 
+					@base_Valor_Aduana, 
+					@usua_UsuarioModificacion, 
+					@base_FechaModificacion)
+
+			SET @base_IDInsertar = SCOPE_IDENTITY();
+
+			INSERT INTO Adua.tbBaseCalculosHistorial(base_Id,
+														 deva_Id, 
+														 base_PrecioFactura, 
+														 base_PagosIndirectos, 
+														 base_PrecioReal, 
+														 base_MontCondicion, 
+														 base_MontoReversion, 
+														 base_ComisionCorrelaje, 
+														 base_Gasto_Envase_Embalaje, 
+														 base_ValoresMateriales_Incorporado, 
+														 base_Valor_Materiales_Utilizados, 
+														 base_Valor_Materiales_Consumidos, 
+														 base_Valor_Ingenieria_Importado, 
+														 base_Valor_Canones, 
+														 base_Gasto_TransporteM_Importada, 
+														 base_Gastos_Carga_Importada, 
+														 base_Costos_Seguro, 
+														 base_Total_Ajustes_Precio_Pagado, 
+														 base_Gastos_Asistencia_Tecnica, 
+														 base_Gastos_Transporte_Posterior, 
+														 base_Derechos_Impuestos, 
+														 base_Monto_Intereses, 
+														 base_Deducciones_Legales, 
+														 base_Total_Deducciones_Precio, 
+														 base_Valor_Aduana, 
+														 hbas_UsuarioAccion,
+														 hbas_FechaAccion,
+														 hbas_Accion)
+			VALUES (SCOPE_IDENTITY(),
+					@deva_Id, 
+					@base_PrecioFactura, 
+					@base_PagosIndirectos, 
+					@base_PrecioReal, 
+					@base_MontCondicion, 
+					@base_MontoReversion, 
+					@base_ComisionCorrelaje, 
+					@base_Gasto_Envase_Embalaje, 
+					@base_ValoresMateriales_Incorporado, 
+					@base_Valor_Materiales_Utilizados, 
+					@base_Valor_Materiales_Consumidos, 
+					@base_Valor_Ingenieria_Importado, 
+					@base_Valor_Canones, 
+					@base_Gasto_TransporteM_Importada, 
+					@base_Gastos_Carga_Importada, 
+					@base_Costos_Seguro, 
+					@base_Total_Ajustes_Precio_Pagado, 
+					@base_Gastos_Asistencia_Tecnica, 
+					@base_Gastos_Transporte_Posterior, 
+					@base_Derechos_Impuestos, 
+					@base_Monto_Intereses, 
+					@base_Deducciones_Legales, 
+					@base_Total_Deducciones_Precio, 
+					@base_Valor_Aduana, 
+					@usua_UsuarioModificacion, 
+					@base_FechaModificacion,
+					'Insertar')
+
+			SELECT @base_IDInsertar
+
+		END
 		COMMIT TRAN
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
 		ROLLBACK TRAN
-	END CATCH
+	END CATCH
 END
 
 GO
@@ -8866,6 +9012,17 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbCondicionesComerciales_Editar
 AS
 BEGIN 
       BEGIN TRY
+			
+		  IF EXISTS (SELECT coco_Id
+					 FROM Adua.tbCondicionesComerciales
+					 WHERE coco_Descripcion = @coco_Descripcion
+					 AND coco_Estado = 0)
+			BEGIN
+				DELETE FROM Adua.tbCondicionesComerciales
+				WHERE coco_Descripcion = @coco_Descripcion
+				AND coco_Estado = 0
+			END
+
 	      UPDATE Adua.tbCondicionesComerciales
 		  SET	coco_Codigo = @coco_Codigo,
 				coco_Descripcion = @coco_Descripcion, 
@@ -9627,7 +9784,7 @@ END
 
 /*Editar condiciones*/
 GO
-CREATE OR ALTER PROCEDURE Adua.UDP_tbCondiciones_Editar 
+ALTER   PROCEDURE [Adua].[UDP_tbCondiciones_Editar] 
 	@codi_Id									INT,
 	@deva_Id									INT, 
 	@codi_Restricciones_Utilizacion				BIT, 
@@ -9647,64 +9804,141 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbCondiciones_Editar
 AS
 BEGIN
 	BEGIN TRY
-		UPDATE Adua.tbCondiciones
-		SET		deva_Id = @deva_Id, 
-				codi_Restricciones_Utilizacion = @codi_Restricciones_Utilizacion, 
-				codi_Indicar_Restricciones_Utilizacion = @codi_Indicar_Restricciones_Utilizacion, 
-				codi_Depende_Precio_Condicion = @codi_Depende_Precio_Condicion, 
-				codi_Indicar_Existe_Condicion = @codi_Indicar_Existe_Condicion, 
-				codi_Condicionada_Revertir = @codi_Condicionada_Revertir, 
-				codi_Vinculacion_Comprador_Vendedor = @codi_Vinculacion_Comprador_Vendedor, 
-				codi_Tipo_Vinculacion = @codi_Tipo_Vinculacion, 
-				codi_Vinculacion_Influye_Precio = @codi_Vinculacion_Influye_Precio, 
-				codi_Pagos_Descuentos_Indirectos = @codi_Pagos_Descuentos_Indirectos, 
-				codi_Concepto_Monto_Declarado = @codi_Concepto_Monto_Declarado, 
-				codi_Existen_Canones = @codi_Existen_Canones, 
-				codi_Indicar_Canones = @codi_Indicar_Canones, 
-				usua_UsuarioModificacion = @usua_UsuarioModificacion, 
-				codi_FechaModificacion = @codi_FechaModificacion
-		WHERE codi_Id = @codi_Id
+		IF(@codi_Id <> 0)
+			BEGIN
+						UPDATE Adua.tbCondiciones
+					SET		deva_Id = @deva_Id, 
+							codi_Restricciones_Utilizacion = @codi_Restricciones_Utilizacion, 
+							codi_Indicar_Restricciones_Utilizacion = @codi_Indicar_Restricciones_Utilizacion, 
+							codi_Depende_Precio_Condicion = @codi_Depende_Precio_Condicion, 
+							codi_Indicar_Existe_Condicion = @codi_Indicar_Existe_Condicion, 
+							codi_Condicionada_Revertir = @codi_Condicionada_Revertir, 
+							codi_Vinculacion_Comprador_Vendedor = @codi_Vinculacion_Comprador_Vendedor, 
+							codi_Tipo_Vinculacion = @codi_Tipo_Vinculacion, 
+							codi_Vinculacion_Influye_Precio = @codi_Vinculacion_Influye_Precio, 
+							codi_Pagos_Descuentos_Indirectos = @codi_Pagos_Descuentos_Indirectos, 
+							codi_Concepto_Monto_Declarado = @codi_Concepto_Monto_Declarado, 
+							codi_Existen_Canones = @codi_Existen_Canones, 
+							codi_Indicar_Canones = @codi_Indicar_Canones, 
+							usua_UsuarioModificacion = @usua_UsuarioModificacion, 
+							codi_FechaModificacion = @codi_FechaModificacion
+					WHERE codi_Id = @codi_Id
 
-		INSERT INTO Adua.tbCondicionesHistorial(codi_Id,
-													deva_Id, 
-													codi_Restricciones_Utilizacion, 
-													codi_Indicar_Restricciones_Utilizacion, 
-													codi_Depende_Precio_Condicion, 
-													codi_Indicar_Existe_Condicion, 
-													codi_Condicionada_Revertir, 
-													codi_Vinculacion_Comprador_Vendedor, 
-													codi_Tipo_Vinculacion, 
-													codi_Vinculacion_Influye_Precio, 
-													codi_Pagos_Descuentos_Indirectos, 
-													codi_Concepto_Monto_Declarado, 
-													codi_Existen_Canones, 
-													codi_Indicar_Canones, 
-													hcod_UsuarioAccion,
-													hcod_FechaAccion,
-													hcod_Accion)
-		VALUES (@codi_Id,
-				@deva_Id, 
-				@codi_Restricciones_Utilizacion, 
-				@codi_Indicar_Restricciones_Utilizacion, 
-				@codi_Depende_Precio_Condicion, 
-				@codi_Indicar_Existe_Condicion, 
-				@codi_Condicionada_Revertir, 
-				@codi_Vinculacion_Comprador_Vendedor, 
-				@codi_Tipo_Vinculacion, 
-				@codi_Vinculacion_Influye_Precio, 
-				@codi_Pagos_Descuentos_Indirectos, 
-				@codi_Concepto_Monto_Declarado, 
-				@codi_Existen_Canones, 
-				@codi_Indicar_Canones, 
-				@usua_UsuarioModificacion, 
-				@codi_FechaModificacion,
-				'Editar')
+					INSERT INTO Adua.tbCondicionesHistorial(codi_Id,
+																deva_Id, 
+																codi_Restricciones_Utilizacion, 
+																codi_Indicar_Restricciones_Utilizacion, 
+																codi_Depende_Precio_Condicion, 
+																codi_Indicar_Existe_Condicion, 
+																codi_Condicionada_Revertir, 
+																codi_Vinculacion_Comprador_Vendedor, 
+																codi_Tipo_Vinculacion, 
+																codi_Vinculacion_Influye_Precio, 
+																codi_Pagos_Descuentos_Indirectos, 
+																codi_Concepto_Monto_Declarado, 
+																codi_Existen_Canones, 
+																codi_Indicar_Canones, 
+																hcod_UsuarioAccion,
+																hcod_FechaAccion,
+																hcod_Accion)
+					VALUES (@codi_Id,
+							@deva_Id, 
+							@codi_Restricciones_Utilizacion, 
+							@codi_Indicar_Restricciones_Utilizacion, 
+							@codi_Depende_Precio_Condicion, 
+							@codi_Indicar_Existe_Condicion, 
+							@codi_Condicionada_Revertir, 
+							@codi_Vinculacion_Comprador_Vendedor, 
+							@codi_Tipo_Vinculacion, 
+							@codi_Vinculacion_Influye_Precio, 
+							@codi_Pagos_Descuentos_Indirectos, 
+							@codi_Concepto_Monto_Declarado, 
+							@codi_Existen_Canones, 
+							@codi_Indicar_Canones, 
+							@usua_UsuarioModificacion, 
+							@codi_FechaModificacion,
+							'Editar')							
 
-		SELECT 1
+					SELECT 1
+			END
+		ELSE
+			BEGIN
+			DECLARE @codi_IdInsert INT;
+
+					INSERT INTO Adua.tbCondiciones(deva_Id, 
+													   codi_Restricciones_Utilizacion, 
+													   codi_Indicar_Restricciones_Utilizacion, 
+													   codi_Depende_Precio_Condicion, 
+													   codi_Indicar_Existe_Condicion, 
+													   codi_Condicionada_Revertir, 
+													   codi_Vinculacion_Comprador_Vendedor, 
+													   codi_Tipo_Vinculacion, 
+													   codi_Vinculacion_Influye_Precio, 
+													   codi_Pagos_Descuentos_Indirectos, 
+													   codi_Concepto_Monto_Declarado, 
+													   codi_Existen_Canones, 
+													   codi_Indicar_Canones, 
+													   usua_UsuarioCreacion, 
+													   codi_FechaCreacion)
+					VALUES (@deva_Id, 
+							@codi_Restricciones_Utilizacion, 
+							@codi_Indicar_Restricciones_Utilizacion, 
+							@codi_Depende_Precio_Condicion, 
+							@codi_Indicar_Existe_Condicion, 
+							@codi_Condicionada_Revertir, 
+							@codi_Vinculacion_Comprador_Vendedor, 
+							@codi_Tipo_Vinculacion, 
+							@codi_Vinculacion_Influye_Precio, 
+							@codi_Pagos_Descuentos_Indirectos, 
+							@codi_Concepto_Monto_Declarado, 
+							@codi_Existen_Canones, 
+							@codi_Indicar_Canones, 
+							@usua_UsuarioModificacion, 
+							@codi_FechaModificacion)
+
+					SET @codi_IdInsert = SCOPE_IDENTITY()
+
+					INSERT INTO Adua.tbCondicionesHistorial(codi_Id,
+																deva_Id, 
+																codi_Restricciones_Utilizacion, 
+																codi_Indicar_Restricciones_Utilizacion, 
+																codi_Depende_Precio_Condicion, 
+																codi_Indicar_Existe_Condicion, 
+																codi_Condicionada_Revertir, 
+																codi_Vinculacion_Comprador_Vendedor, 
+																codi_Tipo_Vinculacion, 
+																codi_Vinculacion_Influye_Precio, 
+																codi_Pagos_Descuentos_Indirectos, 
+																codi_Concepto_Monto_Declarado, 
+																codi_Existen_Canones, 
+																codi_Indicar_Canones, 
+																hcod_UsuarioAccion,
+																hcod_FechaAccion,
+																hcod_Accion)
+					VALUES (SCOPE_IDENTITY(),
+							@deva_Id, 
+							@codi_Restricciones_Utilizacion, 
+							@codi_Indicar_Restricciones_Utilizacion, 
+							@codi_Depende_Precio_Condicion, 
+							@codi_Indicar_Existe_Condicion, 
+							@codi_Condicionada_Revertir, 
+							@codi_Vinculacion_Comprador_Vendedor, 
+							@codi_Tipo_Vinculacion, 
+							@codi_Vinculacion_Influye_Precio, 
+							@codi_Pagos_Descuentos_Indirectos, 
+							@codi_Concepto_Monto_Declarado, 
+							@codi_Existen_Canones, 
+							@codi_Indicar_Canones, 
+							@usua_UsuarioModificacion, 
+							@codi_FechaModificacion,
+							'Insertar')
+
+					SELECT @codi_IdInsert
+			END
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END CATCH
+	END CATCH
 END
 GO
 
@@ -10444,6 +10678,13 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbCodigoImpuesto_Editar
 AS
 BEGIN
 	BEGIN TRY
+		IF EXISTS (SELECT coim_Id 
+				   FROM Adua.tbCodigoImpuesto
+				   WHERE coim_Descripcion = @coim_Descripcion)
+			BEGIN
+				DELETE FROM Adua.tbCodigoImpuesto
+				WHERE coim_Descripcion = @coim_Descripcion
+			END
 		UPDATE  Adua.tbCodigoImpuesto
 		SET		coim_Descripcion = @coim_Descripcion,
 				usua_UsuarioModificacion = @usua_UsuarioModificacion,
@@ -11679,11 +11920,22 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbEstilos_Editar
 AS
 BEGIN 
    BEGIN TRY 
+	  IF EXISTS (SELECT esti_Id
+				 FROM Prod.tbEstilos
+				 WHERE esti_Descripcion = @esti_Descripcion
+				 AND esti_Estado = 0)
+		BEGIN
+			DELETE FROM Prod.tbEstilos
+			WHERE esti_Descripcion = @esti_Descripcion
+			AND esti_Estado = 0
+		END
+
       UPDATE Prod.tbEstilos
       SET esti_Descripcion = @esti_Descripcion, 
           usua_UsuarioModificacion = @usua_UsuarioModificacion,
           esti_FechaModificacion = @esti_FechaModificacion
       WHERE esti_Id = @esti_Id
+
 	  SELECT 1
    END TRY 
    BEGIN CATCH 
@@ -12331,6 +12583,7 @@ BEGIN
 	END CATCH
 END
 GO
+
 /*Editar Proceso*/
 CREATE OR ALTER PROCEDURE Prod.UDP_tbProcesos_Editar
 @proc_ID					INT,
@@ -12340,6 +12593,16 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbProcesos_Editar
 AS
 BEGIN
 	BEGIN TRY
+			IF EXISTS (SELECT proc_Id 
+						FROM Prod.tbProcesos
+						WHERE proc_Descripcion = @proc_Descripcion
+						AND proc_Estado = 0)
+				BEGIN
+					DELETE FROM Prod.tbProcesos
+					WHERE proc_Descripcion = @proc_Descripcion 
+					AND proc_Estado = 0
+				END
+
 			UPDATE Prod.tbProcesos
 			SET proc_Descripcion = @proc_Descripcion,
 			usua_UsuarioModificacion = @usua_UsuarioModificacion,
@@ -12484,22 +12747,12 @@ BEGIN
 					  WHERE tipa_Area = @tipa_area
 					  AND tipa_Estado = 0)
 				BEGIN
-					UPDATE Prod.tbArea
-					SET   tipa_Estado = 0,
-						  usua_UsuarioModificacion = @usua_UsuarioModificacion,
-						  tipa_FechaModificacion = @tipa_FechaModificacion
-					WHERE tipa_Id = @tipa_Id	
-					
-					UPDATE Prod.tbArea
-					SET   tipa_Estado = 1,
-						  usua_UsuarioModificacion = @usua_UsuarioModificacion,
-						  tipa_FechaModificacion = @tipa_FechaModificacion
-					WHERE tipa_Area = @tipa_area	
+					DELETE FROM Prod.tbArea
+					WHERE tipa_Area = @tipa_area
+					AND tipa_Estado = 0
 
-					SELECT 1
 				END
-			ELSE
-				BEGIN
+
 					UPDATE Prod.tbArea
 					SET   tipa_area = @tipa_area,
 						  proc_Id = @proc_Id,
@@ -12508,7 +12761,6 @@ BEGIN
 					WHERE tipa_Id = @tipa_Id	
 
 					SELECT 1
-				END
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
@@ -12672,27 +12924,22 @@ AS
 BEGIN
 	BEGIN TRY
 
-	 
-
-	IF EXISTS (SELECT * FROM Prod.tbTipoEmbalaje WHERE tiem_Descripcion = @tiem_Descripcion AND tiem_Estado = 0)
+	IF EXISTS (SELECT * FROM Prod.tbTipoEmbalaje 
+			   WHERE tiem_Descripcion = @tiem_Descripcion
+			   AND tiem_Estado = 0)
 		BEGIN
-			UPDATE Prod.tbTipoEmbalaje
-			SET tiem_Estado = 1,
-				usua_UsuarioModificacion = @usua_UsuarioModificacion,
-				tiem_FechaModificacion = @tiem_FechaModificacion
+			DELETE FROM Prod.tbTipoEmbalaje	
 			WHERE tiem_Descripcion = @tiem_Descripcion
-			SELECT 1			
+			AND tiem_Estado = 0
 		END
-	ELSE
-		BEGIN
-			UPDATE Prod.tbTipoEmbalaje
-			SET tiem_Descripcion = @tiem_Descripcion,
-			usua_UsuarioModificacion = @usua_UsuarioModificacion,
-			tiem_FechaModificacion = @tiem_FechaModificacion
-			WHERE tiem_Id = @tiem_Id
 
-			SELECT 1
-		END
+		UPDATE Prod.tbTipoEmbalaje
+		SET tiem_Descripcion = @tiem_Descripcion,
+		usua_UsuarioModificacion = @usua_UsuarioModificacion,
+		tiem_FechaModificacion = @tiem_FechaModificacion
+		WHERE tiem_Id = @tiem_Id
+
+		SELECT 1
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE() 
@@ -12943,33 +13190,21 @@ BEGIN
 				   AND	 subc_Descripcion = @subc_Descripcion
 				   AND subc_Estado = 0)
 			BEGIN
-				UPDATE Prod.tbSubcategoria
-				SET subc_Estado = 0,
-					usua_UsuarioEliminacion = @usua_UsuarioModificacion,
-					subc_FechaEliminacion = @subc_FechaModificacion
-				WHERE subc_Id = @subc_Id
-
-				UPDATE Prod.tbSubcategoria
-				SET subc_Estado = 1,
-					usua_UsuarioModificacion = @usua_UsuarioModificacion,
-					subc_FechaModificacion = @subc_FechaModificacion
+				DELETE FROM Prod.tbSubcategoria
 				WHERE cate_Id = @cate_Id
 				AND	 subc_Descripcion = @subc_Descripcion
-
-				SELECT 1
+				AND subc_Estado = 0
 
 			END
-		ELSE
-			BEGIN
-				UPDATE  Prod.tbSubcategoria
-				SET		cate_Id                  = @cate_Id,
-						subc_Descripcion         = @subc_Descripcion,
-						usua_UsuarioModificacion = @usua_UsuarioModificacion,
-						subc_FechaModificacion   = @subc_FechaModificacion
-				WHERE	subc_Id = @subc_Id
 
-				SELECT 1
-			END
+		UPDATE  Prod.tbSubcategoria
+		SET		cate_Id                  = @cate_Id,
+				subc_Descripcion         = @subc_Descripcion,
+				usua_UsuarioModificacion = @usua_UsuarioModificacion,
+				subc_FechaModificacion   = @subc_FechaModificacion
+		WHERE	subc_Id = @subc_Id
+
+		SELECT 1
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
@@ -13323,6 +13558,15 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbModulos_Editar
 AS
 BEGIN
 	BEGIN TRY
+		IF EXISTS (SELECT modu_Id
+					FROM Prod.tbModulos
+					WHERE modu_Nombre = @modu_Nombre
+					AND modu_Estado = 0)
+			BEGIN
+				DELETE FROM Prod.tbModulos
+				WHERE modu_Nombre = @modu_Nombre
+				AND modu_Estado = 0
+			END
 		UPDATE Prod.tbModulos
 		   SET modu_Nombre = @modu_Nombre
 			  ,proc_Id = @proc_Id
@@ -13523,22 +13767,23 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbMarcasMaquina_Editar
 AS
 BEGIN
 	BEGIN TRY
-	IF EXISTS(SELECT * FROM Prod.tbMarcasMaquina WHERE marq_Nombre = @marq_Nombre AND marq_Estado = 0)
+	IF EXISTS(SELECT * FROM 
+			  Prod.tbMarcasMaquina 
+			  WHERE marq_Nombre = @marq_Nombre 
+			  AND marq_Estado = 0)
 			BEGIN
-				UPDATE	Prod.tbMarcasMaquina
-				SET		marq_Estado = 1
-				WHERE   marq_Nombre = @marq_Nombre
-				SELECT 1
+				DELETE FROM Prod.tbMarcasMaquina 
+				WHERE marq_Nombre = @marq_Nombre 
+				AND marq_Estado = 0
 			END
-	ELSE
-			BEGIN
-				UPDATE	Prod.tbMarcasMaquina
-				SET		marq_Nombre = @marq_Nombre,
-						usua_UsuarioModificacion = @usua_UsuarioModificacion,
-						marq_FechaModificacion = @marq_FechaModificacion
-				WHERE	marq_Id  = @marq_Id
-				SELECT 1
-			END
+
+	UPDATE	Prod.tbMarcasMaquina
+	SET		marq_Nombre = @marq_Nombre,
+			usua_UsuarioModificacion = @usua_UsuarioModificacion,
+			marq_FechaModificacion = @marq_FechaModificacion
+	WHERE	marq_Id  = @marq_Id
+
+	SELECT 1
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
@@ -13765,6 +14010,16 @@ CREATE OR ALTER PROCEDURE prod.UDP_tbFuncionesMaquina_Editar
 AS
 BEGIN
 	BEGIN TRY
+	   IF EXISTS (SELECT func_Id
+				  FROM Prod.tbFuncionesMaquina
+				  WHERE func_Nombre = @func_Nombre
+				  AND func_Estado = 0)
+			BEGIN
+				DELETE FROM Prod.tbFuncionesMaquina
+				WHERE func_Nombre = @func_Nombre
+				AND func_Estado = 0
+			END
+
 	   UPDATE Prod.tbFuncionesMaquina
 		  SET func_Nombre = @func_Nombre,
 			  usua_UsuarioModificacion = @usua_UsuarioModificacion,
@@ -15034,34 +15289,35 @@ GO
 
 
 CREATE OR ALTER PROC Prod.UDP_tbLotes_Editar
-@lote_Id				  INT,
-@mate_Id				  INT,
-@lote_CodigoLote          NVARCHAR(150),
-@colr_Id                  INT,
-@unme_Id				  INT,
-@prod_Id				  INT,
-@lote_Stock               INT,
-@tipa_Id				  INT,
-@lote_Observcaciones	  NVARCHAR(MAX),
-@usua_UsuarioModificacion INT,
-@lote_FechaModificacion	  DATETIME
+	@lote_Id				  INT,
+	@mate_Id				  INT,
+	@lote_CodigoLote          NVARCHAR(150),
+	@colr_Id                  INT,
+	@unme_Id				  INT,
+	@prod_Id				  INT,
+	@lote_Stock               INT,
+	@tipa_Id				  INT,
+	@lote_Observcaciones	  NVARCHAR(MAX),
+	@usua_UsuarioModificacion INT,
+	@lote_FechaModificacion	  DATETIME
 AS BEGIN
 BEGIN TRY
-	UPDATE Prod.tbLotes 
-	                    SET  mate_Id                   = @mate_Id, 
-						     lote_CodigoLote           = @lote_CodigoLote,
-							 lote_Stock                = @lote_Stock,
-							 lote_CantIngresada        = 0,
-							 colr_Id                   = @colr_Id,
-						     unme_Id                   = @unme_Id,
-							 prod_Id				   = @prod_Id,
-							 tipa_Id                   = @tipa_Id, 
-							 lote_Observaciones        = @lote_Observcaciones,
-							 usua_UsuarioModificacion  = @usua_UsuarioModificacion,
-							 lote_FechaModificacion    = @lote_FechaModificacion
-					   WHERE lote_Id                   = @lote_Id
 
-					  SELECT 1
+	UPDATE Prod.tbLotes 
+	SET  mate_Id                   = @mate_Id, 
+			lote_CodigoLote           = @lote_CodigoLote,
+			lote_Stock                = @lote_Stock,
+			lote_CantIngresada        = 0,
+			colr_Id                   = @colr_Id,
+			unme_Id                   = @unme_Id,
+			prod_Id				   = @prod_Id,
+			tipa_Id                   = @tipa_Id, 
+			lote_Observaciones        = @lote_Observcaciones,
+			usua_UsuarioModificacion  = @usua_UsuarioModificacion,
+			lote_FechaModificacion    = @lote_FechaModificacion
+	WHERE lote_Id                   = @lote_Id
+
+	SELECT 1
 END TRY
 BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
@@ -15612,6 +15868,15 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbMaquinas_Editar
 AS
 BEGIN
 	BEGIN TRY
+		IF EXISTS (SELECT maqu_Id
+				   FROM Prod.tbMaquinas
+				   WHERE maqu_NumeroSerie = @maqu_NumeroSerie
+				   AND maqu_Estado = 0)
+			BEGIN
+				DELETE FROM Prod.tbMaquinas
+				WHERE maqu_NumeroSerie = @maqu_NumeroSerie
+				AND maqu_Estado = 0
+			END
 		UPDATE Prod.tbMaquinas
 		   SET maqu_NumeroSerie         = @maqu_NumeroSerie
 			  ,modu_Id                  = @modu_Id
@@ -15985,6 +16250,16 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbRegimenesAduaneros_Editar
 AS
 BEGIN
 	BEGIN TRY
+		IF EXISTS (SELECT regi_Id 
+				   FROM Adua.tbRegimenesAduaneros
+				   WHERE regi_Descripcion = @regi_Descripcion
+				   AND regi_Estado = 0)
+			BEGIN
+				DELETE FROM Adua.tbRegimenesAduaneros
+				WHERE regi_Descripcion = @regi_Descripcion
+				AND regi_Estado = 0
+			END
+
 		UPDATE Adua.tbRegimenesAduaneros
 		   SET regi_Codigo = @regi_Codigo,
 		       regi_Descripcion = @regi_Descripcion,

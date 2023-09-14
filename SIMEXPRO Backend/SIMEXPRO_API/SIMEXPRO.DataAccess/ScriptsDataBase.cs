@@ -276,6 +276,7 @@ namespace SIMEXPRO.DataAccess
         public static string InsertDocumentosPersonaJuridica = "Adua.UDP_tbDocumentosContrato_JuridicaInsertar";
         public static string CargarDocumentosPersonaJuridica = "Adua.UDP_tbDocumentosContrato_CargarDocuJuridica";
         public static string EditarDocumentosPersonaJuridica = "Adua.UDP_tbDocumentosContrato_PersonaJuridicaEditar";
+        public static string EliminarDocumentosByPeju_Id = "Adua.UDP_tbDocumentosContratos_DeleteByPeju_Id";
         #endregion
 
         #region Documentos de Soporte
@@ -799,6 +800,9 @@ namespace SIMEXPRO.DataAccess
         public static string PlanificacionPO = "Prod.UDP_Reporte_Planificación_Produccion";
         public static string CostosMaterialesNoBrindados = "Prod.UDP_CostosMaterialesNoBrindados";
         public static string Consumo_Materiales = "Prod.UDP_Reporte_Consumo_Materiales";
+        public static string MaquinasUso = "Prod.UDP_Reporte_MaquinaUso";
+        public static string OrdenesCompraFecha = "Prod.UDP_Reporte_OrdenesDeCompraFecha";
+        public static string Inventario = "Prod.UDP_Reporte_Inventaro";
 
         #endregion
 
