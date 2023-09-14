@@ -60,6 +60,29 @@ AS BEGIN
 END
 GO
 
+--*** CONVERTIR MAYUSUCULAS A 'PROPER CASE' O 'PROPER TITLE' --***
+CREATE or ALTER FUNCTION Gral.ProperCase(@Text as varchar(8000))
+returns varchar(8000)
+as
+BEGIN
+  DECLARE @Reset bit;
+  DECLARE @Ret varchar(8000);
+  DECLARE @i int;
+  DECLARE @c char(1);
+
+  if @Text is null
+    return null;
+
+  select @Reset = 1, @i = 1, @Ret = '';
+
+  while (@i <= len(@Text))
+    select @c = substring(@Text, @i, 1),
+      @Ret = @Ret + case when @Reset = 1 then UPPER(@c) else LOWER(@c) end,
+      @Reset = case when @c like '[a-zA-Z]' then 0 else 1 end,
+      @i = @i + 1
+  return @Ret
+END
+
 -----------------PROCEDIMIENTOS ALMACENADOS Y VISTAS ACCESO
 --************USUARIOS******************--
 
@@ -3792,7 +3815,7 @@ BEGIN
 	--SELECT @emba_Codigo = SUBSTRING(@emba_Codigo ,1,2)
 	SELECT lugar.emba_Id,
 	       lugar.emba_Codigo, 
-		   lugar.emba_Descripcion, 
+		   gral.ProperCase(lugar.emba_Descripcion) AS emba_Descripcion, 
 		   lugar.usua_UsuarioCreacion, 
 		   usuaCrea.usua_Nombre             AS usuarioCreacionNombre,
 		   lugar.emba_FechaCreacion, 
@@ -3812,6 +3835,8 @@ BEGIN
 	 AND emba_Estado = 1
 END
 GO
+
+EXEC Adua.UDP_tbLugaresEmbarque_Listar NULL
 
 /*Insertar lugares embarque*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbLugaresEmbarque_Insertar 
