@@ -3481,11 +3481,6 @@ BEGIN
 			,personaJuridica.peju_CorreoElectronico 
 			,personaJuridica.peju_CorreoElectronicoAlternativo
 
-			,personaJuridica.peju_DNIRepresentante
-			,personaJuridica.peju_RTNSociedadMercantil                --Tab 5
-			,personaJuridica.peju_EscrituraPublica
-			,personaJuridica.peju_RTNReprsentanteLegal
-
 			,personaJuridica.usua_UsuarioCreacion
 			,usuarioCreacion.usua_Nombre				as usuarioCreacionNombre
 			,personaJuridica.peju_FechaCreacion
