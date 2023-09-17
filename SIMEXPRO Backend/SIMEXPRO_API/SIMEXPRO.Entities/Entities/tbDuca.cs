@@ -191,6 +191,8 @@ namespace SIMEXPRO.Entities.Entities
 
         [NotMapped]
         public string usua_NombreModificacion { get; set; }
+        [NotMapped]
+        public string detalles { get; set; }
 
         public virtual tbRegimenesAduaneros duca_Regimen_AduaneroNavigation { get; set; }
         public virtual tbDeclaraciones_Valor deva { get; set; }
