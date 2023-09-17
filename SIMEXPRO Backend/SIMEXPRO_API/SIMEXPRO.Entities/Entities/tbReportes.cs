@@ -26,7 +26,7 @@ namespace SIMEXPRO.Entities.Entities
         public int TotalProduccion{ get; set; }
         public int PromedioCantidad{ get; set; }
         public int PromedioDanio{ get; set; }
-        public int PromedioProduccion{ get; set; }
+        public decimal PromedioProduccion{ get; set; }
 
         //Reportes Pedidos Cliente
 
