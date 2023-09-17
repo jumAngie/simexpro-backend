@@ -387,10 +387,27 @@ SELECT *
 		FROM [Adua].[VW_tbDeclaraciones_ValorCompleto]
 		WHERE deva_Id IN (SELECT deva_Id FROM [Adua].[tbItemsDEVAPorDuca] dvd 
 		WHERE dvd.duca_Id = duca.duca_Id) FOR JSON AUTO) AS detalles
+		,(SELECT TOP(1)	 SUM([item_ValorTransaccion]) AS [item_ValorTransaccion]
+					,SUM([item_OtrosGastos]) AS [item_OtrosGastos]
+					,SUM([item_GastosDeTransporte]) AS [item_GastosDeTransporte]
+					,SUM([item_Seguro]) AS [item_Seguro]
+					,SUM([item_ValorAduana]) AS [item_ValorAduana]
+					,SUM([item_PesoBruto]) AS [item_PesoBruto]
+					,SUM([item_PesoNeto]) AS [item_PesoNeto]
+		FROM [Adua].[tbItems] items INNER JOIN [Adua].[tbFacturas] fact
+		ON fact.fact_Id = items.fact_Id INNER JOIN [Adua].[tbDeclaraciones_Valor] deva
+		ON deva.deva_Id = fact.deva_Id INNER JOIN [Adua].[tbItemsDEVAPorDuca] dvd
+		ON dvd.deva_Id = deva.deva_Id INNER JOIN [Adua].[tbDuca] duca1
+		ON duca1.duca_Id = dvd.duca_Id
+		WHERE duca1.duca_Id = duca.duca_Id FOR JSON AUTO ) AS ValoresTotales 
+		,(SELECT TOP(1)[lige_TotalGral]
+		FROM [Adua].[tbLiquidacionGeneral] liquiG
+		WHERE liquiG.duca_Id = duca.duca_Id ) AS Impuestos
 FROM [Adua].[tbDuca] duca 
 WHERE duca_Id IN (SELECT duca_Id FROM [Adua].[tbItemsDEVAPorDuca])  AND (duca.duca_fechaCreacion >= @fechaInicio AND duca.duca_fechaCreacion <= @fechaFin )
 END
 GO
+
 
 CREATE OR ALTER PROCEDURE adua.UDP_Reporte_DevasPendientes
 @fechaInicio DATE,
