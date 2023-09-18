@@ -112,5 +112,12 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             var datos = _aduanaServices.FinalizarDuca(duca_Id);
             return Ok(datos);
         }
+
+        [HttpPost("CancelarEliminar")]
+        public IActionResult CancelarEliminarDuca(int duca_Id)
+        {
+            var datos = _aduanaServices.CancelarEliminarDuca(duca_Id);
+            return Ok(datos);
+        }
     }
 }
