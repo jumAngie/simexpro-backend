@@ -16,6 +16,8 @@ namespace SIMEXPRO.Entities.Entities
 
         public int peor_Id { get; set; }
         public int? prov_Id { get; set; }
+        public string peor_Codigo { get; set; }
+
         public int? duca_Id { get; set; }
         public decimal? peor_Impuestos { get; set; }
         public int ciud_Id { get; set; }
