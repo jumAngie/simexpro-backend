@@ -3599,7 +3599,7 @@ BEGIN
         
         SET @peju_Id = SCOPE_IDENTITY();
         
-        SELECT @peju_Id AS peju_Id;
+        SELECT CONCAT(@peju_Id, '.',@pers_Id) AS peju_Id;
 
         COMMIT TRANSACTION;
     END TRY
