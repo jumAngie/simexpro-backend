@@ -45,6 +45,8 @@ namespace SIMEXPRO.Entities.Entities
 
         [NotMapped]
         public string usuarioEliminacionNombre { get; set; }
+        [NotMapped]
+        public string marq_Nombre{ get; set; }
 
         public virtual tbModelosMaquina mmaq { get; set; }
         public virtual tbModulos modu { get; set; }
