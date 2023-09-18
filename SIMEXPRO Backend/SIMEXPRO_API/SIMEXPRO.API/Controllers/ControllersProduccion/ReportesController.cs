@@ -110,5 +110,15 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             var listado = _produccionServices.DevasPendientes(fechaInicio, fechaFin);
             return Ok(listado);
         }
+
+        [HttpPost("MaterialesPorPO")]
+        public IActionResult MaterialesPorPO(MaterialesViewModel orden)
+        {
+            var data = _mapper.Map<tbMateriales>(orden);
+            var listado = _produccionServices.Inventario(data);
+            return Ok(listado);
+        }
+
+
     }
 }

@@ -418,3 +418,196 @@ SELECT *
 FROM [Adua].[VW_tbDeclaraciones_ValorCompleto]
 WHERE deva_Id NOT IN (SELECT deva_Id FROM [Adua].[tbItemsDEVAPorDuca]) AND (deva_fechaCreacion >= @fechaInicio AND deva_fechaCreacion <= @fechaFin )
 END
+
+
+GO 
+-------------------------------------------------------------
+
+CREATE OR ALTER PROCEDURE prod.UDP_Reporte_ProduccionAreas
+@fechaInicio DATE,
+@fechaFin DATE,
+@tipa_Id INT
+AS
+BEGIN
+SELECT	area.tipa_area
+		,SUM(rdet_TotalDia) AS TotalPeriodo
+		,SUM(rdet_TotalDanado) AS TotalDanado
+		,SUM(rdet_TotalDia) - SUM(rdet_TotalDanado) AS TotalExitoso
+		,AVG(rdet_TotalDia) AS PromedioDia
+		,AVG(rdet_TotalDanado) AS PromedioDanado
+		,AVG(rdet_TotalDia - rdet_TotalDanado) AS PromedioExitoso
+		,(SUM(rdet_TotalDanado) * 100) / CAST (SUM(rdet_TotalDia) AS DECIMAL(18,2)) AS PorcentajeDanado
+		,100 - ((SUM(rdet_TotalDanado) * 100) / CAST (SUM(rdet_TotalDia) AS DECIMAL(18,2))) AS PorcentajeBueno
+		,(SELECT m.*
+			FROM 
+			(SELECT  rdd.rdet_Id
+					 ,rdd.remo_Id
+					 ,rdd.rdet_TotalDia
+					 ,rdd.rdet_TotalDanado
+					 ,ensa2.code_Id
+					 ,code2.esti_Id
+					 ,esti.esti_Descripcion
+					 ,code2.code_Sexo
+					 ,code_Valor
+					 ,code2.code_Impuesto
+					 ,remd2.remo_Fecha
+			  FROM prod.tbReporteModuloDiaDetalle rdd 
+			  LEFT JOIN prod.tbReporteModuloDia remd2 ON remd2.remo_Id = rdd.remo_Id
+			  LEFT JOIN prod.tbModulos modu2 ON remd2.modu_Id = modu2.modu_Id 
+			  LEFT JOIN Prod.tbOrde_Ensa_Acab_Etiq ensa2 ON ensa2.ensa_Id = rdd.ensa_Id
+			  LEFT JOIN Prod.tbOrdenCompraDetalles code2 ON code2.code_Id = ensa2.code_Id
+			  LEFT JOIN [Prod].[tbEstilos] esti ON esti.esti_Id = code2.esti_Id
+			  WHERE rdd.remo_Id IN (
+								SELECT remo_Id FROM Prod.tbArea area1 INNER JOIN [Prod].tbProcesos prox1
+								ON prox1.proc_Id = area1.proc_Id INNER JOIN prod.tbModulos modu1
+								ON modu1.proc_Id = prox1.proc_Id INNER JOIN prod.tbReporteModuloDia remd1
+								ON remd1.modu_Id = modu1.modu_Id WHERE area1.tipa_Id = area.tipa_Id)			
+		)AS m FOR JSON AUTO)
+		
+		 AS Detalles
+FROM Prod.tbArea area INNER JOIN [Prod].tbProcesos prox
+ON prox.proc_Id = area.proc_Id INNER JOIN prod.tbModulos modu
+ON modu.proc_Id = prox.proc_Id INNER JOIN prod.tbReporteModuloDia remd
+ON remd.modu_Id = modu.modu_Id INNER JOIN prod.tbReporteModuloDiaDetalle rmdd
+ON rmdd.remo_Id = remd.remo_Id
+WHERE (remd.remo_Fecha BETWEEN @fechaInicio AND @fechaFin) AND (area.tipa_Id = @tipa_Id OR @tipa_Id = 0)
+GROUP BY area.tipa_area, area.tipa_Id
+END
+
+GO
+
+
+CREATE OR ALTER PROCEDURE Prod.UDP_Reportes_MateriasDePO --168
+@orco_Id INT
+AS
+BEGIN
+SELECT  ordenCompra.orco_Id
+-- Informacion del cliente
+		,ordenCompra.orco_Codigo
+		,ordenCompra.orco_IdCliente
+		,cliente.clie_Nombre_O_Razon_Social
+		,cliente.clie_Direccion
+		,cliente.clie_RTN
+		,cliente.clie_Nombre_Contacto
+		,cliente.clie_Numero_Contacto
+		,cliente.clie_Correo_Electronico
+		,cliente.clie_FAX
+		,ordenCompra.orco_EstadoFinalizado
+		,ordenCompra.orco_FechaEmision
+		,ordenCompra.orco_FechaLimite
+		,ordenCompra.orco_Materiales
+
+		,ordenCompra.orco_MetodoPago
+		,fomapago.fopa_Descripcion
+
+--Informacion del Embalaje
+		,ordenCompra.orco_IdEmbalaje
+		,tipoEmbajale.tiem_Descripcion
+		,ordenCompra.orco_EstadoOrdenCompra
+		,ordenCompra.orco_DireccionEntrega
+
+
+		,lote.lote_Id
+		,lote.lote_CodigoLote
+		,lote.lote_Observaciones
+		,mate.mate_Descripcion
+		,subc_Descripcion
+		,cate_Descripcion
+		,ppdd.ppde_Cantidad
+		,UnidadesMedida.unme_Descripcion
+		,areas.tipa_area
+		,color.colr_Nombre
+		,color.colr_Codigo
+		,color.colr_CodigoHtml
+
+
+		,prov_NombreCompania
+		,prov_CorreoElectronico
+		,prov_Telefono
+		,pvin_Codigo
+		,pvin_Nombre
+		,pais_Codigo
+		,pais_Nombre
+		,pdod.peor_FechaEntrada
+
+
+		,esti_Descripcion
+		,code.code_Sexo
+		,tall.tall_Codigo
+		,tall.tall_Nombre
+
+  FROM [Prod].[tbOrde_Ensa_Acab_Etiq] ensa 
+		LEFT JOIN [Prod].[tbOrdenCompraDetalles] code ON code.code_Id = ensa.code_Id 
+		LEFT JOIN Prod.tbOrdenCompra ordenCompra ON ordenCompra.orco_Id = code.orco_Id
+		INNER JOIN  Prod.tbClientes	cliente	ON ordenCompra.orco_IdCliente  = cliente.clie_Id
+		INNER JOIN  Prod.tbTipoEmbalaje	tipoEmbajale ON ordenCompra.orco_IdEmbalaje = tipoEmbajale.tiem_Id
+		INNER JOIN	Adua.tbFormasdePago	fomapago ON ordenCompra.orco_MetodoPago = fomapago.fopa_Id
+		LEFT JOIN [Prod].[tbPedidosProduccion] prod ON prod.ppro_Id = ensa.ppro_Id 
+		INNER JOIN [Prod].[tbPedidosProduccionDetalles] ppdd ON ppdd.ppro_Id = prod.ppro_Id 
+		INNER JOIN [Prod].[tbLotes] lote ON lote.lote_Id = ppdd.lote_Id
+		INNER JOIN [Prod].[tbMateriales] mate ON mate.mate_Id = lote.mate_Id
+		LEFT JOIN Prod.tbArea AS areas ON lote.tipa_id = areas.tipa_id
+		LEFT JOIN Prod.tbColores AS color ON lote.colr_Id = color.colr_Id
+		LEFT JOIN Gral.tbUnidadMedidas AS UnidadesMedida ON lote.unme_Id = UnidadesMedida.unme_Id
+		LEFT JOIN [Prod].[tbSubcategoria] subc	ON subc.subc_Id = mate.subc_Id
+		LEFT JOIN [Prod].[tbCategoria] cate	ON cate.cate_Id = subc.cate_Id 
+		LEFT JOIN [Prod].[tbPedidosOrdenDetalle] pord ON pord.prod_Id = lote.prod_Id
+		INNER JOIN [Prod].[tbPedidosOrden] pdod ON pdod.peor_Id = pord.pedi_Id
+		LEFT JOIN [Gral].[tbProveedores] prov ON pdod.prov_Id = prov.prov_Id
+		LEFT JOIN [Gral].[tbProvincias] pvin ON pvin.pvin_Id = pdod.prov_Id
+		LEFT JOIN [Gral].[tbPaises] pais ON pais.pais_Id = pvin.pais_Id 
+		LEFT JOIN [Prod].[tbEstilos] esti ON esti.esti_Id = code.esti_Id
+		LEFT JOIN [Prod].[tbTallas] tall ON code.tall_Id = tall.tall_Id
+  WHERE ordenCompra.orco_Id = @orco_Id 
+  END 
+
+
+  GO 
+
+  CREATE OR ALTER PROCEDURE prod.UDP_Reportes_MaterialesIngreso
+AS 
+BEGIN
+SELECT	peor_Id, 
+		prov.prov_Id, 
+		prov.prov_NombreCompania,
+		prov.prov_NombreContacto,
+		po.duca_Id, 
+		ciud.ciud_Id,
+		ciud.ciud_Nombre,
+		pais.pais_Codigo,
+		pais.pais_Id,
+		pais.pais_Nombre,
+		pvin.pvin_Codigo,
+		pvin.pvin_Id,
+		pvin.pvin_Nombre,
+		po.peor_DireccionExacta,
+		peor_FechaEntrada, 
+		peor_Obsevaciones, 
+		peor_DadoCliente, 
+		CASE peor_DadoCliente
+		WHEN 1 THEN 'Sí'
+		ELSE 'NO' END AS DadoCliente,
+		peor_Est, 
+		   (SELECT prod_Id,
+				   pedi_Id,
+				   pod.mate_Id,
+				   mate_Descripcion,
+				   prod_Cantidad,
+				   prod_Precio
+			   FROM Prod.tbPedidosOrdenDetalle pod
+			   INNER JOIN Prod.tbMateriales mates
+			   ON pod.mate_Id = mates.mate_Id
+			   WHERE po.peor_Id = pod.pedi_Id
+
+			   FOR JSON PATH) 
+			   AS Detalles
+FROM	Prod.tbPedidosOrden po
+		INNER JOIN Gral.tbProveedores prov			    ON po.prov_Id   = prov.prov_Id
+		LEFT JOIN  gral.tbCiudades	  ciud			    ON po.ciud_Id = ciud.ciud_Id
+		LEFT JOIN Gral.tbProvincias   pvin				ON pvin.pvin_Id = ciud.pvin_Id
+		LEFT JOIN Gral.tbPaises	      pais				ON pvin.pais_Id = pais.pais_Id
+		LEFT JOIN  Adua.tbDuca        duca			    ON po.duca_Id = duca.duca_Id
+		LEFT JOIN  Acce.tbUsuarios    crea				ON crea.usua_Id = po.usua_UsuarioCreacion 
+		LEFT JOIN  Acce.tbUsuarios    modi				ON modi.usua_Id = po.usua_UsuarioModificacion 
+END
+
