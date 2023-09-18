@@ -8335,7 +8335,8 @@ BEGIN
 		  cond.cont_Apellido,
 		  cond.pais_IdExpedicion,		
 		  duca_Conductor_Id, 
-		  
+		  duca_Ventaja,
+
 		  --Identificacion de la Declaracion parte V
 		  trns.tran_Id,
 		  trns.tran_IdUnidadTransporte,
@@ -8450,6 +8451,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_InsertarTab1
 	@duca_Lugar_Desembarque				NVARCHAR(MAX),
 	@duca_Manifiesto					NVARCHAR(150),
 	@duca_Titulo						NVARCHAR(150),
+	@duca_Ventaja						NVARCHAR(100),
 	@usua_UsuarioCreacion				INT,
 	@duca_FechaCreacion					DATETIME
 AS
@@ -8470,6 +8472,7 @@ BEGIN
 			duca_Lugar_Desembarque			 = @duca_Lugar_Desembarque,
 			duca_Manifiesto					 = UPPER(@duca_Manifiesto),
 			duca_Titulo						 = UPPER(@duca_Titulo),
+			duca_Ventaja					 = @duca_Ventaja,
 			usua_UsuarioCreacion			 = @usua_UsuarioCreacion,
 			duca_FechaCreacion				 = @duca_FechaCreacion
 	  WHERE duca_Id = @duca_Id	
@@ -8604,6 +8607,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_EditarTab1
 	@duca_Lugar_Desembarque				NVARCHAR(MAX),
 	@duca_Manifiesto					NVARCHAR(150),
 	@duca_Titulo						NVARCHAR(150),
+	@duca_Ventaja						NVARCHAR(100),
 	@usua_UsuarioModificacion			INT,
 	@duca_FechaModificacion				DATETIME
 AS
@@ -8624,6 +8628,7 @@ BEGIN
 			duca_Lugar_Desembarque			 = @duca_Lugar_Desembarque,
 			duca_Manifiesto					 = UPPER(@duca_Manifiesto),
 			duca_Titulo						 = UPPER(@duca_Titulo),
+			duca_Ventaja					 = @duca_Ventaja,
 			usua_UsuarioModificacion		 = @usua_UsuarioModificacion,
 			duca_FechaModificacion			 = @duca_FechaModificacion
 	  WHERE duca_Id = @duca_Id	
@@ -8757,6 +8762,37 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_CancelarEliminarDuca
+(
+	@duca_Id	INT
+)
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRAN 
+
+		DECLARE @cont_Id INT = (SELECT duca_Conductor_Id FROM Adua.tbDuca WHERE duca_Id = @duca_Id)
+		DECLARE @tran_Id INT = (SELECT tran_Id FROM Adua.tbConductor WHERE cont_Id = @cont_Id)
+
+		DELETE FROM Adua.tbDocumentosDeSoporte WHERE duca_Id = @duca_Id
+
+		DELETE FROM Adua.tbItemsDEVAPorDuca WHERE duca_Id = @duca_Id
+
+		DELETE FROM Adua.tbDuca WHERE duca_Id = @duca_Id
+
+		DELETE FROM Adua.tbConductor WHERE cont_Id = @cont_Id
+
+		DELETE FROM Adua.tbTransporte WHERE tran_Id = @tran_Id
+
+		COMMIT
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		ROLLBACK
+		SELECT 'Error: ' + ERROR_MESSAGE();
+	END CATCH
+END
+GO
 
 --************ARCELES******************--
 /*Listar Aranceles Todos*/

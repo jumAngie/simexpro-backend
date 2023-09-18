@@ -1280,7 +1280,6 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         }
 
 
-
         public ServiceResult PreInsertar()
         {
             var result = new ServiceResult();
@@ -1429,6 +1428,20 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult CancelarEliminarDuca(int duca_Id)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var respuesta = _ducaRepository.CancelarEliminarDuca(duca_Id);
+                return resultado.Ok(respuesta);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region EstadoBoletin
