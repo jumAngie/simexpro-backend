@@ -565,6 +565,8 @@ SELECT  ordenCompra.orco_Id
   GO 
 
   CREATE OR ALTER PROCEDURE prod.UDP_Reportes_MaterialesIngreso
+@fechaInicio DATE,
+@fechaFin DATE
 AS 
 BEGIN
 SELECT	peor_Id, 
@@ -609,5 +611,6 @@ FROM	Prod.tbPedidosOrden po
 		LEFT JOIN  Adua.tbDuca        duca			    ON po.duca_Id = duca.duca_Id
 		LEFT JOIN  Acce.tbUsuarios    crea				ON crea.usua_Id = po.usua_UsuarioCreacion 
 		LEFT JOIN  Acce.tbUsuarios    modi				ON modi.usua_Id = po.usua_UsuarioModificacion 
+WHERE (po.peor_FechaEntrada BETWEEN @fechaInicio AND @fechaFin)
 END
 
