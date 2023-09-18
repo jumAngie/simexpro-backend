@@ -15,7 +15,7 @@ namespace SIMEXPRO.Entities.Entities
             tbDocumentosContratos = new HashSet<tbDocumentosContratos>();
         }
 
-        public bool peju_ContratoFinalizado { get; set; }
+        public bool? peju_ContratoFinalizado { get; set; }
         //tab1
         public int peju_Id { get; set; }
         public int pers_Id { get; set; }

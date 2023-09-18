@@ -3292,7 +3292,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Eliminar
+CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Eliminar 
 @coin_Id	INT,
 @pers_Id    INT
 AS
@@ -3512,6 +3512,7 @@ BEGIN
 			,estadoCivil.escv_Nombre      --
 			,personas.ofpr_Id             --
 			,oficioProfesion.ofpr_Nombre  --
+			,personaJuridica.peju_ContratoFinalizado
 		   
 			,personaJuridica.colo_Id               
 			,colonia.colo_Nombre                   AS ColiniaEmpresa
@@ -3838,6 +3839,44 @@ BEGIN
     END CATCH
 END
 GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_ContratoFinalizado 
+	@peju_Id	INT
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE Adua.tbPersonaJuridica
+		SET	   [peju_ContratoFinalizado] = 1
+		WHERE  peju_Id = @peju_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error:' + ERROR_MESSAGE()
+	END CATCH
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_Eliminar 
+@peju_Id	INT,
+@pers_Id    INT
+AS
+BEGIN
+BEGIN TRY
+	BEGIN TRANSACTION
+		DELETE FROM Adua.tbPersonaJuridica WHERE peju_Id = @peju_Id
+		DELETE FROM Adua.tbPersonas WHERE pers_Id = @pers_Id
+		SELECT 1
+	
+	COMMIT TRAN	
+END TRY
+BEGIN CATCH
+		ROLLBACK TRAN
+		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+	END CATCH
+END
+GO
+
 --**********LUGARES EMBARQUE**********--
 /*Listar lugares embarque*/
 CREATE OR ALTER  PROCEDURE [Adua].[UDP_tbLugaresEmbarque_Listar] 
