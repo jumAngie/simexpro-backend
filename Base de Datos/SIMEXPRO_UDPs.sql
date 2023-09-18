@@ -4268,7 +4268,7 @@ AS
 BEGIN
 SELECT    adu.adua_Id                            ,
         adu.adua_Codigo                        ,
-        adu.adua_Nombre                        ,
+        gral.ProperCase(adu.adua_Nombre)   AS adua_Nombre,
         adu.adua_Direccion_Exacta            ,
         adu.ciud_Id,
         ciud.ciud_Nombre                    ,
