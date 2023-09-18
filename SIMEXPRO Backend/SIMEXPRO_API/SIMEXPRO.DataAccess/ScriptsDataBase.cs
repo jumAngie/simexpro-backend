@@ -808,6 +808,9 @@ namespace SIMEXPRO.DataAccess
         public static string Inventario = "Prod.UDP_Reporte_Inventaro";
         public static string Importaciones = "adua.UDP_Reporte_Importaciones";
         public static string DevaPendiente = "adua.UDP_Reporte_DevasPendientes";
+        public static string MateriasDePO = "Prod.UDP_Reportes_MateriasDePO";
+        public static string ProduccionAreas = "Prod.UDP_Reporte_ProduccionAreas";
+        public static string MaterialesIngreso = "Prod.UDP_Reportes_MaterialesIngreso";
 
         #endregion
 

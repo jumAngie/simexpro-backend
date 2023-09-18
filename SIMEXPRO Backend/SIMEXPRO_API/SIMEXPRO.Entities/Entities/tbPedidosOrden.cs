@@ -78,6 +78,10 @@ namespace SIMEXPRO.Entities.Entities
 
         [NotMapped]
         public string pvin_Nombre { get; set; }
+        [NotMapped]
+        public DateTime? fechaInicio { get; set; }
+        [NotMapped]
+        public DateTime? fechaFin { get; set; }
 
         public virtual tbCiudades ciud { get; set; }
         public virtual tbDuca duca { get; set; }

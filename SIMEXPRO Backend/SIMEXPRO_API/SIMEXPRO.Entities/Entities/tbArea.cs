@@ -37,6 +37,29 @@ namespace SIMEXPRO.Entities.Entities
         public DateTime? tipa_FechaEliminacion { get; set; }
         public bool? tipa_Estado { get; set; }
 
+        [NotMapped]
+        public DateTime? fechaInicio { get; set; }
+        [NotMapped]
+        public DateTime? fechaFin { get; set; }
+        [NotMapped]
+        public Decimal? porcentajeDanado { get; set; }
+        [NotMapped]
+        public Decimal? porcentajeBueno { get; set; }
+        [NotMapped]
+        public int? totalPeriodo { get; set; }
+        [NotMapped]
+        public int? totalDanado { get; set; }
+        [NotMapped]
+        public int? totalExitoso { get; set; }
+        [NotMapped]
+        public int? promedioDia { get; set; }
+        [NotMapped]
+        public int? promedioDanado { get; set; }
+        [NotMapped]
+        public int? promedioExitoso { get; set; }
+        [NotMapped]
+        public String? detalles { get; set; }
+
         public virtual tbProcesos proc { get; set; }
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioEliminacionNavigation { get; set; }

@@ -45,5 +45,7 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public string UsuarioModificacionNombre { get; set; }
         public string DadoCliente { get; set; }
         public string Detalles { get; set; }
+        public DateTime? fechaInicio { get; set; }
+        public DateTime? fechaFin { get; set; }
     }
 }

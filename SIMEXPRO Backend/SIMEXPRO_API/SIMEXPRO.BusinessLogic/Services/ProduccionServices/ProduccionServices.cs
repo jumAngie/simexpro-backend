@@ -3911,6 +3911,46 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
+        public ServiceResult MateriasDePO(tbOrdenCompra orden)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _reportesRepository.MateriasDePO(orden);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult ProduccionAreas(tbArea are)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _reportesRepository.ProduccionAreas(are);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult MaterialesIngreso(tbPedidosOrden orde)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _reportesRepository.MaterialesIngreso(orde);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
         #endregion
     }
 }

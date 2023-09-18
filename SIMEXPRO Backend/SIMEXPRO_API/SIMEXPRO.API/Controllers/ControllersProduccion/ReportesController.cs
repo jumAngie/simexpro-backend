@@ -112,10 +112,26 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
         }
 
         [HttpPost("MaterialesPorPO")]
-        public IActionResult MaterialesPorPO(MaterialesViewModel orden)
+        public IActionResult MaterialesPorPO(OrdenCompraViewModel orden)
         {
-            var data = _mapper.Map<tbMateriales>(orden);
-            var listado = _produccionServices.Inventario(data);
+            var data = _mapper.Map<tbOrdenCompra>(orden);
+            var listado = _produccionServices.MateriasDePO(data);
+            return Ok(listado);
+        }
+
+        [HttpPost("ProduccionAreas")]
+        public IActionResult ProduccionAreas(AreasViewModel orden)
+        {
+            var data = _mapper.Map<tbArea>(orden);
+            var listado = _produccionServices.ProduccionAreas(data);
+            return Ok(listado);
+        }
+        
+        [HttpPost("MaterialesIngreso")]
+        public IActionResult MaterialesIngreso(PedidosOrdenViewModel orden)
+        {
+            var data = _mapper.Map<tbPedidosOrden>(orden);
+            var listado = _produccionServices.MaterialesIngreso(data);
             return Ok(listado);
         }
 

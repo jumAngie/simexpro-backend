@@ -62,6 +62,77 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string Detalles { get; set; }
 
+        public string? cate_Descripcion { get; set; }
+
+        [NotMapped]
+        public string? subc_Descripcion { get; set; }
+
+        [NotMapped]
+        public string? mate_Descripcion { get; set; }
+
+        [NotMapped]
+        public string? lote_Observaciones { get; set; }
+
+        [NotMapped]
+        public string? pais_Nombre { get; set; }
+
+        [NotMapped]
+        public string? pais_Codigo { get; set; }
+
+        [NotMapped]
+        public string? pvin_Nombre { get; set; }
+
+        [NotMapped]
+        public string? pvin_Codigo { get; set; }
+
+        [NotMapped]
+        public string? prov_Telefono { get; set; }
+
+        [NotMapped]
+        public string? prov_CorreoElectronico { get; set; }
+
+        [NotMapped]
+        public string? prov_NombreCompania { get; set; }
+
+        [NotMapped]
+        public string? colr_CodigoHtml { get; set; }
+
+        [NotMapped]
+        public string? colr_Codigo { get; set; }
+
+        [NotMapped]
+        public string? colr_Nombre { get; set; }
+
+        [NotMapped]
+        public string? tipa_area { get; set; }
+
+        [NotMapped]
+        public string? unme_Descripcion { get; set; }
+
+        [NotMapped]
+        public string? lote_CodigoLote { get; set; }
+
+        [NotMapped]
+        public string? tall_Codigo { get; set; }
+
+        [NotMapped]
+        public string? tall_Nombre { get; set; }
+
+        [NotMapped]
+        public string? code_Sexo { get; set; }
+
+        [NotMapped]
+        public string? esti_Descripcion { get; set; }
+
+        [NotMapped]
+        public int? ppde_Cantidad { get; set; }
+
+        [NotMapped]
+        public int? lote_Id { get; set; }
+
+        [NotMapped]
+        public DateTime? peor_FechaEntrada { get; set; }
+
         public virtual tbClientes orco_IdClienteNavigation { get; set; }
         public virtual tbTipoEmbalaje orco_IdEmbalajeNavigation { get; set; }
         public virtual tbFormasdePago orco_MetodoPagoNavigation { get; set; }
