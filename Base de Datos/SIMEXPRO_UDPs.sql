@@ -12734,14 +12734,16 @@ GO
 /*Insertar Proceso*/
 CREATE OR ALTER PROCEDURE Prod.UDP_tbProcesos_Insertar
 @proc_Descripcion		NVARCHAR(200),
+@proc_CodigoHtml		NVARCHAR(50),
 @usua_UsuarioCreacion	INT,
 @proc_FechaCreacion		DATETIME
 AS
 BEGIN
 	BEGIN TRY
-			INSERT INTO Prod.tbProcesos(proc_Descripcion,usua_UsuarioCreacion,proc_FechaCreacion)
+			INSERT INTO Prod.tbProcesos(proc_Descripcion,proc_CodigoHtml,usua_UsuarioCreacion,proc_FechaCreacion)
 			VALUES (
 			@proc_Descripcion,		
+			@proc_CodigoHtml,
 			@usua_UsuarioCreacion,	
 			@proc_FechaCreacion
 			)
@@ -12754,11 +12756,12 @@ END
 GO
 
 /*Editar Proceso*/
-CREATE OR ALTER PROCEDURE Prod.UDP_tbProcesos_Editar
+CREATE OR ALTER PROCEDURE Prod.UDP_tbProcesos_Editar 
 @proc_ID					INT,
+@proc_CodigoHtml            NVARCHAR(50),
 @proc_Descripcion			NVARCHAR(200),
 @usua_UsuarioModificacion	INT,
-@proc_FechaCreacion			DATETIME
+@proc_FechaModificacion		DATETIME
 AS
 BEGIN
 	BEGIN TRY
@@ -12774,8 +12777,9 @@ BEGIN
 
 			UPDATE Prod.tbProcesos
 			SET proc_Descripcion = @proc_Descripcion,
+			proc_CodigoHtml = @proc_CodigoHtml,
 			usua_UsuarioModificacion = @usua_UsuarioModificacion,
-			proc_FechaModificacion = @proc_FechaCreacion
+			proc_FechaModificacion = @proc_FechaModificacion
 			WHERE proc_ID = @proc_ID
 			SELECT 1
 	END TRY
