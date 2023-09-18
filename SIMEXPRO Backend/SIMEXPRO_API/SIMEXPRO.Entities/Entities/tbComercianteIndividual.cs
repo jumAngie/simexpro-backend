@@ -23,6 +23,7 @@ namespace SIMEXPRO.Entities.Entities
         public int? usua_UsuarioModificacion { get; set; }
         public DateTime? coin_FechaModificacion { get; set; }
         public bool? coin_Estado { get; set; }
+        public bool? coin_Finalizacion { get; set; }
         public int? ciud_Id { get; set; }
         public int? alde_Id { get; set; }
         public int? coin_CiudadRepresentante { get; set; }

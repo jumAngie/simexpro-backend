@@ -12,6 +12,40 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 {
     public class ComercianteIndividualRepository : IRepository<tbComercianteIndividual>
     {
+        public RequestStatus Delete(int coin_Id, int pers_Id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@coin_Id", coin_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@pers_Id", pers_Id, DbType.Int32, ParameterDirection.Input);
+   
+
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.EliminarComerciante, parametros, commandType: CommandType.StoredProcedure);
+            return new RequestStatus()
+            {
+                MessageStatus = respuesta
+            };
+        }
+
+        public RequestStatus Finalizar(int coin_Id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@coin_Id", coin_Id, DbType.Int32, ParameterDirection.Input);
+
+
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.FinalizarContratoComerciante, parametros, commandType: CommandType.StoredProcedure);
+            return new RequestStatus()
+            {
+                MessageStatus = respuesta
+            };
+        }
+
+
         public RequestStatus Delete(tbComercianteIndividual item)
         {
             throw new NotImplementedException();

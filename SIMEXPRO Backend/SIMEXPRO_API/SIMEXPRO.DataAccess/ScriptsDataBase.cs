@@ -207,6 +207,8 @@ namespace SIMEXPRO.DataAccess
         public static string InsertarComercianteIndividualTap4 = "Adua.UDP_tbComercianteIndividual_InsertarTap4";
 
         public static string EditarComercianteIndividual = "Adua.UDP_tbComercianteIndividual_Editar";
+        public static string EliminarComerciante = "Adua.UDP_tbComercianteIndividual_Eliminar";
+        public static string FinalizarContratoComerciante = "Adua.UDP_tbComercianteIndividual_FinalizarContrato";
 
         #endregion
 

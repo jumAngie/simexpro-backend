@@ -560,6 +560,37 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+
+        public ServiceResult FinalizarContratoComerciante(int coin_Id)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _comercianteIndividualRepository.Finalizar(coin_Id);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
+
+
+        public ServiceResult EliminarComerciante(int coin_Id, int pers_Id)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _comercianteIndividualRepository.Delete(coin_Id, pers_Id);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region ConceptoPago

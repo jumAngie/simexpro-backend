@@ -1731,6 +1731,7 @@ CREATE TABLE Adua.tbComercianteIndividual (
 	--usua_UsuarioEliminacion		    INT DEFAULT NULL,
 	--coin_FechaEliminacion		        DATETIME DEFAULT NULL,
   	coin_Estado                			BIT DEFAULT 1,
+	coin_Finalizacion					BIT DEFAULT 0
   
   	CONSTRAINT PK_Adua_tbComercianteIndividual_coin_Id PRIMARY KEY (coin_Id),
   	CONSTRAINT FK_ComercianteIndividual_pers_Id_Adua_Personas_pers_Id                           FOREIGN KEY (pers_Id) REFERENCES Adua.tbPersonas(pers_Id),

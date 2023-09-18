@@ -2938,7 +2938,7 @@ BEGIN
 	LEFT JOIN Gral.tbPaises					AS pais		ON pvin.pais_Id =	pais.pais_Id
 	LEFT JOIN Acce.tbUsuarios				AS crea		ON coin.usua_UsuarioCreacion = crea.usua_Id
 	LEFT JOIN Acce.tbUsuarios				AS modi		ON coin.usua_UsuarioModificacion = modi.usua_Id
-	WHERE coin.coin_Estado = 1
+	--WHERE coin.coin_Estado = 1
 END
 GO
 
@@ -3291,6 +3291,43 @@ BEGIN
 	END CATCH
 END
 GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Eliminar
+@coin_Id	INT,
+@pers_Id    INT
+AS
+BEGIN
+BEGIN TRY
+	BEGIN TRANSACTION
+		DELETE FROM Adua.tbComercianteIndividual WHERE coin_Id = @coin_Id
+		DELETE FROM Adua.tbPersonas WHERE pers_Id = @pers_Id
+		SELECT 1
+	
+	COMMIT TRAN	
+END TRY
+BEGIN CATCH
+		ROLLBACK TRAN
+		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+	END CATCH
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_FinalizarContrato
+@coin_Id		INT
+AS
+BEGIN
+BEGIN TRY
+			UPDATE Adua.tbComercianteIndividua
+			SET coin_Finalizacion = 1
+			WHERE coin_Id = @coin_Id
+			SELECT 1
+END TRY
+BEGIN CATCH
+			SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+END CATCH
+END
+GO
+
 
 --*************** UDPS Para Tabla Persona Natural ************--
 
