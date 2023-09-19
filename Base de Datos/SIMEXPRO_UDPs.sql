@@ -2914,7 +2914,8 @@ BEGIN
 			coin.usua_UsuarioModificacion, 
 			modi.usua_Nombre				AS usuarioModificacionNombre,
 			coin.coin_FechaModificacion, 
-			coin.coin_Estado
+			coin.coin_Estado,
+			coin.coin_Finalizacion
 	FROM Adua.tbComercianteIndividual		AS coin
 	LEFT  JOIN Adua.tbPersonas				AS pers		ON coin.pers_Id =	pers.pers_Id
 	LEFT  JOIN Gral.tbEstadosCiviles		AS civi		ON pers.escv_Id =	civi.escv_Id
@@ -3317,7 +3318,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_FinalizarContrato
 AS
 BEGIN
 BEGIN TRY
-			UPDATE Adua.tbComercianteIndividua
+			UPDATE Adua.tbComercianteIndividual 
 			SET coin_Finalizacion = 1
 			WHERE coin_Id = @coin_Id
 			SELECT 1
