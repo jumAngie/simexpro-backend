@@ -34,8 +34,12 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public bool? peor_Estado { get; set; }
         public int Total { get; set; }
         public string empl_Creador { get; set; }
+        public string lote_Stock { get; set; }
         public string duca_No_Duca { get; set; }
         public string prov_Telefono { get; set; }
+        public string mate_Descripcion { get; set; }
+        public int? mate_Id { get; set; }
+
         public int prod_Precio { get; set; }
         public int prod_Cantidad { get; set; }
 
