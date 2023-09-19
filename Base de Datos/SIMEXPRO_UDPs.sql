@@ -2868,9 +2868,6 @@ BEGIN
 			ELSE 'Condicion Propia'
 			END											AS formaRepresentacionDesc,
 
-			--coin.coin_DNI,
-			--coin.coin_DNIrepresentante,
-			--coin.coin_DeclaracionComerciante,
 
 			coin.alde_Id, --nuevo
 			alde.alde_Nombre, --nuevo
@@ -2895,9 +2892,7 @@ BEGIN
 			colo2.colo_Nombre		AS coloniaNombreRepresentante, --nuevo
 
 
-			pvin.pais_Id,
-			pais.pais_Codigo,
-			pais.pais_Nombre,
+
 
 			coin.coin_PuntoReferencia,
 			coin.coin_TelefonoCelular, 
@@ -2937,7 +2932,6 @@ BEGIN
 	LEFT JOIN Gral.tbProvincias				AS pvin		ON ciud.pvin_Id =	pvin.pvin_Id
 	LEFT JOIN Gral.tbProvincias				AS pvinR	ON ciudR.pvin_Id =	pvinR.pvin_Id
 
-	LEFT JOIN Gral.tbPaises					AS pais		ON pvin.pais_Id =	pais.pais_Id
 	LEFT JOIN Acce.tbUsuarios				AS crea		ON coin.usua_UsuarioCreacion = crea.usua_Id
 	LEFT JOIN Acce.tbUsuarios				AS modi		ON coin.usua_UsuarioModificacion = modi.usua_Id
 	--WHERE coin.coin_Estado = 1
@@ -3255,7 +3249,14 @@ BEGIN
 	BEGIN TRANSACTION
 
 	DECLARE @estadoCivilRep INT;
-		DECLARE @oficioRep	INT;
+	DECLARE @oficioRep	INT;
+
+	DECLARE @ciudadRep	INT = NULL;
+	DECLARE @coloniaRep	INT = NULL;
+	DECLARE @aldeaRep	INT = NULL;
+	DECLARE @coin_NumeroLocaDepartRepresentante NVARCHAR(150) = NULL;
+	DECLARE @coin_PuntoReferenciaReprentante	NVARCHAR(200) = NULL;
+
 
 		IF(@pers_escvRepresentante = 0 AND @pers_OfprRepresentante = 0 )
 	BEGIN
@@ -3268,7 +3269,17 @@ BEGIN
 	SET @oficioRep = @pers_OfprRepresentante;
 	END
 
+	IF(@pers_FormaRepresentacion = 0)
+   BEGIN
+		UPDATE Adua.tbComercianteIndividual
+		SET [coin_CiudadRepresentante] = @ciudadRep,
+			[coin_AldeaRepresentante] = @aldeaRep,
+			[coin_coloniaIdRepresentante] = @coloniaRep,
+			[coin_NumeroLocaDepartRepresentante] = @coin_NumeroLocaDepartRepresentante,
+			[coin_PuntoReferenciaReprentante] = @coin_PuntoReferenciaReprentante
+		WHERE [coin_Id] = @coin_Id
 
+   END
 
 		 UPDATE Adua.tbComercianteIndividual 
 			SET [pers_FormaRepresentacion] = @pers_FormaRepresentacion,

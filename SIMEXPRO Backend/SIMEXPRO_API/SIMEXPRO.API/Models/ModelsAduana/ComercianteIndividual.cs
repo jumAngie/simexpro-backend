@@ -31,10 +31,7 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public int ciud_Id { get; set; }
 
         public string ciud_Nombre { get; set; }
-        public string doco_Numero_O_Referencia { get; set; }
-        public string doco_TipoDocumento { get; set; }
-        public string doco_URLImagen { get; set; }
-        public string doco_NombreImagen { get; set; }
+
 
         public int pvin_Id { get; set; }
 
@@ -75,10 +72,6 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public string pvin_CodigoRepresentante { get; set; }  
         public string pvin_NombreRepresentante { get; set; }
         public string coloniaNombreRepresentante { get; set; }
-
-
-        public string coin_DNI { get; set; }
-        public string coin_DNIrepresentante { get; set; }
 
 
         public int? alde_Id { get; set; }
