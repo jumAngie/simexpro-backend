@@ -31,7 +31,6 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return db.Query<tbDeclaraciones_Valor>(ScriptsDataBase.ListarDevaNoDuca, null, commandType: CommandType.StoredProcedure);
         }
 
-
         public RequestStatus PreInsert()
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
@@ -151,6 +150,16 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             return db.Query<tbDuca>(ScriptsDataBase.ListarDuca, null, commandType: System.Data.CommandType.StoredProcedure);
+        }
+
+        public IEnumerable<tbDuca> List_ById(int id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@duca_Id", id, DbType.Int32, ParameterDirection.Input);
+            return db.Query<tbDuca>(ScriptsDataBase.ListarDuca_ById, parametros, commandType: System.Data.CommandType.StoredProcedure);
         }
 
 

@@ -302,6 +302,7 @@ namespace SIMEXPRO.DataAccess
 
         #region Duca
         public static string ListarDuca = "Adua.UDP_tbDuca_Listar";
+        public static string ListarDuca_ById = "Adua.UDP_tbDuca_Listar_ById";
         public static string ListarDevaNoDuca = "Adua.UDP_tbDUCA_PreInsertarListado";
 
         public static string PreInsertDuca = "Adua.UDP_tbDuca_PreInsertar";
