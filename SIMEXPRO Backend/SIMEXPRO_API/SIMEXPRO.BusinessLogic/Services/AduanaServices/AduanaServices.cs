@@ -289,7 +289,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -441,8 +441,8 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             var result = new ServiceResult();
             try
             {
-               var map = _codigoImpuestoRepository.Update(item);
-               return result.Ok(map);
+                var map = _codigoImpuestoRepository.Update(item);
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -794,7 +794,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var respuesta = _declaraciones_ValorRepository.InsertTab1(item, itemDecl, itemImp);
-                
+
                 if (respuesta.MessageStatus != "0")
                 {
                     return result.Ok(respuesta);
@@ -1138,7 +1138,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             {
                 var map = _documentosdeSoporteRepository.Insert(item);
                 return result.Ok(map);
-                
+
             }
             catch (Exception ex)
             {
@@ -1286,7 +1286,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             var result = new ServiceResult();
             try
             {
-                var list = _ducaRepository.generarDuca( duca_Id);
+                var list = _ducaRepository.generarDuca(duca_Id);
                 return result.Ok(list);
             }
             catch (Exception ex)
@@ -1400,7 +1400,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             var result = new ServiceResult();
             try
             {
-                var respuesta = _ducaRepository.Update(item); 
+                var respuesta = _ducaRepository.Update(item);
                 if (respuesta.MessageStatus == "1")
                 {
                     return result.Ok(respuesta);
@@ -1535,7 +1535,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         #endregion
 
         #region EstadoMercancias
-     
+
         public ServiceResult ListarEstadoMercancias()
         {
             var result = new ServiceResult();
@@ -1636,7 +1636,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -1658,7 +1658,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 }
                 else
                 {
-                        
+
                     return result.Error(map);
                 }
             }
@@ -2232,8 +2232,8 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             var result = new ServiceResult();
             try
             {
-                    var map = _liquidacionPorLineaRepository.Delete(item);
-                    return result.Ok(map);
+                var map = _liquidacionPorLineaRepository.Delete(item);
+                return result.Ok(map);
             }
             catch (Exception ex)
             {
@@ -2574,13 +2574,28 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
-        public ServiceResult FinalizarContrato(tbPersonaJuridica item)
+        public ServiceResult FinalizarContrato(int peju_id)
         {
             var resultado = new ServiceResult();
 
             try
             {
-                var list = _personaJuridicaRepository.FinalizarContrato(item);
+                var list = _personaJuridicaRepository.FinalizarContrato(peju_id);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult EliminarJuridica(int peju_Id, int pers_Id)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _personaJuridicaRepository.Delete(peju_Id, pers_Id);
                 return resultado.Ok(list);
             }
             catch (Exception ex)

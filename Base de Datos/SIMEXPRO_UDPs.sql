@@ -3293,7 +3293,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Eliminar
+CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Eliminar 
 @coin_Id	INT,
 @pers_Id    INT
 AS
@@ -3513,6 +3513,7 @@ BEGIN
 			,estadoCivil.escv_Nombre      --
 			,personas.ofpr_Id             --
 			,oficioProfesion.ofpr_Nombre  --
+			,personaJuridica.peju_ContratoFinalizado
 		   
 			,personaJuridica.colo_Id               
 			,colonia.colo_Nombre                   AS ColiniaEmpresa
@@ -3599,7 +3600,7 @@ BEGIN
         
         SET @peju_Id = SCOPE_IDENTITY();
         
-        SELECT @peju_Id AS peju_Id;
+        SELECT CONCAT(@peju_Id, '.',@pers_Id) AS peju_Id;
 
         COMMIT TRANSACTION;
     END TRY
@@ -3839,6 +3840,44 @@ BEGIN
     END CATCH
 END
 GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_ContratoFinalizado 
+	@peju_Id	INT
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE Adua.tbPersonaJuridica
+		SET	   [peju_ContratoFinalizado] = 1
+		WHERE  peju_Id = @peju_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error:' + ERROR_MESSAGE()
+	END CATCH
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_Eliminar 
+@peju_Id	INT,
+@pers_Id    INT
+AS
+BEGIN
+BEGIN TRY
+	BEGIN TRANSACTION
+		DELETE FROM Adua.tbPersonaJuridica WHERE peju_Id = @peju_Id
+		DELETE FROM Adua.tbPersonas WHERE pers_Id = @pers_Id
+		SELECT 1
+	
+	COMMIT TRAN	
+END TRY
+BEGIN CATCH
+		ROLLBACK TRAN
+		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+	END CATCH
+END
+GO
+
 --**********LUGARES EMBARQUE**********--
 /*Listar lugares embarque*/
 CREATE OR ALTER  PROCEDURE [Adua].[UDP_tbLugaresEmbarque_Listar] 
@@ -4230,7 +4269,7 @@ AS
 BEGIN
 SELECT    adu.adua_Id                            ,
         adu.adua_Codigo                        ,
-        adu.adua_Nombre                        ,
+        gral.ProperCase(adu.adua_Nombre)   AS adua_Nombre,
         adu.adua_Direccion_Exacta            ,
         adu.ciud_Id,
         ciud.ciud_Nombre                    ,
@@ -4247,6 +4286,7 @@ FROM    Adua.tbAduanas adu
         LEFT JOIN Gral.tbCiudades ciud      ON ciud.ciud_Id = adu.ciud_Id
         LEFT JOIN Gral.tbProvincias prov   ON prov.pvin_Id = ciud.pvin_Id
  WHERE    adu.adua_Estado = 1
+ ORDER BY adua_FechaCreacion DESC
 END
 
 /*Aduanas Crear */
@@ -8556,6 +8596,8 @@ BEGIN
 	SET @tran_FechaCreacion = GETDATE();
 	BEGIN TRY
 		BEGIN TRAN
+		DECLARE @ducaConductor INT = 0
+
 			IF @pais_Id > 0
 				BEGIN
 					INSERT INTO Adua.tbTransporte (pais_Id, tran_Chasis, marca_Id, tran_Remolque, tran_CantCarga, tran_NumDispositivoSeguridad, tran_Equipamiento, tran_TipoCarga, tran_IdContenedor, usua_UsuarioCreacio, tran_FechaCreacion,tran_IdUnidadTransporte, tran_TamanioEquipamiento)
@@ -8566,7 +8608,7 @@ BEGIN
 					INSERT INTO Adua.tbConductor (cont_NoIdentificacion, cont_Nombre, cont_Apellido, cont_Licencia, pais_IdExpedicion, tran_Id, usua_UsuarioCreacion, cont_FechaCreacion)
 					VALUES(@cont_NoIdentificacion, @cont_Nombre,@cont_Apellido,@cont_Licencia,@pais_IdExpedicion,@Transporte_Id,@usua_UsuarioCreacion,@tran_FechaCreacion);
 
-					DECLARE @ducaConductor INT = (SELECT TOP 1 cont_Id FROM Adua.tbConductor ORDER BY cont_Id DESC);
+					SET @ducaConductor = (SELECT TOP 1 cont_Id FROM Adua.tbConductor ORDER BY cont_Id DESC);
 
 					UPDATE Adua.tbDuca
 					   SET duca_Codigo_Declarante = @duca_Codigo_Declarante
