@@ -1568,6 +1568,7 @@ SELECT	pais_Id								,
 		pais_Codigo							,
 		pais_Nombre							,
 		pais_EsAduana							,
+		pais_prefijo						,
 		pais.usua_UsuarioCreacion			,
 		usua.usua_Nombre					AS UsuarioCreacionNombre,
 		pais_FechaCreacion					, 
@@ -1586,7 +1587,8 @@ GO
 /*Insertar PAISES*/
 CREATE OR ALTER PROCEDURE Gral.UDP_tbPaises_Insertar
 	@pais_Codigo				CHAR(2), 
-	@pais_Nombre				NVARCHAR(150), 
+	@pais_Nombre				NVARCHAR(150),
+	@pais_prefijo				NVARCHAR(4),
 	@pais_EsAduana				BIT,
 	@usua_UsuarioCreacion		INT,
 	@pais_FechaCreacion			DATETIME
@@ -1607,12 +1609,14 @@ BEGIN
 		BEGIN
 			INSERT INTO Gral.tbPaises (pais_Codigo, 
 									   pais_Nombre, 
-									   pais_EsAduana, 
+									   pais_EsAduana,
+									   pais_prefijo,
 									   usua_UsuarioCreacion, 
 									   pais_FechaCreacion)
 			VALUES (@pais_Codigo, 
 					@pais_Nombre, 
-					@pais_EsAduana, 
+					@pais_EsAduana,
+					@pais_prefijo,
 					@usua_UsuarioCreacion, 
 					@pais_FechaCreacion)
 			SELECT 1
@@ -1629,7 +1633,8 @@ GO
 CREATE OR ALTER PROCEDURE Gral.UDP_tbPaises_Editar
 	@pais_Id						INT,
 	@pais_Codigo					CHAR(2),
-	@pais_Nombre					NVARCHAR(150), 
+	@pais_Nombre					NVARCHAR(150),
+	@pais_prefijo					NVARCHAR(4),
 	@usua_UsuarioModificacion		INT,
 	@pais_FechaModificacion	DATETIME
 
@@ -1638,7 +1643,7 @@ BEGIN
 
 	BEGIN TRY		
 		UPDATE Gral.tbPaises
-		SET pais_Nombre = @pais_Nombre,pais_Codigo = @pais_Codigo, 
+		SET pais_Nombre = @pais_Nombre,pais_Codigo = @pais_Codigo,pais_prefijo = @pais_prefijo, 
 		usua_UsuarioModificacion = @usua_UsuarioModificacion, pais_FechaModificacion = @pais_FechaModificacion
 		WHERE pais_Id = @pais_Id
 		SELECT 1
@@ -4303,6 +4308,35 @@ FROM    Adua.tbAduanas adu
         LEFT JOIN Gral.tbCiudades ciud      ON ciud.ciud_Id = adu.ciud_Id
         LEFT JOIN Gral.tbProvincias prov   ON prov.pvin_Id = ciud.pvin_Id
  WHERE    adu.adua_Estado = 1
+ ORDER BY adua_FechaCreacion DESC
+END
+
+GO
+
+/*Listar aduanas ById*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbAduanas_Listar_ById
+@adua_Id INT
+AS
+BEGIN
+SELECT    adu.adua_Id                            ,
+        adu.adua_Codigo                        ,
+        gral.ProperCase(adu.adua_Nombre)   AS adua_Nombre,
+        adu.adua_Direccion_Exacta            ,
+        adu.ciud_Id,
+        ciud.ciud_Nombre                    ,
+        prov.pvin_Id                         ,
+        prov.pvin_Nombre                    ,
+        usu.usua_Nombre                        AS usarioCreacion,
+        adu.adua_FechaCreacion                ,
+        usu2.usua_Nombre                    AS usuarioModificacion,
+        adu.adua_FechaModificacion            ,
+        adu.adua_Estado
+FROM    Adua.tbAduanas adu 
+        INNER JOIN Acce.tbUsuarios usu        ON adu.usua_UsuarioCreacion = usu.usua_Id 
+        LEFT JOIN Acce.tbUsuarios usu2        ON usu2.usua_Id = adu.usua_UsuarioModificacion 
+        LEFT JOIN Gral.tbCiudades ciud      ON ciud.ciud_Id = adu.ciud_Id
+        LEFT JOIN Gral.tbProvincias prov   ON prov.pvin_Id = ciud.pvin_Id
+ WHERE  adu.adua_Estado = 1 AND adu.adua_Id = @adua_Id
  ORDER BY adua_FechaCreacion DESC
 END
 
@@ -8485,6 +8519,132 @@ LEFT JOIN Adua.tbAduanas				AS adua1	ON duca.duca_AduanaRegistro = adua1.adua_Id
 LEFT JOIN Adua.tbAduanas				AS adua2	ON duca.duca_AduanaDestino = adua2.adua_Id
 LEFT JOIN Adua.tbTiposIdentificacion	AS tipo		ON duca.duca_Tipo_Iden_Exportador = tipo.iden_Id
 ORDER BY duca_FechaCreacion DESC
+END
+GO
+
+
+/*Duca listar by Id*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_Listar_ById 
+@duca_Id INT 
+AS
+BEGIN
+   SELECT --Identificación de la Declaración parte I
+		  duca_Id,
+		  duca_No_Duca, 
+		  duca_No_Correlativo_Referencia, 
+		  
+		  --4.1 Exportador / Proveedor
+		  duca_Tipo_Iden_Exportador, 
+		  tipo.iden_Descripcion					AS 'Tipo_identidad_exportador_descripcion',
+		  duca_Pais_Emision_Exportador,
+		  paisEE.pais_Nombre					AS 'Nombre_pais_del_exportador', 
+		  duca_DomicilioFiscal_Exportador, 
+		  
+		  --Identificación de la Declaración parte II --
+		  duca.duca_AduanaRegistro,
+		  adua1.adua_Nombre						AS 'Nombre_Aduana_Registro',			
+		  duca.duca_AduanaDestino,
+		  adua2.adua_Nombre						AS 'Nombre_Aduana_Destino',
+		  
+		  --5.1  Iportador / Destinatario
+		  duca_Numero_Id_Importador, 
+		  duca_Pais_Emision_Importador,
+		  paisEI.pais_Nombre					AS 'Nombre_pais_importador',
+		  duca_DomicilioFiscal_Importador, 
+		  
+		  --Identificación de la Declaración parte III
+		  duca.duca_Regimen_Aduanero,
+		  duca.duca_Modalidad,
+		  duca.duca_Clase,
+		  duca.duca_FechaVencimiento,
+		  
+		  --Identificacion de la Declaracion parte IV
+		  duca_Pais_Procedencia,
+		  paisP.pais_Nombre						AS 'Nombre_pais_procedencia', 
+		  duca_Pais_Exportacion,
+		  paisE.pais_Nombre						AS 'Nombre_pais_exportacion', 
+		  duca_Pais_Destino,
+		  paisD.pais_Nombre						AS 'Nombre_pais_destino', 
+		  duca_Deposito_Aduanero,
+		  duca_Lugar_Desembarque,
+		  embarque.emba_Codigo,
+		  duca_Manifiesto, 
+		  duca_Titulo, 
+		  
+		  --6.1 Declarante 
+		  duca_Codigo_Declarante,
+		  duca_Numero_Id_Declarante, 
+		  duca_NombreSocial_Declarante,
+		  duca_DomicilioFiscal_Declarante, 
+		  
+		  --19.1 Transportista 		
+		  duca_Codigo_Transportista,
+		  duca.motr_id, 
+		  duca_Transportista_Nombre,
+		  
+		  --23.1 Conductor 
+		  duca_Conductor_Id,
+		  cond.cont_NoIdentificacion,
+		  cond.cont_Licencia,
+		  paisc.pais_Nombre						AS 'Nombre_pais_conductor',
+		  cond.cont_Nombre,
+		  cond.cont_Apellido,
+		  cond.pais_IdExpedicion,		
+		  duca_Conductor_Id, 
+		  
+		  --Identificacion de la Declaracion parte V
+		  trns.tran_Id,
+		  trns.tran_IdUnidadTransporte,
+		  trns.tran_TamanioEquipamiento,
+		  trns.pais_Id							AS 'Id_pais_transporte',
+		  paist.pais_Nombre						AS 'Nombre_pais_transporte',
+		  trns.marca_Id							AS 'Transporte_marca_Id',
+		  marc.marc_Descripcion					AS 'Transporte_marc_Descripcion',
+		  trns.tran_Chasis,
+		  trns.tran_Remolque,
+		  trns.tran_CantCarga,
+		  trns.tran_NumDispositivoSeguridad,
+		  trns.tran_Equipamiento,
+		  	  
+		  --Tamaño del equipamiento
+		  trns.tran_TipoCarga,
+		  trns.tran_IdContenedor,	
+		  	  
+		  --Otros gastos
+		  
+		  --32.Totales 
+		  duca.duca_PesoBrutoTotal,      
+		  duca.duca_PesoNetoTotal,
+		  
+		  --Liquidacion general 
+		  --Mercancias
+		  duca.usua_UsuarioCreacion,
+		  usu1.usua_Nombre, 
+		  duca_FechaCreacion, 
+		  duca.usua_UsuarioModificacion, 
+		  usu2.usua_Nombre,
+		  duca_FechaModificacion, 
+		  duca_Finalizado,
+		  duca_Estado
+	 FROM Adua.tbDuca duca 
+LEFT JOIN Acce.tbUsuarios				AS usu1		ON duca.usua_UsuarioCreacion = usu1.usua_Id
+LEFT JOIN Acce.tbUsuarios				AS usu2		ON duca.usua_UsuarioModificacion = usu2.usua_Id
+LEFT JOIN Adua.tbConductor				AS cond		ON duca.duca_Conductor_Id = cond.cont_Id
+LEFT JOIN Adua.tbTransporte				AS trns		ON cond.tran_Id = trns.tran_Id 
+LEFT JOIN Gral.tbPaises					AS paisc	ON cond.pais_IdExpedicion = paisc.pais_Id 
+LEFT JOIN Gral.tbPaises					AS paist	ON paist.pais_Id = trns.pais_Id
+LEFT JOIN Adua.tbMarcas					AS marc		ON marc.marc_Id = trns.marca_Id
+LEFT JOIN Gral.tbPaises					AS paisD	ON duca.duca_Pais_Destino = paisD.pais_Id
+LEFT JOIN Gral.tbPaises					AS paisEE	ON duca.duca_Pais_Emision_Exportador = paisEE.pais_Id
+LEFT JOIN Gral.tbPaises					AS paisEI	ON duca.duca_Pais_Emision_Importador = paisEI.pais_Id
+LEFT JOIN Gral.tbPaises					AS paisE	ON duca.duca_Pais_Exportacion = paisE.pais_Id
+LEFT JOIN Gral.tbPaises					AS paisP	ON duca.duca_Pais_Procedencia = paisP.pais_Id
+LEFT JOIN Adua.tbLugaresEmbarque		AS embarque ON duca.duca_Lugar_Desembarque = embarque.emba_Id
+LEFT JOIN Adua.tbModoTransporte			AS modoT	ON duca.motr_id = modoT.motr_Id
+LEFT JOIN Adua.tbAduanas				AS adua1	ON duca.duca_AduanaRegistro = adua1.adua_Id
+LEFT JOIN Adua.tbAduanas				AS adua2	ON duca.duca_AduanaDestino = adua2.adua_Id
+LEFT JOIN Adua.tbTiposIdentificacion	AS tipo		ON duca.duca_Tipo_Iden_Exportador = tipo.iden_Id 
+WHERE duca.duca_Id = @duca_Id
 END
 GO
 
@@ -15831,7 +15991,7 @@ BEGIN
 		mat.mate_Id,
 		mat.mate_Descripcion
 
-		FROM Prod.tbPedidosProduccionDetalles PPD
+		SELECT * FROM Prod.tbPedidosProduccionDetalles PPD
 			INNER JOIN Prod.tbPedidosProduccion pp ON ppd.ppro_Id = pp.ppro_Id
 			INNER JOIN Prod.tbLotes lot ON PPD.lote_Id = lot.lote_Id
 			INNER JOIN Prod.tbMateriales mat ON lot.mate_Id = mat.mate_Id
