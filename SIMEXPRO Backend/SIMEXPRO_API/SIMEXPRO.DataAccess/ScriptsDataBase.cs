@@ -161,6 +161,7 @@ namespace SIMEXPRO.DataAccess
 
         #region Aduanas
         public static string ListarAduanas = "Adua.UDP_tbAduanas_Listar";
+        public static string ListarAduanasById = "Adua.UDP_tbAduanas_Listar_ById";
         public static string InsertarAduanas = "Adua.UDP_tbAduanas_Insertar";
         public static string EditarAduanas = "Adua.UDP_tbAduanas_Editar";
         public static string EliminarAduanas = "Adua.UDP_tbAduanas_Eliminar";

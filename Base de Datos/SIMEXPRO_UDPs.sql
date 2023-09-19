@@ -4295,6 +4295,35 @@ FROM    Adua.tbAduanas adu
  ORDER BY adua_FechaCreacion DESC
 END
 
+GO
+
+/*Listar aduanas ById*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbAduanas_Listar_ById
+@adua_Id INT
+AS
+BEGIN
+SELECT    adu.adua_Id                            ,
+        adu.adua_Codigo                        ,
+        gral.ProperCase(adu.adua_Nombre)   AS adua_Nombre,
+        adu.adua_Direccion_Exacta            ,
+        adu.ciud_Id,
+        ciud.ciud_Nombre                    ,
+        prov.pvin_Id                         ,
+        prov.pvin_Nombre                    ,
+        usu.usua_Nombre                        AS usarioCreacion,
+        adu.adua_FechaCreacion                ,
+        usu2.usua_Nombre                    AS usuarioModificacion,
+        adu.adua_FechaModificacion            ,
+        adu.adua_Estado
+FROM    Adua.tbAduanas adu 
+        INNER JOIN Acce.tbUsuarios usu        ON adu.usua_UsuarioCreacion = usu.usua_Id 
+        LEFT JOIN Acce.tbUsuarios usu2        ON usu2.usua_Id = adu.usua_UsuarioModificacion 
+        LEFT JOIN Gral.tbCiudades ciud      ON ciud.ciud_Id = adu.ciud_Id
+        LEFT JOIN Gral.tbProvincias prov   ON prov.pvin_Id = ciud.pvin_Id
+ WHERE  adu.adua_Estado = 1 AND adu.adua_Id = @adua_Id
+ ORDER BY adua_FechaCreacion DESC
+END
+
 /*Aduanas Crear */
 GO
 CREATE OR ALTER PROCEDURE Adua.UDP_tbAduanas_Insertar 
