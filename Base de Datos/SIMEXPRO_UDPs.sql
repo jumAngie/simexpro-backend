@@ -2850,7 +2850,8 @@ BEGIN
 	SELECT	
 			coin.coin_Id, 
 			coin.pers_Id,
-			pers.pers_RTN,			
+			pers.pers_RTN,
+			pers.pers_Nombre,
 			pers.escv_Id,
 			civi.escv_Nombre,
 			pers.ofic_Id,
