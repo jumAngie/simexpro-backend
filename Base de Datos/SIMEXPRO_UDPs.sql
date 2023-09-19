@@ -15820,7 +15820,7 @@ BEGIN
 		mat.mate_Id,
 		mat.mate_Descripcion
 
-		FROM Prod.tbPedidosProduccionDetalles PPD
+		SELECT * FROM Prod.tbPedidosProduccionDetalles PPD
 			INNER JOIN Prod.tbPedidosProduccion pp ON ppd.ppro_Id = pp.ppro_Id
 			INNER JOIN Prod.tbLotes lot ON PPD.lote_Id = lot.lote_Id
 			INNER JOIN Prod.tbMateriales mat ON lot.mate_Id = mat.mate_Id
