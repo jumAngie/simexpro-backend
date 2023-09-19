@@ -1673,6 +1673,7 @@ GO
 CREATE TABLE Adua.tbPersonas (
 	pers_Id 					INT IDENTITY(1,1),
 	pers_RTN 					NVARCHAR(40) NOT NULL,
+	pers_Nombre					NVARCHAR(150) NOT NULL,
 	ofic_Id 					INT NOT NULL,
 	escv_Id 					INT NOT NULL,
 	ofpr_Id 					INT NOT NULL,

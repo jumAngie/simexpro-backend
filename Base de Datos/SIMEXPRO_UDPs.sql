@@ -2945,9 +2945,10 @@ GO
 
 
 /*Insertar Comersiante Individual*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap1 --'1548-1458-145789', 2, 1, 2,0,null,null,1, '2023-08-30 10:26:59.900'
+CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap1 
 (
 	@pers_RTN							NVARCHAR(40),
+	@pers_Nombre						NVARCHAR(150),
 	@ofic_Id							INT,
 	@escv_Id							INT,
 	@ofpr_Id							INT,
@@ -2980,6 +2981,7 @@ BEGIN
 
 
 		INSERT INTO Adua.tbPersonas ([pers_RTN], 
+									 pers_Nombre,
 									 [ofic_Id],
 									 [escv_Id],
 									 [ofpr_Id],
@@ -2988,14 +2990,16 @@ BEGIN
 									 [usua_UsuarioCreacion], 
 									 [pers_FechaCreacion])
 		VALUES(@pers_RTN,
-		@ofic_Id,
-		@escv_Id,
-		@ofpr_Id,
-		@estadoCivilRep,
-		@oficioRep,
-		@usua_UsuarioCreacion,
-		@pers_FechaCreacion )
-		SET  @pers_Id = SCOPE_IDENTITY() 
+			   @pers_Nombre,
+			   @ofic_Id,
+			   @escv_Id,
+			   @ofpr_Id,
+			   @estadoCivilRep,
+			   @oficioRep,
+			   @usua_UsuarioCreacion,
+			   @pers_FechaCreacion )
+
+		SET @pers_Id = SCOPE_IDENTITY() 
 
 
 		INSERT INTO Adua.tbComercianteIndividual 
@@ -3020,7 +3024,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap2  --6,63,1,'por ahi'
+CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap2  
 	@coin_Id					INT,
 	@ciud_Id					INT,
 	@alde_Id					INT,
@@ -3130,7 +3134,7 @@ BEGIN
                                                 [doco_TipoDocumento])
         SELECT @coin_Id,
                [doco_URLImagen],
-               @usua_UsuarioCreacion, -- Asignar directamente el valor del parámetro
+               @usua_UsuarioCreacion, 
                @doco_FechaCreacion,
                [doco_Numero_O_Referencia],
                [doco_TipoDocumento]
@@ -3141,7 +3145,6 @@ BEGIN
             doco_URLImagen NVARCHAR(MAX)
         )
 
-        -- Seleccionar 1 si la inserción fue exitosa
         SELECT 1
     END TRY
     BEGIN CATCH
@@ -3235,6 +3238,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Editar
 	@coin_Id							INT,
   	@pers_Id                           	INT,
 	@pers_RTN							NVARCHAR(40),
+	@pers_Nombre						NVARCHAR(150),
   	@ofpr_Id                           	INT,
 	@ofic_Id							INT,
 	@escv_Id							INT,
@@ -3273,6 +3277,7 @@ BEGIN
 
 		 UPDATE Adua.tbPersonas
 			SET [pers_RTN] = @pers_RTN,
+				pers_Nombre = @pers_Nombre,
 				[ofic_Id] = @ofic_Id, 
 				[escv_Id] = @escv_Id,
 				[ofpr_Id] = @ofpr_Id, 
@@ -3280,7 +3285,7 @@ BEGIN
 				[pers_OfprRepresentante] = @oficioRep,
 				[usua_UsuarioModificacion] = @usua_UsuarioModificacion,
 				[pers_FechaModificacion] = @coin_FechaModificacion
-			WHERE [pers_Id] = @pers_Id AND [pers_Estado] = 1
+			WHERE [pers_Id] = @pers_Id 
 
 			SELECT 1
 
