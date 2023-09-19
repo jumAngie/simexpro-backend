@@ -1568,6 +1568,7 @@ SELECT	pais_Id								,
 		pais_Codigo							,
 		pais_Nombre							,
 		pais_EsAduana							,
+		pais_prefijo						,
 		pais.usua_UsuarioCreacion			,
 		usua.usua_Nombre					AS UsuarioCreacionNombre,
 		pais_FechaCreacion					, 
@@ -1586,7 +1587,8 @@ GO
 /*Insertar PAISES*/
 CREATE OR ALTER PROCEDURE Gral.UDP_tbPaises_Insertar
 	@pais_Codigo				CHAR(2), 
-	@pais_Nombre				NVARCHAR(150), 
+	@pais_Nombre				NVARCHAR(150),
+	@pais_prefijo				NVARCHAR(4),
 	@pais_EsAduana				BIT,
 	@usua_UsuarioCreacion		INT,
 	@pais_FechaCreacion			DATETIME
@@ -1607,12 +1609,14 @@ BEGIN
 		BEGIN
 			INSERT INTO Gral.tbPaises (pais_Codigo, 
 									   pais_Nombre, 
-									   pais_EsAduana, 
+									   pais_EsAduana,
+									   pais_prefijo,
 									   usua_UsuarioCreacion, 
 									   pais_FechaCreacion)
 			VALUES (@pais_Codigo, 
 					@pais_Nombre, 
-					@pais_EsAduana, 
+					@pais_EsAduana,
+					@pais_prefijo,
 					@usua_UsuarioCreacion, 
 					@pais_FechaCreacion)
 			SELECT 1
@@ -1629,7 +1633,8 @@ GO
 CREATE OR ALTER PROCEDURE Gral.UDP_tbPaises_Editar
 	@pais_Id						INT,
 	@pais_Codigo					CHAR(2),
-	@pais_Nombre					NVARCHAR(150), 
+	@pais_Nombre					NVARCHAR(150),
+	@pais_prefijo					NVARCHAR(4),
 	@usua_UsuarioModificacion		INT,
 	@pais_FechaModificacion	DATETIME
 
@@ -1638,7 +1643,7 @@ BEGIN
 
 	BEGIN TRY		
 		UPDATE Gral.tbPaises
-		SET pais_Nombre = @pais_Nombre,pais_Codigo = @pais_Codigo, 
+		SET pais_Nombre = @pais_Nombre,pais_Codigo = @pais_Codigo,pais_prefijo = @pais_prefijo, 
 		usua_UsuarioModificacion = @usua_UsuarioModificacion, pais_FechaModificacion = @pais_FechaModificacion
 		WHERE pais_Id = @pais_Id
 		SELECT 1
@@ -2868,9 +2873,6 @@ BEGIN
 			ELSE 'Condicion Propia'
 			END											AS formaRepresentacionDesc,
 
-			--coin.coin_DNI,
-			--coin.coin_DNIrepresentante,
-			--coin.coin_DeclaracionComerciante,
 
 			coin.alde_Id, --nuevo
 			alde.alde_Nombre, --nuevo
@@ -2895,9 +2897,7 @@ BEGIN
 			colo2.colo_Nombre		AS coloniaNombreRepresentante, --nuevo
 
 
-			pvin.pais_Id,
-			pais.pais_Codigo,
-			pais.pais_Nombre,
+
 
 			coin.coin_PuntoReferencia,
 			coin.coin_TelefonoCelular, 
@@ -2937,7 +2937,6 @@ BEGIN
 	LEFT JOIN Gral.tbProvincias				AS pvin		ON ciud.pvin_Id =	pvin.pvin_Id
 	LEFT JOIN Gral.tbProvincias				AS pvinR	ON ciudR.pvin_Id =	pvinR.pvin_Id
 
-	LEFT JOIN Gral.tbPaises					AS pais		ON pvin.pais_Id =	pais.pais_Id
 	LEFT JOIN Acce.tbUsuarios				AS crea		ON coin.usua_UsuarioCreacion = crea.usua_Id
 	LEFT JOIN Acce.tbUsuarios				AS modi		ON coin.usua_UsuarioModificacion = modi.usua_Id
 	--WHERE coin.coin_Estado = 1
@@ -3255,7 +3254,14 @@ BEGIN
 	BEGIN TRANSACTION
 
 	DECLARE @estadoCivilRep INT;
-		DECLARE @oficioRep	INT;
+	DECLARE @oficioRep	INT;
+
+	DECLARE @ciudadRep	INT = NULL;
+	DECLARE @coloniaRep	INT = NULL;
+	DECLARE @aldeaRep	INT = NULL;
+	DECLARE @coin_NumeroLocaDepartRepresentante NVARCHAR(150) = NULL;
+	DECLARE @coin_PuntoReferenciaReprentante	NVARCHAR(200) = NULL;
+
 
 		IF(@pers_escvRepresentante = 0 AND @pers_OfprRepresentante = 0 )
 	BEGIN
@@ -3268,7 +3274,17 @@ BEGIN
 	SET @oficioRep = @pers_OfprRepresentante;
 	END
 
+	IF(@pers_FormaRepresentacion = 0)
+   BEGIN
+		UPDATE Adua.tbComercianteIndividual
+		SET [coin_CiudadRepresentante] = @ciudadRep,
+			[coin_AldeaRepresentante] = @aldeaRep,
+			[coin_coloniaIdRepresentante] = @coloniaRep,
+			[coin_NumeroLocaDepartRepresentante] = @coin_NumeroLocaDepartRepresentante,
+			[coin_PuntoReferenciaReprentante] = @coin_PuntoReferenciaReprentante
+		WHERE [coin_Id] = @coin_Id
 
+   END
 
 		 UPDATE Adua.tbComercianteIndividual 
 			SET [pers_FormaRepresentacion] = @pers_FormaRepresentacion,
