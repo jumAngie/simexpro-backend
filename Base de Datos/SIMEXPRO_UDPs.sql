@@ -1568,6 +1568,7 @@ SELECT	pais_Id								,
 		pais_Codigo							,
 		pais_Nombre							,
 		pais_EsAduana							,
+		pais_prefijo						,
 		pais.usua_UsuarioCreacion			,
 		usua.usua_Nombre					AS UsuarioCreacionNombre,
 		pais_FechaCreacion					, 
@@ -1586,7 +1587,8 @@ GO
 /*Insertar PAISES*/
 CREATE OR ALTER PROCEDURE Gral.UDP_tbPaises_Insertar
 	@pais_Codigo				CHAR(2), 
-	@pais_Nombre				NVARCHAR(150), 
+	@pais_Nombre				NVARCHAR(150),
+	@pais_prefijo				NVARCHAR(4),
 	@pais_EsAduana				BIT,
 	@usua_UsuarioCreacion		INT,
 	@pais_FechaCreacion			DATETIME
@@ -1607,12 +1609,14 @@ BEGIN
 		BEGIN
 			INSERT INTO Gral.tbPaises (pais_Codigo, 
 									   pais_Nombre, 
-									   pais_EsAduana, 
+									   pais_EsAduana,
+									   pais_prefijo,
 									   usua_UsuarioCreacion, 
 									   pais_FechaCreacion)
 			VALUES (@pais_Codigo, 
 					@pais_Nombre, 
-					@pais_EsAduana, 
+					@pais_EsAduana,
+					@pais_prefijo,
 					@usua_UsuarioCreacion, 
 					@pais_FechaCreacion)
 			SELECT 1
@@ -1629,7 +1633,8 @@ GO
 CREATE OR ALTER PROCEDURE Gral.UDP_tbPaises_Editar
 	@pais_Id						INT,
 	@pais_Codigo					CHAR(2),
-	@pais_Nombre					NVARCHAR(150), 
+	@pais_Nombre					NVARCHAR(150),
+	@pais_prefijo					NVARCHAR(4),
 	@usua_UsuarioModificacion		INT,
 	@pais_FechaModificacion	DATETIME
 
@@ -1638,7 +1643,7 @@ BEGIN
 
 	BEGIN TRY		
 		UPDATE Gral.tbPaises
-		SET pais_Nombre = @pais_Nombre,pais_Codigo = @pais_Codigo, 
+		SET pais_Nombre = @pais_Nombre,pais_Codigo = @pais_Codigo,pais_prefijo = @pais_prefijo, 
 		usua_UsuarioModificacion = @usua_UsuarioModificacion, pais_FechaModificacion = @pais_FechaModificacion
 		WHERE pais_Id = @pais_Id
 		SELECT 1

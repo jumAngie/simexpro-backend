@@ -184,7 +184,7 @@ CREATE TABLE Gral.tbPaises(
 		pais_Codigo 				CHAR(2)			NOT NULL,
 		pais_Nombre 				NVARCHAR(150) 	NOT NULL,
 		pais_EsAduana				BIT				NOT NULL,
-
+		pais_prefijo				NVARCHAR(4)		NOT NULL,
 		usua_UsuarioCreacion 		INT				NOT NULL,
 		pais_FechaCreacion 			DATETIME 		NOT NULL,
 		usua_UsuarioModificacion	INT				DEFAULT NULL,
@@ -202,6 +202,7 @@ CREATE TABLE Gral.tbPaises(
 	
 );
 GO
+
 
 CREATE TABLE Gral.tbFormas_Envio(
 		foen_Id 					INT IDENTITY(1,1),
