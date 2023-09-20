@@ -2919,16 +2919,24 @@ BEGIN
 			coin.coin_Finalizacion
 	FROM Adua.tbComercianteIndividual		AS coin
 	LEFT  JOIN Adua.tbPersonas				AS pers		ON coin.pers_Id =	pers.pers_Id
+
 	LEFT  JOIN Gral.tbEstadosCiviles		AS civi		ON pers.escv_Id =	civi.escv_Id
+
 	LEFT  JOIN Gral.tbEstadosCiviles		AS civiR	ON pers.pers_escvRepresentante = civiR.escv_Id
+
 	LEFT  JOIN Gral.tbOficinas				AS ofic		ON pers.ofic_Id =	ofic.ofic_Id
+
 	LEFT  JOIN Gral.tbOficio_Profesiones	AS ofpr		ON pers.ofpr_Id =	ofpr.ofpr_Id
+
 	LEFT  JOIN Gral.tbOficio_Profesiones	AS ofprR	ON pers.pers_OfprRepresentante = ofprR.ofpr_Id 
 	 
 	LEFT  JOIN Gral.tbAldeas				AS alde		ON coin.alde_Id =	alde.alde_Id 
+
 	LEFT JOIN  Gral.tbCiudades				AS ciud		ON coin.ciud_Id =	ciud.ciud_Id
+
 		 
 	LEFT  JOIN Gral.tbAldeas				AS aldeR	ON coin.coin_AldeaRepresentante =	aldeR.alde_Id 
+
 	LEFT  JOIN  Gral.tbCiudades				AS ciudR	ON coin.coin_CiudadRepresentante =	ciudR.ciud_Id
 
 	LEFT JOIN Gral.tbColonias				AS colo		ON coin.colo_Id = colo.colo_Id
@@ -3175,15 +3183,12 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_ComercianteEditar
     @coin_Id						INT,
     @doco_URLImagen					NVARCHAR(MAX),
     @usua_UsuarioModificacion		INT,
-    @doco_FechaModificacion			DATETIME
+    @doco_FechaModificacion			DATETIME,
+	@FormaRepresentacion			BIT   --NUEVO
 AS
 BEGIN
     BEGIN TRY
     BEGIN TRANSACTION
-
-		DELETE FROM Adua.tbDocumentosContratos 
-		WHERE [coin_Id] = @coin_Id
-
 
         INSERT INTO Adua.tbDocumentosContratos ([coin_Id],
                                                 [doco_URLImagen],
@@ -3203,6 +3208,14 @@ BEGIN
             doco_Numero_O_Referencia NVARCHAR(50),
             doco_URLImagen NVARCHAR(MAX)
         )
+
+		IF(@FormaRepresentacion = 0)
+		BEGIN
+			DELETE FROM Adua.tbDocumentosContratos 
+			WHERE coin_Id = @coin_Id AND (
+			 [doco_TipoDocumento] = 'RTN-RL'
+			OR [doco_TipoDocumento] = 'DNI-RL')
+		END
 
         SELECT 1
 	COMMIT TRAN	
@@ -3276,6 +3289,9 @@ BEGIN
 
 	IF(@pers_FormaRepresentacion = 0)
    BEGIN
+		SET @estadoCivilRep = NULL;
+		SET @oficioRep = NULL;
+
 		UPDATE Adua.tbComercianteIndividual
 		SET [coin_CiudadRepresentante] = @ciudadRep,
 			[coin_AldeaRepresentante] = @aldeaRep,
