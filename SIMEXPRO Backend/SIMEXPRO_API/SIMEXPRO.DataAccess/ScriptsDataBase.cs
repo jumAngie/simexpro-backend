@@ -818,6 +818,10 @@ namespace SIMEXPRO.DataAccess
         public static string ProduccionAreas = "Prod.UDP_Reporte_ProduccionAreas";
         public static string MaterialesIngreso = "Prod.UDP_Reportes_MaterialesIngreso";
 
+        public static string Contrato_PN = "Adua.UDP_Reporte_Contratos_Persona_Natural_Por_Fecha";
+        public static string Contrato_PJ = "Adua.UDP_Reporte_Contratos_Persona_Juridica_Por_Fecha";
+        public static string Contrato_CI = "Adua.UDP_Reporte_Contratos_Comerciante_Individual_Por_Fecha";
+
         #endregion
 
     }
