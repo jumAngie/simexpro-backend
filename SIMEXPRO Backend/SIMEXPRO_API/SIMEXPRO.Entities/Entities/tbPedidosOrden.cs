@@ -16,7 +16,21 @@ namespace SIMEXPRO.Entities.Entities
 
         public int peor_Id { get; set; }
         public int? prov_Id { get; set; }
+        
+        [NotMapped]
+        public string lote_Stock { get; set; }
+[NotMapped]
+        public int? mate_Id { get; set; }
         public string peor_Codigo { get; set; }
+        [NotMapped]
+
+        public string mate_Descripcion { get; set; }
+        [NotMapped]
+
+        public int prod_Cantidad { get; set; }
+        [NotMapped]
+
+        public decimal prod_Precio { get; set; }
 
         public int? duca_Id { get; set; }
         public decimal? peor_Impuestos { get; set; }
@@ -44,10 +58,6 @@ namespace SIMEXPRO.Entities.Entities
         public string empl_Creador { get; set; }
         [NotMapped]
         public int Total { get; set; }
-        [NotMapped]
-        public int prod_Cantidad { get; set; }
-        [NotMapped]
-        public int prod_Precio { get; set; }
         [NotMapped]
         public string prov_NombreContacto { get; set; }
         [NotMapped]

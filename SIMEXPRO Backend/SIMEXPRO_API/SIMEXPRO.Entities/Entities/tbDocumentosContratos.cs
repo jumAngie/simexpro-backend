@@ -25,6 +25,9 @@ namespace SIMEXPRO.Entities.Entities
 
         public string doco_NombreImagen { get; set; }
 
+        [NotMapped]
+        public bool? FormaRepresentacion { get; set; }
+
 
         public int usua_UsuarioCreacion { get; set; }
         public DateTime doco_FechaCreacion { get; set; }

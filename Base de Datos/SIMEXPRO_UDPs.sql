@@ -2873,9 +2873,6 @@ BEGIN
 			ELSE 'Condicion Propia'
 			END											AS formaRepresentacionDesc,
 
-			--coin.coin_DNI,
-			--coin.coin_DNIrepresentante,
-			--coin.coin_DeclaracionComerciante,
 
 			coin.alde_Id, --nuevo
 			alde.alde_Nombre, --nuevo
@@ -2900,9 +2897,7 @@ BEGIN
 			colo2.colo_Nombre		AS coloniaNombreRepresentante, --nuevo
 
 
-			pvin.pais_Id,
-			pais.pais_Codigo,
-			pais.pais_Nombre,
+
 
 			coin.coin_PuntoReferencia,
 			coin.coin_TelefonoCelular, 
@@ -2924,16 +2919,24 @@ BEGIN
 			coin.coin_Finalizacion
 	FROM Adua.tbComercianteIndividual		AS coin
 	LEFT  JOIN Adua.tbPersonas				AS pers		ON coin.pers_Id =	pers.pers_Id
+
 	LEFT  JOIN Gral.tbEstadosCiviles		AS civi		ON pers.escv_Id =	civi.escv_Id
+
 	LEFT  JOIN Gral.tbEstadosCiviles		AS civiR	ON pers.pers_escvRepresentante = civiR.escv_Id
+
 	LEFT  JOIN Gral.tbOficinas				AS ofic		ON pers.ofic_Id =	ofic.ofic_Id
+
 	LEFT  JOIN Gral.tbOficio_Profesiones	AS ofpr		ON pers.ofpr_Id =	ofpr.ofpr_Id
+
 	LEFT  JOIN Gral.tbOficio_Profesiones	AS ofprR	ON pers.pers_OfprRepresentante = ofprR.ofpr_Id 
 	 
 	LEFT  JOIN Gral.tbAldeas				AS alde		ON coin.alde_Id =	alde.alde_Id 
+
 	LEFT JOIN  Gral.tbCiudades				AS ciud		ON coin.ciud_Id =	ciud.ciud_Id
+
 		 
 	LEFT  JOIN Gral.tbAldeas				AS aldeR	ON coin.coin_AldeaRepresentante =	aldeR.alde_Id 
+
 	LEFT  JOIN  Gral.tbCiudades				AS ciudR	ON coin.coin_CiudadRepresentante =	ciudR.ciud_Id
 
 	LEFT JOIN Gral.tbColonias				AS colo		ON coin.colo_Id = colo.colo_Id
@@ -2942,7 +2945,6 @@ BEGIN
 	LEFT JOIN Gral.tbProvincias				AS pvin		ON ciud.pvin_Id =	pvin.pvin_Id
 	LEFT JOIN Gral.tbProvincias				AS pvinR	ON ciudR.pvin_Id =	pvinR.pvin_Id
 
-	LEFT JOIN Gral.tbPaises					AS pais		ON pvin.pais_Id =	pais.pais_Id
 	LEFT JOIN Acce.tbUsuarios				AS crea		ON coin.usua_UsuarioCreacion = crea.usua_Id
 	LEFT JOIN Acce.tbUsuarios				AS modi		ON coin.usua_UsuarioModificacion = modi.usua_Id
 	--WHERE coin.coin_Estado = 1
@@ -3181,15 +3183,12 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_ComercianteEditar
     @coin_Id						INT,
     @doco_URLImagen					NVARCHAR(MAX),
     @usua_UsuarioModificacion		INT,
-    @doco_FechaModificacion			DATETIME
+    @doco_FechaModificacion			DATETIME,
+	@FormaRepresentacion			BIT   --NUEVO
 AS
 BEGIN
     BEGIN TRY
     BEGIN TRANSACTION
-
-		DELETE FROM Adua.tbDocumentosContratos 
-		WHERE [coin_Id] = @coin_Id
-
 
         INSERT INTO Adua.tbDocumentosContratos ([coin_Id],
                                                 [doco_URLImagen],
@@ -3209,6 +3208,14 @@ BEGIN
             doco_Numero_O_Referencia NVARCHAR(50),
             doco_URLImagen NVARCHAR(MAX)
         )
+
+		IF(@FormaRepresentacion = 0)
+		BEGIN
+			DELETE FROM Adua.tbDocumentosContratos 
+			WHERE coin_Id = @coin_Id AND (
+			 [doco_TipoDocumento] = 'RTN-RL'
+			OR [doco_TipoDocumento] = 'DNI-RL')
+		END
 
         SELECT 1
 	COMMIT TRAN	
@@ -3260,7 +3267,14 @@ BEGIN
 	BEGIN TRANSACTION
 
 	DECLARE @estadoCivilRep INT;
-		DECLARE @oficioRep	INT;
+	DECLARE @oficioRep	INT;
+
+	DECLARE @ciudadRep	INT = NULL;
+	DECLARE @coloniaRep	INT = NULL;
+	DECLARE @aldeaRep	INT = NULL;
+	DECLARE @coin_NumeroLocaDepartRepresentante NVARCHAR(150) = NULL;
+	DECLARE @coin_PuntoReferenciaReprentante	NVARCHAR(200) = NULL;
+
 
 		IF(@pers_escvRepresentante = 0 AND @pers_OfprRepresentante = 0 )
 	BEGIN
@@ -3273,7 +3287,20 @@ BEGIN
 	SET @oficioRep = @pers_OfprRepresentante;
 	END
 
+	IF(@pers_FormaRepresentacion = 0)
+   BEGIN
+		SET @estadoCivilRep = NULL;
+		SET @oficioRep = NULL;
 
+		UPDATE Adua.tbComercianteIndividual
+		SET [coin_CiudadRepresentante] = @ciudadRep,
+			[coin_AldeaRepresentante] = @aldeaRep,
+			[coin_coloniaIdRepresentante] = @coloniaRep,
+			[coin_NumeroLocaDepartRepresentante] = @coin_NumeroLocaDepartRepresentante,
+			[coin_PuntoReferenciaReprentante] = @coin_PuntoReferenciaReprentante
+		WHERE [coin_Id] = @coin_Id
+
+   END
 
 		 UPDATE Adua.tbComercianteIndividual 
 			SET [pers_FormaRepresentacion] = @pers_FormaRepresentacion,

@@ -32,15 +32,7 @@ namespace SIMEXPRO.Entities.Entities
         public string coin_NumeroLocalApart { get; set; }
         public int? coin_coloniaIdRepresentante { get; set; }
         public string coin_NumeroLocaDepartRepresentante { get; set; }
-    
-        [NotMapped]
-        public string doco_Numero_O_Referencia { get; set; }
-        [NotMapped]
-        public string doco_TipoDocumento { get; set; }
-        [NotMapped]
-        public string doco_URLImagen { get; set; }
-        [NotMapped]
-        public string doco_NombreImagen { get; set; }
+
 
 
         [NotMapped]
