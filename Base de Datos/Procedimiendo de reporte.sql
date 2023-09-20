@@ -570,6 +570,7 @@ SELECT  ordenCompra.orco_Id
 AS 
 BEGIN
 SELECT	peor_Id, 
+		po.peor_Codigo,
 		prov.prov_Id, 
 		prov.prov_NombreCompania,
 		prov.prov_NombreContacto,
@@ -586,31 +587,23 @@ SELECT	peor_Id,
 		peor_FechaEntrada, 
 		peor_Obsevaciones, 
 		peor_DadoCliente, 
-		CASE peor_DadoCliente
-		WHEN 1 THEN 'Sí'
-		ELSE 'NO' END AS DadoCliente,
-		peor_Est, 
-		   (SELECT prod_Id,
-				   pedi_Id,
-				   pod.mate_Id,
-				   mate_Descripcion,
-				   prod_Cantidad,
-				   prod_Precio
-			   FROM Prod.tbPedidosOrdenDetalle pod
-			   INNER JOIN Prod.tbMateriales mates
-			   ON pod.mate_Id = mates.mate_Id
-			   WHERE po.peor_Id = pod.pedi_Id
+	    prod_Id,
+		pedi_Id,
+		pod.mate_Id,
+		mate_Descripcion,
+		prod_Cantidad,
+		prod_Precio
 
-			   FOR JSON PATH) 
-			   AS Detalles
 FROM	Prod.tbPedidosOrden po
-		INNER JOIN Gral.tbProveedores prov			    ON po.prov_Id   = prov.prov_Id
-		LEFT JOIN  gral.tbCiudades	  ciud			    ON po.ciud_Id = ciud.ciud_Id
-		LEFT JOIN Gral.tbProvincias   pvin				ON pvin.pvin_Id = ciud.pvin_Id
-		LEFT JOIN Gral.tbPaises	      pais				ON pvin.pais_Id = pais.pais_Id
-		LEFT JOIN  Adua.tbDuca        duca			    ON po.duca_Id = duca.duca_Id
-		LEFT JOIN  Acce.tbUsuarios    crea				ON crea.usua_Id = po.usua_UsuarioCreacion 
-		LEFT JOIN  Acce.tbUsuarios    modi				ON modi.usua_Id = po.usua_UsuarioModificacion 
+		INNER JOIN  Gral.tbProveedores				prov			    ON po.prov_Id   = prov.prov_Id
+		LEFT JOIN   Prod.tbPedidosOrdenDetalle		pod					ON po.peor_Id = pod.pedi_Id
+		LEFT JOIN   Prod.tbMateriales				mates				ON pod.mate_Id = mates.mate_Id
+		LEFT JOIN   gral.tbCiudades					ciud			    ON po.ciud_Id = ciud.ciud_Id
+		LEFT JOIN   Gral.tbProvincias				pvin				ON pvin.pvin_Id = ciud.pvin_Id
+		LEFT JOIN   Gral.tbPaises					pais				ON pvin.pais_Id = pais.pais_Id
+		LEFT JOIN   Adua.tbDuca						duca			    ON po.duca_Id = duca.duca_Id
+		LEFT JOIN   Acce.tbUsuarios					crea				ON crea.usua_Id = po.usua_UsuarioCreacion 
+		LEFT JOIN   Acce.tbUsuarios					modi				ON modi.usua_Id = po.usua_UsuarioModificacion 
 WHERE (po.peor_FechaEntrada BETWEEN @fechaInicio AND @fechaFin)
 END
 

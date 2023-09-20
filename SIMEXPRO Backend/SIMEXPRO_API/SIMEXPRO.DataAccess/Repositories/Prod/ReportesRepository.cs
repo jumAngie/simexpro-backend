@@ -138,8 +138,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             var parametros = new DynamicParameters();
-            parametros.Add ("@fechaInicio", item.fechaInicio, DbType.Date, ParameterDirection.Input);
-            parametros.Add ("@fechaFin", item.fechaFin, DbType.Date, ParameterDirection.Input);
+            parametros.Add ("@fechaInicio", item.fechaInicio, DbType.DateTime, ParameterDirection.Input);
+            parametros.Add ("@fechaFin", item.fechaFin, DbType.DateTime, ParameterDirection.Input);
             var answer = db.Query<tbPedidosOrden>(ScriptsDataBase.MaterialesIngreso, parametros, commandType: CommandType.StoredProcedure);
             return answer;
         }
