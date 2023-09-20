@@ -84,5 +84,14 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             result.MessageStatus = answer;
             return result;
         }
+
+        public IEnumerable<tbPedidosOrden> PedidoOrdenFind(string peor_Codigo)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new();
+            var parametros = new DynamicParameters();
+            parametros.Add("@peor_Codigo", peor_Codigo, DbType.String, ParameterDirection.Input);
+            return db.Query<tbPedidosOrden>(ScriptsDataBase.PedidosOrdenFind, parametros, commandType: CommandType.StoredProcedure);
+        }
     }
 }

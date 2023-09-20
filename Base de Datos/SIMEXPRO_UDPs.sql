@@ -14558,6 +14558,7 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbPedidosOrden_Listar
 AS
 BEGIN
 SELECT	peor_Id, 
+        peor_Codigo,
 		prov.prov_Id, 
 		prov.prov_NombreCompania,
 		prov.prov_NombreContacto,
@@ -15336,6 +15337,28 @@ BEGIN
 	FROM	[Prod].[tbPedidosOrdenDetalle]	peor
 			INNER JOIN Prod.tbMateriales tbmats		ON peor.mate_Id = tbmats.mate_Id
 	WHERE	peor.prod_Id = @prod_Id
+END
+GO
+
+CREATE OR ALTER PROCEDURE Prod.UDP_tbPedidosOrden_FindCodigo --'SAGAS245'
+  @peor_Codigo   NVARCHAR(100)
+AS
+BEGIN 
+SELECT	    peor.prod_Id,
+			po.peor_Id,
+			po.peor_Codigo,
+			prov.prov_Id, 
+		    prov.prov_NombreCompania,
+		    prov.prov_NombreContacto,
+			peor.prod_Cantidad,
+			peor.mate_Id,
+			mate_Descripcion,
+			peor.prod_Precio	  
+	FROM	[Prod].[tbPedidosOrdenDetalle]	peor
+	        INNER JOIN Prod.tbPedidosOrden po       ON peor.peDI_Id = po.peor_Id
+		    LEFT  JOIN Gral.tbProveedores prov	    ON po.prov_Id   = prov.prov_Id
+			LEFT  JOIN Prod.tbMateriales tbmats		ON peor.mate_Id = tbmats.mate_Id
+   WHERE peor_Codigo = @peor_Codigo
 END
 GO
 
