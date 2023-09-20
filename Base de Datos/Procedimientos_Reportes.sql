@@ -49,7 +49,7 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE Prod.UDP_CostosMaterialesNoBrindados --'01-01-2023','11-08-2023'
+CREATE OR ALTER PROCEDURE Prod.UDP_CostosMaterialesNoBrindados -- '01-01-2023','11-08-2023'
 	@mate_FechaInicio			DATE,
 	@mate_FechaLimite			DATE
 AS
@@ -80,4 +80,106 @@ BEGIN
 	WHERE		pep.[ppde_FechaCreacion] BETWEEN @fecha_inicio AND @fecha_fin
 	GROUP BY	mat.[mate_Descripcion]
 	ORDER BY	TotalMaterial;
+END
+
+GO
+
+CREATE OR ALTER PROC Adua.UDP_Reporte_Contratos_Persona_Natural_Por_Fecha -- '2023-09-11','2023-09-12'
+@fecha_inicio   DATE,
+@fecha_fin      DATE
+AS
+BEGIN
+	SELECT
+		ISNULL(tbps.[pers_Nombre], 'N/D')									AS [pers_Nombre],
+		ISNULL([pena_DireccionExacta], 'N/D')								AS [pena_DireccionExacta],
+		ISNULL(tbcd.[ciud_Nombre], 'N/D')									AS [ciud_Nombre],
+		ISNULL([pena_TelefonoFijo], 'N/D')									AS [pena_TelefonoFijo],
+		ISNULL([pena_TelefonoCelular], 'N/D')								AS [pena_TelefonoCelular],
+		ISNULL([pena_CorreoElectronico], 'N/D')								AS [pena_CorreoElectronico],
+		ISNULL([pena_CorreoAlternativo], 'N/D')								AS [pena_CorreoAlternativo],
+		ISNULL([pena_RTN], 'N/D')											AS [pena_RTN],
+		ISNULL([pena_ArchivoRTN], 'N/D')									AS [pena_ArchivoRTN],
+		ISNULL([pena_DNI], 'N/D')											AS [pena_DNI],
+		ISNULL([pena_ArchivoDNI], 'N/D')									AS [pena_ArchivoDNI],
+		ISNULL([pena_NumeroRecibo], 'N/D')									AS [pena_NumeroRecibo],
+		ISNULL([pena_ArchivoNumeroRecibo], 'N/D')							AS [pena_ArchivoNumeroRecibo],
+		ISNULL([pena_NombreArchDNI], 'N/D')									AS [pena_NombreArchDNI],
+		ISNULL([pena_NombreArchRTN], 'N/D')									AS [pena_NombreArchRTN],
+		ISNULL([pena_NombreArchRecibo], 'N/D')								AS [pena_NombreArchRecibo],
+		[pena_FechaCreacion]
+FROM	[Adua].[tbPersonaNatural]			tbpn
+
+		LEFT JOIN	[Adua].[tbPersonas]		tbps ON tbpn.pers_Id = tbps.pers_Id
+		LEFT JOIN	[Gral].[tbCiudades]		tbcd ON tbpn.ciud_Id = tbcd.ciud_Id
+
+WHERE	tbpn.[pena_FechaCreacion] >= @fecha_inicio AND tbpn.[pena_FechaCreacion] <=  @fecha_fin
+END
+
+GO
+
+
+CREATE OR ALTER PROC Adua.UDP_Reporte_Contratos_Persona_Juridica_Por_Fecha -- '2023-09-11','2023-09-20'
+@fecha_inicio   DATE,
+@fecha_fin      DATE
+AS
+BEGIN
+	SELECT
+		ISNULL(tbps.[pers_Nombre], 'N/D')								AS [pers_Nombre],
+		ISNULL([peju_PuntoReferencia], 'N/D')							AS [peju_PuntoReferencia],
+		ISNULL([peju_NumeroLocalRepresentante], 'N/D')					AS [peju_NumeroLocalRepresentante],
+		ISNULL([peju_PuntoReferenciaRepresentante], 'N/D')				AS [peju_PuntoReferenciaRepresentante],
+		ISNULL([peju_TelefonoEmpresa], 'N/D')							AS [peju_TelefonoEmpresa],
+		ISNULL([peju_TelefonoFijoRepresentanteLegal], 'N/D')			AS [peju_TelefonoFijoRepresentanteLegal],
+		ISNULL([peju_TelefonoRepresentanteLegal], 'N/D')				AS [peju_TelefonoRepresentanteLegal],
+		ISNULL([peju_CorreoElectronico], 'N/D')							AS [peju_CorreoElectronico],
+		ISNULL([peju_CorreoElectronicoAlternativo], 'N/D')				AS [peju_CorreoElectronicoAlternativo],
+		ISNULL(tbcd.[ciud_Nombre], 'N/D')								AS [ciud_Nombre],
+		ISNULL(tbcl.[colo_Nombre], 'N/D')								AS [colo_Nombre],
+		ISNULL(tbal.[alde_Nombre], 'N/D')								AS [alde_Nombre],
+		ISNULL(tbcd2.[ciud_Nombre], 'N/D')								AS [peju_CiudadIdRepresentante],
+		ISNULL(tbcl2.[colo_Nombre], 'N/D')								AS [peju_ColoniaRepresentante],
+		ISNULL(tbal2.[alde_Nombre], 'N/D')								AS [peju_AldeaIdRepresentante],
+		ISNULL([peju_NumeroLocalApart], 'N/D')							AS [peju_NumeroLocalApart],
+		[peju_FechaCreacion]
+FROM	[Adua].[tbPersonaJuridica]			tbpj
+
+		LEFT JOIN	[Adua].[tbPersonas]		tbps ON tbpj.pers_Id = tbps.pers_Id
+		LEFT JOIN	[Gral].[tbCiudades]		tbcd ON tbpj.ciud_Id = tbcd.ciud_Id
+		LEFT JOIN	[Gral].[tbColonias]		tbcl ON tbpj.colo_Id = tbcl.colo_Id
+		LEFT JOIN	[Gral].[tbAldeas]		tbal ON tbpj.alde_Id = tbal.alde_Id
+		
+		LEFT JOIN	[Gral].[tbCiudades]		tbcd2 ON tbpj.ciud_Id = tbcd2.ciud_Id
+		LEFT JOIN	[Gral].[tbColonias]		tbcl2 ON tbpj.colo_Id = tbcl2.colo_Id
+		LEFT JOIN	[Gral].[tbAldeas]		tbal2 ON tbpj.alde_Id = tbal2.alde_Id
+
+
+WHERE	tbpj.[peju_FechaCreacion] >= @fecha_inicio AND tbpj.[peju_FechaCreacion] <=  @fecha_fin
+END
+
+GO
+
+CREATE OR ALTER PROC Adua.UDP_Reporte_Contratos_Comerciante_Individual_Por_Fecha '2023-09-11','2023-09-18'
+@fecha_inicio   DATE,
+@fecha_fin      DATE
+AS
+BEGIN
+		SELECT
+		ISNULL(tbps.[pers_Nombre], 'N/D')					AS [pers_Nombre],
+		ISNULL([pers_FormaRepresentacion], 'N/D')			AS [pers_FormaRepresentacion],
+		ISNULL(tbcd.[ciud_Nombre], 'N/D')					AS [ciud_Nombre],
+		ISNULL(tbcl.[colo_Nombre], 'N/D')					AS [colo_Nombre],
+		ISNULL(tbal.[alde_Nombre], 'N/D')					AS [alde_Nombre],
+		ISNULL([coin_TelefonoCelular], 'N/D')				AS [coin_TelefonoCelular],
+		ISNULL([coin_TelefonoFijo], 'N/D')					AS [coin_TelefonoFijo],
+		ISNULL([coin_CorreoElectronico], 'N/D')				AS [coin_CorreoElectronico],
+		ISNULL([coin_CorreoElectronicoAlternativo], 'N/D')	AS [coin_CorreoElectronicoAlternativo],
+		[coin_FechaCreacion]
+FROM	[Adua].[tbComercianteIndividual]	tbci
+		
+		LEFT JOIN	[Adua].[tbPersonas]		tbps ON tbci.pers_Id = tbps.pers_Id
+		LEFT JOIN	[Gral].[tbCiudades]		tbcd ON tbci.ciud_Id = tbcd.ciud_Id
+		LEFT JOIN	[Gral].[tbColonias]		tbcl ON tbci.colo_Id = tbcl.colo_Id
+		LEFT JOIN	[Gral].[tbAldeas]		tbal ON tbci.alde_Id = tbal.alde_Id
+
+WHERE	tbci.[coin_FechaCreacion] >= @fecha_inicio AND tbci.[coin_FechaCreacion] <=  @fecha_fin
 END
