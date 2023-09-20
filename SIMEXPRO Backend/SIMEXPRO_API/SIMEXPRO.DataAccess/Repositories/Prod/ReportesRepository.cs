@@ -86,12 +86,12 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             return answer;
         }
         
-        public IEnumerable<tbOrdenCompra> Inventario(tbMateriales item)
+        public IEnumerable<tbMateriales> Inventario(tbMateriales item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             var parametros = new DynamicParameters();
             parametros.Add ("@mate_Id", item.mate_Id, DbType.Int32, ParameterDirection.Input);
-            var answer = db.Query<tbOrdenCompra>(ScriptsDataBase.Inventario, parametros, commandType: CommandType.StoredProcedure);
+            var answer = db.Query<tbMateriales>(ScriptsDataBase.Inventario, parametros, commandType: CommandType.StoredProcedure);
             return answer;
         }
 

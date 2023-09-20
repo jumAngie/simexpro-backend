@@ -15,6 +15,8 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public string orco_Codigo { get; set; }
         [NotMapped]
         public string Validacion { get; set; }
+        [NotMapped]
+        public string orco_EstadoFinalizado { get; set; }
         public string Detalles { get; set; }
         [NotMapped]
         public string clie_Nombre_O_Razon_Social { get; set; }

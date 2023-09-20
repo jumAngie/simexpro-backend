@@ -55,3 +55,7 @@ ADD CONSTRAINT FK_Adua_tbItemsDEVAPorDuca_Adua_tbDuca_duca_Id FOREIGN KEY(duca_I
 
 ALTER TABLE [Prod].[tbOrdenCompraDetalles]
 ADD code_FechaProcActual DATETIME NULL;
+
+
+ALTER TABLE [Prod].[tbPedidosOrdenDetalle]
+ADD CONSTRAINT FK_Prod_tbPedidosOrdenDetalle_pedi_Id_Pro_tbPedidos		FOREIGN KEY (pedi_Id)	REFERENCES Prod.tbPedidosOrden(peor_Id)

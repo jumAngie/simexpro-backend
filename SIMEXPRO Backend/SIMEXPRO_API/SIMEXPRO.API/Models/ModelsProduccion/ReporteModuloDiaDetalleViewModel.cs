@@ -13,6 +13,7 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
 
         public string orco_Codigo { get; set; }
 
+        public string orco_EstadoFinalizado { get; set; }
         public int colr_Id { get; set; }
 
         public string colr_Nombre { get; set; }
