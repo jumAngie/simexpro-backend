@@ -16,9 +16,10 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public bool orco_Materiales { get; set; }
         public int orco_IdEmbalaje { get; set; }
         public string orco_EstadoOrdenCompra { get; set; }
+        [NotMapped]
+        public string orco_EstadoFinalizado { get; set; }
         public string orco_Codigo{ get; set; }
         public string orco_DireccionEntrega { get; set; }
-        public bool orco_EstadoFinalizado { get; set; }
         public string fopa_Descripcion { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         public DateTime orco_FechaCreacion { get; set; }

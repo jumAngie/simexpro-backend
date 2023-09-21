@@ -100,6 +100,23 @@ namespace SIMEXPRO.Entities.Entities
         public DateTime? peju_FechaModificacion { get; set; }
         public bool? peju_Estado { get; set; }
         public string pais_Nombre { get; set; }
+
+        [NotMapped]
+        public string peju_CiudadRepresentanteNombre { get; set; }
+        [NotMapped]
+        public string peju_ColoniaRepresentanteNombre { get; set; }
+        [NotMapped]
+        public string peju_AldeaRepresentanteNombre { get; set; }
+        [NotMapped]
+        public string pers_Nombre { get; set; }
+        [NotMapped]
+        public string ciud_Nombre { get; set; }
+        [NotMapped]
+        public string colo_Nombre { get; set; }
+        [NotMapped]
+        public string alde_Nombre { get; set; }
+
+
         public virtual tbCiudades ciud { get; set; }
         public virtual tbAldeas alde { get; set; }
         public virtual tbColonias colo { get; set; }

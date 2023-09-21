@@ -19,7 +19,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             var parametros = new DynamicParameters();
             parametros.Add("@mmaq_Id", item.mmaq_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioEliminacion", item.usua_UsuarioEliminacion, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@mmaq_FechaEliminacion", item.mmaq_FechaEliminacion, DbType.String, ParameterDirection.Input);
+            parametros.Add("@mmaq_FechaEliminacion", item.mmaq_FechaEliminacion, DbType.DateTime, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.EliminarModelosMaquina, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
             return result;

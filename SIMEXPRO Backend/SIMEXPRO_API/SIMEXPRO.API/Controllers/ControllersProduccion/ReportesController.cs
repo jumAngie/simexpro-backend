@@ -135,6 +135,13 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             return Ok(listado);
         }
 
+        [HttpGet("Contratos_Adhesion")]
+        public IActionResult Contratos_Adhesion(DateTime fechaInicio, DateTime fechaFin, string Contrato)
+        {
+            //var data = _mapper.Map<tbDeclaraciones_Valor>(orden);
+            var listado = _produccionServices.Contratos_Adhesion(fechaInicio, fechaFin, Contrato);
+            return Ok(listado);
+        }
 
     }
 }

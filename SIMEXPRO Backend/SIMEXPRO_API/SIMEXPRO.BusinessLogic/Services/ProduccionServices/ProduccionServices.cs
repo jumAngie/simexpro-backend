@@ -2,6 +2,8 @@
 using SIMEXPRO.DataAccess.Repositories.Prod;
 using SIMEXPRO.Entities.Entities;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
 {
@@ -2207,6 +2209,19 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
+        public ServiceResult PedidoOrdenFind(string peor_Codigo)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _pedidosOrdenRepository.PedidoOrdenFind(peor_Codigo);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         public ServiceResult InsertarPedidosOrden(tbPedidosOrden item)
         {
             var result = new ServiceResult();
@@ -3950,6 +3965,44 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
                 return result.Error(ex.Message);
             }
         }
+
+        public ServiceResult Contratos_Adhesion(DateTime fechaInicio, DateTime fechaFin, string Contrato)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                IEnumerable<object> list = null;
+
+                switch (Contrato)
+                {
+                    case "PJ":
+                        list = _reportesRepository.Contratos_Adhesion_PJ(fechaInicio, fechaFin).Cast<object>();
+                        break;
+                    case "PN":
+                        list = _reportesRepository.Contratos_Adhesion_PN(fechaInicio, fechaFin).Cast<object>();
+                        break;
+                    case "CI":
+                        list = _reportesRepository.Contratos_Adhesion_CI(fechaInicio, fechaFin).Cast<object>();
+                        break;
+                    default:
+                        break;
+                }
+
+                if (list != null)
+                {
+                    return result.Ok(list);
+                }
+                else
+                {
+                    return result.Error("Contrato no válido");
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
 
         #endregion
     }

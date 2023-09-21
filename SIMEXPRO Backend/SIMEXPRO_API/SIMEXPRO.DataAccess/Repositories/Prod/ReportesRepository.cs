@@ -86,12 +86,12 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             return answer;
         }
         
-        public IEnumerable<tbOrdenCompra> Inventario(tbMateriales item)
+        public IEnumerable<tbMateriales> Inventario(tbMateriales item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             var parametros = new DynamicParameters();
             parametros.Add ("@mate_Id", item.mate_Id, DbType.Int32, ParameterDirection.Input);
-            var answer = db.Query<tbOrdenCompra>(ScriptsDataBase.Inventario, parametros, commandType: CommandType.StoredProcedure);
+            var answer = db.Query<tbMateriales>(ScriptsDataBase.Inventario, parametros, commandType: CommandType.StoredProcedure);
             return answer;
         }
 
@@ -144,6 +144,35 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             return answer;
         }
 
+        public IEnumerable<tbPersonaJuridica> Contratos_Adhesion_PJ(DateTime fechaInicio, DateTime fechaFin)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@fecha_inicio", fechaInicio, DbType.Date, ParameterDirection.Input);
+            parametros.Add("@fecha_fin", fechaFin, DbType.Date, ParameterDirection.Input);
+            var answer = db.Query<tbPersonaJuridica>(ScriptsDataBase.Contrato_PJ, parametros, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
+
+        public IEnumerable<tbComercianteIndividual> Contratos_Adhesion_CI(DateTime fechaInicio, DateTime fechaFin)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@fecha_inicio", fechaInicio, DbType.Date, ParameterDirection.Input);
+            parametros.Add("@fecha_fin", fechaFin, DbType.Date, ParameterDirection.Input);
+            var answer = db.Query<tbComercianteIndividual>(ScriptsDataBase.Contrato_CI, parametros, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
+
+        public IEnumerable<tbPersonaNatural> Contratos_Adhesion_PN(DateTime fechaInicio, DateTime fechaFin)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@fecha_inicio", fechaInicio, DbType.Date, ParameterDirection.Input);
+            parametros.Add("@fecha_fin", fechaFin, DbType.Date, ParameterDirection.Input);
+            var answer = db.Query<tbPersonaNatural>(ScriptsDataBase.Contrato_PN, parametros, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
 
     }
 }
