@@ -88,7 +88,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             var parametros = new DynamicParameters();
 
             parametros.Add("@coin_Id", item.coin_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@ciud_Id", item.ciud, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@ciud_Id", item.ciud_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@alde_Id", item.alde_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@colo_Id", item.colo_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@coin_NumeroLocalApart", item.coin_NumeroLocalApart, DbType.String, ParameterDirection.Input);

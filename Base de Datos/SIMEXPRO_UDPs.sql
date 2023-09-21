@@ -3055,7 +3055,7 @@ BEGIN
 		UPDATE Adua.tbComercianteIndividual
 		SET ciud_Id = @ciud_Id, alde_Id = @aldea, coin_PuntoReferencia = @coin_PuntoReferencia,
 		    colo_Id = @colo_Id, coin_NumeroLocalApart = @coin_NumeroLocalApart
-		WHERE coin_Id = @coin_Id AND [coin_Estado] = 1
+		WHERE coin_Id = @coin_Id 
 		SELECT 1
 END TRY
 BEGIN CATCH
