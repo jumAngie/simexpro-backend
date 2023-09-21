@@ -2216,7 +2216,6 @@ FROM	Gral.tbFormas_Envio formasEnvio
 		LEFT JOIN Acce.tbUsuarios usuarioModificacion	ON formasEnvio.usua_UsuarioModificacion = usuarioModificacion.usua_Id
 		LEFT JOIN Acce.tbUsuarios usuarioEliminacion	ON formasEnvio.usua_UsuarioEliminacion = usuarioEliminacion.usua_Id
 WHERE	foen_Estado = 1
-ORDER BY foen_Id DESC
 END
 
 GO
