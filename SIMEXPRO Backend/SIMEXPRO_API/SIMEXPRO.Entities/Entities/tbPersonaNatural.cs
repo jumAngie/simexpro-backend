@@ -12,6 +12,8 @@ namespace SIMEXPRO.Entities.Entities
         public int pena_Id { get; set; }
         public int pers_Id { get; set; }
         public string pena_DireccionExacta { get; set; }
+        [NotMapped]
+        public string Cliente { get; set; }
         public int ciud_Id { get; set; }
 
         [NotMapped]
