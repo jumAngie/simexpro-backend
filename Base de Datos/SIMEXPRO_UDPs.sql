@@ -5321,12 +5321,14 @@ GO
 /*Vista que trae todos los campos de la parte  1 del formulario de la declaración de valor, incluso los que están en 
   otras tablas conectadas a tbDeclaraciones_Valor (no se incluyen las facturas ni las condiciones)*/
 
-CREATE OR ALTER VIEW [Adua].[VW_tbDeclaraciones_ValorCompleto]
+ALTER   VIEW [Adua].[VW_tbDeclaraciones_ValorCompleto]
 AS
 SELECT		deva.deva_Id, 
 			deva.deva_AduanaIngresoId, 
+			aduaIngreso.adua_Codigo				AS adua_IngresoCodigo,
 			aduaIngreso.adua_Nombre				AS adua_IngresoNombre,
 			deva.deva_AduanaDespachoId, 
+			aduaDespacho.adua_Codigo			AS adua_DespachoCodigo,
 			aduaDespacho.adua_Nombre			AS adua_DespachoNombre,
 			deva.deva_DeclaracionMercancia, 
 			deva.deva_FechaAceptacion, 
@@ -5339,6 +5341,11 @@ SELECT		deva.deva_Id,
 			mone.mone_Codigo + ' - ' + mone.mone_Descripcion as monedaNombre,
 			deva.mone_Otra, 
 			deva.deva_ConversionDolares, 
+
+			--Regimen Aduanero
+			deva.regi_Id,
+			regi.regi_Codigo,
+			regi.regi_Descripcion,
 
 			--Lugares de embarque
 			deva.emba_Id,
@@ -5413,6 +5420,7 @@ SELECT		deva.deva_Id,
 			pais.pais_Codigo + ' - ' + pais.pais_Nombre as pais_EntregaNombre,
 			inco.inco_Id, 
 			inco.inco_Descripcion,
+			inco.inco_Codigo,
 			deva.inco_Version, 
 			deva.deva_NumeroContrato, 
 			deva.deva_FechaContrato, 
@@ -5483,7 +5491,7 @@ SELECT		deva.deva_Id,
 			LEFT JOIN Gral.tbProvincias provimpo            ON declaImpo.ciud_Id = provimpo.pvin_Id
 			LEFT JOIN Gral.tbPaises impoPais                ON provimpo.pais_Id = impoPais.pais_Id
 			LEFT JOIN Gral.tbMonedas mone                   ON deva.mone_Id = mone.mone_Id
-			
+			LEFT JOIN Adua.tbRegimenesAduaneros regi		ON deva.regi_Id = regi.regi_Id
 			
 			LEFT JOIN Adua.tbNivelesComerciales nico		ON impo.nico_Id = nico.nico_Id
 			LEFT JOIN Adua.tbProveedoresDeclaracion prov	ON prov.pvde_Id = deva.pvde_Id
@@ -5506,12 +5514,15 @@ SELECT		deva.deva_Id,
 			LEFT JOIN Gral.tbPaises	paix					ON deva.pais_ExportacionId	 = paix.pais_Id
 			LEFT JOIN Adua.tbLugaresEmbarque emba			ON deva.emba_Id = emba.emba_Id 
 
-			Inner JOIN Adua.tbCondiciones condi              ON deva.deva_Id = condi.deva_Id
-			Inner JOIN Adua.tbBaseCalculos bacu               ON deva.deva_Id = bacu.deva_Id
+			LEFT JOIN Adua.tbCondiciones condi              ON deva.deva_Id = condi.deva_Id
+			LEFT JOIN Adua.tbBaseCalculos bacu               ON deva.deva_Id = bacu.deva_Id
 			
 			LEFT JOIN Acce.tbUsuarios usuaCrea				ON deva.usua_UsuarioCreacion = usuaCrea.usua_Id
 			LEFT JOIN Acce.tbUsuarios usuaModifica			ON deva.usua_UsuarioModificacion = usuaModifica.usua_Id
 GO
+
+
+
 
 --Endpoint para rellenar información cuando se escriba el número de identificación 
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDeclarantes_Find 
@@ -5815,6 +5826,7 @@ CREATE OR ALTER PROCEDURE adua.UDP_tbDeclaraciones_Valor_Tab1_Insertar
 	@deva_AduanaDespachoId				INT,
 	@deva_DeclaracionMercancia			NVARCHAR(500),
 	@deva_FechaAceptacion				DATETIME,
+	@regi_Id							INT,
 	@decl_Nombre_Raso					NVARCHAR(250),
 	@impo_RTN							NVARCHAR(40),
 	@impo_NumRegistro					NVARCHAR(40),
@@ -5967,6 +5979,7 @@ BEGIN
 											   deva_AduanaDespachoId, 
 											   deva_DeclaracionMercancia,
 											   deva_FechaAceptacion, 
+											   regi_Id,
 											   impo_Id, 
 											   usua_UsuarioCreacion, 
 											   deva_FechaCreacion)
@@ -5974,6 +5987,7 @@ BEGIN
 												@deva_AduanaDespachoId,
 												@deva_DeclaracionMercancia,
 												@deva_FechaAceptacion,
+												@regi_Id,
 												@impo_Id,
 												@usua_UsuarioCreacion,
 												@deva_FechaCreacion)
@@ -5985,7 +5999,7 @@ BEGIN
 															deva_AduanaIngresoId, 
 															deva_AduanaDespachoId,  
 															deva_FechaAceptacion,
-															deva_DeclaracionMercancia, 
+															deva_DeclaracionMercancia,
 															impo_Id,
 															hdev_UsuarioAccion, 
 															hdev_FechaAccion, 
@@ -6016,6 +6030,7 @@ CREATE OR ALTER PROCEDURE adua.UDP_tbDeclaraciones_Valor_Tab1_Editar
 	@deva_AduanaIngresoId				INT,
 	@deva_AduanaDespachoId				INT,
 	@deva_FechaAceptacion				DATETIME,
+	@regi_Id							INT,
 	@decl_Nombre_Raso					NVARCHAR(250),
 	@impo_RTN							NVARCHAR(40),
 	@impo_NumRegistro					NVARCHAR(40),
@@ -6166,7 +6181,8 @@ BEGIN
 		UPDATE Adua.tbDeclaraciones_Valor
 		SET deva_AduanaIngresoId = @deva_AduanaIngresoId, 
 			deva_AduanaDespachoId = @deva_AduanaDespachoId, 
-			deva_FechaAceptacion = @deva_FechaAceptacion, 
+			deva_FechaAceptacion = @deva_FechaAceptacion,
+			regi_Id = @regi_Id,
 			impo_Id = @impo_Id,
 			usua_UsuarioModificacion = @usua_UsuarioModificacion,
 			deva_FechaModificacion = @deva_FechaModificacion
