@@ -9284,7 +9284,7 @@ END
 GO
 CREATE OR ALTER PROCEDURE Adua.UDP_tbCondicionesComerciales_Listar
 AS
-
+BEGIN
 SELECT	condi.coco_Id					,
 		condi.coco_Codigo				,
         condi.coco_Descripcion			,
@@ -9303,7 +9303,8 @@ FROM	Adua.tbCondicionesComerciales condi
 		LEFT JOIN Acce.tbUsuarios usu1	ON usu1.usua_Id = condi.usua_UsuarioModificacion
 		LEFT JOIN Acce.tbUsuarios elim ON elim.usua_Id = condi.usua_UsuarioEliminacion
 WHERE	coco_Estado = 1
-
+END
+GO
 
 /*Crear Condiciones comerciales*/
 GO
@@ -11300,8 +11301,6 @@ GO
 CREATE OR ALTER PROCEDURE Prod.UDP_tbOrdenCompra_Listado
 AS
 BEGIN
-
-	
 	SELECT	 ordenCompra.orco_Id
 	-- Informacion del cliente
 			,ordenCompra.orco_Codigo
@@ -12580,7 +12579,6 @@ FROM	Prod.tbReporteModuloDia rmd
 		INNER JOIN Gral.tbEmpleados  empleados		ON modu.empr_Id	= empleados.empl_Id
 		INNER JOIN Acce.tbUsuarios crea				ON crea.usua_Id = rmd.usua_UsuarioCreacion 
 		LEFT JOIN  Acce.tbUsuarios modi				ON modi.usua_Id = rmd.usua_UsuarioModificacion 	
-ORDER BY rmd.remo_FechaCreacion desc
 END
 GO
 
