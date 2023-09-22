@@ -1568,6 +1568,7 @@ SELECT	pais_Id								,
 		pais_Codigo							,
 		pais_Nombre							,
 		pais_EsAduana							,
+		pais_prefijo						,
 		pais.usua_UsuarioCreacion			,
 		usua.usua_Nombre					AS UsuarioCreacionNombre,
 		pais_FechaCreacion					, 
@@ -1586,7 +1587,8 @@ GO
 /*Insertar PAISES*/
 CREATE OR ALTER PROCEDURE Gral.UDP_tbPaises_Insertar
 	@pais_Codigo				CHAR(2), 
-	@pais_Nombre				NVARCHAR(150), 
+	@pais_Nombre				NVARCHAR(150),
+	@pais_prefijo				NVARCHAR(4),
 	@pais_EsAduana				BIT,
 	@usua_UsuarioCreacion		INT,
 	@pais_FechaCreacion			DATETIME
@@ -1607,12 +1609,14 @@ BEGIN
 		BEGIN
 			INSERT INTO Gral.tbPaises (pais_Codigo, 
 									   pais_Nombre, 
-									   pais_EsAduana, 
+									   pais_EsAduana,
+									   pais_prefijo,
 									   usua_UsuarioCreacion, 
 									   pais_FechaCreacion)
 			VALUES (@pais_Codigo, 
 					@pais_Nombre, 
-					@pais_EsAduana, 
+					@pais_EsAduana,
+					@pais_prefijo,
 					@usua_UsuarioCreacion, 
 					@pais_FechaCreacion)
 			SELECT 1
@@ -1629,7 +1633,8 @@ GO
 CREATE OR ALTER PROCEDURE Gral.UDP_tbPaises_Editar
 	@pais_Id						INT,
 	@pais_Codigo					CHAR(2),
-	@pais_Nombre					NVARCHAR(150), 
+	@pais_Nombre					NVARCHAR(150),
+	@pais_prefijo					NVARCHAR(4),
 	@usua_UsuarioModificacion		INT,
 	@pais_FechaModificacion	DATETIME
 
@@ -1638,7 +1643,7 @@ BEGIN
 
 	BEGIN TRY		
 		UPDATE Gral.tbPaises
-		SET pais_Nombre = @pais_Nombre,pais_Codigo = @pais_Codigo, 
+		SET pais_Nombre = @pais_Nombre,pais_Codigo = @pais_Codigo,pais_prefijo = @pais_prefijo, 
 		usua_UsuarioModificacion = @usua_UsuarioModificacion, pais_FechaModificacion = @pais_FechaModificacion
 		WHERE pais_Id = @pais_Id
 		SELECT 1
@@ -2211,7 +2216,6 @@ FROM	Gral.tbFormas_Envio formasEnvio
 		LEFT JOIN Acce.tbUsuarios usuarioModificacion	ON formasEnvio.usua_UsuarioModificacion = usuarioModificacion.usua_Id
 		LEFT JOIN Acce.tbUsuarios usuarioEliminacion	ON formasEnvio.usua_UsuarioEliminacion = usuarioEliminacion.usua_Id
 WHERE	foen_Estado = 1
-ORDER BY foen_Id DESC
 END
 
 GO
@@ -2850,7 +2854,8 @@ BEGIN
 	SELECT	
 			coin.coin_Id, 
 			coin.pers_Id,
-			pers.pers_RTN,			
+			pers.pers_RTN,
+			pers.pers_Nombre,
 			pers.escv_Id,
 			civi.escv_Nombre,
 			pers.ofic_Id,
@@ -2867,9 +2872,6 @@ BEGIN
 			ELSE 'Condicion Propia'
 			END											AS formaRepresentacionDesc,
 
-			--coin.coin_DNI,
-			--coin.coin_DNIrepresentante,
-			--coin.coin_DeclaracionComerciante,
 
 			coin.alde_Id, --nuevo
 			alde.alde_Nombre, --nuevo
@@ -2894,9 +2896,7 @@ BEGIN
 			colo2.colo_Nombre		AS coloniaNombreRepresentante, --nuevo
 
 
-			pvin.pais_Id,
-			pais.pais_Codigo,
-			pais.pais_Nombre,
+
 
 			coin.coin_PuntoReferencia,
 			coin.coin_TelefonoCelular, 
@@ -2914,19 +2914,28 @@ BEGIN
 			coin.usua_UsuarioModificacion, 
 			modi.usua_Nombre				AS usuarioModificacionNombre,
 			coin.coin_FechaModificacion, 
-			coin.coin_Estado
+			coin.coin_Estado,
+			coin.coin_Finalizacion
 	FROM Adua.tbComercianteIndividual		AS coin
 	LEFT  JOIN Adua.tbPersonas				AS pers		ON coin.pers_Id =	pers.pers_Id
+
 	LEFT  JOIN Gral.tbEstadosCiviles		AS civi		ON pers.escv_Id =	civi.escv_Id
+
 	LEFT  JOIN Gral.tbEstadosCiviles		AS civiR	ON pers.pers_escvRepresentante = civiR.escv_Id
+
 	LEFT  JOIN Gral.tbOficinas				AS ofic		ON pers.ofic_Id =	ofic.ofic_Id
+
 	LEFT  JOIN Gral.tbOficio_Profesiones	AS ofpr		ON pers.ofpr_Id =	ofpr.ofpr_Id
+
 	LEFT  JOIN Gral.tbOficio_Profesiones	AS ofprR	ON pers.pers_OfprRepresentante = ofprR.ofpr_Id 
 	 
 	LEFT  JOIN Gral.tbAldeas				AS alde		ON coin.alde_Id =	alde.alde_Id 
+
 	LEFT JOIN  Gral.tbCiudades				AS ciud		ON coin.ciud_Id =	ciud.ciud_Id
+
 		 
 	LEFT  JOIN Gral.tbAldeas				AS aldeR	ON coin.coin_AldeaRepresentante =	aldeR.alde_Id 
+
 	LEFT  JOIN  Gral.tbCiudades				AS ciudR	ON coin.coin_CiudadRepresentante =	ciudR.ciud_Id
 
 	LEFT JOIN Gral.tbColonias				AS colo		ON coin.colo_Id = colo.colo_Id
@@ -2935,7 +2944,6 @@ BEGIN
 	LEFT JOIN Gral.tbProvincias				AS pvin		ON ciud.pvin_Id =	pvin.pvin_Id
 	LEFT JOIN Gral.tbProvincias				AS pvinR	ON ciudR.pvin_Id =	pvinR.pvin_Id
 
-	LEFT JOIN Gral.tbPaises					AS pais		ON pvin.pais_Id =	pais.pais_Id
 	LEFT JOIN Acce.tbUsuarios				AS crea		ON coin.usua_UsuarioCreacion = crea.usua_Id
 	LEFT JOIN Acce.tbUsuarios				AS modi		ON coin.usua_UsuarioModificacion = modi.usua_Id
 	--WHERE coin.coin_Estado = 1
@@ -2944,9 +2952,10 @@ GO
 
 
 /*Insertar Comersiante Individual*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap1 --'1548-1458-145789', 2, 1, 2,0,null,null,1, '2023-08-30 10:26:59.900'
+CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap1 
 (
 	@pers_RTN							NVARCHAR(40),
+	@pers_Nombre						NVARCHAR(150),
 	@ofic_Id							INT,
 	@escv_Id							INT,
 	@ofpr_Id							INT,
@@ -2979,6 +2988,7 @@ BEGIN
 
 
 		INSERT INTO Adua.tbPersonas ([pers_RTN], 
+									 pers_Nombre,
 									 [ofic_Id],
 									 [escv_Id],
 									 [ofpr_Id],
@@ -2987,14 +2997,16 @@ BEGIN
 									 [usua_UsuarioCreacion], 
 									 [pers_FechaCreacion])
 		VALUES(@pers_RTN,
-		@ofic_Id,
-		@escv_Id,
-		@ofpr_Id,
-		@estadoCivilRep,
-		@oficioRep,
-		@usua_UsuarioCreacion,
-		@pers_FechaCreacion )
-		SET  @pers_Id = SCOPE_IDENTITY() 
+			   @pers_Nombre,
+			   @ofic_Id,
+			   @escv_Id,
+			   @ofpr_Id,
+			   @estadoCivilRep,
+			   @oficioRep,
+			   @usua_UsuarioCreacion,
+			   @pers_FechaCreacion )
+
+		SET @pers_Id = SCOPE_IDENTITY() 
 
 
 		INSERT INTO Adua.tbComercianteIndividual 
@@ -3019,7 +3031,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap2  --6,63,1,'por ahi'
+CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap2  
 	@coin_Id					INT,
 	@ciud_Id					INT,
 	@alde_Id					INT,
@@ -3042,7 +3054,7 @@ BEGIN
 		UPDATE Adua.tbComercianteIndividual
 		SET ciud_Id = @ciud_Id, alde_Id = @aldea, coin_PuntoReferencia = @coin_PuntoReferencia,
 		    colo_Id = @colo_Id, coin_NumeroLocalApart = @coin_NumeroLocalApart
-		WHERE coin_Id = @coin_Id AND [coin_Estado] = 1
+		WHERE coin_Id = @coin_Id 
 		SELECT 1
 END TRY
 BEGIN CATCH
@@ -3129,7 +3141,7 @@ BEGIN
                                                 [doco_TipoDocumento])
         SELECT @coin_Id,
                [doco_URLImagen],
-               @usua_UsuarioCreacion, -- Asignar directamente el valor del parámetro
+               @usua_UsuarioCreacion, 
                @doco_FechaCreacion,
                [doco_Numero_O_Referencia],
                [doco_TipoDocumento]
@@ -3140,7 +3152,6 @@ BEGIN
             doco_URLImagen NVARCHAR(MAX)
         )
 
-        -- Seleccionar 1 si la inserción fue exitosa
         SELECT 1
     END TRY
     BEGIN CATCH
@@ -3171,15 +3182,12 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_ComercianteEditar
     @coin_Id						INT,
     @doco_URLImagen					NVARCHAR(MAX),
     @usua_UsuarioModificacion		INT,
-    @doco_FechaModificacion			DATETIME
+    @doco_FechaModificacion			DATETIME,
+	@FormaRepresentacion			BIT   --NUEVO
 AS
 BEGIN
     BEGIN TRY
     BEGIN TRANSACTION
-
-		DELETE FROM Adua.tbDocumentosContratos 
-		WHERE [coin_Id] = @coin_Id
-
 
         INSERT INTO Adua.tbDocumentosContratos ([coin_Id],
                                                 [doco_URLImagen],
@@ -3199,6 +3207,14 @@ BEGIN
             doco_Numero_O_Referencia NVARCHAR(50),
             doco_URLImagen NVARCHAR(MAX)
         )
+
+		IF(@FormaRepresentacion = 0)
+		BEGIN
+			DELETE FROM Adua.tbDocumentosContratos 
+			WHERE coin_Id = @coin_Id AND (
+			 [doco_TipoDocumento] = 'RTN-RL'
+			OR [doco_TipoDocumento] = 'DNI-RL')
+		END
 
         SELECT 1
 	COMMIT TRAN	
@@ -3234,6 +3250,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Editar
 	@coin_Id							INT,
   	@pers_Id                           	INT,
 	@pers_RTN							NVARCHAR(40),
+	@pers_Nombre						NVARCHAR(150),
   	@ofpr_Id                           	INT,
 	@ofic_Id							INT,
 	@escv_Id							INT,
@@ -3249,7 +3266,14 @@ BEGIN
 	BEGIN TRANSACTION
 
 	DECLARE @estadoCivilRep INT;
-		DECLARE @oficioRep	INT;
+	DECLARE @oficioRep	INT;
+
+	DECLARE @ciudadRep	INT = NULL;
+	DECLARE @coloniaRep	INT = NULL;
+	DECLARE @aldeaRep	INT = NULL;
+	DECLARE @coin_NumeroLocaDepartRepresentante NVARCHAR(150) = NULL;
+	DECLARE @coin_PuntoReferenciaReprentante	NVARCHAR(200) = NULL;
+
 
 		IF(@pers_escvRepresentante = 0 AND @pers_OfprRepresentante = 0 )
 	BEGIN
@@ -3262,7 +3286,20 @@ BEGIN
 	SET @oficioRep = @pers_OfprRepresentante;
 	END
 
+	IF(@pers_FormaRepresentacion = 0)
+   BEGIN
+		SET @estadoCivilRep = NULL;
+		SET @oficioRep = NULL;
 
+		UPDATE Adua.tbComercianteIndividual
+		SET [coin_CiudadRepresentante] = @ciudadRep,
+			[coin_AldeaRepresentante] = @aldeaRep,
+			[coin_coloniaIdRepresentante] = @coloniaRep,
+			[coin_NumeroLocaDepartRepresentante] = @coin_NumeroLocaDepartRepresentante,
+			[coin_PuntoReferenciaReprentante] = @coin_PuntoReferenciaReprentante
+		WHERE [coin_Id] = @coin_Id
+
+   END
 
 		 UPDATE Adua.tbComercianteIndividual 
 			SET [pers_FormaRepresentacion] = @pers_FormaRepresentacion,
@@ -3272,6 +3309,7 @@ BEGIN
 
 		 UPDATE Adua.tbPersonas
 			SET [pers_RTN] = @pers_RTN,
+				pers_Nombre = @pers_Nombre,
 				[ofic_Id] = @ofic_Id, 
 				[escv_Id] = @escv_Id,
 				[ofpr_Id] = @ofpr_Id, 
@@ -3279,7 +3317,7 @@ BEGIN
 				[pers_OfprRepresentante] = @oficioRep,
 				[usua_UsuarioModificacion] = @usua_UsuarioModificacion,
 				[pers_FechaModificacion] = @coin_FechaModificacion
-			WHERE [pers_Id] = @pers_Id AND [pers_Estado] = 1
+			WHERE [pers_Id] = @pers_Id 
 
 			SELECT 1
 
@@ -3317,7 +3355,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_FinalizarContrato
 AS
 BEGIN
 BEGIN TRY
-			UPDATE Adua.tbComercianteIndividua
+			UPDATE Adua.tbComercianteIndividual 
 			SET coin_Finalizacion = 1
 			WHERE coin_Id = @coin_Id
 			SELECT 1
@@ -4268,7 +4306,7 @@ AS
 BEGIN
 SELECT    adu.adua_Id                            ,
         adu.adua_Codigo                        ,
-        adu.adua_Nombre                        ,
+        gral.ProperCase(adu.adua_Nombre)   AS adua_Nombre,
         adu.adua_Direccion_Exacta            ,
         adu.ciud_Id,
         ciud.ciud_Nombre                    ,
@@ -4285,6 +4323,36 @@ FROM    Adua.tbAduanas adu
         LEFT JOIN Gral.tbCiudades ciud      ON ciud.ciud_Id = adu.ciud_Id
         LEFT JOIN Gral.tbProvincias prov   ON prov.pvin_Id = ciud.pvin_Id
  WHERE    adu.adua_Estado = 1
+ ORDER BY adua_FechaCreacion DESC
+END
+
+GO
+
+/*Listar aduanas ById*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbAduanas_Listar_ById
+@adua_Id INT
+AS
+BEGIN
+SELECT    adu.adua_Id                            ,
+        adu.adua_Codigo                        ,
+        gral.ProperCase(adu.adua_Nombre)   AS adua_Nombre,
+        adu.adua_Direccion_Exacta            ,
+        adu.ciud_Id,
+        ciud.ciud_Nombre                    ,
+        prov.pvin_Id                         ,
+        prov.pvin_Nombre                    ,
+        usu.usua_Nombre                        AS usarioCreacion,
+        adu.adua_FechaCreacion                ,
+        usu2.usua_Nombre                    AS usuarioModificacion,
+        adu.adua_FechaModificacion            ,
+        adu.adua_Estado
+FROM    Adua.tbAduanas adu 
+        INNER JOIN Acce.tbUsuarios usu        ON adu.usua_UsuarioCreacion = usu.usua_Id 
+        LEFT JOIN Acce.tbUsuarios usu2        ON usu2.usua_Id = adu.usua_UsuarioModificacion 
+        LEFT JOIN Gral.tbCiudades ciud      ON ciud.ciud_Id = adu.ciud_Id
+        LEFT JOIN Gral.tbProvincias prov   ON prov.pvin_Id = ciud.pvin_Id
+ WHERE  adu.adua_Estado = 1 AND adu.adua_Id = @adua_Id
+ ORDER BY adua_FechaCreacion DESC
 END
 
 /*Aduanas Crear */
@@ -8469,6 +8537,132 @@ ORDER BY duca_FechaCreacion DESC
 END
 GO
 
+
+/*Duca listar by Id*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_Listar_ById 
+@duca_Id INT 
+AS
+BEGIN
+   SELECT --Identificación de la Declaración parte I
+		  duca_Id,
+		  duca_No_Duca, 
+		  duca_No_Correlativo_Referencia, 
+		  
+		  --4.1 Exportador / Proveedor
+		  duca_Tipo_Iden_Exportador, 
+		  tipo.iden_Descripcion					AS 'Tipo_identidad_exportador_descripcion',
+		  duca_Pais_Emision_Exportador,
+		  paisEE.pais_Nombre					AS 'Nombre_pais_del_exportador', 
+		  duca_DomicilioFiscal_Exportador, 
+		  
+		  --Identificación de la Declaración parte II --
+		  duca.duca_AduanaRegistro,
+		  adua1.adua_Nombre						AS 'Nombre_Aduana_Registro',			
+		  duca.duca_AduanaDestino,
+		  adua2.adua_Nombre						AS 'Nombre_Aduana_Destino',
+		  
+		  --5.1  Iportador / Destinatario
+		  duca_Numero_Id_Importador, 
+		  duca_Pais_Emision_Importador,
+		  paisEI.pais_Nombre					AS 'Nombre_pais_importador',
+		  duca_DomicilioFiscal_Importador, 
+		  
+		  --Identificación de la Declaración parte III
+		  duca.duca_Regimen_Aduanero,
+		  duca.duca_Modalidad,
+		  duca.duca_Clase,
+		  duca.duca_FechaVencimiento,
+		  
+		  --Identificacion de la Declaracion parte IV
+		  duca_Pais_Procedencia,
+		  paisP.pais_Nombre						AS 'Nombre_pais_procedencia', 
+		  duca_Pais_Exportacion,
+		  paisE.pais_Nombre						AS 'Nombre_pais_exportacion', 
+		  duca_Pais_Destino,
+		  paisD.pais_Nombre						AS 'Nombre_pais_destino', 
+		  duca_Deposito_Aduanero,
+		  duca_Lugar_Desembarque,
+		  embarque.emba_Codigo,
+		  duca_Manifiesto, 
+		  duca_Titulo, 
+		  
+		  --6.1 Declarante 
+		  duca_Codigo_Declarante,
+		  duca_Numero_Id_Declarante, 
+		  duca_NombreSocial_Declarante,
+		  duca_DomicilioFiscal_Declarante, 
+		  
+		  --19.1 Transportista 		
+		  duca_Codigo_Transportista,
+		  duca.motr_id, 
+		  duca_Transportista_Nombre,
+		  
+		  --23.1 Conductor 
+		  duca_Conductor_Id,
+		  cond.cont_NoIdentificacion,
+		  cond.cont_Licencia,
+		  paisc.pais_Nombre						AS 'Nombre_pais_conductor',
+		  cond.cont_Nombre,
+		  cond.cont_Apellido,
+		  cond.pais_IdExpedicion,		
+		  duca_Conductor_Id, 
+		  
+		  --Identificacion de la Declaracion parte V
+		  trns.tran_Id,
+		  trns.tran_IdUnidadTransporte,
+		  trns.tran_TamanioEquipamiento,
+		  trns.pais_Id							AS 'Id_pais_transporte',
+		  paist.pais_Nombre						AS 'Nombre_pais_transporte',
+		  trns.marca_Id							AS 'Transporte_marca_Id',
+		  marc.marc_Descripcion					AS 'Transporte_marc_Descripcion',
+		  trns.tran_Chasis,
+		  trns.tran_Remolque,
+		  trns.tran_CantCarga,
+		  trns.tran_NumDispositivoSeguridad,
+		  trns.tran_Equipamiento,
+		  	  
+		  --Tamaño del equipamiento
+		  trns.tran_TipoCarga,
+		  trns.tran_IdContenedor,	
+		  	  
+		  --Otros gastos
+		  
+		  --32.Totales 
+		  duca.duca_PesoBrutoTotal,      
+		  duca.duca_PesoNetoTotal,
+		  
+		  --Liquidacion general 
+		  --Mercancias
+		  duca.usua_UsuarioCreacion,
+		  usu1.usua_Nombre, 
+		  duca_FechaCreacion, 
+		  duca.usua_UsuarioModificacion, 
+		  usu2.usua_Nombre,
+		  duca_FechaModificacion, 
+		  duca_Finalizado,
+		  duca_Estado
+	 FROM Adua.tbDuca duca 
+LEFT JOIN Acce.tbUsuarios				AS usu1		ON duca.usua_UsuarioCreacion = usu1.usua_Id
+LEFT JOIN Acce.tbUsuarios				AS usu2		ON duca.usua_UsuarioModificacion = usu2.usua_Id
+LEFT JOIN Adua.tbConductor				AS cond		ON duca.duca_Conductor_Id = cond.cont_Id
+LEFT JOIN Adua.tbTransporte				AS trns		ON cond.tran_Id = trns.tran_Id 
+LEFT JOIN Gral.tbPaises					AS paisc	ON cond.pais_IdExpedicion = paisc.pais_Id 
+LEFT JOIN Gral.tbPaises					AS paist	ON paist.pais_Id = trns.pais_Id
+LEFT JOIN Adua.tbMarcas					AS marc		ON marc.marc_Id = trns.marca_Id
+LEFT JOIN Gral.tbPaises					AS paisD	ON duca.duca_Pais_Destino = paisD.pais_Id
+LEFT JOIN Gral.tbPaises					AS paisEE	ON duca.duca_Pais_Emision_Exportador = paisEE.pais_Id
+LEFT JOIN Gral.tbPaises					AS paisEI	ON duca.duca_Pais_Emision_Importador = paisEI.pais_Id
+LEFT JOIN Gral.tbPaises					AS paisE	ON duca.duca_Pais_Exportacion = paisE.pais_Id
+LEFT JOIN Gral.tbPaises					AS paisP	ON duca.duca_Pais_Procedencia = paisP.pais_Id
+LEFT JOIN Adua.tbLugaresEmbarque		AS embarque ON duca.duca_Lugar_Desembarque = embarque.emba_Id
+LEFT JOIN Adua.tbModoTransporte			AS modoT	ON duca.motr_id = modoT.motr_Id
+LEFT JOIN Adua.tbAduanas				AS adua1	ON duca.duca_AduanaRegistro = adua1.adua_Id
+LEFT JOIN Adua.tbAduanas				AS adua2	ON duca.duca_AduanaDestino = adua2.adua_Id
+LEFT JOIN Adua.tbTiposIdentificacion	AS tipo		ON duca.duca_Tipo_Iden_Exportador = tipo.iden_Id 
+WHERE duca.duca_Id = @duca_Id
+END
+GO
+
  
 /* Preinsert DUCA*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_PreInsertar
@@ -8594,6 +8788,8 @@ BEGIN
 	SET @tran_FechaCreacion = GETDATE();
 	BEGIN TRY
 		BEGIN TRAN
+		DECLARE @ducaConductor INT = 0
+
 			IF @pais_Id > 0
 				BEGIN
 					INSERT INTO Adua.tbTransporte (pais_Id, tran_Chasis, marca_Id, tran_Remolque, tran_CantCarga, tran_NumDispositivoSeguridad, tran_Equipamiento, tran_TipoCarga, tran_IdContenedor, usua_UsuarioCreacio, tran_FechaCreacion,tran_IdUnidadTransporte, tran_TamanioEquipamiento)
@@ -8604,7 +8800,7 @@ BEGIN
 					INSERT INTO Adua.tbConductor (cont_NoIdentificacion, cont_Nombre, cont_Apellido, cont_Licencia, pais_IdExpedicion, tran_Id, usua_UsuarioCreacion, cont_FechaCreacion)
 					VALUES(@cont_NoIdentificacion, @cont_Nombre,@cont_Apellido,@cont_Licencia,@pais_IdExpedicion,@Transporte_Id,@usua_UsuarioCreacion,@tran_FechaCreacion);
 
-					DECLARE @ducaConductor INT = (SELECT TOP 1 cont_Id FROM Adua.tbConductor ORDER BY cont_Id DESC);
+					SET @ducaConductor = (SELECT TOP 1 cont_Id FROM Adua.tbConductor ORDER BY cont_Id DESC);
 
 					UPDATE Adua.tbDuca
 					   SET duca_Codigo_Declarante = @duca_Codigo_Declarante
@@ -9181,7 +9377,7 @@ BEGIN
 		  SELECT 1
 	   END TRY 
 	   BEGIN CATCH 
-	       SELECT 0
+	       SELECT 'Error Message: ' + ERROR_MESSAGE()
 	   END CATCH
 END
  
@@ -14365,6 +14561,7 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbPedidosOrden_Listar
 AS
 BEGIN
 SELECT	peor_Id, 
+        peor_Codigo,
 		prov.prov_Id, 
 		prov.prov_NombreCompania,
 		prov.prov_NombreContacto,
@@ -15146,6 +15343,28 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE Prod.UDP_tbPedidosOrden_FindCodigo --'SAGAS245'
+  @peor_Codigo   NVARCHAR(100)
+AS
+BEGIN 
+SELECT	    peor.prod_Id,
+			po.peor_Id,
+			po.peor_Codigo,
+			prov.prov_Id, 
+		    prov.prov_NombreCompania,
+		    prov.prov_NombreContacto,
+			peor.prod_Cantidad,
+			peor.mate_Id,
+			mate_Descripcion,
+			peor.prod_Precio	  
+	FROM	[Prod].[tbPedidosOrdenDetalle]	peor
+	        INNER JOIN Prod.tbPedidosOrden po       ON peor.peDI_Id = po.peor_Id
+		    LEFT  JOIN Gral.tbProveedores prov	    ON po.prov_Id   = prov.prov_Id
+			LEFT  JOIN Prod.tbMateriales tbmats		ON peor.mate_Id = tbmats.mate_Id
+   WHERE peor_Codigo = @peor_Codigo
+END
+GO
+
 --INSERTAR
 CREATE OR ALTER PROCEDURE Prod.UDP_tbPedidosOrdenDetalle_Insertar
 (
@@ -15814,7 +16033,7 @@ BEGIN
 		mat.mate_Id,
 		mat.mate_Descripcion
 
-		FROM Prod.tbPedidosProduccionDetalles PPD
+		SELECT * FROM Prod.tbPedidosProduccionDetalles PPD
 			INNER JOIN Prod.tbPedidosProduccion pp ON ppd.ppro_Id = pp.ppro_Id
 			INNER JOIN Prod.tbLotes lot ON PPD.lote_Id = lot.lote_Id
 			INNER JOIN Prod.tbMateriales mat ON lot.mate_Id = mat.mate_Id

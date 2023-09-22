@@ -63,6 +63,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             var parametros = new DynamicParameters();
 
             parametros.Add("@pers_RTN", item.pers_RTN, DbType.String, ParameterDirection.Input);
+            parametros.Add("@pers_Nombre", item.pers_Nombre, DbType.String, ParameterDirection.Input);
             parametros.Add("@ofic_Id", item.ofic_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@escv_Id", item.escv_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@ofpr_Id", item.ofpr_Id, DbType.Int32, ParameterDirection.Input);
@@ -87,7 +88,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             var parametros = new DynamicParameters();
 
             parametros.Add("@coin_Id", item.coin_Id, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@ciud_Id", item.ciud, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@ciud_Id", item.ciud_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@alde_Id", item.alde_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@colo_Id", item.colo_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@coin_NumeroLocalApart", item.coin_NumeroLocalApart, DbType.String, ParameterDirection.Input);
@@ -158,6 +159,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@coin_Id", item.coin_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@pers_Id", item.pers_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@pers_RTN", item.pers_RTN, DbType.String, ParameterDirection.Input);
+            parametros.Add("@pers_Nombre", item.pers_Nombre, DbType.String, ParameterDirection.Input);
             parametros.Add("@ofic_Id", item.ofic_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@escv_Id", item.escv_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@ofpr_Id", item.ofpr_Id, DbType.Int32, ParameterDirection.Input);

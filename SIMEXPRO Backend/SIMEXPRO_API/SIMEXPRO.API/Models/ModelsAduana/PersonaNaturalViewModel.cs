@@ -48,7 +48,15 @@ namespace SIMEXPRO.API.Models.ModelsAduana
 
         public string usuarioCreacion { get; set; }
 
-         public string usuarioModificacion { get; set; }
+        public string usuarioModificacion { get; set; }
+
+
+        public string peju_CiudadRepresentanteNombre { get; set; }
+        public string peju_ColoniaRepresentanteNombre { get; set; }
+        public string peju_AldeaRepresentanteNombre { get; set; }
+        public string pers_Nombre { get; set; }
+        public string colo_Nombre { get; set; }
+        public string alde_Nombre { get; set; }
 
     }
 }

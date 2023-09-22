@@ -45,6 +45,8 @@ namespace SIMEXPRO.Entities.Entities
         public string usuarioModificaNombre { get; set; }
         public DateTime? mate_FechaModificacion { get; set; }
         public bool? mate_Estado { get; set; }
+        [NotMapped]
+        public string detalles { get; set; }
 
         public virtual tbSubcategoria subc { get; set; }
         public virtual tbColores colr { get; set; }

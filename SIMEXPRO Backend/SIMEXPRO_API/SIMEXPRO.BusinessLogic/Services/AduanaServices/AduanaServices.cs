@@ -128,6 +128,20 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult ListarAduanas_ById(int id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _aduanasRepository.List_ById(id);
+                return result.Ok(list);
+            }
+            catch (Exception e)
+            {
+                return result.Error(e.Message);
+            }
+        }
+
         public ServiceResult InsertarAduanas(tbAduanas item)
         {
             var result = new ServiceResult();
@@ -1272,6 +1286,21 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var list = _ducaRepository.List();
+
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult ListarDuca_ById(int id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _ducaRepository.List_ById(id);
 
                 return result.Ok(list);
             }

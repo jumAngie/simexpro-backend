@@ -184,7 +184,7 @@ CREATE TABLE Gral.tbPaises(
 		pais_Codigo 				CHAR(2)			NOT NULL,
 		pais_Nombre 				NVARCHAR(150) 	NOT NULL,
 		pais_EsAduana				BIT				NOT NULL,
-
+		pais_prefijo				NVARCHAR(4)		NOT NULL,
 		usua_UsuarioCreacion 		INT				NOT NULL,
 		pais_FechaCreacion 			DATETIME 		NOT NULL,
 		usua_UsuarioModificacion	INT				DEFAULT NULL,
@@ -202,6 +202,7 @@ CREATE TABLE Gral.tbPaises(
 	
 );
 GO
+
 
 CREATE TABLE Gral.tbFormas_Envio(
 		foen_Id 					INT IDENTITY(1,1),
@@ -828,6 +829,7 @@ CREATE TABLE Adua.tbDeclaraciones_Valor
 		deva_AduanaIngresoId 			INT NOT NULL, 
 		deva_AduanaDespachoId 			INT NOT NULL,
 		deva_DeclaracionMercancia 		NVARCHAR(500),
+		regi_Id							INT NOT NULL,
 		deva_FechaAceptacion 			DATETIME,
 		impo_Id 						INT,
 		pvde_Id 						INT,
@@ -863,6 +865,7 @@ CREATE TABLE Adua.tbDeclaraciones_Valor
 	CONSTRAINT FK_Adua_tbDeclaraciones_Valor_deva_Id 												PRIMARY KEY (deva_Id),
 	CONSTRAINT FK_Adua_tbDeclaraciones_Valor_deva_AduanaIngresoId_Adua_tbAduanas					FOREIGN KEY (deva_AduanaIngresoId)		REFERENCES Adua.tbAduanas (adua_Id),
 	CONSTRAINT FK_Adua_tbDeclaraciones_Valor_deva_AduanaDespachoId_Adua_tbAduanas					FOREIGN KEY (deva_AduanaDespachoId)		REFERENCES Adua.tbAduanas (adua_Id),
+	CONSTRAINT FK_Adua_tbDeclaraciones_Valor_regi_Id_Adua_tbRegimenesAduaneros						FOREIGN KEY (regi_Id)					REFERENCES Adua.tbRegimenesAduaneros(regi_Id),
 	CONSTRAINT FK_Adua_tbDeclaraciones_Valor_impo_Id_Adua_tbImportadores							FOREIGN KEY (impo_Id)					REFERENCES Adua.tbImportadores (impo_Id),
 	CONSTRAINT FK_Adua_tbDeclaraciones_Valor_pvde_Id_Adua_tbProveedoresDeclaracion					FOREIGN KEY (pvde_Id)					REFERENCES Adua.tbProveedoresDeclaracion (pvde_Id),
 	CONSTRAINT FK_Adua_tbDeclaraciones_Valor_inte_Id_Adua_tbIntermediarios							FOREIGN KEY (inte_Id)					REFERENCES Adua.tbIntermediarios (inte_Id),
@@ -1673,6 +1676,7 @@ GO
 CREATE TABLE Adua.tbPersonas (
 	pers_Id 					INT IDENTITY(1,1),
 	pers_RTN 					NVARCHAR(40) NOT NULL,
+	pers_Nombre					NVARCHAR(150) NOT NULL,
 	ofic_Id 					INT NOT NULL,
 	escv_Id 					INT NOT NULL,
 	ofpr_Id 					INT NOT NULL,

@@ -18,6 +18,7 @@ namespace SIMEXPRO.Entities.Entities
 
         public int pers_Id { get; set; }
         public string pers_RTN { get; set; }
+        public string pers_Nombre { get; set; }
         public int ofic_Id { get; set; }
 
         [NotMapped]

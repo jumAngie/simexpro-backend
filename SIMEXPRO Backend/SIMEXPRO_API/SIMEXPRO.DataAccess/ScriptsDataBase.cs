@@ -161,6 +161,7 @@ namespace SIMEXPRO.DataAccess
 
         #region Aduanas
         public static string ListarAduanas = "Adua.UDP_tbAduanas_Listar";
+        public static string ListarAduanasById = "Adua.UDP_tbAduanas_Listar_ById";
         public static string InsertarAduanas = "Adua.UDP_tbAduanas_Insertar";
         public static string EditarAduanas = "Adua.UDP_tbAduanas_Editar";
         public static string EliminarAduanas = "Adua.UDP_tbAduanas_Eliminar";
@@ -302,6 +303,7 @@ namespace SIMEXPRO.DataAccess
 
         #region Duca
         public static string ListarDuca = "Adua.UDP_tbDuca_Listar";
+        public static string ListarDuca_ById = "Adua.UDP_tbDuca_Listar_ById";
         public static string ListarDevaNoDuca = "Adua.UDP_tbDUCA_PreInsertarListado";
 
         public static string PreInsertDuca = "Adua.UDP_tbDuca_PreInsertar";
@@ -710,6 +712,7 @@ namespace SIMEXPRO.DataAccess
         public static string InsertarPedidosOrden = "Prod.UDP_tbPedidosOrden_Insertar";
         public static string EditarPedidosOrden = "Prod.UDP_tbPedidosOrden_Editar";
         public static string FinalizarPedidosOrden = "Prod.UDP_tbPedidosOrden_Finalizado";
+        public static string PedidosOrdenFind = "Prod.UDP_tbPedidosOrden_FindCodigo";
         #endregion
 
         #region Orden de Pedido Detalles
@@ -814,6 +817,10 @@ namespace SIMEXPRO.DataAccess
         public static string MateriasDePO = "Prod.UDP_Reportes_MateriasDePO";
         public static string ProduccionAreas = "Prod.UDP_Reporte_ProduccionAreas";
         public static string MaterialesIngreso = "Prod.UDP_Reportes_MaterialesIngreso";
+
+        public static string Contrato_PN = "Adua.UDP_Reporte_Contratos_Persona_Natural_Por_Fecha";
+        public static string Contrato_PJ = "Adua.UDP_Reporte_Contratos_Persona_Juridica_Por_Fecha";
+        public static string Contrato_CI = "Adua.UDP_Reporte_Contratos_Comerciante_Individual_Por_Fecha";
 
         #endregion
 
