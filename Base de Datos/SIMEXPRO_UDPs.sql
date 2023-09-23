@@ -8720,6 +8720,24 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE Adua.UDP_tbItemsDEVAPorDuca_LiberarDevasPorDucaId
+(
+	@duca_Id	INT
+)
+AS
+BEGIN
+	BEGIN TRY
+		DELETE FROM [Adua].[tbItemsDEVAPorDuca] 
+			  WHERE [duca_Id] = @duca_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error: ' + ERROR_MESSAGE();
+	END CATCH
+END
+GO
+
 /* Insertar Duca tab1*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_InsertarTab1
 	@duca_Id							INT,
@@ -17007,9 +17025,9 @@ BEGIN
 			,DPD.duca_Id
 			,deva.deva_Id, 
 			deva.deva_AduanaIngresoId, 
-			aduaIngreso.adua_Nombre				AS adua_IngresoNombre,
+			aduaIngreso.adua_Codigo + ' ' + aduaIngreso.adua_Nombre				AS adua_IngresoNombre,
 			deva.deva_AduanaDespachoId, 
-			aduaDespacho.adua_Nombre			AS adua_DespachoNombre,
+			aduaDespacho.adua_Codigo + ' ' + aduaDespacho.adua_Nombre			AS adua_DespachoNombre,
 			deva.deva_DeclaracionMercancia, 
 			deva.deva_FechaAceptacion, 
 			deva.deva_Finalizacion,

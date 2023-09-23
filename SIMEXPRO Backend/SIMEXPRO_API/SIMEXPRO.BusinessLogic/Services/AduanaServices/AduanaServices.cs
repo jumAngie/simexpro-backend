@@ -3320,6 +3320,19 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult LiberarDevasPorDucaId(int duca_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var respuesta = _itemsDEVAporDUCARepository.LiberarDevasPorDucaId(duca_Id);
+                return result.Ok(respuesta);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
     }
 }

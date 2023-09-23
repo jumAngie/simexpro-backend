@@ -73,5 +73,19 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             result.MessageStatus = answer;
             return result;
         }
+
+        public RequestStatus LiberarDevasPorDucaId(int duca_Id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@duca_Id", duca_Id, DbType.Int32, ParameterDirection.Input);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.LiberarDevasPorDucaId, parametros, commandType: CommandType.StoredProcedure);
+
+            return new RequestStatus()
+            {
+                CodeStatus = answer != "1" ? 0 : int.Parse(answer),
+                MessageStatus = answer
+            };
+        }
     }
 }

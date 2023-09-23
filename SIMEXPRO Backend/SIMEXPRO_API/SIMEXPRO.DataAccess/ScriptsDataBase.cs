@@ -491,6 +491,7 @@ namespace SIMEXPRO.DataAccess
         public static string LitarItemDEVAxDuca = "Adua.UPD_tbItemsDEVAPorDuca_DEVAsPorDUCANo";
         public static string InsertarItemDEVAxDuca = "Adua.UDP_tbItemsDEVAPorDuca_InsertarDuca";
         public static string EditarItemDevaxDuca = "Adua.UDP_tbItemsDEVAPorDuca_Editar";
+        public static string LiberarDevasPorDucaId = "Adua.UDP_tbItemsDEVAPorDuca_LiberarDevasPorDucaId";
         #endregion
 
         #endregion
