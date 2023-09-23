@@ -3542,6 +3542,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_Listar
 AS
 BEGIN
 	SELECT	 personaJuridica.peju_Id      --
+			 ,personas.pers_Nombre
 			,personas.pers_Id             --
 			,personas.pers_RTN            --
 			,personas.ofic_Id             -- TABLA PERSONA TAB 1
@@ -3613,6 +3614,7 @@ GO
 CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab1 
 
   @pers_RTN                 NVARCHAR(40),
+  @pers_Nombre				NVARCHAR(150),
   @ofic_Id                  INT,
   @escv_Id                  INT,
   @ofpr_Id                  INT,
@@ -3627,8 +3629,8 @@ BEGIN
     BEGIN TRY
         BEGIN TRANSACTION
         
-        INSERT INTO [Adua].[tbPersonas]([pers_RTN], [ofic_Id], [escv_Id], [ofpr_Id], [pers_escvRepresentante], [pers_OfprRepresentante], [usua_UsuarioCreacion], [pers_FechaCreacion])
-        VALUES (@pers_RTN, @ofic_Id, @escv_Id, @ofpr_Id, null, null, @usua_UsuarioCreacion, @pers_FechaCreacion);
+        INSERT INTO [Adua].[tbPersonas]([pers_RTN], pers_Nombre,[ofic_Id], [escv_Id], [ofpr_Id], [pers_escvRepresentante], [pers_OfprRepresentante], [usua_UsuarioCreacion], [pers_FechaCreacion])
+        VALUES (@pers_RTN,@pers_Nombre ,@ofic_Id, @escv_Id, @ofpr_Id, null, null, @usua_UsuarioCreacion, @pers_FechaCreacion);
         
         SET @pers_Id = SCOPE_IDENTITY();
         
@@ -3837,6 +3839,7 @@ GO
 CREATE OR ALTER PROCEDURE [Adua].[UDP_tbPersonaJuridica_Editar]
   @peju_Id                 INT,
   @pers_RTN                NVARCHAR(40),
+  @pers_Nombre             NVARCHAR(150),
   @ofic_Id                 INT,
   @escv_Id                 INT,
   @ofpr_Id                 INT,
@@ -3852,6 +3855,7 @@ BEGIN
         UPDATE [Adua].[tbPersonas]
         SET
             [pers_RTN] = @pers_RTN,
+		    [pers_Nombre] = @pers_Nombre,
             [ofic_Id] = @ofic_Id,
             [escv_Id] = @escv_Id,
             [ofpr_Id] = @ofpr_Id,
