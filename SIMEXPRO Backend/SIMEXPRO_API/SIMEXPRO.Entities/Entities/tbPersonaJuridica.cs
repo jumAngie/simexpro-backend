@@ -36,15 +36,15 @@ namespace SIMEXPRO.Entities.Entities
 
         //tab2
         [NotMapped]
-        public int colo_Id { get; set; }
+        public int? colo_Id { get; set; }
         [NotMapped]
         public string ColiniaEmpresa { get; set; }
         [NotMapped]
-        public int ciud_Id { get; set; }
+        public int? ciud_Id { get; set; }
         [NotMapped]
         public string CiudadEmpresa { get; set; }
         [NotMapped]
-        public int alde_Id { get; set; }
+        public int? alde_Id { get; set; }
         [NotMapped]
         public string AldeaEmpresa { get; set; }
         [NotMapped]
@@ -55,15 +55,15 @@ namespace SIMEXPRO.Entities.Entities
 
         //tab3
         [NotMapped]
-        public int peju_ColoniaRepresentante { get; set; }
+        public int? peju_ColoniaRepresentante { get; set; }
         [NotMapped]
         public string ColoniaRepresentante { get; set; }
         [NotMapped]
-        public int peju_CiudadIdRepresentante { get; set; }
+        public int? peju_CiudadIdRepresentante { get; set; }
         [NotMapped]
         public string CiudadRepresentante { get; set; }
         [NotMapped]
-        public int peju_AldeaIdRepresentante { get; set; }
+        public int? peju_AldeaIdRepresentante { get; set; }
         [NotMapped]
         public string AldeaRepresemtante { get; set; }
         [NotMapped]
