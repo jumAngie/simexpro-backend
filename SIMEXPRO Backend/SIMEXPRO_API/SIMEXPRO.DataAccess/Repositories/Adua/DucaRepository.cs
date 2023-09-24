@@ -116,6 +116,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
             return new RequestStatus()
             {
+                CodeStatus = respuesta.Contains("Error") ? 0 : 1,
                 MessageStatus = respuesta
             };
         }
@@ -219,8 +220,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parameters.Add("@duca_Codigo_Transportista", item.duca_Codigo_Transportista, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Transportista_Nombre", item.duca_Transportista_Nombre, DbType.String, ParameterDirection.Input);
             parameters.Add("@motr_Id", item.motr_Id, DbType.Int32, ParameterDirection.Input);
+            
             parameters.Add("@duca_Conductor_Id", item.duca_Conductor_Id, DbType.Int32, ParameterDirection.Input);
-
             parameters.Add("@cont_NoIdentificacion", item.cont_NoIdentificacion, DbType.String, ParameterDirection.Input);
             parameters.Add("@cont_Licencia", item.cont_Licencia, DbType.String, ParameterDirection.Input);
             parameters.Add("@pais_IdExpedicion", item.pais_IdExpedicion, DbType.Int32, ParameterDirection.Input);

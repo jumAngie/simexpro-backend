@@ -1346,14 +1346,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var respuesta = _ducaRepository.PreInsert();
-                if (respuesta.MessageStatus == "1")
-                {
-                    return result.Ok(respuesta);
-                }
-                else
-                {
-                    return result.Error(respuesta);
-                }
+                return result.Ok(respuesta);
             }
             catch (Exception ex)
             {
@@ -1367,14 +1360,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var respuesta = _ducaRepository.Insert(item);
-                if (respuesta.MessageStatus == "1")
-                {
-                    return result.Ok(respuesta);
-                }
-                else
-                {
-                    return result.Error(respuesta);
-                }
+                return result.Ok(respuesta);
             }
             catch (Exception ex)
             {
@@ -1388,14 +1374,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var respuesta = _ducaRepository.InsertTap2(item);
-                if (respuesta.MessageStatus == "1")
-                {
-                    return result.Ok(respuesta);
-                }
-                else
-                {
-                    return result.Error(respuesta);
-                }
+                return result.Ok(respuesta);
             }
             catch (Exception ex)
             {
@@ -1409,14 +1388,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var respuesta = _ducaRepository.InsertTap3(item);
-                if (respuesta.MessageStatus == "1")
-                {
-                    return result.Ok(respuesta);
-                }
-                else
-                {
-                    return result.Error(respuesta);
-                }
+                return result.Ok(respuesta);
             }
             catch (Exception ex)
             {
@@ -1430,14 +1402,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var respuesta = _ducaRepository.Update(item);
-                if (respuesta.MessageStatus == "1")
-                {
-                    return result.Ok(respuesta);
-                }
-                else
-                {
-                    return result.Error(respuesta);
-                }
+                return result.Ok(respuesta);
             }
             catch (Exception ex)
             {
@@ -1476,7 +1441,6 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         public ServiceResult FinalizarDuca(int duca_Id)
         {
             var resultado = new ServiceResult();
-
             try
             {
                 var respuesta = _ducaRepository.FinalizarDuca(duca_Id);

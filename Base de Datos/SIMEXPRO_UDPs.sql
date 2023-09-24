@@ -8793,7 +8793,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbDuca_InsertarTab2]
+CREATE OR ALTER	PROCEDURE Adua.UDP_tbDuca_InsertarTab2
 	@duca_Id							INT,
 	@duca_Codigo_Declarante				NVARCHAR(200),
 	@duca_Numero_Id_Declarante			NVARCHAR(200),
@@ -8864,7 +8864,7 @@ BEGIN
 					 WHERE duca_Id = @duca_Id
 				END
 		COMMIT 
-		SELECT 1
+		SELECT @ducaConductor
 	END TRY
 	BEGIN CATCH
 		ROLLBACK
@@ -8951,7 +8951,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE [Adua].[UDP_tbDuca_EditarTab2]
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_EditarTab2
 	@duca_Id							INT,
 	@duca_Codigo_Declarante				NVARCHAR(200),
 	@duca_Numero_Id_Declarante			NVARCHAR(200),
