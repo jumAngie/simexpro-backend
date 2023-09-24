@@ -8,7 +8,7 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAVTsarOjH+ESfTjumQ9udcgAAAAACAAAAAAAQZgAAAAEAACAAAACO7oxFoCqDTXC55tx9Gy9f5nO3N2f+hCKU5g5XZEvX0AAAAAAOgAAAAAIAACAAAABroZFqX5kttjDkA25f1WAhY3IlK9MWiEPS/heXLsC92iAAAAB1zNmbdk8aZoM9HagldjhQpQ3DGvsupKY04VqUBiAm60AAAACvFBaH69WEUwV9oszFvdUl3VhdYx6MeRygbbPhqKKMagwm4FdkSaGq0xV1QmEx0Zy0PlG8kwSgumeGzDwOfHpl</EncryptedPassword>
     <_PublishTargetUrl>ftp://155.254.244.28/www.practicaAcademia.somee.com</_PublishTargetUrl>
-    <History>True|2023-09-24T05:14:08.9496746Z;True|2023-09-22T10:27:41.7349373-06:00;True|2023-09-19T15:56:50.3847642-06:00;True|2023-09-12T23:28:52.5285901-06:00;</History>
+    <History>True|2023-09-24T07:06:55.6341932Z;True|2023-09-23T23:14:08.9496746-06:00;True|2023-09-22T10:27:41.7349373-06:00;True|2023-09-19T15:56:50.3847642-06:00;True|2023-09-12T23:28:52.5285901-06:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="appsettings.json">
@@ -168,16 +168,16 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>11/15/2019 02:53:46</publishTime>
     </File>
     <File Include="SIMEXPRO.API.deps.json">
-      <publishTime>09/23/2023 23:13:43</publishTime>
+      <publishTime>09/24/2023 01:06:40</publishTime>
     </File>
     <File Include="SIMEXPRO.API.dll">
-      <publishTime>09/23/2023 23:13:39</publishTime>
+      <publishTime>09/24/2023 01:03:55</publishTime>
     </File>
     <File Include="SIMEXPRO.API.exe">
-      <publishTime>09/23/2023 23:13:39</publishTime>
+      <publishTime>09/24/2023 01:03:55</publishTime>
     </File>
     <File Include="SIMEXPRO.API.pdb">
-      <publishTime>09/23/2023 23:13:39</publishTime>
+      <publishTime>09/24/2023 01:03:55</publishTime>
     </File>
     <File Include="SIMEXPRO.API.runtimeconfig.json">
       <publishTime>09/06/2023 14:04:30</publishTime>
@@ -189,10 +189,10 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>09/23/2023 23:13:35</publishTime>
     </File>
     <File Include="SIMEXPRO.DataAccess.dll">
-      <publishTime>09/23/2023 23:13:34</publishTime>
+      <publishTime>09/24/2023 01:03:43</publishTime>
     </File>
     <File Include="SIMEXPRO.DataAccess.pdb">
-      <publishTime>09/23/2023 23:13:34</publishTime>
+      <publishTime>09/24/2023 01:03:43</publishTime>
     </File>
     <File Include="SIMEXPRO.Entities.dll">
       <publishTime>09/23/2023 23:13:32</publishTime>
@@ -234,7 +234,7 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>10/18/2022 10:32:24</publishTime>
     </File>
     <File Include="web.config">
-      <publishTime>09/23/2023 23:13:43</publishTime>
+      <publishTime>09/24/2023 01:06:40</publishTime>
     </File>
   </ItemGroup>
 </Project>

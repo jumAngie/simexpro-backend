@@ -198,6 +198,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@deva_AduanaIngresoId", item.deva_AduanaIngresoId, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@deva_AduanaDespachoId", item.deva_AduanaDespachoId, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@deva_FechaAceptacion", item.deva_FechaAceptacion, DbType.Date, ParameterDirection.Input);
+            parametros.Add("@regi_Id", item.regi_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@decl_Nombre_Raso", itemDecl.decl_Nombre_Raso, DbType.String, ParameterDirection.Input);
             parametros.Add("@impo_RTN", itemImp.impo_RTN, DbType.String, ParameterDirection.Input);
             parametros.Add("@impo_NumRegistro", itemImp.impo_NumRegistro, DbType.String, ParameterDirection.Input);
