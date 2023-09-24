@@ -5325,7 +5325,7 @@ GO
 /*Vista que trae todos los campos de la parte  1 del formulario de la declaración de valor, incluso los que están en 
   otras tablas conectadas a tbDeclaraciones_Valor (no se incluyen las facturas ni las condiciones)*/
 
-ALTER   VIEW [Adua].[VW_tbDeclaraciones_ValorCompleto]
+CREATE OR ALTER   VIEW [Adua].[VW_tbDeclaraciones_ValorCompleto]
 AS
 SELECT		deva.deva_Id, 
 			deva.deva_AduanaIngresoId, 

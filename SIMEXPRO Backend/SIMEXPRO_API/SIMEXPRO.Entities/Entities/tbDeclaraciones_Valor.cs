@@ -28,6 +28,7 @@ namespace SIMEXPRO.Entities.Entities
         public string adua_DespachoNombre { get; set; }
         public string deva_DeclaracionMercancia { get; set; }
         public DateTime? deva_FechaAceptacion { get; set; }
+        [NotMapped]
         public int regi_Id { get; set; }
         [NotMapped]
         public string regi_Codigo { get; set; }

@@ -14,6 +14,12 @@ namespace SIMEXPRO.Entities.Entities
         public string? adua_IngresoNombre { get; set; }
         public string? adua_IngresoCodigo { get; set; }
         public string? adua_DespachoCodigo { get; set; }
+        [NotMapped]
+        public int regi_Id { get; set; }
+        [NotMapped]
+        public string regi_Codigo { get; set; }
+        [NotMapped]
+        public string regi_Descripcion { get; set; }
         public string? inco_Codigo { get; set; }
         [NotMapped]
         public string? duca_No_DUCA { get; set; }
