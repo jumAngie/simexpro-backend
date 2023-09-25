@@ -3058,7 +3058,7 @@ CREATE TABLE Prod.tbImpuestosProd
 );
 GO
 
-INSERT INTO Prod.tbImpuestosProd VALUES('ISV',15)
+
 
 --**********************************************************************************************
 --********** TABLA PAISES / procedimientos tomando en cuenta los uniques ***********************
