@@ -607,3 +607,82 @@ FROM	Prod.tbPedidosOrden po
 WHERE (po.peor_FechaEntrada BETWEEN @fechaInicio AND @fechaFin)
 END
 
+
+
+CREATE OR ALTER  PROCEDURE Prod.UDP_ReporteSeguimientoProcesosPO
+@orco_Codigo NVARCHAR(100)
+AS
+BEGIN
+
+SELECT DISTINCT
+     orco.orco_Id,
+	 orco.orco_Codigo,
+	 clie.clie_Nombre_O_Razon_Social,
+	 orco.orco_EstadoFinalizado,
+	 orco.orco_EstadoOrdenCompra,
+
+	 
+	 orde.code_Id,
+	 proceActual.proc_Descripcion AS proc_Actual,
+	 proceComienza.proc_Descripcion as proc_Comienza,
+	 orde.code_CantidadPrenda,
+	 estilo.esti_Descripcion,
+	 talla.tall_Nombre,
+	 orde.code_Sexo,
+	 colores.colr_Nombre,
+
+	 todo.ppro_Id AS OrdenProduccion,
+
+	 faex.faex_Id,
+	 faex.faex_Fecha AS FechaExportacion, 
+	 fade.fede_Cantidad AS CantidadExportada, 
+	 fade.fede_Cajas, 
+	 fade.fede_TotalDetalle,
+	 
+	 (
+		SELECT p.* 
+					FROM 
+				(  SELECT	 pros.proc_Descripcion,		             
+				CASE
+				   WHEN asor.asor_FechaInicio IS NULL THEN 'NADA'
+				ELSE CONVERT(NVARCHAR, asor.asor_FechaInicio, 120)
+			    END AS asor_FechaInicio,
+			    CASE
+				   WHEN asor.asor_FechaLimite IS NULL THEN 'NADA'
+				ELSE CONVERT(NVARCHAR, asor.asor_FechaLimite, 120)
+			   END AS asor_FechaLimite,
+			    CASE
+				   WHEN asor.asor_Cantidad IS NULL THEN 'NADA'
+				ELSE CONVERT(NVARCHAR, asor.asor_Cantidad, 120)
+			   END AS asor_Cantidad,
+			  
+			  CASE
+				   WHEN empl.empl_Nombres + ' '+ empl_Apellidos IS NULL THEN 'Nada'
+				ELSE CONVERT(NVARCHAR, (empl.empl_Nombres + ' '+ empl_Apellidos), 120)
+			   END AS Empleado
+				             
+										
+					FROM	Prod.tbOrdenCompraDetalles ordenCompraDetalle
+						LEFT JOIN	Prod.tbProcesoPorOrdenCompraDetalle	procesos ON	ordenCompraDetalle.code_Id = procesos.code_Id
+						LEFT JOIN	Prod.tbProcesos	pros                         ON	pros.proc_Id = procesos.proc_Id					
+						LEFT JOIN   Prod.tbAsignacionesOrden asor                ON asor.proc_Id = procesos.proc_Id  AND   ordenCompraDetalle.code_Id = asor.asor_OrdenDetId
+						LEFT JOIN   Gral.tbEmpleados empl                        ON asor.empl_Id = empl.empl_Id
+					
+						WHERE       orde.code_Id = procesos.code_Id) AS p
+				FOR JSON PATH ) AS SeguimientoProcesos
+			
+FROM 
+Prod.tbOrdenCompraDetalles orde
+INNER JOIN Prod.tbOrdenCompra orco                       ON orco.orco_Id        = orde.orco_Id
+INNER JOIN Prod.tbProcesos	proceActual                  ON	proceActual.proc_Id = orde.proc_IdActual	
+INNER JOIN Prod.tbProcesos	proceComienza                ON	proceComienza.proc_Id = orde.proc_IdComienza	
+INNER JOIN Prod.tbClientes clie                          ON orco.orco_IdCliente = clie.clie_Id 
+INNER JOIN Prod.tbEstilos estilo			             ON	orde.esti_Id		= estilo.esti_Id
+INNER JOIN Prod.tbTallas	talla	                     ON	orde.tall_Id		= talla.tall_Id
+INNER JOIN Prod.tbColores	colores	                     ON	orde.colr_Id	    = colores.colr_Id
+LEFT  JOIN Prod.tbOrde_Ensa_Acab_Etiq todo               ON todo.code_Id        = orde.code_Id
+LEFT  JOIN Prod.tbFacturasExportacionDetalles fade       ON orde.code_Id        = fade.code_Id
+LEFT  JOIN Prod.tbFacturasExportacion faex               ON fade.faex_Id        = faex.faex_Id 
+WHERE  orco.orco_Codigo = @orco_Codigo
+END
+

@@ -143,5 +143,14 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             return Ok(listado);
         }
 
+        [HttpPost("SeguimientodeProcesosporPO")]
+        public IActionResult SeguimientodeProcesosporPO(string orco_Codigo)
+        {
+      
+            var listado = _produccionServices.SeguimientodePO(orco_Codigo);
+            return Ok(listado);
+        }
+
+
     }
 }

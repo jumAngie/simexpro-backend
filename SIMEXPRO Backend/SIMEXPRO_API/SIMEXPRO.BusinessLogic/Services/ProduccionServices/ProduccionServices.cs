@@ -3966,6 +3966,20 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
+        public ServiceResult SeguimientodePO(string orco_Codigo)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _reportesRepository.SeguimientoDePO(orco_Codigo);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
         public ServiceResult Contratos_Adhesion(DateTime fechaInicio, DateTime fechaFin, string Contrato)
         {
             var result = new ServiceResult();
