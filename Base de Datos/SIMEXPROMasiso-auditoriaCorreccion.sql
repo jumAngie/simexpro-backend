@@ -11,11 +11,10 @@
 		GO
 		*/
 	/*
-	CREATE DATABASE SIMEXPRO
+	
 	Primero crear y luego correr script
 	*/
-	USE SIMEXPRO
-	GO
+
 
 	CREATE SCHEMA Adua
 	GO  
@@ -71,10 +70,7 @@ CREATE TABLE Acce.tbUsuariosHistorial(
 		hist_FechaAccion 			DATETIME 		NOT NULL,
 		hist_Accion					NVARCHAR(100)
 );
-GO
 
-INSERT INTO Acce.tbUsuarios(usua_Nombre, usua_Contrasenia, empl_Id, usua_esAduana, usua_Image, role_Id, usua_EsAdmin, pant_subCategoria, usua_UsuarioCreacion, usua_FechaCreacion)
-VALUES						('prueba',		'123',				1,		1,			'.jpg',		1,			1,			1,					1,					GETDATE())
 
 GO
 CREATE TABLE Acce.tbRoles
@@ -104,11 +100,11 @@ CREATE TABLE Acce.tbPantallas(
 		pant_Id						INT 			IDENTITY(1,1),
 		pant_Nombre					NVARCHAR(100),
 		pant_URL					NVARCHAR(100),
+		pant_Identificador			NVARCHAR(MAX),
 		pant_Icono					NVARCHAR(50),
+		pant_Subcategoria			NVARCHAR(500),
 		pant_Esquema				NVARCHAR(100),
 		pant_EsAduana				BIT	         ,
-
-
 		usua_UsuarioCreacion 		INT				NOT NULL,
 		pant_FechaCreacion 			DATETIME 		NOT NULL,
 		usua_UsuarioModificacion	INT				DEFAULT NULL,
@@ -127,11 +123,12 @@ CREATE TABLE Acce.tbPantallas(
 );
 GO
 
+
 CREATE TABLE Acce.tbRolesXPantallas(
 		ropa_Id						INT	IDENTITY(1,1),
 		pant_Id						INT,
 		role_Id						INT,
-
+		pant_Identificador			NVARCHAR(MAX),	
 		usua_UsuarioCreacion 		INT				NOT NULL,
 		ropa_FechaCreacion 			DATETIME 		NOT NULL,
 		usua_UsuarioModificacion	INT				DEFAULT NULL,
@@ -1797,7 +1794,7 @@ CREATE TABLE Adua.tbPersonaNatural (
     pena_NombreArchDNI			NVARCHAR(200),
 	pena_NombreArchRTN			NVARCHAR(200),
 	pena_NombreArchRecibo		NVARCHAR(200),
-
+	pena_Finalizado				BIT DEFAULT 0,
   	usua_UsuarioCreacion       	INT NOT NULL,
   	pena_FechaCreacion         	DATETIME NOT NULL,
   	usua_UsuarioModificacion   	INT DEFAULT NULL,
@@ -1816,6 +1813,7 @@ CREATE TABLE Adua.tbPersonaNatural (
 	--CONSTRAINT FK_Adua_PersonaNatural_pena_Acce_tbUsuarios_usua_UsuarioEliminacion_usua_Id  FOREIGN KEY (usua_UsuarioEliminacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id)
 );
 GO
+
 
 CREATE TABLE Adua.tbPersonaJuridica (
 	peju_Id							  				INT IDENTITY(1,1) ,
@@ -1906,6 +1904,7 @@ CREATE TABLE Adua.tbDocumentosContratos(
 CREATE TABLE Prod.tbOrdenCompra(
 	orco_Id						INT IDENTITY(1,1),
 	orco_IdCliente				INT NOT NULL,
+	orco_Codigo					NVARCHAR(100)  NOT NULL,	
 	orco_FechaEmision			DATETIME NOT NULL,
 	orco_FechaLimite			DATETIME NOT NULL,
 	orco_MetodoPago 			INT NOT NULL,
@@ -2592,6 +2591,8 @@ GO
 
 CREATE TABLE Prod.tbPedidosOrden(--No se podrá eliminar de ninguna manera
 	peor_Id   					INT IDENTITY(1,1),
+	peor_Codigo					NVARCHAR(100) NOT NULL,
+	peor_Impuestos				NVARCHAR(MAX),
 	prov_Id						INT,
 	duca_Id						INT,
 	ciud_Id						INT,
@@ -2608,8 +2609,9 @@ CREATE TABLE Prod.tbPedidosOrden(--No se podrá eliminar de ninguna manera
 	--usua_UsuarioEliminacion	    INT	DEFAULT NULL,
 	--peor_FechaEliminacion		DATETIME DEFAULT NULL,
 	peor_Estado 				BIT DEFAULT 1 
-
+	
 	CONSTRAINT PK_Prod_tbPedidosOrden_peor_Id PRIMARY KEY (peor_Id),
+	CONSTRAINT UQ_Prod_tbPedidosOrden_peor_Codigo UNIQUE(peor_Codigo),
 	CONSTRAINT FK_Prod_tbPedidosOrden_prov_Id_Prod_tbProveedores_prov_Id 			FOREIGN KEY (prov_Id)					REFERENCES Gral.tbProveedores(prov_Id),
 	CONSTRAINT FK_Prod_tbPedidosOrden_Gral_tbCiudades_ciud_Id			 			FOREIGN KEY (ciud_Id)					REFERENCES Gral.tbCiudades(ciud_Id),
 	CONSTRAINT FK_Prod_tbPedidosOrden_tbUsuarios_peor_UsuarioCreacion				FOREIGN KEY (usua_UsuarioCreacion)     	REFERENCES Acce.tbUsuarios (usua_Id),
@@ -2617,7 +2619,8 @@ CREATE TABLE Prod.tbPedidosOrden(--No se podrá eliminar de ninguna manera
 	CONSTRAINT FK_Prod_tbPedidosOrden_tbDuca_Duca_Id FOREIGN KEY (duca_Id) REFERENCES Adua.tbDuca(duca_Id)
 	--CONSTRAINT FK_Prod_tbPedidosOrden__Acce_tbUsuarios_usua_UsuarioEliminacion_usua_Id  FOREIGN KEY (usua_UsuarioEliminacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id)
 );
-	GO
+GO
+
 
 CREATE TABLE Prod.tbPedidosOrdenDetalle(--No se podrá eliminar de ninguna manera
 	prod_Id							INT IDENTITY(1,1),
@@ -3045,6 +3048,17 @@ CREATE TABLE Adua.tbDocumentosSanciones(
 	CONSTRAINT FK_Adua_tbDocumentosSanciones_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id FOREIGN KEY (usua_UsuarioCreacion) REFERENCES Acce.tbUsuarios (usua_Id)
 );
 GO
+
+CREATE TABLE Prod.tbImpuestosProd
+(
+	impr_Id				INT IDENTITY(1,1),
+	impr_Descripcion	NVARCHAR(MAX),
+	impr_Valor			DECIMAL(18,4),
+	CONSTRAINT PK_Prod_tbImpuestosProd_impr_Id PRIMARY KEY(impr_Id)
+);
+GO
+
+INSERT INTO Prod.tbImpuestosProd VALUES('ISV',15)
 
 --**********************************************************************************************
 --********** TABLA PAISES / procedimientos tomando en cuenta los uniques ***********************

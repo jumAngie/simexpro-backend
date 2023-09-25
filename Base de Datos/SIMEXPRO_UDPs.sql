@@ -1,6 +1,4 @@
 
-USE SIMEXPRO
-GO
 
 ---***********VALIDACIÓN DE ELIMINAR**************---
 GO
@@ -121,29 +119,29 @@ END
 GO
 
 --/*Dibujar menu*/
-CREATE OR ALTER   PROCEDURE [Acce].[UDP_RolesPorPantalla_DibujadoMenu] 
+CREATE OR ALTER   PROCEDURE [Acce].[UDP_RolesPorPantalla_DibujadoMenu] 1
     @role_ID INT
 AS
 BEGIN
-    SELECT 
-        ropa_Id, 
-        pnt.pant_Id, 
-        pant_Nombre,
-        pant_URL,
-        pant_Icono,
-        pant_Esquema,
-		pant_Subcategoria,
-		pant_EsAduana,
-        CASE 
-            WHEN pnt.pant_Id = rxp.pant_Id THEN 'Asignada'
-            ELSE 'No asignada' 
-        END AS Asignada,
-        pnt.usua_UsuarioCreacion, 
-        ropa_FechaCreacion,
-		pant_Identificador
-    FROM Acce.tbPantallas pnt
-    LEFT JOIN Acce.tbRolesXPantallas rxp 
-	ON pnt.pant_Id = rxp.pant_Id 
+		SELECT 
+		    ropa_Id, 
+			pnt.pant_Id, 
+			pant_Nombre,
+			pant_URL,
+			pant_Icono,
+			pant_Esquema,
+			pant_Subcategoria,
+			pant_EsAduana,
+			CASE 
+				WHEN pnt.pant_Id = rxp.pant_Id THEN 'Asignada'
+				ELSE 'No asignada' 
+			END AS Asignada,
+			pnt.usua_UsuarioCreacion, 
+			ropa_FechaCreacion,
+			pnt.pant_Identificador
+		FROM Acce.tbPantallas pnt
+		LEFT JOIN Acce.tbRolesXPantallas rxp 
+		ON pnt.pant_Id = rxp.pant_Id 
 	AND rxp.role_Id = @role_ID;
 END
 
@@ -262,8 +260,7 @@ BEGIN
 	ON usua.usua_UsuarioEliminacion = usuaElimina.usua_Id
 	LEFT JOIN acce.tbUsuarios usuaActiva
 	ON usua.usua_UsuarioActivacion = usuaActiva.usua_Id
-WHERE empl_EsAduana = @empl_EsAduana
-OR    @empl_EsAduana IS NULL
+WHERE usua.usua_esAduana = @empl_EsAduana
 END
 GO
 
@@ -285,8 +282,8 @@ WHERE (empl_EsAduana = @empl_EsAduana)
 AND   (usua.usua_Id IS NULL AND empl.empl_Estado = 1)
 END
 
---EXEC acce.UDP_tbUsuarios_Insertar 'juan', '123', 1,1, 'https://www.dumpaday.com/wp-content/uploads/2019/04/the-random-pics-4.jpg', 1, 1, 1,'08-08-2023'
---EXEC acce.UDP_tbUsuarios_Insertar 'angie', '123', 2,0, 'https://i.pinimg.com/originals/10/b8/50/10b8509d551e5a264227dee8248fc1fa.jpg', 1, 1, 1,'08-08-2023'
+EXEC acce.UDP_tbUsuarios_Insertar 'juan', '123', 1,1, 'https://www.dumpaday.com/wp-content/uploads/2019/04/the-random-pics-4.jpg', 1, 1, 1,'08-08-2023'
+EXEC acce.UDP_tbUsuarios_Insertar 'angie', '123', 2,0, 'https://i.pinimg.com/originals/10/b8/50/10b8509d551e5a264227dee8248fc1fa.jpg', 1, 1, 1,'08-08-2023'
 /*Insertar Usuarios*/
 GO
 CREATE OR ALTER PROCEDURE acce.UDP_tbUsuarios_Insertar 
@@ -3627,7 +3624,7 @@ BEGIN
     DECLARE @peju_Id INT;
 
     BEGIN TRY
-        BEGIN TRANSACTION
+    BEGIN TRAN
         
         INSERT INTO [Adua].[tbPersonas]([pers_RTN], pers_Nombre,[ofic_Id], [escv_Id], [ofpr_Id], [pers_escvRepresentante], [pers_OfprRepresentante], [usua_UsuarioCreacion], [pers_FechaCreacion])
         VALUES (@pers_RTN,@pers_Nombre ,@ofic_Id, @escv_Id, @ofpr_Id, null, null, @usua_UsuarioCreacion, @pers_FechaCreacion);
@@ -3641,10 +3638,10 @@ BEGIN
         
         SELECT CONCAT(@peju_Id, '.',@pers_Id) AS peju_Id;
 
-        COMMIT TRANSACTION;
+    COMMIT TRAN;
     END TRY
     BEGIN CATCH
-        ROLLBACK TRANSACTION;
+        ROLLBACK TRAN;
         SELECT 'Mensaje de error: ' + ERROR_MESSAGE() AS Resultado;
     END CATCH
 END
@@ -3949,8 +3946,6 @@ BEGIN
 END
 GO
 
-EXEC Adua.UDP_tbLugaresEmbarque_Listar NULL
-
 /*Insertar lugares embarque*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbLugaresEmbarque_Insertar 
 	 @emba_Codigo             CHAR(5),
@@ -4061,7 +4056,7 @@ BEGIN
  
 	SELECT	 dopo_Id
 			,code_Id
-			,dope_NombreArchivo
+			,dopo_NombreArchivo
 			,dopo_Archivo
 			,dopo_TipoArchivo
 			,documentosOrdenCompraDetalle.usua_UsuarioCreacion
@@ -4081,7 +4076,7 @@ END
 GO
 CREATE OR ALTER PROCEDURE Prod.UDP_tbDocumentosOrdenCompraDetalles_Insertar  
 @code_Id					 int,
-@dope_NombreArchivo          NVARCHAR(MAX),
+@dopo_NombreArchivo          NVARCHAR(MAX),
 @dopo_Archivo				 nvarchar(max),
 @dopo_TipoArchivo			 nvarchar(40),
 @usua_UsuarioCreacion		 int,
@@ -4091,14 +4086,14 @@ BEGIN
 BEGIN TRY 
 	INSERT INTO Prod.tbDocumentosOrdenCompraDetalles
 			   (code_Id
-			   ,dope_NombreArchivo
+			   ,dopo_NombreArchivo
 			   ,dopo_Archivo
 			   ,dopo_TipoArchivo
 			   ,usua_UsuarioCreacion
 			   ,dopo_FechaCreacion )
 		 VALUES
 			   (@code_Id
-			   ,@dope_NombreArchivo
+			   ,@dopo_NombreArchivo
 			   ,@dopo_Archivo
 			   ,@dopo_TipoArchivo
 			   ,@usua_UsuarioCreacion
@@ -7194,7 +7189,7 @@ END
 GO
 
 
-ALTER   PROCEDURE [Adua].[UDP_tbFacturas_Editar]
+CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbFacturas_Editar]
 	@fact_Id					INT, 
 	@fact_Numero				NVARCHAR(4000),
 	@deva_Id					INT,
@@ -7899,7 +7894,7 @@ END
 
 
 GO
-ALTER   PROCEDURE [Adua].[UDP_tbBaseCalculos_Editar] 
+CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbBaseCalculos_Editar] 
 	@base_Id								INT,
 	@deva_Id								INT, 
 	@base_PrecioFactura						DECIMAL(18,2), 
@@ -8174,8 +8169,8 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDeclaraciones_Valor_Eliminar
 	@deva_FechaEliminacion		DATETIME
 AS
 BEGIN
-	BEGIN TRANSACTION 
 	BEGIN TRY
+	BEGIN TRAN 
 		INSERT INTO Adua.tbBaseCalculosHistorial(base_Id, 
 													 deva_Id, 
 													 base_PrecioFactura, 
@@ -9452,262 +9447,6 @@ END
 GO
 
 
---**********BOLETIN PAGO**********--
-/*Listar boletin de pago*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbBoletinPago_Listar
-AS
-BEGIN
-	SELECT  boletin.boen_Id, 
-	        boletin.liqu_Id, 
-			boletin.duca_Id,
-			lig.lige_TotalGral,
-			boletin.tipl_Id, 
-			tipli.tipl_Descripcion,
-			boletin.boen_FechaEmision, 
-			boletin.esbo_Id,
-			estadoB.esbo_Descripcion,
-			boletin.boen_Observaciones, 
-			boletin.boen_NDeclaracion,
-			--boletin.pena_RTN, 
-			boletin.boen_Preimpreso, 
-			--boletin.boen_Declarante, 
-			boletin.boen_TotalPagar, 
-			boletin.boen_TotalGarantizar, 
-			--boletin.boen_RTN, 
-			--boletin.boen_TipoEncabezado, 
-			boletin.coim_Id, 
-			codigoIm.coim_Descripcion,
-			boletin.copa_Id, 
-			boletin.usua_UsuarioCreacion, 
-            usuaCrea.usua_Nombre		  AS usuarioCreacionNombre,
-			boletin.boen_FechaCreacion, 
-			boletin.usua_UsuarioModificacion,
-			usuaModifica.usua_Nombre      AS usuarioModificacionNombre,
-			boletin.boen_FechaModificacion, 
-			boen_Estado  
-      FROM  Adua.tbBoletinPago boletin
-	       LEFT JOIN Acce.tbUsuarios usuaCrea			ON boletin.usua_UsuarioCreacion     = usuaCrea.usua_Id 
-		   LEFT JOIN  Acce.tbUsuarios usuaModifica		ON boletin.usua_UsuarioModificacion = usuaModifica.usua_Id 
-		   LEFT JOIN Adua.tbLiquidacionGeneral lig      ON boletin.liqu_Id                  = lig.lige_Id
-		   LEFT JOIN Adua.tbTipoLiquidacion tipli       ON boletin.tipl_Id                  = tipli.tipl_Id
-		   LEFT JOIN Adua.tbEstadoBoletin estadoB       ON boletin.esbo_Id                  = estadoB.esbo_Id
-		   LEFT JOIN Adua.tbCodigoImpuesto codigoIm     ON boletin.coim_Id                  = codigoIm.coim_Id
-	 WHERE boen_Estado = 1
-END
-
-
-/*Insertar boletin de pago*/
-GO
-CREATE OR ALTER PROCEDURE Adua.UDP_tbBoletinPago_Insertar 
-	@liqu_Id                 INT, 
-	@duca_Id				 INT,
-	@tipl_Id                 INT, 
-	@boen_FechaEmision       DATE, 
-	@esbo_Id                 INT, 
-	@boen_Observaciones      NVARCHAR(200), 
-	@boen_NDeclaracion       NVARCHAR(200), 
-	--@pena_RTN                VARCHAR(20), 
-	@boen_Preimpreso         NVARCHAR(MAX), 
-	--@boen_Declarante         NVARCHAR(200), 
-	@boen_TotalPagar         DECIMAL(18,2), 
-	@boen_TotalGarantizar    DECIMAL(18,2), 
-	--@boen_RTN                NVARCHAR(100),
-	--@boen_TipoEncabezado     NVARCHAR(200), 
-	@coim_Id                 INT, 
-	@copa_Id                 INT, 
-	@usua_UsuarioCreacion    INT, 
-	@boen_FechaCreacion      DATETIME
-AS 
-BEGIN
-	
-	BEGIN TRY
-			INSERT INTO Adua.tbBoletinPago(liqu_Id,
-										   duca_Id,
-			                               tipl_Id, 
-										   boen_FechaEmision, 
-										   esbo_Id, 
-										   boen_Observaciones, 
-										   boen_NDeclaracion, 
-										   --pena_RTN, 
-										   boen_Preimpreso, 
-										   --boen_Declarante, 
-										   boen_TotalPagar, 
-										   boen_TotalGarantizar, 
-										   --boen_RTN, 
-										   --boen_TipoEncabezado, 
-										   coim_Id, 
-										   copa_Id, 
-										   usua_UsuarioCreacion, 
-										   boen_FechaCreacion,
-										   boen_Estado)
-			VALUES(@liqu_Id, 
-				   @duca_Id,
-			       @tipl_Id, 
-				   @boen_FechaEmision, 
-				   @esbo_Id, 
-				   @boen_Observaciones, 
-				   @boen_NDeclaracion, 
-				   --@pena_RTN, 
-				   @boen_Preimpreso, 
-				   --@boen_Declarante, 
-				   @boen_TotalPagar, 
-				   @boen_TotalGarantizar, 
-				   --@boen_RTN, 
-				   --@boen_TipoEncabezado, 
-				   @coim_Id, 
-				   @copa_Id, 
-				   @usua_UsuarioCreacion, 
-				   @boen_FechaCreacion,1)
-			SELECT SCOPE_IDENTITY()
-	END TRY
-	BEGIN CATCH
-		SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END CATCH 
-END
-GO
-
---Execute Adua.UDP_tbBoletinPago_Insertar 1,7,'2023-02-01',2,'observaciones','# declaracion','rtn542451162','preimpreso','declarante',520.00,500.00,'15145454','encabezado',1,1,1,'01-02-2023'
---NO VA
-/*Editar boletin de pago*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbBoletinPago_Editar
-	@boen_Id                   INT,
-	@liqu_Id                   INT, 
-	@duca_Id				   INT,
-	@tipl_Id                   INT, 
-	@boen_FechaEmision         DATE, 
-	@esbo_Id                   INT, 
-	@boen_Observaciones        NVARCHAR(200), 
-	@boen_NDeclaracion         NVARCHAR(200), 
-	--@pena_RTN                  NVARCHAR(20), 
-	@boen_Preimpreso           NVARCHAR(MAX), 
-	--@boen_Declarante           NVARCHAR(200), 
-	@boen_TotalPagar           DECIMAL(18,2), 
-	@boen_TotalGarantizar      DECIMAL(18,2), 
-	--@boen_RTN                  NVARCHAR(100), 
-	--@boen_TipoEncabezado       NVARCHAR(200), 
-	@coim_Id                   INT,
-	@copa_Id                   INT,  
-	@usua_UsuarioModificacion  INT, 
-	@boen_FechaModificacion    DATETIME
-AS
-BEGIN
-	BEGIN TRY
-		UPDATE  Adua.tbBoletinPago
-		SET		liqu_Id                   = @liqu_Id,
-			    duca_Id					  = @duca_Id,
-		        tipl_Id                   = @tipl_Id,
-				boen_FechaEmision         = @boen_FechaEmision,
-				esbo_Id                   = @esbo_Id,
-				boen_Observaciones        = @boen_Observaciones,
-				boen_NDeclaracion         = @boen_NDeclaracion,
-				--pena_RTN                  = @pena_RTN,
-				boen_Preimpreso           = @boen_Preimpreso,
-                --boen_Declarante           = @boen_Declarante,
-				boen_TotalPagar           = @boen_TotalPagar,
-                boen_TotalGarantizar      = @boen_TotalGarantizar,
-				--boen_RTN                  = @boen_RTN,
-				--boen_TipoEncabezado       = @boen_TipoEncabezado,
-				coim_Id                   = @coim_Id,
-				copa_Id                   = @copa_Id,
-				usua_UsuarioModificacion  = @usua_UsuarioModificacion,
-				boen_FechaModificacion    = @boen_FechaModificacion
-		WHERE	boen_Id                   = @boen_Id
-
-		SELECT 1
-	END TRY
-	BEGIN CATCH
-		SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END CATCH
-END
-GO
-
---**********DETALLES DE BOLETIN PAGO**********--
-CREATE OR ALTER PROCEDURE Adua.UDP_tbBoletinPagoDetalles_Listado_ByIdBoletin
-(
-	@boen_Id		INT
-)
-AS
-BEGIN
-	SELECT bode_Id,
-		   lige_Id,
-		   bode_Concepto,
-		   bode_TipoObligacion,
-		   bode_CuentaPA01,
-		   usua_UsuarioCreacion,           
-		   bode_FechaCreacion,             
-		   usua_UsuarioModificacion,       
-		   bode_FechaModificacion
-	  FROM Adua.tbBoletinPagoDetalles
-	 WHERE boen_Id = @boen_Id
-END
-GO
-
-CREATE OR ALTER PROCEDURE Adua.UDP_tbBoletinPagoDetalles_Insertar
-(
-	@boen_Id					INT,
-	@lige_Id					INT,
-	@bode_Concepto				VARCHAR(50),
-	@bode_TipoObligacion		VARCHAR(50),
-	@bode_CuentaPA01			INT,
-	@usua_UsuarioCreacion       INT,
-    @bode_FechaCreacion         DATETIME
-)
-AS
-BEGIN
-	BEGIN TRY
-		INSERT INTO Adua.tbBoletinPagoDetalles
-					(boen_Id,
-					lige_Id,				   
-					bode_Concepto,				   
-					bode_TipoObligacion,			   
-					bode_CuentaPA01,				   
-					usua_UsuarioCreacion,           
-					bode_FechaCreacion)
-			VALUES (@boen_Id,
-					@lige_Id,			
-					@bode_Concepto,		
-					@bode_TipoObligacion,
-					@bode_CuentaPA01,	
-					@usua_UsuarioCreacion,
-					@bode_FechaCreacion)
-
-		SELECT 1
-	END TRY
-	BEGIN CATCH
-		SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END CATCH
-END
-GO
-
-CREATE OR ALTER PROCEDURE Adua.UDP_tbBoletinPagoDetalles_Editar
-(
-	@bode_Id					INT,
-	@lige_Id					INT,
-	@bode_Concepto				VARCHAR(50),
-	@bode_TipoObligacion		VARCHAR(50),
-	@bode_CuentaPA01			INT,
-	@usua_UsuarioModificacion   INT,
-    @bode_FechaModificacion     DATETIME
-)
-AS
-BEGIN
-	BEGIN TRY
-		UPDATE Adua.tbBoletinPagoDetalles
-		   SET lige_Id					= @lige_Id,	
-			   bode_Concepto			= @bode_Concepto,		
-			   bode_TipoObligacion		= @bode_TipoObligacion,
-			   bode_CuentaPA01			= @bode_CuentaPA01,
-			   usua_UsuarioModificacion	= @usua_UsuarioModificacion, 
-			   bode_FechaModificacion	= @bode_FechaModificacion
-		 WHERE bode_Id = @bode_Id
-
-		SELECT 1
-	END TRY
-	BEGIN CATCH
-		SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END CATCH
-END
-GO
 
 /********************Listar Tipo intermediario***************************/
 CREATE OR ALTER  PROCEDURE Adua.UDP_tbTipoIntermediario_Listar
@@ -10167,7 +9906,7 @@ END
 
 /*Editar condiciones*/
 GO
-ALTER   PROCEDURE [Adua].[UDP_tbCondiciones_Editar] 
+CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbCondiciones_Editar] 
 	@codi_Id									INT,
 	@deva_Id									INT, 
 	@codi_Restricciones_Utilizacion				BIT, 
@@ -11575,7 +11314,6 @@ BEGIN
 					,ordenCompraDetalle.code_Valor
 					,ordenCompraDetalle.code_Impuesto
 					,ordenCompraDetalle.code_EspecificacionEmbalaje
-					,ordenCompraDetalle.code_CodigoDetalle
 			  FROM	Prod.tbOrdenCompraDetalles			    ordenCompraDetalle
 					INNER JOIN	Prod.tbEstilos				estilo						ON	ordenCompraDetalle.esti_Id						= estilo.esti_Id
 					INNER JOIN	Prod.tbTallas				talla						ON	ordenCompraDetalle.tall_Id						= talla.tall_Id
@@ -11597,56 +11335,6 @@ GO
 -----------------------------------------------/UDPS Para orden de compra---------------------------------------------
 
 --------------------------------------------UDPS Para orden de compra detalle-----------------------------------------
-
-CREATE OR ALTER VIEW Prod.VW_tbOrdenCompraDetalle_LineaTiempo
-AS
- SELECT ordenCompraDetalle.code_Id,
-			ordenCompraDetalle.orco_Id,
-			ordenCompraDetalle.code_CantidadPrenda,
-			ordenCompraDetalle.esti_Id,
-			estilo.esti_Descripcion,
-			ordenCompraDetalle.tall_Id,
-			talla.tall_Codigo,
-			talla.tall_Nombre,
-			ordenCompraDetalle.code_Sexo,
-			ordenCompraDetalle.colr_Id,
-			colores.colr_Nombre,
-			ordenCompraDetalle.proc_IdComienza,
-			procesoComienza.proc_Descripcion											AS proc_DescripcionComienza,
-			orden_Ensa_Acab_EtiqComienza.ensa_FechaInicio								AS procInicio_FechaInicio,
-			orden_Ensa_Acab_EtiqComienza.ensa_FechaLimite								AS procInicio_FechaLimite,
-			empleadoComienza.empl_DNI													AS dni_empleado_procInicio,
-			empleadoComienza.empl_Nombres + ' ' + empleadoComienza.empl_Apellidos		AS nombre_empleado_procInicio,
-			ordenCompraDetalle.proc_IdActual,
-			procesoActual.proc_Descripcion												AS proc_DescripcionActual,
-			orden_Ensa_Acab_EtiqProcActual.ensa_FechaInicio								AS procActual_FechaInicio,
-			orden_Ensa_Acab_EtiqProcActual.ensa_FechaLimite								AS procActual_FechaLimite,
-			empleadoProcActual.empl_DNI													AS dni_empleado_procActual,
-			empleadoProcActual.empl_Nombres + ' ' + empleadoProcActual.empl_Apellidos	AS nombre_empleado_procActual,
-			ordenCompraDetalle.code_Unidad,
-			ordenCompraDetalle.code_Valor,
-			ordenCompraDetalle.code_Impuesto,
-			ordenCompraDetalle.code_EspecificacionEmbalaje,
-			ordenCompraDetalle.usua_UsuarioCreacion,
-			usuarioCreacion.usua_Nombre													AS usuarioCreacionNombre,
-			ordenCompraDetalle.code_FechaCreacion,
-			ordenCompraDetalle.usua_UsuarioModificacion,
-			usuarioModificacion.usua_Nombre												AS usuarioModificacionNombre,
-			ordenCompraDetalle.code_FechaModificacion,
-			ordenCompraDetalle.code_Estado
-	   FROM Prod.tbOrdenCompraDetalles			ordenCompraDetalle
- INNER JOIN Prod.tbEstilos						estilo								ON	ordenCompraDetalle.esti_Id						= estilo.esti_Id
- INNER JOIN	Prod.tbTallas						talla								ON	ordenCompraDetalle.tall_Id						= talla.tall_Id
- INNER JOIN Prod.tbColores						colores								ON	ordenCompraDetalle.colr_Id						= colores.colr_Id
- INNER JOIN Prod.tbProcesos						procesoComienza						ON	ordenCompraDetalle.proc_IdComienza				= procesoComienza.proc_Id
- INNER JOIN Prod.tbOrde_Ensa_Acab_Etiq			orden_Ensa_Acab_EtiqComienza		ON	ordenCompraDetalle.proc_IdComienza				= orden_Ensa_Acab_EtiqComienza.proc_Id
- INNER JOIN Gral.tbEmpleados					empleadoComienza					ON  orden_Ensa_Acab_EtiqComienza.empl_Id			= empleadoComienza.empl_Id
- INNER JOIN Prod.tbProcesos						procesoActual						ON	ordenCompraDetalle.proc_IdActual				= procesoActual.proc_Id
- INNER JOIN Prod.tbOrde_Ensa_Acab_Etiq			Orden_Ensa_Acab_EtiqProcActual		ON	ordenCompraDetalle.proc_IdActual				= orden_Ensa_Acab_EtiqProcActual.proc_Id
- INNER JOIN Gral.tbEmpleados					empleadoProcActual					ON  orden_Ensa_Acab_EtiqProcActual.empl_Id			= empleadoProcActual.empl_Id
- INNER JOIN Acce.tbUsuarios						usuarioCreacion						ON  ordenCompraDetalle.usua_UsuarioCreacion			= usuarioCreacion.usua_Id
-  LEFT JOIN Acce.tbUsuarios						usuarioModificacion					ON  ordenCompraDetalle.usua_UsuarioModificacion		= usuarioModificacion.usua_Id
-GO
 
 CREATE OR ALTER PROCEDURE Prod.UDP_tbOrdenCompraDetalle_ObtenerPorIdOrdenCompra_ParaLineaTiempo
 (
@@ -12763,8 +12451,6 @@ BEGIN
 		   revi.reca_FechaRevision, 
 		   revi.reca_Imagen, 
 		   revi.usua_UsuarioCreacion, 
-		   revi.rcer_Id,
-		   rcer.rcer_Nombre,
 		   usuaCrea.usua_Nombre                       AS usuarioCreacionNombre,
 		   revi.reca_FechaCreacion, 
 		   revi.usua_UsuarioModificacion,
@@ -12775,7 +12461,6 @@ BEGIN
 	       LEFT JOIN  Acce.tbUsuarios usuaCrea		  ON revi.usua_UsuarioCreacion     = usuaCrea.usua_Id 
 		   LEFT JOIN  Acce.tbUsuarios usuaModifica	  ON revi.usua_UsuarioModificacion = usuaModifica.usua_Id
 		   INNER JOIN Prod.tbOrde_Ensa_Acab_Etiq ensa ON revi.ensa_Id                  = ensa.ensa_Id
-		   LEFT JOIN [Prod].[tbRevisionDeCalidadErrores] rcer ON revi.rcer_Id = rcer.rcer_Id 
 	 WHERE reca_Estado = 1
 END
 GO
@@ -12818,8 +12503,6 @@ SELECT	ensa_Id,
 						   revi.reca_FechaRevision, 
 						   revi.reca_Imagen, 
 						   revi.usua_UsuarioCreacion, 
-						   rcer.rcer_Id,
-						   rcer.rcer_Id, 
 						   usuaCrea.usua_Nombre                       AS usuarioCreacionNombre,
 						   revi.reca_FechaCreacion, 
 						   revi.usua_UsuarioModificacion,
@@ -12829,7 +12512,6 @@ SELECT	ensa_Id,
 					  FROM Prod.tbRevisionDeCalidad revi
 						   LEFT JOIN  Acce.tbUsuarios usuaCrea		  ON revi.usua_UsuarioCreacion     = usuaCrea.usua_Id 
 						   LEFT JOIN  Acce.tbUsuarios usuaModifica	  ON revi.usua_UsuarioModificacion = usuaModifica.usua_Id
-						   LEFT JOIN [Prod].[tbRevisionDeCalidadErrores] rcer ON revi.rcer_Id = rcer.rcer_Id 
 					  WHERE revi.ensa_id = ensa.ensa_Id) AS m
 			  FOR JSON AUTO) as detalles
 		FROM	Prod.tbOrde_Ensa_Acab_Etiq ensa
@@ -16059,16 +15741,16 @@ BEGIN
 		SELECT	PPD.ppde_Id, 
 		PPD.ppro_Id, 
 		PPD.ppde_Cantidad,
-		pp.[ppro_Estados],
+		pp.ppro_Estados,
 		PPD.lote_Id, 
 		lot.lote_CodigoLote,
-		lot.[lote_Stock],
+		lot.lote_Stock,
 		col.colr_Codigo,
 		col.colr_Nombre,
 		mat.mate_Id,
 		mat.mate_Descripcion
 
-		SELECT * FROM Prod.tbPedidosProduccionDetalles PPD
+		FROM Prod.tbPedidosProduccionDetalles PPD
 			INNER JOIN Prod.tbPedidosProduccion pp ON ppd.ppro_Id = pp.ppro_Id
 			INNER JOIN Prod.tbLotes lot ON PPD.lote_Id = lot.lote_Id
 			INNER JOIN Prod.tbMateriales mat ON lot.mate_Id = mat.mate_Id
