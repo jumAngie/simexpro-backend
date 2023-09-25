@@ -8822,11 +8822,10 @@ CREATE OR ALTER	PROCEDURE Adua.UDP_tbDuca_InsertarTab2
 	@tran_FechaCreacion					DATETIME
 AS	
 BEGIN
-	BEGIN TRANSACTION 
-	SET @tran_FechaCreacion = GETDATE();
 	BEGIN TRY
 		BEGIN TRAN
-		DECLARE @ducaConductor INT = 0
+			SET @tran_FechaCreacion = GETDATE();
+			DECLARE @ducaConductor INT = 0
 
 			IF @pais_Id > 0
 				BEGIN
@@ -8984,47 +8983,47 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRAN
 
-	    DECLARE @Transporte_Id INT = (SELECT tran_Id FROM Adua.tbConductor WHERE cont_Id = @duca_Conductor_Id);
+			DECLARE @Transporte_Id INT = (SELECT tran_Id FROM Adua.tbConductor WHERE cont_Id = @duca_Conductor_Id);
 
-		UPDATE Adua.tbTransporte 
-		SET    pais_Id = @pais_Id, 
-		       tran_Chasis = UPPER(@tran_Chasis), 
-		       marca_Id = @marca_Id, 
-			   tran_Remolque = @tran_Remolque, 
-			   tran_CantCarga = @tran_CantCarga,
-			   tran_NumDispositivoSeguridad = @tran_NumDispositivoSeguridad,
-			   tran_Equipamiento = @tran_Equipamiento, 
-			   tran_TipoCarga = @tran_TipoCarga, 
-			   tran_IdContenedor = @tran_IdContenedor, 
-			   usua_UsuarioModificacion = @usua_UsuarioModificacion, 
-			   tran_FechaModificacion = @duca_FechaModificacion,
-			   tran_IdUnidadTransporte = @tran_IdUnidadTransporte,
-			   tran_TamanioEquipamiento = @tran_TamanioEquipamiento
-		WHERE  tran_Id = @Transporte_Id
+			UPDATE Adua.tbTransporte 
+			SET    pais_Id = @pais_Id, 
+				   tran_Chasis = UPPER(@tran_Chasis), 
+				   marca_Id = @marca_Id, 
+				   tran_Remolque = @tran_Remolque, 
+				   tran_CantCarga = @tran_CantCarga,
+				   tran_NumDispositivoSeguridad = @tran_NumDispositivoSeguridad,
+				   tran_Equipamiento = @tran_Equipamiento, 
+				   tran_TipoCarga = @tran_TipoCarga, 
+				   tran_IdContenedor = @tran_IdContenedor, 
+				   usua_UsuarioModificacion = @usua_UsuarioModificacion, 
+				   tran_FechaModificacion = @duca_FechaModificacion,
+				   tran_IdUnidadTransporte = @tran_IdUnidadTransporte,
+				   tran_TamanioEquipamiento = @tran_TamanioEquipamiento
+			WHERE  tran_Id = @Transporte_Id
 
-		UPDATE Adua.tbConductor
-		SET    cont_NoIdentificacion = @cont_NoIdentificacion,
-			   cont_Nombre = @cont_Nombre,
-		       cont_Apellido = @cont_Apellido,
-			   cont_Licencia = @cont_Licencia,
-			   pais_IdExpedicion = @pais_IdExpedicion,
-			   tran_Id = @Transporte_Id,
-			   usua_UsuarioModificacion = @usua_UsuarioModificacion,
-			   cont_FechaModificacion = @duca_FechaModificacion
-        WHERE  cont_Id = @duca_Conductor_Id
+			UPDATE Adua.tbConductor
+			SET    cont_NoIdentificacion = @cont_NoIdentificacion,
+				   cont_Nombre = @cont_Nombre,
+				   cont_Apellido = @cont_Apellido,
+				   cont_Licencia = @cont_Licencia,
+				   pais_IdExpedicion = @pais_IdExpedicion,
+				   tran_Id = @Transporte_Id,
+				   usua_UsuarioModificacion = @usua_UsuarioModificacion,
+				   cont_FechaModificacion = @duca_FechaModificacion
+			WHERE  cont_Id = @duca_Conductor_Id
 
-		UPDATE Adua.tbDuca
-		   SET duca_Codigo_Declarante = @duca_Codigo_Declarante
-			  ,duca_Numero_Id_Declarante = @duca_Numero_Id_Declarante
-			  ,duca_NombreSocial_Declarante = @duca_NombreSocial_Declarante
-			  ,duca_DomicilioFiscal_Declarante = @duca_DomicilioFiscal_Declarante
-			  ,duca_Codigo_Transportista = @duca_Codigo_Transportista 
-			  ,motr_id = @motr_Id
-			  ,duca_Transportista_Nombre = @duca_Transportista_Nombre
-			  ,duca_Conductor_Id = @duca_Conductor_Id
-			  ,usua_UsuarioModificacion = @usua_UsuarioModificacion
-			  ,duca_FechaModificacion = @duca_FechaModificacion
-		 WHERE duca_Id = @duca_Id
+			UPDATE Adua.tbDuca
+			   SET duca_Codigo_Declarante = @duca_Codigo_Declarante
+				  ,duca_Numero_Id_Declarante = @duca_Numero_Id_Declarante
+				  ,duca_NombreSocial_Declarante = @duca_NombreSocial_Declarante
+				  ,duca_DomicilioFiscal_Declarante = @duca_DomicilioFiscal_Declarante
+				  ,duca_Codigo_Transportista = @duca_Codigo_Transportista 
+				  ,motr_id = @motr_Id
+				  ,duca_Transportista_Nombre = @duca_Transportista_Nombre
+				  ,duca_Conductor_Id = @duca_Conductor_Id
+				  ,usua_UsuarioModificacion = @usua_UsuarioModificacion
+				  ,duca_FechaModificacion = @duca_FechaModificacion
+			 WHERE duca_Id = @duca_Id
 		
 		COMMIT
 		SELECT 1
@@ -9081,18 +9080,18 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRAN 
 
-		DECLARE @cont_Id INT = (SELECT duca_Conductor_Id FROM Adua.tbDuca WHERE duca_Id = @duca_Id)
-		DECLARE @tran_Id INT = (SELECT tran_Id FROM Adua.tbConductor WHERE cont_Id = @cont_Id)
+			DECLARE @cont_Id INT = (SELECT duca_Conductor_Id FROM Adua.tbDuca WHERE duca_Id = @duca_Id)
+			DECLARE @tran_Id INT = (SELECT tran_Id FROM Adua.tbConductor WHERE cont_Id = @cont_Id)
 
-		DELETE FROM Adua.tbDocumentosDeSoporte WHERE duca_Id = @duca_Id
+			DELETE FROM Adua.tbDocumentosDeSoporte WHERE duca_Id = @duca_Id
 
-		DELETE FROM Adua.tbItemsDEVAPorDuca WHERE duca_Id = @duca_Id
+			DELETE FROM Adua.tbItemsDEVAPorDuca WHERE duca_Id = @duca_Id
 
-		DELETE FROM Adua.tbDuca WHERE duca_Id = @duca_Id
+			DELETE FROM Adua.tbDuca WHERE duca_Id = @duca_Id
 
-		DELETE FROM Adua.tbConductor WHERE cont_Id = @cont_Id
+			DELETE FROM Adua.tbConductor WHERE cont_Id = @cont_Id
 
-		DELETE FROM Adua.tbTransporte WHERE tran_Id = @tran_Id
+			DELETE FROM Adua.tbTransporte WHERE tran_Id = @tran_Id
 
 		COMMIT
 		SELECT 1
