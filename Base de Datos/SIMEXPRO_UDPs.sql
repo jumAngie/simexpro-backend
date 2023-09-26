@@ -2785,7 +2785,7 @@ END
 GO
 
 /*Editar Personas*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonas_Editar
+CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbPersonas_Editar]
 (
 	@pers_Id 					INT,
 	@pers_RTN					VARCHAR(20),
@@ -2794,8 +2794,8 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonas_Editar
 	@ofpr_Id					INT,
 	@pers_escvRepresentante		INT,
 	@pers_OfprRepresentante		INT,
-	@usua_UsuarioCreacion		INT,
-	@pers_FechaCreacion			DATETIME
+	@usua_UsuarioModificacion		INT,
+	@pers_FechaModificacion			DATETIME
 )
 AS
 BEGIN
@@ -2807,8 +2807,8 @@ BEGIN
 				   ofpr_Id					= @ofpr_Id, 					
 				   pers_escvRepresentante	= @pers_escvRepresentante, 		
 				   pers_OfprRepresentante	= @pers_OfprRepresentante, 		
-				   usua_UsuarioCreacion		= @usua_UsuarioCreacion,      	
-				   pers_FechaCreacion		= @pers_FechaCreacion
+				   usua_UsuarioModificacion		= @usua_UsuarioModificacion,      	
+				   pers_FechaModificacion		= @pers_FechaModificacion
 			 WHERE pers_Id = @pers_Id
 
 		SELECT 1 AS Resultado
@@ -3272,12 +3272,13 @@ GO
 --*************** UDPS Para Tabla Persona Natural ************--
 
 /*Listar Persona Natural*/
-CREATE OR ALTER PROC Adua.UDP_tbPersonaNatural_Listar
+CREATE OR ALTER  PROC [Adua].[UDP_tbPersonaNatural_Listar]
 AS
 BEGIN
 		SELECT	tbpn.pena_Id							, 
 				tbpn.pers_Id							, 
 				tbpn.pena_DireccionExacta				, 
+				prov.pvin_Nombre						,
 				tbpn.ciud_Id							, 
 				tbc.ciud_Nombre							,
 				tbpn.pena_TelefonoFijo					, 
@@ -3297,17 +3298,22 @@ BEGIN
 				usu2.usua_Nombre						AS usuarioModificacion,
 				tbpn.pena_FechaModificacion				, 
 				tbpn.pena_Estado						,
-				tbpn.pena_Finalizado
+				tbpn.pena_Finalizado					,
+				pena_NombreArchRecibo,
+				pena_NombreArchRTN,
+				pena_NombreArchDNI
+
 		FROM	Adua.tbPersonaNatural  tbpn			
 				INNER JOIN Acce.tbUsuarios usu			ON 	tbpn.usua_UsuarioCreacion		= usu.usua_Id 
 				LEFT  JOIN Acce.tbUsuarios usu2			ON	tbpn.usua_UsuarioModificacion	= usu2.usua_Id
 				INNER JOIN Gral.tbCiudades tbc			ON	tbpn.ciud_Id					= tbc.ciud_Id 
+				INNER JOIN Gral.tbProvincias	prov	ON	tbc.pvin_Id						= prov.pvin_Id
 		WHERE	tbpn.pena_Estado = 1
 END
 GO
 
 /*Insertar Persona Natural*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaNatural_Insertar
+CREATE OR ALTER PROCEDURE [Adua].[UDP_tbPersonaNatural_Insertar]
 (
 	@pers_Id					INT,
 	@pena_DireccionExacta		NVARCHAR(200),
@@ -3322,6 +3328,9 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaNatural_Insertar
 	@pena_ArchivoDNI			NVARCHAR(MAX),
 	@pena_NumeroRecibo			VARCHAR(100),
 	@pena_ArchivoNumeroRecibo	NVARCHAR(MAX),
+	@pena_NombreArchDNI VARCHAR(100),
+	@pena_NombreArchRTN VARCHAR(100),
+	@pena_NombreArchRecibo VARCHAR(100),
 	@usua_UsuarioCreacion       INT,
 	@pena_FechaCreacion         DATETIME
 )
@@ -3341,7 +3350,10 @@ BEGIN
 					pena_DNI,					
 					pena_ArchivoDNI,				
 					pena_NumeroRecibo,			
-					pena_ArchivoNumeroRecibo,	
+					pena_ArchivoNumeroRecibo,
+					pena_NombreArchRecibo,
+					pena_NombreArchRTN,
+					pena_NombreArchDNI,
 					usua_UsuarioCreacion,       	
 					pena_FechaCreacion)
 			VALUES (@pers_Id,					
@@ -3357,6 +3369,9 @@ BEGIN
 					@pena_ArchivoDNI,			
 					@pena_NumeroRecibo,			
 					@pena_ArchivoNumeroRecibo,	
+					@pena_NombreArchRecibo,
+					@pena_NombreArchRTN,
+					@pena_NombreArchDNI,
 					@usua_UsuarioCreacion,      
 					@pena_FechaCreacion)
 
@@ -3369,7 +3384,7 @@ END
 GO
 
 /*Editar Persona Natural*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaNatural_Editar
+CREATE OR ALTER PROCEDURE [Adua].[UDP_tbPersonaNatural_Editar]
 (
 	@pena_Id					INT,
 	@pers_Id					INT,
@@ -3385,6 +3400,9 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaNatural_Editar
 	@pena_ArchivoDNI			NVARCHAR(MAX),
 	@pena_NumeroRecibo			VARCHAR(100),
 	@pena_ArchivoNumeroRecibo	NVARCHAR(MAX),
+	@pena_NombreArchDNI VARCHAR(100),
+	@pena_NombreArchRTN VARCHAR(100),
+	@pena_NombreArchRecibo VARCHAR(100),
 	@usua_UsuarioModificacion   INT,
 	@pena_FechaModificacion     DATETIME
 )
@@ -3403,7 +3421,10 @@ BEGIN
 				pena_ArchivoRTN				= @pena_ArchivoRTN,				
 				pena_DNI					= @pena_DNI,					
 				pena_ArchivoDNI				= @pena_ArchivoDNI,				
-				pena_NumeroRecibo			= @pena_NumeroRecibo,			
+				pena_NumeroRecibo			= @pena_NumeroRecibo,
+				pena_NombreArchRecibo		= @pena_NombreArchRecibo,
+				pena_NombreArchRTN			= @pena_NombreArchRTN,
+				pena_NombreArchDNI			= @pena_NombreArchDNI,
 				pena_ArchivoNumeroRecibo	= @pena_ArchivoNumeroRecibo,	  	
 				usua_UsuarioModificacion	= @usua_UsuarioModificacion,   	
 				pena_FechaModificacion		= @pena_FechaModificacion     	
@@ -14801,51 +14822,56 @@ GO
 
 --------------------------------------------------------------- TABLA REPORTE MODULO DIA DETALLE ---------------------------------------------------------------
 /* LISTAR REPORTE MODULO DIA DETALLE */
-CREATE OR ALTER   PROCEDURE [Prod].[UDP_tbReporteModuloDiaDetalle_Listar]	 --246
+CREATE OR ALTER  PROCEDURE [Prod].[UDP_tbReporteModuloDiaDetalle_Listar]	 --246
 @remo_Id		INT
 AS
 BEGIN
-SELECT	rdet.[rdet_Id], 
-		rdet.[remo_Id], 
-		rdet.[code_Id], 
-		rdet.[ensa_Id], 
-		code.[orco_Id],
-		orco.[orco_Codigo],
-		rdet.[rdet_TotalDia], 
-		rdet.[rdet_TotalDanado], 
-		[proc].[proc_Descripcion],
-		modu.proc_Id AS colr_Nombre,
-		--modu.proc_Id, agragar campo a la api
-
-		(CASE code.code_Sexo 
-			WHEN 'M' THEN 'Masculino'
-			WHEN 'F' THEN 'Femenino'
-			WHEN 'U' THEN 'Unisex'
-
-			ELSE code.code_Sexo 
-		END) AS Sexo,
-
-		code.esti_Id,
-		esti.esti_Descripcion, 
-
-		clie.[clie_Nombre_Contacto], 
-		clie.[clie_RTN],
-
-		colr.[colr_Id],
-		colr.[colr_Nombre],
-		rdet.[rdet_Estado] 
-
-FROM	Prod.tbReporteModuloDiaDetalle			rdet
-		INNER JOIN Prod.tbReporteModuloDia		remo					ON rdet.remo_Id = remo.remo_Id
-		INNER JOIN Prod.tbModulos				modu					ON remo.modu_Id	= modu.modu_Id
-		INNER JOIN Prod.tbOrde_Ensa_Acab_Etiq	ensa					ON rdet.ensa_Id	= ensa.ensa_Id
-		INNER JOIN Prod.tbOrdenCompraDetalles   code				    ON ensa.code_Id	= code.code_Id
-		INNER JOIN Prod.tbOrdenCompra			orco					ON code.orco_Id	= orco.orco_Id
-		INNER JOIN Prod.tbClientes				clie					ON orco.orco_IdCliente = clie.clie_Id
-		INNER JOIN Prod.tbProcesos				[proc]					ON modu.proc_Id	= [proc].proc_Id
-		INNER JOIN Prod.tbEstilos				esti					ON code.esti_Id = esti.esti_Id
-		INNER JOIN Prod.tbColores				colr					ON code.colr_Id	= colr.colr_Id
-WHERE rdet.remo_Id = @remo_Id AND rdet_Estado = 1
+SELECT	remo_Id, 
+		modu.modu_Id, 
+		modu.modu_Nombre,
+		empleados.empl_Nombres + ' ' + empleados.empl_Apellidos as Empleado,
+		remo_Fecha,
+		remo_TotalDia - remo_TotalDanado as CantidadTotal,
+		remo_TotalDia, 
+		remo_TotalDanado, 
+		(SELECT	rdet_Id, 
+			remo_Id, 
+			rdet_TotalDia, 
+			rdet_TotalDanado, 
+			OrdenCompra.orco_Id,
+			Isnull(colores.colr_Nombre,'N/A') as colr_Nombre,
+			case ordencompradetalle.code_Sexo 
+			when 'M' then 'Masculino'
+			when 'F' then 'Femenino'
+			when 'U' then 'Unisex'
+			else ordencompradetalle.code_Sexo end as Sexo,
+			clientes.[clie_Nombre_Contacto],
+			clientes.[clie_RTN],
+ 			ReporteModuloDia.code_Id, 
+			ordencompradetalle.esti_Id,
+			estilos.esti_Descripcion
+	FROM	Prod.tbReporteModuloDiaDetalle ReporteModuloDia
+			INNER JOIN Prod.tbOrdenCompraDetalles ordencompradetalle  	ON  ReporteModuloDia.code_Id = ordencompradetalle.code_Id 
+			INNER JOIN Prod.tbEstilos			estilos					ON ordencompradetalle.esti_Id = estilos.esti_Id
+			INNER JOIN Prod.tbOrdenCompra		OrdenCompra				ON	ordencompradetalle.orco_Id = OrdenCompra.orco_Id
+			INNER JOIN Prod.tbClientes			clientes				ON  OrdenCompra.orco_IdCliente = clientes.clie_Id
+			left JOIN Prod.tbColores			colores					ON	ordencompradetalle.colr_Id	= colores.colr_Id
+			WHERE rmd.remo_Id = remo_Id AND rdet_Estado = 1 
+			FOR JSON PATH) as detalles,
+		rmd.usua_UsuarioCreacion, 
+		crea.usua_Nombre AS usua_NombreUsuarioCreacion, 
+		remo_FechaCreacion, 
+		rmd.usua_UsuarioModificacion,
+		modi.usua_Nombre AS usua_NombreUsuarioModificacion, 
+		remo_FechaModificacion, 
+		remo_Estado,
+		remo_Finalizado 
+FROM	Prod.tbReporteModuloDia rmd 
+		INNER JOIN Prod.tbModulos modu				ON rmd.modu_Id = modu.modu_Id 
+		INNER JOIN Gral.tbEmpleados  empleados		ON modu.empr_Id	= empleados.empl_Id
+		INNER JOIN Acce.tbUsuarios crea				ON crea.usua_Id = rmd.usua_UsuarioCreacion 
+		LEFT JOIN  Acce.tbUsuarios modi				ON modi.usua_Id = rmd.usua_UsuarioModificacion 	
+ORDER BY rmd.remo_FechaCreacion desc
 END
 GO
 
@@ -15412,7 +15438,7 @@ END
 GO
 
 /*Seleccionar lotes Material*/
-CREATE OR ALTER   PROCEDURE Prod.UDP_tbLotes_Materiales --'CW20230827'
+CREATE OR ALTER  PROCEDURE [Prod].[UDP_tbLotes_Materiales] --'CW20230827'
 (
 	@lote_CodigoLote NVARCHAR(40)
 )
@@ -15423,10 +15449,13 @@ BEGIN
 			tblotes.mate_Id,
 			mate_Descripcion,
 			tblotes.lote_Stock,
-			tbarea.tipa_area
+			tbarea.tipa_area,
+			tbcolo.colr_Id,
+			tbcolo.colr_Nombre
 	FROM Prod.tbLotes tblotes			
 			INNER JOIN Prod.tbMateriales tbmats		ON tblotes.mate_Id = tbmats.mate_Id
 			INNER JOIN Prod.tbArea	tbarea			ON tblotes.tipa_Id = tbarea.tipa_Id
+			LEFT JOIN Prod.tbColores tbcolo			ON tblotes.colr_Id = tbcolo.colr_Id
 	WHERE tblotes.lote_CodigoLote = @lote_CodigoLote
 END
 GO
