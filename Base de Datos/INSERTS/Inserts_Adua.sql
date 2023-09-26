@@ -188,6 +188,16 @@ VALUES ('AV', 'AVERIADAS', 1, GETDATE()),
 	   ('US', 'USADAS', 1, GETDATE()),
 	   ('VI', 'VIVOS', 1, GETDATE()),
 	   ('ZL', 'ZOLI DESPERDICIOS-BIENES DADOS', 1, GETDATE());
+	   --ARREGLANDO ESTOS INSERTS
+GO
+		UPDATE Adua.tbEstadoMercancias
+			SET  merc_Descripcion = 
+			CONCAT(
+			UPPER(LEFT(merc_Descripcion, 1)),
+			LOWER(SUBSTRING(merc_Descripcion, 2, LEN(merc_Descripcion)))
+				)
+		WHERE merc_Descripcion COLLATE Latin1_General_BIN LIKE '[A-Z]%'
+GO
 
 	   
 /*-------------------------------------*/
@@ -209,6 +219,16 @@ VALUES	('CFR', 'COSTO Y FLETE', 1, GETDATE()),
 		('FAS', 'LIBRE COSTADO BUQUE', 1, GETDATE()),
 		('FCA', 'FRANCO TRANSPORTISTA', 1, GETDATE()),
 		('FOB', 'LIBRE PUESTA A BORDO', 1, GETDATE());
+ --ARREGLANDO ESTOS INSERTS
+GO
+			UPDATE [Adua].[tbIncoterm]
+			SET  [inco_Descripcion] = 
+			CONCAT(
+			UPPER(LEFT([inco_Descripcion], 1)),
+			LOWER(SUBSTRING([inco_Descripcion], 2, LEN([inco_Descripcion])))
+				)
+		WHERE [inco_Descripcion] COLLATE Latin1_General_BIN LIKE '[A-Z]%'
+GO
 
 
 /*------------------------------------------*/
@@ -224,6 +244,16 @@ VALUES	('CHEQUE BANCARIO/CHEQUE PERSONAL', 1, GETDATE()),
 		('PAGO ELECTRONICO', 1, GETDATE()),
 		('TRANSFERENCIA BANCARIA', 1, GETDATE()),
 		('TARJETA DE CREDITO', 1, GETDATE());
+ --ARREGLANDO ESTOS INSERTS
+GO
+		UPDATE  [Adua].[tbFormasdePago]
+			SET  [fopa_Descripcion] = 
+			CONCAT(
+			UPPER(LEFT([fopa_Descripcion], 1)),
+			LOWER(SUBSTRING([fopa_Descripcion], 2, LEN([fopa_Descripcion])))
+				)
+		WHERE [fopa_Descripcion] COLLATE Latin1_General_BIN LIKE '[A-Z]%'
+GO
 
 
 /*-----------------------------------------------*/
@@ -566,6 +596,17 @@ VALUES	('BR','BROKER',1,GETDATE()),
 		('CO','CORREDOR',1,GETDATE()),
 		('CV','COMISIONISTA VENTA',1,GETDATE()),
 		('OT','OTRO',1,GETDATE());
+
+ --ARREGLANDO ESTOS INSERTS
+GO
+		UPDATE [Adua].[tbTipoIntermediario]
+			SET  tite_Descripcion = 
+			CONCAT(
+			UPPER(LEFT(tite_Descripcion, 1)),
+			LOWER(SUBSTRING(tite_Descripcion, 2, LEN(tite_Descripcion)))
+				)
+		WHERE tite_Descripcion COLLATE Latin1_General_BIN LIKE '[A-Z]%'
+GO
 
 
 /*------------------------------------------*/
@@ -81000,6 +81041,17 @@ VALUES('ZWBAT','BATA',1,GETDATE(),1),
 ('ZWZMZ','ZIMBABWE',1,GETDATE(),1),
 ('ZWZVS','ZVISHAVANE',1,GETDATE(),1),
 ('ZWZ45','CHINHOYI',1,GETDATE(),1);
+
+ --ARREGLANDO ESTOS INSERTS
+GO
+		UPDATE  [Adua].[tbLugaresEmbarque]
+			SET  [emba_Descripcion] = 
+			CONCAT(
+			UPPER(LEFT([emba_Descripcion], 1)),
+			LOWER(SUBSTRING([emba_Descripcion], 2, LEN([emba_Descripcion])))
+				)
+		WHERE [emba_Descripcion] COLLATE Latin1_General_BIN LIKE '[A-Z]%'
+GO
 
 
 
