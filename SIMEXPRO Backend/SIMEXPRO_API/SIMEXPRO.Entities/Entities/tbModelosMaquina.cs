@@ -17,6 +17,10 @@ namespace SIMEXPRO.Entities.Entities
         public int mmaq_Id { get; set; }
         public string mmaq_Nombre { get; set; }
         public int marq_Id { get; set; }
+        [NotMapped]
+        public string func_Nombre { get; set; }
+        [NotMapped]
+        public string marq_Nombre { get; set; }
         public int func_Id { get; set; }
         public string mmaq_Imagen { get; set; }
         public int usua_UsuarioCreacion { get; set; }
