@@ -15845,7 +15845,7 @@ END
 
 GO
 
-CREATE OR ALTER PROCEDURE [Prod].[UDP_tbPedidosProduccionDetalle_Filtrar_Estado] --219
+CREATE OR ALTER  PROCEDURE [Prod].[UDP_tbPedidosProduccionDetalle_Filtrar_Estado]
 (
 @ppro_Id INT
 )
@@ -15855,23 +15855,26 @@ BEGIN
 		SELECT	PPD.ppde_Id, 
 		PPD.ppro_Id, 
 		PPD.ppde_Cantidad,
-		pp.ppro_Estados,
+		pp.[ppro_Estados],
 		PPD.lote_Id, 
+		lot.[lote_Stock],
 		lot.lote_CodigoLote,
-		lot.lote_Stock,
 		col.colr_Codigo,
 		col.colr_Nombre,
+		are.tipa_Id,
+		are.tipa_area,
 		mat.mate_Id,
 		mat.mate_Descripcion
 
 		FROM Prod.tbPedidosProduccionDetalles PPD
-			INNER JOIN Prod.tbPedidosProduccion pp ON ppd.ppro_Id = pp.ppro_Id
-			INNER JOIN Prod.tbLotes lot ON PPD.lote_Id = lot.lote_Id
-			INNER JOIN Prod.tbMateriales mat ON lot.mate_Id = mat.mate_Id
-			LEFT  JOIN Prod.tbColores col ON lot.colr_Id = col.colr_Id
+			INNER JOIN Prod.tbPedidosProduccion pp	ON ppd.ppro_Id = pp.ppro_Id
+			LEFT JOIN Prod.tbLotes lot				ON PPD.lote_Id = lot.lote_Id
+			LEFT JOIN Prod.tbMateriales mat			ON lot.mate_Id = mat.mate_Id
+			LEFT JOIN Prod.tbColores col			ON lot.colr_Id = col.colr_Id
+			LEFT JOIN Prod.tbArea are				ON are.tipa_Id = lot.tipa_Id
 			WHERE ppd.ppro_Id = @ppro_Id
 
-		
+		SELECT 1
 	END TRY
 	BEGIN CATCH
 			SELECT 'Error Message: ' + ERROR_MESSAGE()
