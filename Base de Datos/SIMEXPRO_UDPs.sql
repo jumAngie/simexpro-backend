@@ -4372,7 +4372,6 @@ FROM    Adua.tbAduanas adu
         LEFT JOIN Gral.tbCiudades ciud      ON ciud.ciud_Id = adu.ciud_Id
         LEFT JOIN Gral.tbProvincias prov   ON prov.pvin_Id = ciud.pvin_Id
  WHERE    adu.adua_Estado = 1
- ORDER BY adua_FechaCreacion DESC
 END
 
 GO
