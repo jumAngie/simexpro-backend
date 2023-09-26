@@ -4236,7 +4236,7 @@ END
 
 /**************Crear Formas de pago**********************/
 GO
-CREATE OR ALTER PROCEDURE Adua.UDP_tbFormasdePago_Insertar 
+ALTER   PROCEDURE [Adua].[UDP_tbFormasdePago_Insertar] 
    @fopa_Descripcion        NVARCHAR(MAX), 
    @usua_UsuarioCreacion    INT, 
    @fopa_FechaCreacion      DATETIME
@@ -4250,6 +4250,7 @@ BEGIN
 		    UPDATE Adua.tbFormasdePago
 			SET fopa_Estado = 1
 			WHERE fopa_Descripcion=@fopa_Descripcion
+			SELECT 1
 		 END
 		ELSE 
 		 BEGIN
@@ -4267,7 +4268,7 @@ BEGIN
 		 SELECT 1
 	END TRY 
 	BEGIN CATCH
-	   SELECT 0	
+	   SELECT 'Error Messagee: ' + ERROR_MESSAGE()
 	END CATCH    
 END
 
