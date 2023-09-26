@@ -93,6 +93,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@colo_Id", item.colo_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@coin_NumeroLocalApart", item.coin_NumeroLocalApart, DbType.String, ParameterDirection.Input);
             parametros.Add("@coin_PuntoReferencia", item.coin_PuntoReferencia, DbType.String, ParameterDirection.Input);
+            parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@coin_FechaModificacion", item.coin_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
 
             var respuesta = db.QueryFirst<string>(ScriptsDataBase.InsertarComercianteIndividualTap2, parametros, commandType: CommandType.StoredProcedure);
             return new RequestStatus()
@@ -114,6 +116,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@coin_coloniaIdRepresentante", item.coin_coloniaIdRepresentante, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@coin_NumeroLocaDepartRepresentante", item.coin_NumeroLocaDepartRepresentante, DbType.String, ParameterDirection.Input);
             parametros.Add("@coin_PuntoReferenciaReprentante", item.coin_PuntoReferenciaReprentante, DbType.String, ParameterDirection.Input);
+            parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@coin_FechaModificacion", item.coin_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
 
             var respuesta = db.QueryFirst<string>(ScriptsDataBase.InsertarComercianteIndividualTap3, parametros, commandType: CommandType.StoredProcedure);
             return new RequestStatus()
@@ -134,6 +138,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@coin_TelefonoFijo", item.coin_TelefonoFijo, DbType.String, ParameterDirection.Input);
             parametros.Add("@coin_CorreoElectronico", item.coin_CorreoElectronico, DbType.String, ParameterDirection.Input);
             parametros.Add("@coin_CorreoElectronicoAlternativo", item.coin_CorreoElectronicoAlternativo, DbType.String, ParameterDirection.Input);
+            parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@coin_FechaModificacion", item.coin_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
 
             var respuesta = db.QueryFirst<string>(ScriptsDataBase.InsertarComercianteIndividualTap4, parametros, commandType: CommandType.StoredProcedure);
             return new RequestStatus()
