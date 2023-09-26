@@ -1563,8 +1563,8 @@ BEGIN
 	
 SELECT	pais_Id								,
 		pais_Codigo							,
-		pais_Nombre							,
-		pais_EsAduana							,
+		Gral.ProperCase(pais_Nombre)		AS pais_Nombre,
+		pais_EsAduana						,
 		pais_prefijo						,
 		pais.usua_UsuarioCreacion			,
 		usua.usua_Nombre					AS UsuarioCreacionNombre,
