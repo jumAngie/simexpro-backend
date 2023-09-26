@@ -17619,6 +17619,7 @@ LEFT  JOIN Prod.tbFacturasExportacionDetalles fade       ON orde.code_Id        
 LEFT  JOIN Prod.tbFacturasExportacion faex               ON fade.faex_Id        = faex.faex_Id 
 WHERE  orco.orco_Codigo = @orco_Codigo
 END
+GO
 
 ---- TRACKING PARA LA LINEA DE TIEMPO ---
 CREATE OR ALTER PROC Prod.UDP_DibujarProcesos
@@ -17653,3 +17654,54 @@ BEGIN
 	WHERE	orco_Codigo = @orco_Codigo
 	ORDER BY code_FechaProcActual ASC
 END
+GO
+/*Insertar ITEMXDUCA*/
+GO
+CREATE OR ALTER PROCEDURE Adua.UDP_tbItemsDEVAPorDuca_Insertar 
+(   @duca_Id						INT,
+	@deva_Id						INT,
+	@usua_UsuarioCreacion 			INT,
+	@dedu_FechaCreacion				DATETIME
+)
+AS
+BEGIN
+	BEGIN TRY	
+			BEGIN
+				INSERT INTO Adua.tbItemsDEVAPorDuca (duca_Id, deva_Id, usua_UsuarioCreacion, dedu_FechaCreacion)
+				     VALUES							(@duca_Id, @deva_Id, @usua_UsuarioCreacion, @dedu_FechaCreacion )
+				     SELECT  1
+			END
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+	END CATCH
+END
+GO
+
+
+/*Editar ITEMXDUCA*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbItemsDEVAPorDuca_Editar
+(
+	@dedu_Id						INT,
+	@duca_Id						INT,
+	@deva_Id						INT,
+	@usua_UsuarioModificacion		INT,
+	@dedu_FechaModificacion			DATETIME
+)
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE Adua.tbItemsDEVAPorDuca
+		   SET duca_Id = @duca_Id,
+		       deva_Id = @deva_Id,
+			   usua_UsuarioModificacion = @usua_UsuarioModificacion,
+			   dedu_FechaModificacion = @dedu_FechaModificacion
+		 WHERE dedu_Id = @dedu_Id
+
+		SELECT 1 AS Resultado
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
+	END CATCH
+END
+GO

@@ -3058,6 +3058,24 @@ CREATE TABLE Prod.tbImpuestosProd
 );
 GO
 
+CREATE TABLE Adua.tbItemsDEVAPorDuca (
+		dedu_Id						INT IDENTITY(1,1),
+		duca_Id						INT,
+		deva_Id						INT,
+
+		usua_UsuarioCreacion		INT,
+		dedu_FechaCreacion			DATETIME,
+		usua_UsuarioModificacion	INT,
+		dedu_FechaModificacion		DATETIME
+
+		CONSTRAINT PK_Adua_tbItemsDEVAPorDuca_dedu_Id										PRIMARY KEY (dedu_Id),
+		CONSTRAINT FK_Adua_tbItemsDEVAPorDuca_duca_Id_Adua_tbDuca_duca_Id			FOREIGN KEY (duca_Id)  REFERENCES Adua.tbDuca (duca_Id),
+		CONSTRAINT FK_Adua_tbItemsDEVAPorDuca_deva_Id_Adua_tbDeclaraciones_Valor_deva_Id	FOREIGN KEY (deva_Id)		REFERENCES Adua.tbDeclaraciones_Valor (deva_Id),
+
+		CONSTRAINT FK_Acce_tbUsuarios_Adua_tbItemsDEVAPorDuca_usua_UsuarioCreacion 			FOREIGN KEY (usua_UsuarioCreacion)		REFERENCES Acce.tbUsuarios(usua_Id),
+		CONSTRAINT FK_Acce_tbUsuarios_Adua_tbItemsDEVAPorDuca_usua_UsuarioModificacion		FOREIGN KEY (usua_UsuarioModificacion)	REFERENCES Acce.tbUsuarios(usua_Id),
+);
+
 
 
 --**********************************************************************************************
