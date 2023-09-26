@@ -1601,7 +1601,7 @@ VALUES
 --***** INSERT TABLA FORMAS DE ENVIO --******--
 GO
 INSERT INTO Gral.tbFormas_Envio (foen_Codigo,foen_Descripcion, usua_UsuarioCreacion, foen_FechaCreacion)
-VALUES	('FR', 'FRACCIONADO',	1, GETDATE()),
-		('OT', 'OTRO',			1, GETDATE()),
-		('PR', 'PARCIAL',		1, GETDATE()),
-		('TT', 'TOTAL',			1, GETDATE())
+VALUES	('FR', 'Fraccionado',	1, GETDATE()),
+		('OT', 'Otro',			1, GETDATE()),
+		('PR', 'Parcial',		1, GETDATE()),
+		('TT', 'Total',			1, GETDATE())

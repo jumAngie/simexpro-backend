@@ -17,8 +17,6 @@ CREATE TABLE Adua.tbItemsDEVAPorDuca (
 		CONSTRAINT FK_Acce_tbUsuarios_Adua_tbItemsDEVAPorDuca_usua_UsuarioModificacion		FOREIGN KEY (usua_UsuarioModificacion)	REFERENCES Acce.tbUsuarios(usua_Id),
 );
 
-DROP TABLE Adua.tbItemsDEVAPorDuca
-
 -- PROCS ---
 
 /*Insertar ITEMXDUCA*/
