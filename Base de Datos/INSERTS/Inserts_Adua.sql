@@ -230,10 +230,10 @@ VALUES	('CHEQUE BANCARIO/CHEQUE PERSONAL', 1, GETDATE()),
 --***** INSERT TABLA NIVELES COMERCIALES --******--
 GO
 INSERT INTO [Adua].[tbNivelesComerciales](nico_Codigo, [nico_Descripcion], [usua_UsuarioCreacion], [nico_FechaCreacion])
-VALUES ('DIS', 'DISTRIBUIDOR', 1, GETDATE()),
-	   ('MAY', 'MAYORISTA', 1, GETDATE()),
-	   ('MIN', 'MINORISTA', 1, GETDATE()),
-	   ('OTR', 'OTROS', 1, GETDATE());
+VALUES ('DIS', 'Distribuidor', 1, GETDATE()),
+	   ('MAY', 'Mayorista', 1, GETDATE()),
+	   ('MIN', 'Minorista', 1, GETDATE()),
+	   ('OTR', 'Otros', 1, GETDATE());
 
 
 /*---------------------------------------------------*/
