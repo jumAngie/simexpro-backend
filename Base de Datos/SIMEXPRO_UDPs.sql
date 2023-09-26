@@ -3176,6 +3176,7 @@ END
 GO
 
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_ComercianteEditar 
+	@coin_Id						INT,
     @doco_URLImagen					NVARCHAR(MAX),
     @usua_UsuarioModificacion		INT,
     @doco_FechaModificacion			DATETIME,
