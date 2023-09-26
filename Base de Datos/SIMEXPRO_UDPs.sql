@@ -11418,13 +11418,14 @@ END
 GO
 
 
-CREATE OR ALTER PROCEDURE Prod.UDP_tbOrdenCompraDetalles_Find
-	@code_Id		INT
+CREATE OR ALTER PROCEDURE [Prod].[UDP_tbOrdenCompraDetalles_Find]
+	@code_Id		NVARCHAR(MAX)
 AS
 BEGIN
 	SELECT	 ordenCompraDetalle.code_Id
 			,ordenCompraDetalle.orco_Id
 			,ordenCompraDetalle.esti_Id
+			,orco.orco_Codigo
 			,estilo.esti_Descripcion
 			,ordenCompraDetalle.tall_Id
 			,CONCAT(talla.tall_Codigo, ' (', talla.tall_Nombre, ')') AS tall_Nombre
@@ -11437,7 +11438,7 @@ BEGIN
 			INNER JOIN  Prod.tbColores				colores						ON	ordenCompraDetalle.colr_Id						= colores.colr_Id
 			INNER JOIN Prod.tbOrdenCompra			orco						ON ordenCompraDetalle.orco_Id						= orco.orco_Id
 			INNER JOIN Prod.tbClientes				clie						ON orco.orco_IdCliente = clie.clie_Id						
-	  WHERE ordenCompraDetalle.code_Id	=	@code_Id 
+	  WHERE CONCAT(orco.orco_Codigo, ' - ', ordenCompraDetalle.code_Id )	=	@code_Id 
 END
 GO
 
@@ -11848,80 +11849,158 @@ GO
 
 -------------------------------------------UDPS Para Asignaciones Orden detalle---------------------------------------
 
-CREATE OR ALTER PROCEDURE Prod.UDP_tbAsignacionesOrdenDetalle_Listado 
-	@asor_Id INT
+CREATE OR ALTER PROCEDURE [Prod].[UDP_tbAsignacionesOrden_Listado]
 AS
 BEGIN
-	SELECT adet_Id,						
-		   lote.lote_Id,
-		   adet_Cantidad,				
-		   AsignacionesOrdenDetalle.usua_UsuarioCreacion,
-		   usuarioCreacion.usua_Nombre							AS usuarioCreacionNombre,
-		   adet_FechaCreacion,			
-		   AsignacionesOrdenDetalle.usua_UsuarioModificacion,
-		   usuarioModificacion.usua_Nombre						AS usuarioModificacionNombre,
-		   adet_FechaModificacion
-	  FROM Prod.tbAsignacionesOrdenDetalle		AS AsignacionesOrdenDetalle
-INNER JOIN Prod.tbLotes		lote				ON AsignacionesOrdenDetalle.lote_Id = lote.lote_Id
-INNER JOIN Acce.tbUsuarios usuarioCreacion		ON AsignacionesOrdenDetalle.usua_UsuarioCreacion = usuarioCreacion.usua_Id
- LEFT JOIN Acce.tbUsuarios usuarioModificacion	ON AsignacionesOrdenDetalle.usua_UsuarioModificacion = usuarioModificacion.usua_Id
+	 SELECT asor_Id,						
+			asor_OrdenDetId,
+			esti.esti_Descripcion,
+			colr.colr_Nombre,
+			tall.tall_Nombre,
+			orco.orco_Id,
+			orco.orco_Codigo,
+			clie.clie_Nombre_O_Razon_Social,
+			asor_FechaInicio,			
+			asor_FechaLimite,						
+			asor_Cantidad,				
+			pro.proc_Id,	
+			pro.proc_Descripcion,
+			empl.empl_Id,			
+			empl.empl_Nombres + ' ' + empl_Apellidos AS empl_NombreCompleto,
+			asignacionesOrden.usua_UsuarioCreacion,
+			usuarioCreacion.usua_Nombre					AS usuarioCreacionNombre,
+			asor_FechaCreacion,			
+			asignacionesOrden.usua_UsuarioModificacion,
+			usuarioModificacion.usua_Nombre				AS usuarioModificacionNombre,
+			asor_FechaModificacion,
+			(SELECT		adet_Id,						
+					   lote.lote_Id,
+					   lote.lote_CodigoLote,
+					   mate.mate_Id,
+					   mate.mate_Descripcion,
+					   lote.colr_Id,
+					   colors.colr_Nombre,
+					   adet_Cantidad,				
+					   AsignacionesOrdenDetalle.usua_UsuarioCreacion,
+					   usuarioCreacion.usua_Nombre							AS usuarioCreacionNombre,
+					   adet_FechaCreacion,			
+					   AsignacionesOrdenDetalle.usua_UsuarioModificacion,
+					   usuarioModificacion.usua_Nombre						AS usuarioModificacionNombre,
+					   adet_FechaModificacion
+			FROM Prod.tbAsignacionesOrdenDetalle		AS AsignacionesOrdenDetalle	
+			INNER JOIN Prod.tbLotes		lote				ON AsignacionesOrdenDetalle.lote_Id = lote.lote_Id
+			INNER JOIN Acce.tbUsuarios usuarioCreacion		ON AsignacionesOrdenDetalle.usua_UsuarioCreacion = usuarioCreacion.usua_Id
+			INNER JOIN prod.tbMateriales mate				ON lote.mate_Id = mate.mate_Id
+			LEFT JOIN prod.tbColores colors					ON colors.colr_Id = lote.colr_Id
+			LEFT JOIN Acce.tbUsuarios usuarioModificacion	ON AsignacionesOrdenDetalle.usua_UsuarioModificacion = usuarioModificacion.usua_Id
+			WHERE 	AsignacionesOrdenDetalle.asor_Id = asignacionesOrden.asor_Id FOR JSON AUTO) AS Detalles
 
-WHERE 	AsignacionesOrdenDetalle.asor_Id = @asor_Id
-
+	   FROM Prod.tbAsignacionesOrden					AS asignacionesOrden 
+	   INNER JOIN Prod.tbProcesos pro					ON asignacionesOrden.proc_Id = pro.proc_Id
+	   INNER JOIN Gral.tbEmpleados empl					ON asignacionesOrden.empl_Id = empl.empl_Id
+	   INNER JOIN Prod.tbOrdenCompraDetalles code		ON asignacionesOrden.asor_OrdenDetId = code.code_Id
+	   INNER JOIN Prod.tbEstilos esti					ON code.esti_Id = esti.esti_Id
+	   INNER JOIN Prod.tbColores colr					ON code.colr_Id = colr.colr_Id
+	   INNER JOIN Prod.tbTallas tall					ON code.tall_Id = tall.tall_Id
+	   INNER JOIN Prod.tbOrdenCompra orco				ON code.orco_Id = orco.orco_Id
+	   INNER JOIN Prod.tbClientes clie					ON orco.orco_IdCliente = clie.clie_Id
+	   INNER JOIN Acce.tbUsuarios usuarioCreacion		ON asignacionesOrden.usua_UsuarioCreacion = usuarioCreacion.usua_Id
+	   LEFT JOIN Acce.tbUsuarios usuarioModificacion	ON asignacionesOrden.usua_UsuarioModificacion = usuarioModificacion.usua_Id
 END
 GO
 
-CREATE OR ALTER PROCEDURE Prod.UDP_tbAsignacionesOrdenDetalle_Insertar 
+CREATE OR ALTER PROCEDURE [Prod].[UDP_tbAsignacionesOrden_Insertar] --1,'10-16-2004', '10-16-2004', 1,1,1,'[{"lote_Id":1,"adet_Cantidad":2},{"lote_Id":2,"adet_Cantidad":2},{"lote_Id":3,"adet_Cantidad":2},{"lote_Id":4,"adet_Cantidad":2},{"lote_Id":7,"adet_Cantidad":2}]',1, '10-16-2004'  
 (
-	@lote_Id					INT, 
-	@adet_Cantidad				INT, 
-	@asor_Id					INT,
+	@asor_OrdenDetId			INT,
+	@asor_FechaInicio			DATETIME,
+	@asor_FechaLimite			DATETIME,
+	@asor_Cantidad				INT,
+	@proc_Id					INT,
+	@empl_Id					INT,
+	@detalles					NVARCHAR(MAX),
 	@usua_UsuarioCreacion		INT,
-	@adet_FechaCreacion			DATETIME
-	
+	@asor_FechaCreacion			DATETIME
 )
 AS
 BEGIN
+BEGIN TRANSACTION
 	BEGIN TRY
-		INSERT INTO Prod.tbAsignacionesOrdenDetalle
-					(lote_Id,					
-					adet_Cantidad,
-					asor_Id,
+		INSERT INTO Prod.tbAsignacionesOrden
+					(asor_OrdenDetId,			
+					asor_FechaInicio,			
+					asor_FechaLimite,			
+					asor_Cantidad,				
+					proc_Id,					
+					empl_Id,					
 					usua_UsuarioCreacion,		
-					adet_FechaCreacion)
-			VALUES (@lote_Id,					
-					@adet_Cantidad,
-					@asor_Id,
+					asor_FechaCreacion)
+			 VALUES (@asor_OrdenDetId,			
+					@asor_FechaInicio,			
+					@asor_FechaLimite,			
+					@asor_Cantidad,				
+					@proc_Id,					
+					@empl_Id,					
 					@usua_UsuarioCreacion,		
-					@adet_FechaCreacion)
-	
-		SELECT 1 AS Resultado
+					@asor_FechaCreacion)
+		
+		DECLARE @asor_Id INT = SCOPE_IDENTITY() 
+
+
+INSERT INTO [Prod].[tbAsignacionesOrdenDetalle]
+           ([lote_Id]
+           ,[adet_Cantidad]
+           ,[asor_Id]
+           ,[usua_UsuarioCreacion]
+           ,[adet_FechaCreacion])
+     SELECT *
+           ,@asor_Id
+           ,@usua_UsuarioCreacion	
+		   ,@asor_FechaCreacion
+		   FROM OPENJSON(@detalles, '$.detalles')
+				WITH (
+					 lote_Id INT
+					,adet_Cantidad INT
+				) 
+
+	UPDATE Prod.tbOrdenCompra
+	SET [orco_EstadoOrdenCompra] = 'C'
+	WHERE [orco_Id] = (SELECT [orco_Id]
+						 FROM Prod.tbOrdenCompraDetalles
+						 WHERE [code_Id] = @asor_OrdenDetId)
+	SELECT SCOPE_IDENTITY() 
+	COMMIT TRAN
 	END TRY
 	BEGIN CATCH
+		 ROLLBACK TRAN
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
 	END CATCH
 END
 GO
 
-CREATE OR ALTER PROCEDURE Prod.UDP_tbAsignacionesOrdenDetalle_Editar
+CREATE OR ALTER PROCEDURE [Prod].[UDP_tbAsignacionesOrdenDetalle_Editar]
 (
 	@adet_Id					INT,
 	@lote_Id					INT, 
 	@adet_Cantidad				INT, 
 	@asor_Id					INT,
 	@usua_UsuarioModificacion	INT,
-	@adet_FechaModificacion		DATETIME
+	@adet_FechaModificacion		DATETIME,
+	@jsonParameter				NVARCHAR(MAX)
 )	
 AS
 BEGIN
 	BEGIN TRY
+		DECLARE @lote_Viejo INT = JSON_VALUE(@jsonParameter, '$.lote_viejo')
+		DECLARE @lote_Nuevo INT = JSON_VALUE(@jsonParameter, '$.lote_nuevo')
+		
 		UPDATE Prod.tbAsignacionesOrdenDetalle
-		   SET lote_Id					= @lote_Id,					 
+		   SET lote_Id					= @lote_Nuevo,					 
 			   adet_Cantidad			= @adet_Cantidad,	
 			   asor_Id					= @asor_Id,
 			   usua_UsuarioModificacion	= @usua_UsuarioModificacion,		
 			   adet_FechaModificacion	= @adet_FechaModificacion
-		 WHERE adet_Id = @adet_Id
+		 WHERE asor_Id = @asor_Id
+		 AND   lote_Id = @lote_Viejo
 
 		 SELECT 1 AS Resultado
 	END TRY
@@ -11931,15 +12010,17 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Prod.UDP_tbAsignacionesOrdenDetalle_Eliminar
+CREATE OR ALTER PROCEDURE [Prod].[UDP_tbAsignacionesOrdenDetalle_Eliminar]
 (
-	@adet_Id	INT
+	@lote_Id		INT,
+	@adet_Cantidad		INT
 )
 AS
 BEGIN
 	BEGIN TRY
 		DELETE Prod.tbAsignacionesOrdenDetalle
-		 WHERE adet_Id = @adet_Id
+		 WHERE lote_Id = @lote_Id
+		 AND   asor_Id = @adet_Cantidad
 
 		 SELECT 1 AS Resultado
 	END TRY
