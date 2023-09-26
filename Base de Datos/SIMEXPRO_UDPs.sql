@@ -11055,13 +11055,14 @@ GO
 
 -----------------------------------------------/UDPS Para orden de compra---------------------------------------------
 
-CREATE OR ALTER PROCEDURE Prod.UDP_tbOrdenCompra_ObtenerPorId_Para_LineaTiempo
+CREATE OR ALTER   PROCEDURE Prod.UDP_tbOrdenCompra_ObtenerPorId_Para_LineaTiempo
 (
-	@orco_Id		INT
+	@orco_Codigo		nvarchar(100)
 )	
 AS
 BEGIN
 	 SELECT ordenCompra.orco_Id,
+			ordenCompra.orco_Codigo,
 		    --Informacion del cliente
 		    ordenCompra.orco_IdCliente,
 			cliente.clie_Nombre_O_Razon_Social,
@@ -11097,9 +11098,8 @@ BEGIN
  INNER JOIN Prod.tbTipoEmbalaje		tipoEmbajale			ON ordenCompra.orco_IdEmbalaje				= tipoEmbajale.tiem_Id
  INNER JOIN Acce.tbUsuarios			usuarioCreacion			ON ordenCompra.usua_UsuarioCreacion			= usuarioCreacion.usua_Id
   LEFT JOIN Acce.tbUsuarios			usuarioModificacion		ON ordenCompra.usua_UsuarioModificacion		= usuarioModificacion.usua_Id
-	  WHERE orco_Id = @orco_Id
+	  WHERE orco_Codigo = @orco_Codigo
 END
-GO
 
 
 
@@ -17617,4 +17617,38 @@ LEFT  JOIN Prod.tbOrde_Ensa_Acab_Etiq todo               ON todo.code_Id        
 LEFT  JOIN Prod.tbFacturasExportacionDetalles fade       ON orde.code_Id        = fade.code_Id
 LEFT  JOIN Prod.tbFacturasExportacion faex               ON fade.faex_Id        = faex.faex_Id 
 WHERE  orco.orco_Codigo = @orco_Codigo
+END
+
+---- TRACKING PARA LA LINEA DE TIEMPO ---
+CREATE OR ALTER PROC Prod.UDP_DibujarProcesos
+	@orco_Codigo NVARCHAR(100)
+AS
+BEGIN
+SELECT	DISTINCT 
+		proce.proc_Descripcion,
+		proce.proc_CodigoHTML,
+		procxorder.proc_Id
+FROM	[Prod].[tbProcesoPorOrdenCompraDetalle] procxorder	INNER JOIN [Prod].[tbProcesos] proce
+ON		procxorder.proc_Id = proce.proc_Id					INNER JOIN [Prod].[tbOrdenCompraDetalles] orderdet
+ON		procxorder.code_Id = orderdet.code_Id				INNER JOIN [Prod].[tbOrdenCompra] orderhead
+ON		orderdet.orco_Id = orderhead.orco_Id
+WHERE	orco_Codigo = @orco_Codigo
+ORDER BY procxorder.proc_Id DESC;
+END
+
+
+-- ///
+go
+CREATE OR ALTER PROC Prod.UDP_DibujarDetalles
+	@orco_Codigo NVARCHAR(100)
+AS
+BEGIN
+	SELECT	orden.orco_Id, code_Id, code_CantidadPrenda, estilos.esti_Descripcion, [tall_Nombre]  , proc_IdActual, [proc_Descripcion], [code_FechaProcActual]
+	FROM	[Prod].[tbOrdenCompraDetalles] orderdet	INNER JOIN [Prod].[tbOrdenCompra] orden
+	ON		orderdet.orco_Id = orden.orco_Id		INNER JOIN [Prod].[tbEstilos] estilos
+	ON		orderdet.esti_Id = estilos.esti_Id		INNER JOIN [Prod].[tbTallas] tallas
+	ON		orderdet.tall_Id = tallas.tall_Id		INNER JOIN [Prod].[tbProcesos] procesos
+	ON		orderdet.proc_IdActual = procesos.proc_Id
+	WHERE	orco_Codigo = @orco_Codigo
+	ORDER BY code_FechaProcActual ASC
 END
