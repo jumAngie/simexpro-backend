@@ -11445,6 +11445,8 @@ BEGIN
 			,orco.orco_Codigo
 			,estilo.esti_Descripcion
 			,ordenCompraDetalle.tall_Id
+			,orco.orco_FechaEmision
+			,orco.orco_FechaLimite
 			,CONCAT(talla.tall_Codigo, ' (', talla.tall_Nombre, ')') AS tall_Nombre
 			,ordenCompraDetalle.colr_Id
 			,colores.colr_Nombre
