@@ -2843,7 +2843,7 @@ BEGIN
 END
 GO
 
---*************** UDPS Para Tabla Comersiante Individual ************--
+--***** UDPS Para Tabla Comersiante Individual ****--
 
 CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Listar
 AS
@@ -2948,7 +2948,7 @@ END
 GO
 
 
-/*Insertar Comersiante Individual*/
+--/Insertar Comersiante Individual/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap1 
 (
 	@pers_RTN							NVARCHAR(40),
@@ -3175,8 +3175,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_ComercianteEditar
-    @coin_Id						INT,
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDocumentosContrato_ComercianteEditar 
     @doco_URLImagen					NVARCHAR(MAX),
     @usua_UsuarioModificacion		INT,
     @doco_FechaModificacion			DATETIME,
@@ -3189,18 +3188,22 @@ BEGIN
         INSERT INTO Adua.tbDocumentosContratos ([coin_Id],
                                                 [doco_URLImagen],
                                                 [usua_UsuarioModificacion],
+												[usua_UsuarioCreacion],
                                                 [doco_FechaModificacion],
+												[doco_FechaCreacion],
                                                 [doco_Numero_O_Referencia],
                                                 [doco_TipoDocumento])
         SELECT @coin_Id,
                [doco_URLImagen],
                @usua_UsuarioModificacion,
+			   @usua_UsuarioModificacion,
                @doco_FechaModificacion,
+			   @doco_FechaModificacion,
                [doco_Numero_O_Referencia],
                [doco_TipoDocumento]
         FROM OPENJSON(@doco_URLImagen, '$.documentos')
         WITH (
-            doco_TipoDocumento NVARCHAR(6),
+            doco_TipoDocumento NVARCHAR(7),
             doco_Numero_O_Referencia NVARCHAR(50),
             doco_URLImagen NVARCHAR(MAX)
         )
@@ -3223,7 +3226,7 @@ BEGIN
 END
 GO
 
-
+GO
 CREATE OR ALTER PROCEDURE [Adua].[UDP_tbDocumentosContratos_DeleteByCoin_Id]
 @coin_Id INT
 AS
@@ -3241,7 +3244,7 @@ GO
 
 
 
-/*Editar Comersiante Individual*/
+--/Editar Comersiante Individual/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_Editar
 (
 	@coin_Id							INT,
