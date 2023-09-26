@@ -12627,6 +12627,7 @@ AS
 BEGIN
 SELECT	proc_Id								,
 		proc_Descripcion					,
+		proc_CodigoHtml						, 
 		pro.usua_UsuarioCreacion				,
 		crea.usua_Nombre					AS usarioCreacion,			 
 		proc_FechaCreacion					,
