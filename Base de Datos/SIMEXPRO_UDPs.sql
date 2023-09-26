@@ -11672,7 +11672,20 @@ BEGIN
 			colr.colr_Nombre,
 			tall.tall_Nombre,
 			orco.orco_Id,
+			orco.orco_Codigo,
+			orco.orco_FechaEmision,
+			orco.orco_FechaLimite,
 			clie.clie_Nombre_O_Razon_Social,
+			--(SELECT RowNumber
+			--  FROM (SELECT ROW_NUMBER() OVER (ORDER BY prod_Id) AS RowNumber,
+			--			   prod_Id 
+			--		  FROM Prod.tbPedidosOrdenDetalle
+			--		 WHERE pedi_Id = pedidos.peor_Id)			AS RowNumbers
+			-- WHERE prod_Id = pedidosDetalle.prod_Id)			AS prod_NumeroLinea,
+			
+			(SELECT COUNT(orco_Id)
+			 FROM Prod.tbOrdenCompraDetalles
+			 WHERE orco_Id = orco.orco_Id) AS cantidad_Items,
 			asor_FechaInicio,			
 			asor_FechaLimite,						
 			asor_Cantidad,				
