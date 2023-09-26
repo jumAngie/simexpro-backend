@@ -14395,17 +14395,21 @@ GO
 
 --*****Pedidos Orden*****-
 --*****Listado*****--
-CREATE OR ALTER PROCEDURE Prod.UDP_tbPedidosOrden_Listar
+CREATE OR ALTER PROCEDURE [Prod].[UDP_tbPedidosOrden_Listar] 
 AS
 BEGIN
 SELECT	peor_Id, 
-        peor_Codigo,
-		prov.prov_Id, 
-		prov.prov_NombreCompania,
-		prov.prov_NombreContacto,
+		COALESCE(prov.prov_NombreCompania, 'No disponible') AS prov_NombreCompania,
+		COALESCE(prov.prov_NombreContacto, 'No disponible') AS prov_NombreContacto,
+		COALESCE(prov.prov_Telefono, 'No disponible') AS prov_Telefono,
+		prov.prov_Id,
+		po.peor_finalizacion,
+		peor_Codigo,
+		peor_Impuestos,
 		po.duca_Id, 
 		ciud.ciud_Id,
-		ciud.ciud_Nombre,
+		COALESCE(ciud.ciud_Nombre, 'No disponible') AS ciud_Nombre,
+		COALESCE(duca.duca_No_Duca, 'No disponible') AS duca_No_Duca,
 		pais.pais_Codigo,
 		pais.pais_Id,
 		pais.pais_Nombre,
@@ -14413,8 +14417,9 @@ SELECT	peor_Id,
 		pvin.pvin_Id,
 		pvin.pvin_Nombre,
 		po.peor_DireccionExacta,
-		peor_FechaEntrada, 
-		peor_Obsevaciones, 
+		SUBSTRING(CAST(po.peor_FechaEntrada AS NVARCHAR(100)), 1, 12) AS peor_FechaEntrada,
+		COALESCE(po.peor_Obsevaciones, 'No disponible') AS peor_Obsevaciones, 
+		CONCAT(empl_Nombres, ' ', empl_Apellidos) AS empl_Creador,
 		peor_DadoCliente, 
 		CASE peor_DadoCliente
 		WHEN 1 THEN 'Sí'
@@ -14430,13 +14435,15 @@ SELECT	peor_Id,
 		   (SELECT prod_Id,
 				   pedi_Id,
 				   pod.mate_Id,
-				   mate_Descripcion,
+				   COALESCE(mates.mate_Descripcion, 'No disponible') AS mate_Descripcion,
+				   (pod.prod_Cantidad * pod.prod_Precio) AS Total,
 				   prod_Cantidad,
 				   prod_Precio
    FROM Prod.tbPedidosOrdenDetalle pod
    INNER JOIN Prod.tbMateriales mates
    ON pod.mate_Id = mates.mate_Id
    WHERE po.peor_Id = pod.pedi_Id
+
 
    FOR JSON PATH) 
    AS Detalles
@@ -14448,46 +14455,77 @@ FROM	Prod.tbPedidosOrden po
 		LEFT JOIN  Adua.tbDuca        duca			    ON po.duca_Id = duca.duca_Id
 		LEFT JOIN  Acce.tbUsuarios    crea				ON crea.usua_Id = po.usua_UsuarioCreacion 
 		LEFT JOIN  Acce.tbUsuarios    modi				ON modi.usua_Id = po.usua_UsuarioModificacion 	
+		INNER JOIN Gral.tbEmpleados Emples				ON crea.empl_Id = Emples.empl_Id
+		   ORDER BY peor_FechaEntrada DESC 
 END
 GO
 
 --*****Insertar*****--
 
-CREATE OR ALTER PROCEDURE [Prod].[UDP_tbPedidosOrden_Insertar]
+CREATE OR ALTER PROCEDURE [Prod].[UDP_tbPedidosOrden_Insertar] 
+@peor_Codigo			NVARCHAR(100),
 @prov_Id				INT, 
 @duca_Id				INT, 
-@ciud_Id				INT,
+@ciud_Id				INT,	
 @peor_DireccionExacta	NVARCHAR(500),
 @peor_FechaEntrada		DATETIME, 
 @peor_Obsevaciones		NVARCHAR(100), 
+@peor_Impuestos			DECIMAL(8,2),
 @usua_UsuarioCreacion	INT, 
 @peor_FechaCreacion		DATETIME
 AS
 BEGIN
 	BEGIN TRY
-		INSERT INTO Prod.tbPedidosOrden (prov_Id, duca_Id,ciud_Id,peor_DireccionExacta, peor_FechaEntrada, peor_Obsevaciones, usua_UsuarioCreacion, peor_FechaCreacion)
-		VALUES	(@prov_Id,				
-				 @duca_Id,	
+
+	DECLARE @impuesto DECIMAL(8,2)
+		IF(@peor_Impuestos = 1)
+		BEGIN
+		 SET @impuesto = (SELECT TOP 1 impr_Valor FROM Prod.tbImpuestosProd)
+		END
+		ELSE 
+		BEGIN
+		 SET @impuesto = 0
+		END
+
+
+
+	DECLARE  @duca INT;
+		IF(@duca_Id = 0 )
+		BEGIN
+			SET @duca = NULL;
+		END
+		ELSE
+		BEGIN
+		 	SET @duca = @duca_Id;
+		END
+
+		INSERT INTO Prod.tbPedidosOrden (peor_Codigo, prov_Id, duca_Id,ciud_Id,peor_DireccionExacta, peor_FechaEntrada, peor_Obsevaciones, peor_Impuestos, usua_UsuarioCreacion, peor_FechaCreacion)
+		VALUES	(@peor_Codigo,
+				 @prov_Id,				
+				 @duca,	
 				 @ciud_Id,	
 				 @peor_DireccionExacta,
 				 @peor_FechaEntrada,		
-				 @peor_Obsevaciones,		
+				 @peor_Obsevaciones,	
+				 @impuesto,
 				 @usua_UsuarioCreacion,	
 				 @peor_FechaCreacion	
 				 )	
 		SELECT SCOPE_IDENTITY() AS Resultado
 	END TRY
+
+
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE() 
 	END CATCH
 END
-
 GO
 
 
 --*****Editar*****--
 
-CREATE OR ALTER   PROCEDURE [Prod].[UDP_tbPedidosOrden_Editar]
+CREATE OR ALTER PROCEDURE [Prod].[UDP_tbPedidosOrden_Editar]
+@peor_Codigo				NVARCHAR(100),
 @peor_Id					INT, 
 @prov_Id					INT, 
 @duca_Id					INT, 
@@ -14495,18 +14533,34 @@ CREATE OR ALTER   PROCEDURE [Prod].[UDP_tbPedidosOrden_Editar]
 @peor_DireccionExacta		NVARCHAR(500),
 @peor_FechaEntrada			DATETIME, 
 @peor_Obsevaciones			NVARCHAR(100), 
+@peor_Impuestos				DECIMAL(8,2),
 @usua_UsuarioModificacion	INT, 
 @peor_FechaModificacion		DATETIME
 AS
 BEGIN
 	BEGIN TRY
+
+		DECLARE @impuesto DECIMAL(8,2)
+		IF(@peor_Impuestos = 1)
+		BEGIN
+		 SET @impuesto = (SELECT TOP 1 impr_Valor FROM Prod.tbImpuestosProd)
+		END
+		ELSE 
+		BEGIN
+		 SET @impuesto = 0
+		END
+
+
 		UPDATE Prod.tbPedidosOrden 
-		SET prov_Id 				= @prov_Id, 
+		SET 
+		peor_Codigo				= @peor_Codigo,
+		prov_Id 					= @prov_Id, 
 		duca_Id						= @duca_Id,
 		ciud_Id						= @ciud_Id,
 		peor_DireccionExacta		= @peor_DireccionExacta,
 		peor_FechaEntrada			= @peor_FechaEntrada,	 
 		peor_Obsevaciones			= @peor_Obsevaciones,  
+		peor_Impuestos				= @impuesto,
 		usua_UsuarioModificacion	= @usua_UsuarioModificacion,
 		peor_FechaModificacion		= @peor_FechaModificacion	
 		WHERE peor_Id				= @peor_Id
@@ -15140,33 +15194,80 @@ GO
 
 ----------------------------UDPS Pedidos Orden Detalle-----------------------------
 --LISTAR
-CREATE OR ALTER   PROCEDURE [Prod].[UDP_tbPedidosOrdenDetalle_Listar] 
+CREATE OR ALTER PROCEDURE [Prod].[UDP_tbPedidosOrdenDetalle_Listar] 
 (
 @pedi_Id INT
 )
 AS
 BEGIN
-  SELECT    prod.prod_Id           
-		    ,prod.pedi_Id           
-		    ,prod.mate_Id       
-			,mate.mate_Descripcion
-		    ,prod.prod_Cantidad     
-			,prod.prod_Precio       
-		   		
-			,usu.usua_Id            
-			,usu.usua_Nombre         AS UsuarioCreacionNombre 
-			,prod_FechaCreacion    
+SELECT
+    prod.prod_Id,
+    prod.pedi_Id,
+    prod.mate_Id,
+    mate.mate_Descripcion,
+    prod.prod_Cantidad,
+    prod.prod_Precio,
+    usu.usua_Id,
+    usu.usua_Nombre AS UsuarioCreacionNombre,
+    prod_FechaCreacion,
+    usu1.usua_Id,
+    usu1.usua_Nombre AS UsuarioModificacionNombre,
+    prod_FechaModificacion,
+    (
+        SELECT
+            podetas.ocpo_Id,
+            podetas.prod_Id,
+			clie.clie_Nombre_O_Razon_Social,
+			orcomde.code_CantidadPrenda,
+			CASE code_Sexo
+			WHEN 'F' THEN 'Femenino'
+			WHEN NULL THEN 'N/A'
+			ELSE 'Masculino' END AS code_SexoEvaluado,
+			orcomde.code_Sexo,
+			CASE esti_Descripcion 
+			WHEN NULL THEN 'PO completa asignada'
+			ELSE esti_Descripcion END AS esti_DescripcionEvaludado,
+			esti.esti_Descripcion,
+			CASE colr_Nombre 
+			WHEN NULL THEN 'PO completa asignada'
+			ELSE colr_Nombre END AS colr_NombreEvaludado,
+			colr.colr_Nombre,
+			CASE tall_Nombre 
+			WHEN NULL THEN 'PO completa asignada'
+			ELSE tall_Nombre END AS tall_NombreEvaludado,
+			talla.tall_Nombre,
+			CASE podetas.code_Id 
+			WHEN NULL THEN 'PO completa asignada'
+			ELSE  podetas.code_Id  END AS code_IdEvaludado,
+            podetas.code_Id,
+            orcom.orco_Codigo AS orco_Id
+        FROM [Prod].[tbPODetallePorPedidoOrdenDetalle] podetas
+        LEFT JOIN [Prod].[tbOrdenCompra] orcom
+            ON orcom.orco_Id = podetas.orco_Id
+        INNER JOIN [Prod].[tbOrdenCompraDetalles] orcomde
+            ON orcomde.code_Id = podetas.code_Id
+		LEFT JOIN Prod.tbEstilos esti					
+			ON orcomde.esti_Id = esti.esti_Id
+		LEFT JOIN Prod.tbTallas talla					
+			ON orcomde.tall_Id = talla.tall_Id
+		LEFT JOIN Prod.tbColores colr					
+			ON orcomde.colr_Id = colr.colr_Id
+        INNER JOIN [Prod].[tbPedidosOrdenDetalle] pedisorde
+            ON pedisorde.prod_Id = podetas.prod_Id
+		LEFT JOIN Prod.tbClientes clie					
+			ON orcom.orco_IdCliente = clie.clie_Id
+        INNER JOIN [Prod].[tbPedidosOrden] pedisor
+            ON pedisor.peor_Id = pedisorde.pedi_Id
+        WHERE podetas.prod_Id = prod.prod_Id
+        FOR JSON PATH
+    ) AS detalles
+FROM Prod.tbPedidosOrdenDetalle prod
+INNER JOIN Prod.tbPedidosOrden pedi ON prod.pedi_Id = pedi.peor_Id
+INNER JOIN Acce.tbUsuarios usu ON usu.usua_Id = prod.usua_UsuarioCreacion
+LEFT JOIN Acce.tbUsuarios usu1 ON usu1.usua_UsuarioModificacion = prod.usua_UsuarioModificacion
+INNER JOIN Prod.tbMateriales mate ON prod.mate_Id = mate.mate_Id
+WHERE prod.prod_Estado = 1 AND prod.pedi_Id = @pedi_Id
 
-			,usu1.usua_Id          
-			,usu1.usua_Nombre        AS UsuarioModificacionNombre
-			,prod_FechaModificacion 
- 
-  FROM	    Prod.tbPedidosOrdenDetalle prod
-            INNER JOIN Prod.tbPedidosOrden pedi ON prod.pedi_Id = pedi.peor_Id
-			INNER JOIN Acce.tbUsuarios usu          ON usu.usua_Id = prod.usua_UsuarioCreacion 
-			LEFT JOIN Acce.tbUsuarios usu1          ON usu1.usua_UsuarioModificacion = prod.usua_UsuarioModificacion
-			INNER JOIN Prod.tbMateriales mate   ON prod.mate_Id = mate.mate_Id
-			WHERE prod.prod_Estado = 1 AND prod.pedi_Id = @pedi_Id
 END
 GO
 
@@ -15333,32 +15434,35 @@ END
 GO
 
 
-CREATE OR ALTER PROCEDURE Prod.UDP_tbPODetallePorPedidoOrdenDetalle_Insertar 
-	@prod_Id						INT,
-	@code_Id						INT,
-	@orco_Id						INT,
-	@usua_UsuarioCreacion			INT,
-	@ocpo_FechaCreacion				DATETIME 
+CREATE OR ALTER PROCEDURE [Prod].[UDP_tbPODetallePorPedidoOrdenDetalle_Insertar] 
+    @prod_Id INT,
+    @code_Id INT,
+    @orco_Id INT,
+    @usua_UsuarioCreacion INT,
+    @ocpo_FechaCreacion DATETIME 
 AS
 BEGIN
-	BEGIN TRY
-		INSERT INTO Prod.tbPODetallePorPedidoOrdenDetalle(prod_Id,
-														  code_Id,
-														  orco_Id,
-														  usua_UsuarioCreacion,
-														  ocpo_FechaCreacion)
-		VALUES (@prod_Id,
-				@code_Id,
-				@orco_Id,
-				@usua_UsuarioCreacion,
-				@ocpo_FechaCreacion)
+    BEGIN TRY
+        IF (@code_Id IS NULL OR @code_Id = 0)
+        BEGIN
+            INSERT INTO Prod.tbPODetallePorPedidoOrdenDetalle (prod_Id, code_Id, orco_Id, usua_UsuarioCreacion, ocpo_FechaCreacion)
+            SELECT DISTINCT @prod_Id, orcomde.code_Id, orcomde.orco_Id, @usua_UsuarioCreacion, @ocpo_FechaCreacion
+            FROM  [Prod].[tbOrdenCompraDetalles] orcomde
+            INNER JOIN [Prod].[tbOrdenCompra] orcom
+            ON orcom.orco_Id = orcomde.orco_Id
+            WHERE orcomde.orco_Id = @orco_Id
+        END
+        ELSE
+        BEGIN
+            INSERT INTO Prod.tbPODetallePorPedidoOrdenDetalle (prod_Id, code_Id, orco_Id, usua_UsuarioCreacion, ocpo_FechaCreacion)
+            VALUES (@prod_Id, @code_Id, @orco_Id, @usua_UsuarioCreacion, @ocpo_FechaCreacion)
+        END
 
-		SELECT 1
-
-	END TRY
-	BEGIN CATCH
-		SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END CATCH
+        SELECT 1
+    END TRY
+    BEGIN CATCH
+        SELECT 'Error Message: ' + ERROR_MESSAGE()
+    END CATCH
 END
 GO
 
