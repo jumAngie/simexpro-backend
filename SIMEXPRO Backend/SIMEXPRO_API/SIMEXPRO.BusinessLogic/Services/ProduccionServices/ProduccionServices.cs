@@ -3966,12 +3966,12 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
-        public ServiceResult SeguimientodePO(string orco_Codigo)
+        public ServiceResult SeguimientodePO(tbOrdenCompraDetalles tbOrdenCompraDetalles)
         {
             var result = new ServiceResult();
             try
             {
-                var list = _reportesRepository.SeguimientoDePO(orco_Codigo);
+                var list = _reportesRepository.SeguimientoDePO(tbOrdenCompraDetalles);
                 return result.Ok(list);
             }
             catch (Exception ex)

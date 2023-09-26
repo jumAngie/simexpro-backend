@@ -174,11 +174,11 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             return answer;
         }
 
-        public IEnumerable<tbOrdenCompraDetalles> SeguimientoDePO(string orco_Codigo)
+        public IEnumerable<tbOrdenCompraDetalles> SeguimientoDePO(tbOrdenCompraDetalles tbOrdenCompraDetalles)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             var parametros = new DynamicParameters();
-            parametros.Add("@orco_Codigo", orco_Codigo, DbType.String, ParameterDirection.Input);
+            parametros.Add("@orco_Codigo", tbOrdenCompraDetalles.orco_Codigo, DbType.String, ParameterDirection.Input);
          
             var answer = db.Query<tbOrdenCompraDetalles>(ScriptsDataBase.SeguimientoProcesos, parametros, commandType: CommandType.StoredProcedure);
             return answer;

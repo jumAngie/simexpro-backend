@@ -144,10 +144,10 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
         }
 
         [HttpPost("SeguimientodeProcesosporPO")]
-        public IActionResult SeguimientodeProcesosporPO(string orco_Codigo)
+        public IActionResult SeguimientodeProcesosporPO(OrdenCompraDetalleViewModel ordenCompraDetalleViewModel)
         {
-      
-            var listado = _produccionServices.SeguimientodePO(orco_Codigo);
+            var data = _mapper.Map<tbOrdenCompraDetalles>(ordenCompraDetalleViewModel);
+            var listado = _produccionServices.SeguimientodePO(data);
             return Ok(listado);
         }
 
