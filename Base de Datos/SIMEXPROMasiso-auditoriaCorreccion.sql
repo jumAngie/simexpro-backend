@@ -1873,7 +1873,7 @@ CREATE TABLE Adua.tbDocumentosContratos(
 	coin_Id								INT,
 	peju_Id								INT,
 	doco_Numero_O_Referencia			NVARCHAR(50) NOT NULL,
-	doco_TipoDocumento					NVARCHAR(6),
+	doco_TipoDocumento					NVARCHAR(7),
 	doco_URLImagen                      NVARCHAR(MAX),
 	doco_NombreImagen                   NVARCHAR(350),
 
