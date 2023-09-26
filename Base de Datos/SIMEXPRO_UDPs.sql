@@ -6053,7 +6053,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE adua.UDP_tbDeclaraciones_Valor_Tab1_Editar 
+CREATE OR ALTER   PROCEDURE Adua.UDP_tbDeclaraciones_Valor_Tab1_Editar 
 	@deva_Id							INT,
 	@deva_AduanaIngresoId				INT,
 	@deva_AduanaDespachoId				INT,
@@ -6155,7 +6155,7 @@ BEGIN
 
 						SET @impo_Id = (SELECT impo_Id 
 										FROM Adua.tbImportadores
-										WHERE decl_Id = 17)
+										WHERE decl_Id = @decl_Id)
 					END
 
 					--REVISAMOS SI EL DECLARANTE YA ESTÁ PRESENTE EN LA TABLA DE IMPORTADORES
@@ -6283,7 +6283,6 @@ BEGIN
 		ROLLBACK TRAN
 	END CATCH
 END
-GO
 
 CREATE OR ALTER PROCEDURE adua.UDP_tbDeclaraciones_Valor_Tab2_Insertar
 	@deva_Id						INT,
