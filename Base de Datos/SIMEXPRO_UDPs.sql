@@ -3034,7 +3034,9 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap2
 	@alde_Id					INT,
 	@colo_Id					INT,
 	@coin_NumeroLocalApart		NVARCHAR(150),
-	@coin_PuntoReferencia		NVARCHAR(200)
+	@coin_PuntoReferencia		NVARCHAR(200),
+	@usua_UsuarioModificacion	INT,
+	@coin_FechaModificacion		DATETIME
 
 AS
 BEGIN
@@ -3050,7 +3052,9 @@ BEGIN
 	 END
 		UPDATE Adua.tbComercianteIndividual
 		SET ciud_Id = @ciud_Id, alde_Id = @aldea, coin_PuntoReferencia = @coin_PuntoReferencia,
-		    colo_Id = @colo_Id, coin_NumeroLocalApart = @coin_NumeroLocalApart
+		    colo_Id = @colo_Id, coin_NumeroLocalApart = @coin_NumeroLocalApart,
+			usua_UsuarioModificacion = @usua_UsuarioModificacion,
+			coin_FechaModificacion = @coin_FechaModificacion
 		WHERE coin_Id = @coin_Id 
 		SELECT 1
 END TRY
@@ -3068,7 +3072,9 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap3
 	@coin_AldeaRepresentante			INT,
 	@coin_coloniaIdRepresentante		INT,
 	@coin_NumeroLocaDepartRepresentante NVARCHAR(150),
-	@coin_PuntoReferenciaReprentante	NVARCHAR(200)
+	@coin_PuntoReferenciaReprentante	NVARCHAR(200),
+	@usua_UsuarioModificacion			INT,
+	@coin_FechaModificacion				DATETIME
 AS
 BEGIN
 	BEGIN TRY
@@ -3087,7 +3093,9 @@ BEGIN
 		coin_AldeaRepresentante = @aldea,
 		coin_PuntoReferenciaReprentante = @coin_PuntoReferenciaReprentante,
 		coin_coloniaIdRepresentante = @coin_coloniaIdRepresentante,
-		coin_NumeroLocaDepartRepresentante = @coin_NumeroLocaDepartRepresentante
+		coin_NumeroLocaDepartRepresentante = @coin_NumeroLocaDepartRepresentante,
+		usua_UsuarioModificacion = @usua_UsuarioModificacion,
+		coin_FechaModificacion = @coin_FechaModificacion
 		WHERE coin_Id = @coin_Id AND [coin_Estado] = 1
 		SELECT 1
 END TRY
@@ -3102,7 +3110,9 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbComercianteIndividual_InsertarTap4
 	@coin_TelefonoCelular				NVARCHAR(20),
 	@coin_TelefonoFijo					NVARCHAR(20),
 	@coin_CorreoElectronico				NVARCHAR(30),
-	@coin_CorreoElectronicoAlternativo  NVARCHAR(30)
+	@coin_CorreoElectronicoAlternativo  NVARCHAR(30),
+	@usua_UsuarioModificacion			INT,
+	@coin_FechaModificacion				DATETIME
 AS
 	BEGIN
 	BEGIN TRY
@@ -3110,7 +3120,9 @@ AS
 		SET coin_TelefonoCelular = @coin_TelefonoCelular,
 			coin_TelefonoFijo = @coin_TelefonoFijo,
 			coin_CorreoElectronico = @coin_CorreoElectronico,
-			coin_CorreoElectronicoAlternativo = @coin_CorreoElectronicoAlternativo
+			coin_CorreoElectronicoAlternativo = @coin_CorreoElectronicoAlternativo,
+			usua_UsuarioModificacion = @usua_UsuarioModificacion,
+			coin_FechaModificacion = @coin_FechaModificacion
 		WHERE coin_Id = @coin_Id AND [coin_Estado] = 1
 		SELECT 1
 	END TRY
@@ -3216,6 +3228,11 @@ BEGIN
 			 [doco_TipoDocumento] = 'RTN-RL'
 			OR [doco_TipoDocumento] = 'DNI-RL')
 		END
+
+		UPDATE Adua.tbComercianteIndividual
+		SET usua_UsuarioModificacion = @usua_UsuarioModificacion,
+			coin_FechaModificacion = @doco_FechaModificacion
+		WHERE  coin_Id = @coin_Id
 
         SELECT 1
 	COMMIT TRAN	
@@ -3366,6 +3383,8 @@ BEGIN CATCH
 END CATCH
 END
 GO
+
+
 
 
 --*************** UDPS Para Tabla Persona Natural ************--
