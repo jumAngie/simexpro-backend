@@ -115,13 +115,13 @@ VALUES	('Area de Corte',1,1,GETDATE()),
 --***** INSERT TABLA TALLAS --******--
 GO
 INSERT INTO Prod.tbTallas (tall_Codigo,tall_Nombre,usua_UsuarioCreacion,tall_FechaCreacion)
-VALUES	('XXS'	,'Extra Extra Small',1,GETDATE()),
-		('XS'	,'Extra Small',1,GETDATE()),
-		('S'	,'Small',1,GETDATE()),
-		('M'	,'Medium',1,GETDATE()),
-		('L'	,'Large',1,GETDATE()),
-		('XL'	,'Extra Large',1,GETDATE()),
-		('XXL'	,'Extra Extra Large',1,GETDATE());
+VALUES	('XXS'	,'Extra Extra Small',2,GETDATE()),
+		('XS'	,'Extra Small',2,GETDATE()),
+		('S'	,'Small',2,GETDATE()),
+		('M'	,'Medium',2,GETDATE()),
+		('L'	,'Large',2,GETDATE()),
+		('XL'	,'Extra Large',2,GETDATE()),
+		('XXL'	,'Extra Extra Large',2,GETDATE());
 
 
 
@@ -570,3 +570,8 @@ VALUES	('54363244535', '08-07-2023', 1, 15000, 1, '08-07-2023'),
 		('83739333921', '09-06-2023', 3, 100000, 1, '09-06-2023')
 GO
 
+/*----------------------------------*/
+--***** INSERT TABLA REGIMENES ADUANEROS --******--
+GO
+INSERT INTO [Adua].[tbRegimenesAduaneros] (regi_Codigo, regi_Descripcion, usua_UsuarioCreacion, regi_FechaCreacion)
+VALUES	('4000'	,'Importación Definitva',1,GETDATE());

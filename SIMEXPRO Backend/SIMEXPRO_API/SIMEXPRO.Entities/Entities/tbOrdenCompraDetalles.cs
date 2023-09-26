@@ -66,6 +66,69 @@ namespace SIMEXPRO.Entities.Entities
         public DateTime? code_FechaModificacion { get; set; }
         public bool? code_Estado { get; set; }
 
+
+       
+        [NotMapped]
+        public string orco_Codigo { get; set; }
+
+        [NotMapped]
+        public string clie_Nombre_O_Razon_Social { get; set; }
+
+        [NotMapped]
+        public bool orco_EstadoFinalizado { get; set; }
+
+        [NotMapped]
+        public string orco_EstadoOrdenCompra { get; set; }
+
+        [NotMapped]
+        public string proc_Actual { get; set; }
+
+        [NotMapped]
+        public string proc_Comienza { get; set; }
+
+        [NotMapped]
+        public int OrdenProduccion { get; set; }
+
+        [NotMapped]
+        public int faex_Id { get; set; }
+
+        [NotMapped]
+        public DateTime FechaExportacion { get; set; }
+
+        [NotMapped]
+        public decimal CantidadExportada { get; set; }
+
+        [NotMapped]
+        public int fede_Cajas { get; set; }
+
+        [NotMapped]
+        public decimal fede_TotalDetalle { get; set; }
+
+
+        [NotMapped]
+        public string SeguimientoProcesos { get; set; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public virtual tbColores colr { get; set; }
         public virtual tbEstilos esti { get; set; }
         public virtual tbOrdenCompra orco { get; set; }

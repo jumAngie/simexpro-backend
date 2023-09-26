@@ -12,9 +12,21 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 {
     public class PersonaJuridicaRepository : IRepository<tbPersonaJuridica>
     {
-        public RequestStatus Delete(tbPersonaJuridica item)
+        public RequestStatus Delete(int peju_Id, int pers_Id)
         {
-            throw new NotImplementedException();
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@peju_Id", peju_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@pers_Id", pers_Id, DbType.Int32, ParameterDirection.Input);
+
+
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.EliminarJuridica, parametros, commandType: CommandType.StoredProcedure);
+            return new RequestStatus()
+            {
+                MessageStatus = respuesta
+            };
         }
 
         public tbPersonaJuridica Find(int? id)
@@ -93,6 +105,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             var parametros = new DynamicParameters();
 
             parametros.Add("@pers_RTN", item.pers_RTN, DbType.String, ParameterDirection.Input);
+            parametros.Add("@pers_Nombre", item.pers_Nombre, DbType.String, ParameterDirection.Input);
             parametros.Add("@ofic_Id", item.ofic_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@escv_Id", item.escv_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@ofpr_Id", item.ofpr_Id, DbType.Int32, ParameterDirection.Input);
@@ -109,12 +122,12 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return db.Query<tbPersonaJuridica>(ScriptsDataBase.ListarPersonaJuridica, null, commandType: CommandType.StoredProcedure);
         }
 
-        public RequestStatus FinalizarContrato(tbPersonaJuridica item)
+        public RequestStatus FinalizarContrato(int peju_Id)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
-            parametros.Add("@peju_Id", item.peju_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@peju_Id", peju_Id, DbType.Int32, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.FinalizarPersonaJuridica, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
             return result;
@@ -128,6 +141,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
             parametros.Add("@peju_Id", item.peju_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@pers_RTN", item.pers_RTN, DbType.String, ParameterDirection.Input);
+            parametros.Add("@pers_Nombre", item.pers_Nombre, DbType.String, ParameterDirection.Input);
             parametros.Add("@ofic_Id", item.ofic_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@escv_Id", item.escv_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@ofpr_Id", item.ofpr_Id, DbType.Int32, ParameterDirection.Input);
@@ -139,7 +153,9 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return result;
         }
 
-
-
+        public RequestStatus Delete(tbPersonaJuridica item)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

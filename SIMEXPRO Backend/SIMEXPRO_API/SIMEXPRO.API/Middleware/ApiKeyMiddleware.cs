@@ -59,7 +59,7 @@ namespace SIMEXPRO.API.Middleware
 
                 await _next(context);
             }
-            else if (context.Request.Path == "/api/Usuarios/UsuarioCorreo" || context.Request.Path == "/api/Usuarios/CambiarContrasenia")
+            else if (context.Request.Path == "/api/Usuarios/UsuarioCorreo" || context.Request.Path == "/api/Usuarios/CambiarContrasenia" || context.Request.Path == "/api/Duca/GenerarDuca" || context.Request.Path == "/api/RolesPorPantallas/DibujadoDeMenu")
             {
                 await _next(context);
             }

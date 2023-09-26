@@ -34,6 +34,16 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(list);
         }
 
+        [HttpPost("Listar_ById")]
+        public IActionResult List_ById(int id)
+        {
+            var list = _aduanaServices.ListarDuca_ById(id);
+
+            list.Data = _mapper.Map<IEnumerable<DucaViewModel>>(list.Data);
+
+            return Ok(list);
+        }
+
         [HttpGet("GenerarDuca")]
         public IActionResult Genera(int duca_Id)
         {
@@ -110,6 +120,13 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
         public IActionResult FinalizarDuca(int duca_Id)
         {
             var datos = _aduanaServices.FinalizarDuca(duca_Id);
+            return Ok(datos);
+        }
+
+        [HttpPost("CancelarEliminar")]
+        public IActionResult CancelarEliminarDuca(int duca_Id)
+        {
+            var datos = _aduanaServices.CancelarEliminarDuca(duca_Id);
             return Ok(datos);
         }
     }

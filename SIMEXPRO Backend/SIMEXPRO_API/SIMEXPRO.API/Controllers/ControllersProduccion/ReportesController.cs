@@ -110,5 +110,47 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             var listado = _produccionServices.DevasPendientes(fechaInicio, fechaFin);
             return Ok(listado);
         }
+
+        [HttpPost("MaterialesPorPO")]
+        public IActionResult MaterialesPorPO(OrdenCompraViewModel orden)
+        {
+            var data = _mapper.Map<tbOrdenCompra>(orden);
+            var listado = _produccionServices.MateriasDePO(data);
+            return Ok(listado);
+        }
+
+        [HttpPost("ProduccionAreas")]
+        public IActionResult ProduccionAreas(AreasViewModel orden)
+        {
+            var data = _mapper.Map<tbArea>(orden);
+            var listado = _produccionServices.ProduccionAreas(data);
+            return Ok(listado);
+        }
+        
+        [HttpPost("MaterialesIngreso")]
+        public IActionResult MaterialesIngreso(PedidosOrdenViewModel orden)
+        {
+            var data = _mapper.Map<tbPedidosOrden>(orden);
+            var listado = _produccionServices.MaterialesIngreso(data);
+            return Ok(listado);
+        }
+
+        [HttpGet("Contratos_Adhesion")]
+        public IActionResult Contratos_Adhesion(DateTime fechaInicio, DateTime fechaFin, string Contrato)
+        {
+            //var data = _mapper.Map<tbDeclaraciones_Valor>(orden);
+            var listado = _produccionServices.Contratos_Adhesion(fechaInicio, fechaFin, Contrato);
+            return Ok(listado);
+        }
+
+        [HttpPost("SeguimientodeProcesosporPO")]
+        public IActionResult SeguimientodeProcesosporPO(string orco_Codigo)
+        {
+      
+            var listado = _produccionServices.SeguimientodePO(orco_Codigo);
+            return Ok(listado);
+        }
+
+
     }
 }

@@ -73,12 +73,21 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(datos);
         }
 
-        //[HttpPost("Eliminar")]
-        //public IActionResult Eliminar(ComercianteIndividual comercianteIndividual)
-        //{
-        //    var mapped = _mapper.Map<tbComercianteIndividual>(comercianteIndividual);
-        //    var datos = _aduanaServices.EliminarComercianteIndividual(mapped);
-        //    return Ok(datos);
-        //}
+
+
+        [HttpPost("Eliminar")]
+        public IActionResult Eliminar(int coin_Id, int pers_Id)
+        {
+            var respuesta = _aduanaServices.EliminarComerciante(coin_Id, pers_Id);
+            return Ok(respuesta);
+        }
+
+
+        [HttpPost("FinalizarContrato")]
+        public IActionResult FinalizarContratoComerciante(int coin_Id)
+        {
+            var datos = _aduanaServices.FinalizarContratoComerciante(coin_Id);
+            return Ok(datos);
+        }
     }
 }

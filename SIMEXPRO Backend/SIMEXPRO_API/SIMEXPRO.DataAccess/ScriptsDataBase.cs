@@ -161,6 +161,7 @@ namespace SIMEXPRO.DataAccess
 
         #region Aduanas
         public static string ListarAduanas = "Adua.UDP_tbAduanas_Listar";
+        public static string ListarAduanasById = "Adua.UDP_tbAduanas_Listar_ById";
         public static string InsertarAduanas = "Adua.UDP_tbAduanas_Insertar";
         public static string EditarAduanas = "Adua.UDP_tbAduanas_Editar";
         public static string EliminarAduanas = "Adua.UDP_tbAduanas_Eliminar";
@@ -207,6 +208,8 @@ namespace SIMEXPRO.DataAccess
         public static string InsertarComercianteIndividualTap4 = "Adua.UDP_tbComercianteIndividual_InsertarTap4";
 
         public static string EditarComercianteIndividual = "Adua.UDP_tbComercianteIndividual_Editar";
+        public static string EliminarComerciante = "Adua.UDP_tbComercianteIndividual_Eliminar";
+        public static string FinalizarContratoComerciante = "Adua.UDP_tbComercianteIndividual_FinalizarContrato";
 
         #endregion
 
@@ -300,6 +303,7 @@ namespace SIMEXPRO.DataAccess
 
         #region Duca
         public static string ListarDuca = "Adua.UDP_tbDuca_Listar";
+        public static string ListarDuca_ById = "Adua.UDP_tbDuca_Listar_ById";
         public static string ListarDevaNoDuca = "Adua.UDP_tbDUCA_PreInsertarListado";
 
         public static string PreInsertDuca = "Adua.UDP_tbDuca_PreInsertar";
@@ -312,6 +316,8 @@ namespace SIMEXPRO.DataAccess
 
         public static string InsertarDucaTAP3 = "Adua.UDP_tbDuca_InsertarTab3";
         public static string EditarDucaTAP3 = "Adua.UDP_tbDuca_EditarTab3";
+
+        public static string CancelarEliminarDuca = "Adua.UDP_tbDuca_CancelarEliminarDuca";
 
         public static string FinalizarDuca = "Adua.UDP_tbDuca_Finalizado";
         #endregion
@@ -425,6 +431,7 @@ namespace SIMEXPRO.DataAccess
         public static string InsertarPersonaJuridicaTap4 = "Adua.UDP_tbPersonaJuridica_InsertarTab4";
         public static string EditarPersonaJuridica = "Adua.UDP_tbPersonaJuridica_Editar";
         public static string FinalizarPersonaJuridica = "Adua.UDP_tbPersonaJuridica_ContratoFinalizado";
+        public static string EliminarJuridica = "Adua.UDP_tbPersonaJuridica_Eliminar";
         #endregion
 
         #region Persona Natural
@@ -484,6 +491,7 @@ namespace SIMEXPRO.DataAccess
         public static string LitarItemDEVAxDuca = "Adua.UPD_tbItemsDEVAPorDuca_DEVAsPorDUCANo";
         public static string InsertarItemDEVAxDuca = "Adua.UDP_tbItemsDEVAPorDuca_InsertarDuca";
         public static string EditarItemDevaxDuca = "Adua.UDP_tbItemsDEVAPorDuca_Editar";
+        public static string LiberarDevasPorDucaId = "Adua.UDP_tbItemsDEVAPorDuca_LiberarDevasPorDucaId";
         #endregion
 
         #endregion
@@ -705,6 +713,7 @@ namespace SIMEXPRO.DataAccess
         public static string InsertarPedidosOrden = "Prod.UDP_tbPedidosOrden_Insertar";
         public static string EditarPedidosOrden = "Prod.UDP_tbPedidosOrden_Editar";
         public static string FinalizarPedidosOrden = "Prod.UDP_tbPedidosOrden_Finalizado";
+        public static string PedidosOrdenFind = "Prod.UDP_tbPedidosOrden_FindCodigo";
         #endregion
 
         #region Orden de Pedido Detalles
@@ -806,6 +815,15 @@ namespace SIMEXPRO.DataAccess
         public static string Inventario = "Prod.UDP_Reporte_Inventaro";
         public static string Importaciones = "adua.UDP_Reporte_Importaciones";
         public static string DevaPendiente = "adua.UDP_Reporte_DevasPendientes";
+        public static string MateriasDePO = "Prod.UDP_Reportes_MateriasDePO";
+        public static string ProduccionAreas = "Prod.UDP_Reporte_ProduccionAreas";
+        public static string MaterialesIngreso = "Prod.UDP_Reportes_MaterialesIngreso";
+
+        public static string Contrato_PN = "Adua.UDP_Reporte_Contratos_Persona_Natural_Por_Fecha";
+        public static string Contrato_PJ = "Adua.UDP_Reporte_Contratos_Persona_Juridica_Por_Fecha";
+        public static string Contrato_CI = "Adua.UDP_Reporte_Contratos_Comerciante_Individual_Por_Fecha";
+
+        public static string SeguimientoProcesos = "Prod.UDP_ReporteSeguimientoProcesosPO";
 
         #endregion
 

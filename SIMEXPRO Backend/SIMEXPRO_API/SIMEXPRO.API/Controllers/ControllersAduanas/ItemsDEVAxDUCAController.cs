@@ -54,5 +54,12 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             var respuesta = _aduanaServices.ActualizarItemsDEVAxDUCA(item);
             return Ok(respuesta);
         }
+
+        [HttpPost("LiberarDevasPorDucaId")]
+        public IActionResult LiberarDevasPorDucaId(int duca_Id)
+        {
+            var respuesta = _aduanaServices.LiberarDevasPorDucaId(duca_Id);
+            return Ok(respuesta);
+        }
     }
 }

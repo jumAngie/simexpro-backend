@@ -31,7 +31,6 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return db.Query<tbDeclaraciones_Valor>(ScriptsDataBase.ListarDevaNoDuca, null, commandType: CommandType.StoredProcedure);
         }
 
-
         public RequestStatus PreInsert()
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
@@ -65,6 +64,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parameters.Add("@duca_Lugar_Desembarque", item.duca_Lugar_Desembarque, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Manifiesto", item.duca_Manifiesto, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Titulo", item.duca_Titulo, DbType.String, ParameterDirection.Input);
+            parameters.Add("@duca_Ventaja", item.duca_Ventaja, DbType.String, ParameterDirection.Input);
 
             parameters.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@duca_FechaCreacion", item.duca_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
@@ -116,6 +116,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
             return new RequestStatus()
             {
+                CodeStatus = respuesta.Contains("Error") ? 0 : 1,
                 MessageStatus = respuesta
             };
         }
@@ -152,6 +153,16 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return db.Query<tbDuca>(ScriptsDataBase.ListarDuca, null, commandType: System.Data.CommandType.StoredProcedure);
         }
 
+        public IEnumerable<tbDuca> List_ById(int id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@duca_Id", id, DbType.Int32, ParameterDirection.Input);
+            return db.Query<tbDuca>(ScriptsDataBase.ListarDuca_ById, parametros, commandType: System.Data.CommandType.StoredProcedure);
+        }
+
 
         public IEnumerable<VW_tbDuca_GenerarDuca> generarDuca(int duca_Id)
         {
@@ -181,6 +192,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parameters.Add("@duca_Lugar_Desembarque", item.duca_Lugar_Desembarque, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Manifiesto", item.duca_Manifiesto, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Titulo", item.duca_Titulo, DbType.String, ParameterDirection.Input);
+            parameters.Add("@duca_Ventaja", item.duca_Ventaja, DbType.String, ParameterDirection.Input);
 
             parameters.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@duca_FechaModificacion", item.duca_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
@@ -208,8 +220,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parameters.Add("@duca_Codigo_Transportista", item.duca_Codigo_Transportista, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Transportista_Nombre", item.duca_Transportista_Nombre, DbType.String, ParameterDirection.Input);
             parameters.Add("@motr_Id", item.motr_Id, DbType.Int32, ParameterDirection.Input);
+            
             parameters.Add("@duca_Conductor_Id", item.duca_Conductor_Id, DbType.Int32, ParameterDirection.Input);
-
             parameters.Add("@cont_NoIdentificacion", item.cont_NoIdentificacion, DbType.String, ParameterDirection.Input);
             parameters.Add("@cont_Licencia", item.cont_Licencia, DbType.String, ParameterDirection.Input);
             parameters.Add("@pais_IdExpedicion", item.pais_IdExpedicion, DbType.Int32, ParameterDirection.Input);
@@ -273,6 +285,20 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             
             return new RequestStatus() 
             { 
+                CodeStatus = answer != "1" ? 0 : int.Parse(answer),
+                MessageStatus = answer
+            };
+        }
+
+        public RequestStatus CancelarEliminarDuca(int duca_Id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@duca_Id", duca_Id, DbType.Int32, ParameterDirection.Input);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.CancelarEliminarDuca, parametros, commandType: CommandType.StoredProcedure);
+
+            return new RequestStatus()
+            {
                 CodeStatus = answer != "1" ? 0 : int.Parse(answer),
                 MessageStatus = answer
             };

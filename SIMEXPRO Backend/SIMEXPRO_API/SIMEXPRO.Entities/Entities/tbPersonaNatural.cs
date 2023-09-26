@@ -12,6 +12,8 @@ namespace SIMEXPRO.Entities.Entities
         public int pena_Id { get; set; }
         public int pers_Id { get; set; }
         public string pena_DireccionExacta { get; set; }
+        [NotMapped]
+        public string Cliente { get; set; }
         public int ciud_Id { get; set; }
 
         [NotMapped]
@@ -61,6 +63,19 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
 
         public string ofpr_Nombre { get; set; }
+
+        [NotMapped]
+        public string peju_CiudadRepresentanteNombre { get; set; }
+        [NotMapped]
+        public string peju_ColoniaRepresentanteNombre { get; set; }
+        [NotMapped]
+        public string peju_AldeaRepresentanteNombre { get; set; }
+        [NotMapped]
+        public string pers_Nombre { get; set; }
+        [NotMapped]
+        public string colo_Nombre { get; set; }
+        [NotMapped]
+        public string alde_Nombre { get; set; }
 
         public virtual tbCiudades ciud { get; set; }
         public virtual tbPersonas pers { get; set; }

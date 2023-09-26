@@ -19,22 +19,22 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public string ofpr_Nombre { get; set; }
 
         //tab2
-        public int colo_Id { get; set; }
+        public int? colo_Id { get; set; }
         public string ColiniaEmpresa { get; set; }
-        public int ciud_Id { get; set; }
+        public int? ciud_Id { get; set; }
         public string CiudadEmpresa { get; set; }
-        public int alde_Id { get; set; }
+        public int? alde_Id { get; set; }
         public string AldeaEmpresa { get; set; }
         public int pvin_Id { get; set; }
         public string ProvinciaEmpresa { get; set; }
         public string peju_PuntoReferencia { get; set; }
 
         //tab3
-        public int peju_ColoniaRepresentante { get; set; }
+        public int? peju_ColoniaRepresentante { get; set; }
         public string ColoniaRepresentante { get; set; }
-        public int peju_CiudadIdRepresentante { get; set; }
+        public int? peju_CiudadIdRepresentante { get; set; }
         public string CiudadRepresentante { get; set; }
-        public int peju_AldeaIdRepresentante { get; set; }
+        public int? peju_AldeaIdRepresentante { get; set; }
         public string AldeaRepresemtante { get; set; }
         public int ProvinciaIdRepresentante { get; set; }
         public string ProvinciaRepresentante { get; set; }
@@ -62,5 +62,14 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public string usuarioModificaNombre { get; set; }
         public DateTime? peju_FechaModificacion { get; set; }
         public bool? peju_Estado { get; set; }
+
+
+        public string peju_CiudadRepresentanteNombre { get; set; }
+        public string peju_ColoniaRepresentanteNombre { get; set; }
+        public string peju_AldeaRepresentanteNombre { get; set; }
+        public string pers_Nombre { get; set; }
+        public string ciud_Nombre { get; set; }
+        public string colo_Nombre { get; set; }
+        public string alde_Nombre { get; set; }
     }
 }

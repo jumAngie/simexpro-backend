@@ -27,6 +27,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
+            parametros.Add("@peor_Codigo", item.peor_Codigo, DbType.String, ParameterDirection.Input);
             parametros.Add("@prov_Id", item.prov_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@duca_Id", item.duca_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@ciud_Id", item.ciud_Id, DbType.Int32, ParameterDirection.Input);
@@ -56,6 +57,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
+            parametros.Add("@peor_Codigo", item.peor_Codigo, DbType.String, ParameterDirection.Input);
             parametros.Add("@peor_Id", item.peor_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@prov_Id", item.prov_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@duca_Id", item.duca_Id, DbType.Int32, ParameterDirection.Input);
@@ -81,6 +83,15 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             var answer = db.QueryFirst<string>(ScriptsDataBase.FinalizarPedidosOrden, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
             return result;
+        }
+
+        public IEnumerable<tbPedidosOrden> PedidoOrdenFind(string peor_Codigo)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new();
+            var parametros = new DynamicParameters();
+            parametros.Add("@peor_Codigo", peor_Codigo, DbType.String, ParameterDirection.Input);
+            return db.Query<tbPedidosOrden>(ScriptsDataBase.PedidosOrdenFind, parametros, commandType: CommandType.StoredProcedure);
         }
     }
 }

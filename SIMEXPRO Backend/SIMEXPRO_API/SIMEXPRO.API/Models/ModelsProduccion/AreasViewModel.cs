@@ -29,6 +29,17 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public string usuarioEliminacion { get; set; }
         public DateTime? tipa_FechaEliminacion { get; set; }
         public bool? tipa_Estado { get; set; }
+        public DateTime? fechaInicio { get; set; }
+        public DateTime? fechaFin { get; set; }
+        public Decimal? porcentajeDanado { get; set; }
+        public Decimal? porcentajeBueno { get; set; }
+        public int? totalPeriodo { get; set; }
+        public int? totalDanado { get; set; }
+        public int? totalExitoso { get; set; }
+        public int? promedioDia { get; set; }
+        public int? promedioDanado { get; set; }
+        public int? promedioExitoso { get; set; }
+        public String? detalles { get; set; }
 
     }
 }

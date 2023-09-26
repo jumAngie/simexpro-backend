@@ -9,8 +9,8 @@ namespace SIMEXPRO.API.Models.ModelsAduana
     {
         public int pers_Id { get; set; }
         public string pers_RTN { get; set; }
+        public string pers_Nombre { get; set; }
         public int ofic_Id { get; set; }
-
          public string ofic_Nombre { get; set; }
         public int escv_Id { get; set; }
          public string escv_Nombre { get; set; }

@@ -32,6 +32,14 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(listado);
         }
 
+        [HttpGet("Listar_ById")]
+        public IActionResult Listar_ById(int id)
+        {
+            var listado = _aduanaServices.ListarAduanas_ById(id);
+            listado.Data = _mapper.Map<IEnumerable<AduanasViewModel>>(listado.Data);
+            return Ok(listado);
+        }
+
         [HttpPost("Insertar")]
         public IActionResult Insertar(AduanasViewModel aduanas)
         {

@@ -542,12 +542,20 @@ VALUES	('0001', 'ADUANA AMAPALA', '1st Street, Amapala, Valle, Honduras', 1, GET
 		('6386', 'INDUSTRIA RESINERA BAHR, S. A.', '12345 Elm Street, Comayagua, Honduras', 1, GETDATE()),
 		('6387', 'SOUTHERN APPAREL CONTRACTORS S.A.', '67890 Oak Avenue, Siguatepeque, Honduras', 1, GETDATE()),
 		('6388', 'CORINFAR S A DE C V', '24680 Maple Lane, San Pedro Sula, Honduras', 1, GETDATE()),
-		('6389', 'SOUTHERN APPAREL CONTRACTORS SA', '13579 Pine Road, Tegucigalpa, Honduras', 1, GETDATE()),
-		('6392', 'GLOBAL PRINTING SOLUTIONS DE HONDURAS SOCIEDAD ANO', '97531 Cedar Avenue, La Ceiba, Honduras', 1, GETDATE()),
-		('9100', 'ZEDE MORAZAN', '24680 Elm Street, San Pedro Sula, Honduras', 1, GETDATE()),
-		('9101', 'ZEDE ORQUIDEA', '13579 Oak Avenue, Tegucigalpa, Honduras', 1, GETDATE()),
-		('9102', 'ZEDE PROSPERA', '67890 Maple Lane, La Ceiba, Honduras', 1, GETDATE());
-
+		('6389', 'Southern Apparel Contractors SA', '13579 Pine Road, Tegucigalpa, Honduras', 1, GETDATE()),
+		('6392', 'Global Printing Solutions de Honduras Sociedad ANO', '97531 Cedar Avenue, La Ceiba, Honduras', 1, GETDATE()),
+		('9100', 'Zede Morazan', '24680 Elm Street, San Pedro Sula, Honduras', 1, GETDATE()),
+		('9101', 'Zede ORQUIDEA', '13579 Oak Avenue, Tegucigalpa, Honduras', 1, GETDATE()),
+		('9102', 'Zede Prospera', '67890 Maple Lane, La Ceiba, Honduras', 1, GETDATE());
+GO
+		UPDATE [Adua].[tbAduanas]
+			SET [adua_Nombre] = 
+			CONCAT(
+			UPPER(LEFT([adua_Nombre], 1)),
+			LOWER(SUBSTRING([adua_Nombre], 2, LEN([adua_Nombre])))
+				)
+		WHERE [adua_Nombre] COLLATE Latin1_General_BIN LIKE '[A-Z]%'
+GO
 
 /*-----------------------------------------------*/
 --***** INSERT TABLA TIPO INTERMEDIARIO --******--

@@ -23,6 +23,7 @@ namespace SIMEXPRO.Entities.Entities
         public int? usua_UsuarioModificacion { get; set; }
         public DateTime? coin_FechaModificacion { get; set; }
         public bool? coin_Estado { get; set; }
+        public bool? coin_Finalizacion { get; set; }
         public int? ciud_Id { get; set; }
         public int? alde_Id { get; set; }
         public int? coin_CiudadRepresentante { get; set; }
@@ -31,19 +32,13 @@ namespace SIMEXPRO.Entities.Entities
         public string coin_NumeroLocalApart { get; set; }
         public int? coin_coloniaIdRepresentante { get; set; }
         public string coin_NumeroLocaDepartRepresentante { get; set; }
-    
-        [NotMapped]
-        public string doco_Numero_O_Referencia { get; set; }
-        [NotMapped]
-        public string doco_TipoDocumento { get; set; }
-        [NotMapped]
-        public string doco_URLImagen { get; set; }
-        [NotMapped]
-        public string doco_NombreImagen { get; set; }
+
 
 
         [NotMapped]
         public string pers_RTN { get; set; }
+        [NotMapped]
+        public string pers_Nombre { get; set; }
         [NotMapped]
         public int escv_Id { get; set; }
         [NotMapped]

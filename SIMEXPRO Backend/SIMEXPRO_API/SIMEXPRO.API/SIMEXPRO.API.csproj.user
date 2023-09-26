@@ -7,7 +7,7 @@
     <ActiveDebugProfile>IIS Express</ActiveDebugProfile>
     <Controller_SelectedScaffolderID>ApiControllerEmptyScaffolder</Controller_SelectedScaffolderID>
     <Controller_SelectedScaffolderCategoryPath>root/Common/Api</Controller_SelectedScaffolderCategoryPath>
-    <NameOfLastUsedPublishProfile>C:\Users\eders\OneDrive\Documentos\GitHub\simexpro-backend\SIMEXPRO Backend\SIMEXPRO_API\SIMEXPRO.API\Properties\PublishProfiles\practicaacademia.somee.com.pubxml</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>ahmsimexpro.somee.com</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>

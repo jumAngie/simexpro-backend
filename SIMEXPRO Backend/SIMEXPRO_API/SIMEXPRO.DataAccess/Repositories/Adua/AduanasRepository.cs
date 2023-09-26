@@ -54,6 +54,14 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return db.Query<tbAduanas>(ScriptsDataBase.ListarAduanas, null, commandType: CommandType.StoredProcedure);
         }
 
+        public IEnumerable<tbAduanas> List_ById(int id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@adua_Id", id, DbType.Int32, ParameterDirection.Input);
+            return db.Query<tbAduanas>(ScriptsDataBase.ListarAduanasById, parametros, commandType: CommandType.StoredProcedure);
+        }
+
         public RequestStatus Update(tbAduanas item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
