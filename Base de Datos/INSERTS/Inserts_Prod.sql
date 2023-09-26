@@ -570,3 +570,8 @@ VALUES	('54363244535', '08-07-2023', 1, 15000, 1, '08-07-2023'),
 		('83739333921', '09-06-2023', 3, 100000, 1, '09-06-2023')
 GO
 
+/*----------------------------------*/
+--***** INSERT TABLA REGIMENES ADUANEROS --******--
+GO
+INSERT INTO [Adua].[tbRegimenesAduaneros] (regi_Codigo, regi_Descripcion, usua_UsuarioCreacion, regi_FechaCreacion)
+VALUES	('4000'	,'Importación Definitva',1,GETDATE());
