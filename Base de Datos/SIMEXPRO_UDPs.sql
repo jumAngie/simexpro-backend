@@ -11465,6 +11465,9 @@ BEGIN
 			,ordenCompraDetalle.tall_Id
 			,orco.orco_FechaEmision
 			,orco.orco_FechaLimite
+			,(SELECT COUNT(orco_Id)
+			 FROM Prod.tbOrdenCompraDetalles
+			 WHERE orco_Id = orco.orco_Id) AS cantidad_Items
 			,CONCAT(talla.tall_Codigo, ' (', talla.tall_Nombre, ')') AS tall_Nombre
 			,ordenCompraDetalle.colr_Id
 			,colores.colr_Nombre
