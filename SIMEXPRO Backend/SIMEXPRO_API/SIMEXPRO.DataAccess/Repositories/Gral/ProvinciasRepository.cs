@@ -80,7 +80,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Gral
             parametros.Add("@pais_Id", pais_Id, DbType.String, ParameterDirection.Input);
             parametros.Add("@pvin_EsAduana", pvin_EsAduana, DbType.Boolean, ParameterDirection.Input);
 
-            return db.Query<tbProvincias>(ScriptsDataBase.ProvinciasPorPais, parametros, commandType: CommandType.StoredProcedure);
+            return db.Query<tbProvincias>(ScriptsDataBase.ProvinciaPaisYesAduana, parametros, commandType: CommandType.StoredProcedure);
         }
 
         public RequestStatus Update(tbProvincias item)
