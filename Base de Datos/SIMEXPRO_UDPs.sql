@@ -17817,3 +17817,26 @@ BEGIN
 	END CATCH
 END
 GO
+
+/*Cambiar Foto de Perfil */
+
+CREATE OR ALTER PROCEDURE acce.UDP_tbUsuarios_CambiarFoto
+	@usua_Id					INT,
+	@usua_Image					NVARCHAR(MAX),
+	@usua_UsuarioModificacion	INT,
+	@usua_FechaModificacion		DATE
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE  acce.tbUsuarios
+		SET		usua_Image = @usua_Image,
+				usua_UsuarioModificacion = @usua_UsuarioModificacion,
+				usua_FechaModificacion = @usua_FechaModificacion 
+		WHERE	usua_Id = @usua_Id
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 0
+	END CATCH
+END
+GO
