@@ -1893,6 +1893,28 @@ BEGIN
 END
 GO
 
+/* Listar Provincias por Pais con condicion */
+CREATE OR ALTER   PROCEDURE Gral.UDP_FiltrarProvinciasPorPaisYaduana
+@pais_Id INT,
+@pvin_EsAduana BIT
+AS
+BEGIN
+	SELECT	pvin_Id, 
+			pvin_Nombre, 
+			pvin_Codigo, 
+			provincia.pais_Id, 
+			pais.pais_Codigo,
+			pais.pais_Nombre, 
+			pvin_Estado
+	FROM Gral.tbProvincias AS provincia INNER JOIN Gral.tbPaises AS pais
+	ON  provincia.pais_Id = pais.pais_Id
+	WHERE provincia.pais_Id = @pais_Id AND provincia.pvin_Estado = 1
+	AND pvin_EsAduana = @pvin_EsAduana
+END
+GO
+
+--- *********************** -----
+
 --************ALDEAS******************--
 /*Listar ALDEAS*/
 CREATE OR ALTER PROCEDURE Gral.UDP_tbAldeas_Listar
