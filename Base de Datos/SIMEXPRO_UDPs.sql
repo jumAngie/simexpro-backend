@@ -11460,6 +11460,7 @@ BEGIN
 	SELECT	 ordenCompraDetalle.code_Id
 			,ordenCompraDetalle.orco_Id
 			,ordenCompraDetalle.esti_Id
+			,ordenCompraDetalle.proc_IdComienza AS proc_Id
 			,orco.orco_Codigo
 			,estilo.esti_Descripcion
 			,ordenCompraDetalle.tall_Id
@@ -15002,15 +15003,16 @@ CREATE OR ALTER   PROCEDURE [Prod].[UDP_tbProcesoPorOrdenCompraDetalle_Listado_P
 AS
 BEGIN
 	BEGIN TRY
-		SELECT	PPOCD.[poco_Id], 
-				PPOCD.[code_Id], 
-				PPOCD.[proc_Id], 
-				PROCE.[proc_Descripcion],
-				PPOCD.[usua_UsuarioCreacion], 
-				PPOCD.[poco_FechaCreacion], 
-				PPOCD.[usua_UsuarioModificacion], 
-				PPOCD.[poco_FechaModificacion], 
-				PPOCD.[code_Estado]
+		SELECT	PPOCD.poco_Id, 
+				PPOCD.code_Id, 
+				PPOCD.proc_Id, 
+				PROCE.proc_Descripcion,
+				PPOCD.usua_UsuarioCreacion, 
+				PPOCD.poco_FechaCreacion, 
+				PPOCD.usua_UsuarioModificacion, 
+				PPOCD.poco_FechaModificacion, 
+				PPOCD.code_Estado,
+				PROCE.proc_CodigoHtml
 		FROM Prod.tbProcesoPorOrdenCompraDetalle PPOCD
 			INNER JOIN Prod.tbOrdenCompraDetalles OCD
 			ON PPOCD.code_Id = OCD.code_Id
