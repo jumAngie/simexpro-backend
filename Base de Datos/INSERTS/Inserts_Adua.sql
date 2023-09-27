@@ -81351,3 +81351,15 @@ INSERT INTO Adua.tbCondiciones(deva_Id, codi_Restricciones_Utilizacion, codi_Ind
 VALUES
         (1, 0, '', 0, '', 0, 0, '', 0, 0, '', 0, '', 1, GETDATE())
 
+/*------------------------------*/
+--****** INSERT TABLA TRATADOS LIBRE COMERCIO *****--
+INSERT INTO Adua.tbTratadosLibreComercio([trli_NombreTratado], [trli_FechaInicio], [usua_UsuarioCreacion], [trli_FechaCreacion], [usua_UsuarioModificacion], [trli_FechaModificacion])
+VALUES ('TLC - México - Centroamérica ','01/01/2013')
+GO
+
+INSERT INTO Adua.tbTratadosLibreComercio([trli_NombreTratado], [trli_FechaInicio], [usua_UsuarioCreacion], [trli_FechaCreacion], [usua_UsuarioModificacion], [trli_FechaModificacion])
+VALUES ('TLC - CAFTA-DR - Centroamérica - Estados Unidos - República Dominicana','01/04/2006')
+GO
+
+INSERT INTO Adua.tbTratadosLibreComercio([trli_NombreTratado], [trli_FechaInicio], [usua_UsuarioCreacion], [trli_FechaCreacion], [usua_UsuarioModificacion], [trli_FechaModificacion])
+VALUES ('TLCTLC -  Centroamérica - Unión Europea','01/08/2013')

@@ -3075,8 +3075,53 @@ CREATE TABLE Adua.tbItemsDEVAPorDuca (
 		CONSTRAINT FK_Acce_tbUsuarios_Adua_tbItemsDEVAPorDuca_usua_UsuarioCreacion 			FOREIGN KEY (usua_UsuarioCreacion)		REFERENCES Acce.tbUsuarios(usua_Id),
 		CONSTRAINT FK_Acce_tbUsuarios_Adua_tbItemsDEVAPorDuca_usua_UsuarioModificacion		FOREIGN KEY (usua_UsuarioModificacion)	REFERENCES Acce.tbUsuarios(usua_Id),
 );
+GO
 
+CREATE TABLE Adua.tbTratadosLibreComercio(
+	trli_Id						INT IDENTITY(1,1),
+	trli_NombreTratado			NVARCHAR(500) NOT NULL,
+	trli_FechaInicio			DATE NOT NULL,
+	usua_UsuarioCreacion		INT NOT NULL,
+	trli_FechaCreacion			DATETIME NOT NULL,
+	usua_UsuarioModificacion	INT,
+	trli_FechaModificacion		DATETIME
 
+	CONSTRAINT PK_Adua_tbTratadosLibreComercio_trli_Id											PRIMARY KEY (trli_Id),
+	CONSTRAINT FK_Acce_tbUsuarios_Adua_tbTratadosLibreComercio_usua_UsuarioCreacion 			FOREIGN KEY (usua_UsuarioCreacion)		REFERENCES Acce.tbUsuarios(usua_Id),
+	CONSTRAINT FK_Acce_tbUsuarios_Adua_tbTratadosLibreComercio_usua_UsuarioModificacion			FOREIGN KEY (usua_UsuarioModificacion)	REFERENCES Acce.tbUsuarios(usua_Id),
+);
+
+GO
+
+CREATE TABLE Adua.tbPaisesEstanTratadosConHonduras(
+	patr_Id						INT IDENTITY(1,1),
+	trli_Id						INT,
+	pais_Id						INT,
+	usua_UsuarioCreacion		INT NOT NULL,
+	patr_FechaCreacion			DATETIME NOT NULL,
+	usua_UsuarioModificacion	INT,
+	patr_FechaModificacion		DATETIME
+
+	CONSTRAINT PK_Adua_tbPaisesEstanTratadoConHonduras_patr_Id											PRIMARY KEY(patr_Id),
+	CONSTRAINT FK_Adua_tbPaisesEstanTratadoConHonduras_Adua_tbTratadosLibreComercio_trli_Id 			FOREIGN KEY (trli_Id)		REFERENCES Adua.tbTratadosLibreComercio(trli_Id),
+	CONSTRAINT FK_Adua_tbPaisesEstanTratadoConHonduras_Gral_tbPaises_pais_Id							FOREIGN KEY (pais_Id)		REFERENCES Gral.tbPaises(pais_Id),
+
+	CONSTRAINT FK_Acce_tbUsuarios_Adua_tbPaisesEstanTratadoConHonduras_usua_UsuarioCreacion 			FOREIGN KEY (usua_UsuarioCreacion)		REFERENCES Acce.tbUsuarios(usua_Id),
+	CONSTRAINT FK_Acce_tbUsuarios_Adua_tbPaisesEstanTratadoConHonduras_usua_UsuarioModificacion			FOREIGN KEY (usua_UsuarioModificacion)	REFERENCES Acce.tbUsuarios(usua_Id),
+);
+GO
+
+CREATE TABLE Adua.tbArancelesPorTratados(
+	axtl_Id					INT IDENTITY(1,1),
+	aran_Id					INT NOT NULL,
+	trli_Id					INT NOT NULL,
+	axtl_TasaActual			DECIMAL(18,4) NOT NULL,
+	usua_usuarioCreacion	INT NOT NULL,
+	axtl_FechaCreacion		DATETIME  NOT NULL
+
+	CONSTRAINT PK_Adua_tbArancelesPorTratados_axtl_Id											PRIMARY KEY(axtl_Id),
+	CONSTRAINT FK_Acce_tbUsuarios_Adua_tbArancelesPorTratados_usua_UsuarioCreacion 			FOREIGN KEY (usua_UsuarioCreacion)		REFERENCES Acce.tbUsuarios(usua_Id),
+);
 
 --**********************************************************************************************
 --********** TABLA PAISES / procedimientos tomando en cuenta los uniques ***********************
