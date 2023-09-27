@@ -114,6 +114,8 @@ namespace SIMEXPRO.DataAccess
         public static string EditarProvincias = "Gral.UDP_tbProvinvias_Editar";
         public static string EliminarProvincias = "Gral.UDP_tbProvincias_Eliminar";
         public static string ProvinciasPorPais = "Gral.UDP_FiltrarProvinciasPorPais";
+
+        public static string ProvinciaPaisYesAduana = "Gral.UDP_FiltrarProvinciasPorPaisYaduana";
         #endregion
 
         #region Aldeas

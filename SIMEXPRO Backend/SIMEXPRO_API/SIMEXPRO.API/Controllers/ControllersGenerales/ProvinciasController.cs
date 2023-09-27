@@ -67,5 +67,15 @@ namespace SIMEXPRO.API.Controllers.ControllersGenerales
         }
 
 
+        [HttpGet("ProvinciasFiltradaPorPaisYesAduana")]
+        public IActionResult ProvinciasPorPaisesYaduana(int pais_Id, bool pvin_EsAduana)
+        {
+
+            var respuesta = _generalesServices.ProvinciasPorPaisesYesAduana(pais_Id, pvin_EsAduana);
+            respuesta.Data = _mapper.Map<IEnumerable<ProvinciasViewModel>>(respuesta.Data);
+            return Ok(respuesta);
+        }
+
+
     }
 }

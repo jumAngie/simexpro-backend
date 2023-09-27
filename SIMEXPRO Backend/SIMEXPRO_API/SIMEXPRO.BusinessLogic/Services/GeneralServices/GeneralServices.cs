@@ -911,6 +911,21 @@ namespace SIMEXPRO.BussinessLogic.Services.GeneralServices
             }
         }
 
+        public ServiceResult ProvinciasPorPaisesYesAduana (int pais_Id, bool pvin_EsAduana)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _provinciasRepository.ProvinciasPorPaisesYesAduana(pais_Id, pvin_EsAduana);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+
         public ServiceResult InsertarProvincias(tbProvincias item)
         {
             var result = new ServiceResult();
