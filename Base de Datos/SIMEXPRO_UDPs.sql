@@ -17111,8 +17111,8 @@ AS
 				ISNULL(Duca.duca_No_Duca, 'N/A') AS duca_No_Duca,
 				FactExport.faex_Fecha, 
 				FactExport.orco_Id, 
-				CONCAT('No. ', PO.orco_Id, ' - ', Clie.clie_Nombre_O_Razon_Social, ' - ', CONVERT(DATE, PO.orco_FechaEmision)) AS orco_Descripcion,
-				
+				CONCAT('No. ', PO.orco_Codigo, ' - ', Clie.clie_Nombre_O_Razon_Social, ' - ', CONVERT(DATE, PO.orco_FechaEmision)) AS orco_Descripcion,
+				PO.orco_Codigo,
 				FactExport.faex_Total,
 
 				Clie.clie_Nombre_O_Razon_Social,
@@ -17161,7 +17161,7 @@ AS
 		LEFT JOIN Adua.tbDuca				AS Duca			ON FactExport.duca_Id = Duca.duca_Id
 		LEFT JOIN Acce.tbUsuarios			AS UserModifica ON FactExport.usua_UsuarioModificacion = UserModifica.usua_Id
 		WHERE FactExport.faex_Estado = 1
-		ORDER BY faex_FechaCreacion DESC
+		--ORDER BY FactExport.faex_FechaCreacion ASC
 	END
 GO
 
@@ -17468,11 +17468,11 @@ GO
 CREATE OR ALTER PROCEDURE Prod.UDP_OrdenesCompraDDL
 AS
 BEGIN
-	SELECT DISTINCT(PO.orco_Id), CONCAT('No. ', PO.orco_Id, ' - ', Clie.clie_Nombre_O_Razon_Social, ' - ', CONVERT(DATE, PO.orco_FechaEmision)) AS orco_Descripcion 
+	SELECT DISTINCT(PO.orco_Id), CONCAT('No. ', PO.orco_Codigo, ' - ', Clie.clie_Nombre_O_Razon_Social, ' - ', CONVERT(DATE, PO.orco_FechaEmision)) AS orco_Descripcion 
 	FROM Prod.tbOrdenCompra AS PO
 	INNER JOIN Prod.tbClientes AS Clie ON PO.orco_IdCliente = Clie.clie_Id
 	INNER JOIN Prod.tbOrdenCompraDetalles AS POdetail ON PO.orco_Id = POdetail.orco_Id
-	WHERE PO.orco_Estado = 1 AND PO.orco_EstadoFinalizado = 1
+	WHERE PO.orco_Estado = 1 AND PO.orco_EstadoOrdenCompra = 'T'
 END
 GO
 
