@@ -3720,7 +3720,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab2
+CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbPersonaJuridica_InsertarTab2]
 (
   @peju_Id                          INT,
   @ciud_Id					        INT,
@@ -3734,7 +3734,7 @@ BEGIN
 
 	BEGIN TRY
 	 DECLARE @aldea INT;
-     IF (@aldea = 0)
+     IF (@alde_Id = 0)
 	 BEGIN
 	   SET @aldea = NULL;	
 	 END
@@ -3754,7 +3754,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonaJuridica_InsertarTab3
+CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbPersonaJuridica_InsertarTab3]
 (
   @peju_Id                            INT,
   @peju_CiudadIdRepresentante	      INT,
@@ -3767,7 +3767,7 @@ AS
 BEGIN
 	BEGIN TRY
 	   DECLARE @aldea INT;
-     IF (@aldea = 0)
+     IF (@peju_AldeaIdRepresentante = 0)
 	 BEGIN
 	   SET @aldea = NULL;	
 	 END
@@ -3776,7 +3776,7 @@ BEGIN
 	     SET @aldea = @peju_AldeaIdRepresentante;
 	 END
 	  UPDATE [Adua].[tbPersonaJuridica]
-	     SET  peju_CiudadIdRepresentante = @peju_CiudadIdRepresentante, peju_AldeaIdRepresentante = @peju_AldeaIdRepresentante, peju_PuntoReferenciaRepresentante = @peju_PuntoReferenciaRepresentante,
+	     SET  peju_CiudadIdRepresentante = @peju_CiudadIdRepresentante, peju_AldeaIdRepresentante = @aldea, peju_PuntoReferenciaRepresentante = @peju_PuntoReferenciaRepresentante,
 		    peju_ColoniaRepresentante = @peju_ColoniaRepresentante, peju_NumeroLocalRepresentante = @peju_NumeroLocalRepresentante 
       WHERE peju_Id =  @peju_Id
 	   SELECT 1
