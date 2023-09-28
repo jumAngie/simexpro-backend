@@ -3412,13 +3412,14 @@ GO
 --*************** UDPS Para Tabla Persona Natural ************--
 
 /*Listar Persona Natural*/
-CREATE OR ALTER  PROC [Adua].[UDP_tbPersonaNatural_Listar]
+ALTER   PROC [Adua].[UDP_tbPersonaNatural_Listar]
 AS
 BEGIN
 		SELECT	tbpn.pena_Id							, 
 				tbpn.pers_Id							, 
 				tbpn.pena_DireccionExacta				, 
-				prov.pvin_Nombre						,
+				tbc.pvin_Id								,
+				provincia.pvin_Nombre					,
 				tbpn.ciud_Id							, 
 				tbc.ciud_Nombre							,
 				tbpn.pena_TelefonoFijo					, 
@@ -3432,6 +3433,8 @@ BEGIN
 				tbpn.pena_NumeroRecibo					, 
 				tbpn.pena_ArchivoNumeroRecibo			, 
 				tbpn.usua_UsuarioCreacion				,
+				pers.ofic_Id							,
+				ofic.ofic_Nombre						,
 				usu.usua_Nombre							AS usuarioCreacion,
 				tbpn.pena_FechaCreacion					, 
 				tbpn.usua_UsuarioModificacion			, 
@@ -3439,15 +3442,19 @@ BEGIN
 				tbpn.pena_FechaModificacion				, 
 				tbpn.pena_Estado						,
 				tbpn.pena_Finalizado					,
-				pena_NombreArchRecibo,
-				pena_NombreArchRTN,
-				pena_NombreArchDNI
-
+				pena_NombreArchRTN						,
+				pena_NombreArchRecibo					,
+				pena_NombreArchDNI						,
+				
+				pers_Nombre  AS Cliente
 		FROM	Adua.tbPersonaNatural  tbpn			
 				INNER JOIN Acce.tbUsuarios usu			ON 	tbpn.usua_UsuarioCreacion		= usu.usua_Id 
 				LEFT  JOIN Acce.tbUsuarios usu2			ON	tbpn.usua_UsuarioModificacion	= usu2.usua_Id
 				INNER JOIN Gral.tbCiudades tbc			ON	tbpn.ciud_Id					= tbc.ciud_Id 
-				INNER JOIN Gral.tbProvincias	prov	ON	tbc.pvin_Id						= prov.pvin_Id
+				INNER JOIN Gral.tbProvincias provincia  ON  tbc.pvin_Id						= provincia.pvin_Id
+				INNER JOIN [Gral].[tbEmpleados]	empl    ON  usu.empl_Id						= empl.empl_Id
+				INNER JOIN [Adua].[tbPersonas] pers		ON	tbpn.pers_Id					= pers.pers_Id
+				INNER JOIN [Gral].[tbOficinas] ofic		ON	pers.ofic_Id					= ofic.ofic_Id 
 		WHERE	tbpn.pena_Estado = 1
 END
 GO
