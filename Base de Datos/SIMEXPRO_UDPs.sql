@@ -17771,6 +17771,7 @@ BEGIN
 			[tall_Nombre], 
 			proc_IdActual, 
 			[proc_Descripcion], 
+			[proc_CodigoHtml],
 			[code_FechaProcActual],
 			orderdet.colr_Id,
 			colores.colr_Nombre
