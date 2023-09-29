@@ -1464,6 +1464,7 @@ BEGIN
    WHERE mone_Estado = 1
    AND mone_EsAduana = @mone_EsAduana
    OR @mone_EsAduana IS NULL
+   ORDER BY mone_FechaCreacion DESC
 END
 GO
 
@@ -1579,8 +1580,10 @@ FROM	Gral.tbPaises pais
 WHERE	pais_Estado = 1
 AND		pais_EsAduana = @pais_EsAduana
 OR		@pais_EsAduana IS NULL
+ORDER BY pais_FechaCreacion ASC
 END
 GO
+
 /*Insertar PAISES*/
 CREATE OR ALTER PROCEDURE Gral.UDP_tbPaises_Insertar
 	@pais_Codigo				CHAR(2), 
@@ -9588,6 +9591,7 @@ FROM	Adua.tbTipoIntermediario tip
 		INNER JOIN Acce.tbUsuarios usu	ON tip.usua_UsuarioCreacion = usu.usua_Id 
 		LEFT JOIN Acce.tbUsuarios usu1	ON tip.usua_UsuarioModificacion = usu1.usua_Id 
 WHERE	tite_Estado = 1
+ORDER BY tite_FechaCreacion DESC
 END 
 GO
 
@@ -15192,7 +15196,7 @@ GO
 
 
 /* INSERTAR REPORTE MODULO DETALLE  */
-CREATE OR ALTER PROCEDURE [Prod].[UDP_tbReporteModuloDiaDetalle_Insertar] --246,466,6,298,70,33				
+CREATE OR ALTER PROCEDURE [Prod].[UDP_tbReporteModuloDiaDetalle_Insertar] --28,2000,10,1,4,1				
 	@remo_Id 					INT,
 	@rdet_TotalDia				INT,
 	@rdet_TotalDanado			INT,
@@ -15202,6 +15206,7 @@ CREATE OR ALTER PROCEDURE [Prod].[UDP_tbReporteModuloDiaDetalle_Insertar] --246,
 AS
 BEGIN
 	BEGIN TRY
+		BEGIN TRANSACTION
 
 		INSERT INTO Prod.tbReporteModuloDiaDetalle(	remo_Id, 
 													rdet_TotalDia, 
@@ -15218,10 +15223,24 @@ BEGIN
 				@usua_UsuarioCreacion,
 				GETDATE())
 
+
+		DECLARE @NewSumaTotal INT = (SELECT SUM(rdet_TotalDia) FROM Prod.tbReporteModuloDiaDetalle WHERE remo_Id = @remo_Id)
+		DECLARE @NewSumaTotalDanado INT = (SELECT SUM(rdet_TotalDanado) FROM Prod.tbReporteModuloDiaDetalle WHERE remo_Id = @remo_Id)
+
 		UPDATE [Prod].[tbReporteModuloDia]
-		SET [remo_TotalDia] = (SELECT SUM(rdet_TotalDia) FROM Prod.tbReporteModuloDiaDetalle WHERE remo_Id = @remo_Id ),
-			[remo_TotalDanado] = (SELECT SUM(rdet_TotalDanado) FROM Prod.tbReporteModuloDiaDetalle WHERE remo_Id = @remo_Id )
+		SET [remo_TotalDia] = @NewSumaTotal,
+			[remo_TotalDanado] = @NewSumaTotalDanado
 		WHERE [remo_Id] = @remo_Id
+
+
+		DECLARE @Newcode_Id INT = (SELECT code_Id FROM [Prod].[tbOrde_Ensa_Acab_Etiq] WHERE ensa_Id = @ensa_Id)
+		DECLARE @proc_Id INT = (SELECT proc_Id FROM [Prod].[tbReporteModuloDia] AS remo 
+								INNER JOIN [Prod].[tbModulos] modu ON remo.modu_Id = modu.modu_Id 
+								WHERE remo_Id = @remo_Id)
+
+		UPDATE [Prod].[tbProcesoPorOrdenCompraDetalle]
+		SET poco_Completado = poco_Completado + (@rdet_TotalDia - @rdet_TotalDanado)
+		WHERE code_Id = @Newcode_Id AND proc_Id = @proc_Id
 
 		SELECT 1
 		COMMIT; 
@@ -15232,7 +15251,6 @@ BEGIN
 	END CATCH
 END
 GO
-
 
 /* EDITAR REPORTE MODULO DIA DETALLE */
 CREATE OR ALTER   PROCEDURE [Prod].[UDP_tbReporteModuloDiaDetalle_Editar] --415,246,777,7,298,70,33	
