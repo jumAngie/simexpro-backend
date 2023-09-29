@@ -9189,7 +9189,11 @@ BEGIN
 				ELSE 'Arancel' 
 			END AS aran_Tipo,
 			aran_Descripcion,
-		
+			 aran_DAI,
+			 aran_ISV,
+			 aran_ProdCons,
+			 aran_SEL,
+			 aran_AplicaVehiculos,
 			ara.usua_UsuarioCreacion,
 			usu.usua_Nombre           AS UsuarioCreacion,		
 			ara.aran_FechaCreacion, 
@@ -9222,7 +9226,11 @@ BEGIN
 				ELSE 'Arancel' 
 			END AS aran_Tipo,
 			aran_Descripcion,
-		
+			 aran_DAI,
+			 aran_ISV,
+			 aran_ProdCons,
+			 aran_SEL,
+			 aran_AplicaVehiculos,
 			ara.usua_UsuarioCreacion,
 			usu.usua_Nombre           AS UsuarioCreacion,		
 			ara.aran_FechaCreacion, 
@@ -9250,7 +9258,11 @@ BEGIN
 	SELECT	aran_Id,
 			aran_Codigo,
 			aran_Descripcion,
-		
+			 aran_DAI,
+			 aran_ISV,
+			 aran_ProdCons,
+			 aran_SEL,
+			 aran_AplicaVehiculos,
 			ara.usua_UsuarioCreacion,
 			usu.usua_Nombre           AS UsuarioCreacion,		
 			ara.aran_FechaCreacion, 
@@ -9276,7 +9288,11 @@ BEGIN
 	SELECT	aran_Id,
 			aran_Codigo,
 			aran_Descripcion,
-		
+			 aran_DAI,
+			 aran_ISV,
+			 aran_ProdCons,
+			 aran_SEL,
+			 aran_AplicaVehiculos,
 			ara.usua_UsuarioCreacion,
 			usu.usua_Nombre           AS UsuarioCreacion,		
 			ara.aran_FechaCreacion, 
@@ -9302,7 +9318,11 @@ BEGIN
 			aran_Codigo,
 			aran_Descripcion,
 			DATALENGTH(aran_Codigo)  AS lenght,
-		
+			 aran_DAI,
+			 aran_ISV,
+			 aran_ProdCons,
+			 aran_SEL,
+			 aran_AplicaVehiculos,
 			ara.usua_UsuarioCreacion,
 			usu.usua_Nombre           AS UsuarioCreacion,		
 			ara.aran_FechaCreacion, 
@@ -9335,9 +9355,14 @@ GO
 
 
 /*Insertar Aranceles*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbAranceles_Insertar 
+CREATE OR ALTER  PROCEDURE [Adua].[UDP_tbAranceles_Insertar] 
 	@aran_Codigo				NVARCHAR(100),
 	@aran_Descripcion			NVARCHAR(150),
+	@aran_DAI					DECIMAL(18,2),
+	@aran_ISV					INT,
+	@aran_SEL					DECIMAL(18,2),
+	@aran_ProdCons				DECIMAL(18,2),
+	@aran_AplicaVehiculos		BIT,
 	@usua_UsuarioCreacion		INT,
 	@aran_FechaCreacion			DATETIME
 AS
@@ -9345,11 +9370,21 @@ BEGIN
 	SET @aran_FechaCreacion = GETDATE();
 	BEGIN TRY
 		INSERT INTO Adua.tbAranceles (aran_Codigo, 
-									  aran_Descripcion, 
+									  aran_Descripcion,
+									  aran_DAI,
+									  aran_ISV,
+									  aran_ProdCons,
+									  aran_SEL,
+									  aran_AplicaVehiculos,
 									  usua_UsuarioCreacion, 
 									  aran_FechaCreacion)
 		VALUES	(@aran_Codigo,
 				 @aran_Descripcion,
+				 @aran_DAI,			
+				 @aran_ISV,			
+				 @aran_ProdCons,
+				 @aran_SEL,		
+				 @aran_AplicaVehiculos,
 				 @usua_UsuarioCreacion,
 				 @aran_FechaCreacion)
 
@@ -9360,6 +9395,7 @@ BEGIN
 	END CATCH
 END
 
+
 GO
 
 /*Editar Aranceles*/
@@ -9367,6 +9403,11 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbAranceles_Editar
 	@aran_Id					INT,
 	@aran_Codigo				NVARCHAR(100),
 	@aran_Descripcion			NVARCHAR(150),
+	@aran_DAI					DECIMAL(18,2),
+	@aran_ISV					INT,
+	@aran_SEL					DECIMAL(18,2),
+	@aran_ProdCons				DECIMAL(18,2),
+	@aran_AplicaVehiculos		BIT,
 	@usua_UsuarioModificacion	INT,
 	@aran_FechaModificacion		DATETIME
 AS
@@ -9376,6 +9417,11 @@ BEGIN
 		UPDATE Adua.tbAranceles
 		   SET aran_Codigo = @aran_Codigo
 			  ,aran_Descripcion = @aran_Descripcion
+			  ,aran_DAI = @aran_DAI
+			  ,aran_ISV	= @aran_ISV				
+			  ,aran_SEL	= @aran_SEL				
+			  ,aran_ProdCons = @aran_ProdCons			
+			  ,aran_AplicaVehiculos	= @aran_AplicaVehiculos	
 			  ,usua_UsuarioModificacion = @usua_UsuarioModificacion
 			  ,aran_FechaModificacion = @aran_FechaModificacion
 		 WHERE aran_Id = @aran_Id

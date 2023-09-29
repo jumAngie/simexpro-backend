@@ -18,6 +18,11 @@ namespace SIMEXPRO.Entities.Entities
         public int aran_Id { get; set; }
         public string aran_Codigo { get; set; }
         public string aran_Descripcion { get; set; }
+        public decimal aran_DAI { get; set; }
+        public int aran_ISV { get; set; }
+        public decimal aran_SEL { get; set; }
+        public decimal aran_ProdCons { get; set; }
+        public bool aran_AplicaVehiculos { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         [NotMapped]
         public string UsuarioCreacion { get; set; }
