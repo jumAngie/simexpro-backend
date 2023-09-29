@@ -9180,7 +9180,7 @@ GO
 CREATE OR ALTER PROCEDURE Adua.UDP_tbAranceles_Listar
 AS
 BEGIN
-	SELECT	50 aran_Id,
+	SELECT	aran_Id,
 			aran_Codigo,
 			DATALENGTH(aran_Codigo) AS tamaño, 
 			CASE 
@@ -9190,7 +9190,7 @@ BEGIN
 			END AS aran_Tipo,
 			aran_Descripcion,
 			 aran_DAI,
-			 aran_ISV,
+			 impu.impu_Cantidad AS aran_ISV,
 			 aran_ProdCons,
 			 aran_SEL,
 			 aran_AplicaVehiculos,
@@ -9207,6 +9207,7 @@ BEGIN
    FROM	Adua.tbAranceles ara
    INNER JOIN Acce.tbUsuarios usu ON ara.usua_UsuarioCreacion = usu.usua_Id
    LEFT JOIN Acce.tbUsuarios usu1 ON usu1.usua_Id = ara.usua_UsuarioModificacion 
+   LEFT JOIN [Adua].[tbImpuestos] impu ON impu.impu_Id = aran_ISV
    WHERE aram_Estado = 1
    ORDER BY DATALENGTH(aran_Codigo) 
 

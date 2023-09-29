@@ -183,193 +183,193 @@ GO
 
 
 
-SELECT  DISTINCT duca.duca_Id
-		,tbDeva.deva_Id
-		--Identificacion de la declaracion
-		,[duca_No_Correlativo_Referencia]
-		,[duca_No_Duca]
-		,[deva_FechaAceptacion]
-		,aduaRegistro.[adua_Codigo] + ', ' + aduaRegistro.[adua_Nombre] AS duca_AduanaRegistro
-		,[adua_DespachoCodigo] + ', ' + [adua_DespachoNombre] AS adua_SalidaNombre
-		,[adua_IngresoCodigo] + ', ' + [adua_IngresoNombre] AS adua_IngresoNombre
-		,aduaDestino.[adua_Codigo] + ', ' + aduaDestino.[adua_Nombre] AS duca_AduanaDestino
+--SELECT  DISTINCT duca.duca_Id
+--		,tbDeva.deva_Id
+--		--Identificacion de la declaracion
+--		,[duca_No_Correlativo_Referencia]
+--		,[duca_No_Duca]
+--		,[deva_FechaAceptacion]
+--		,aduaRegistro.[adua_Codigo] + ', ' + aduaRegistro.[adua_Nombre] AS duca_AduanaRegistro
+--		,[adua_DespachoCodigo] + ', ' + [adua_DespachoNombre] AS adua_SalidaNombre
+--		,[adua_IngresoCodigo] + ', ' + [adua_IngresoNombre] AS adua_IngresoNombre
+--		,aduaDestino.[adua_Codigo] + ', ' + aduaDestino.[adua_Nombre] AS duca_AduanaDestino
 
 
-		--Exportador
-		,[prov_NumeroIdentificacion]
-		,tipoExportador.[iden_Descripcion] AS duca_TipoIdentificacionExportador
-		,paisExportador.pais_Codigo AS duca_PaisExportador 
-		,[prov_Nombre_Raso]
-		,[duca_DomicilioFiscal_Exportador]
+--		--Exportador
+--		,[prov_NumeroIdentificacion]
+--		,tipoExportador.[iden_Descripcion] AS duca_TipoIdentificacionExportador
+--		,paisExportador.pais_Codigo AS duca_PaisExportador 
+--		,[prov_Nombre_Raso]
+--		,[duca_DomicilioFiscal_Exportador]
 
-		--Importador
-		,[impo_NumRegistro]
-		,[impo_Nombre_Raso]
-		,paisImportador.pais_Codigo AS duca_PaisImportador
-		,[duca_DomicilioFiscal_Importador]
+--		--Importador
+--		,[impo_NumRegistro]
+--		,[impo_Nombre_Raso]
+--		,paisImportador.pais_Codigo AS duca_PaisImportador
+--		,[duca_DomicilioFiscal_Importador]
 
-		--Declarante
-		,[duca_Codigo_Declarante]
-		,[duca_Numero_Id_Declarante]
-		,[duca_NombreSocial_Declarante]
-		,[duca_DomicilioFiscal_Declarante]
+--		--Declarante
+--		,[duca_Codigo_Declarante]
+--		,[duca_Numero_Id_Declarante]
+--		,[duca_NombreSocial_Declarante]
+--		,[duca_DomicilioFiscal_Declarante]
 
-		--OTROS
-		,regi_Codigo + ', ' + regi_Descripcion AS duca_RegimenAduanero
-		,[duca_Modalidad]
-		,[duca_Clase]
-		,[duca_FechaVencimiento]
+--		--OTROS
+--		,regi_Codigo + ', ' + regi_Descripcion AS duca_RegimenAduanero
+--		,[duca_Modalidad]
+--		,[duca_Clase]
+--		,[duca_FechaVencimiento]
 
-		--Otros XD 
-		,paisProcedencia.pais_Codigo +', '+ paisProcedencia.pais_Nombre AS duca_PaisProcedencia
-		,paisExportacion.pais_Codigo +', '+ paisExportacion.pais_Nombre AS duca_PaisExportacion
-		,paisDestino.pais_Codigo +', '+ paisDestino.pais_Nombre AS duca_PaisDestino
-		,[duca_Deposito_Aduanero]
-		,lugarDesembarque.[emba_Codigo] +', '+ [emba_Descripcion] AS [duca_Lugar_Desembarque]
-		,tbDeva.[emba_Codigo] +', '+ tbDeva.[LugarEmbarque] AS [duca_Lugar_Embarque]
-		,[duca_Manifiesto]
-		,[duca_Titulo]
+--		--Otros XD 
+--		,paisProcedencia.pais_Codigo +', '+ paisProcedencia.pais_Nombre AS duca_PaisProcedencia
+--		,paisExportacion.pais_Codigo +', '+ paisExportacion.pais_Nombre AS duca_PaisExportacion
+--		,paisDestino.pais_Codigo +', '+ paisDestino.pais_Nombre AS duca_PaisDestino
+--		,[duca_Deposito_Aduanero]
+--		,lugarDesembarque.[emba_Codigo] +', '+ [emba_Descripcion] AS [duca_Lugar_Desembarque]
+--		,tbDeva.[emba_Codigo] +', '+ tbDeva.[LugarEmbarque] AS [duca_Lugar_Embarque]
+--		,[duca_Manifiesto]
+--		,[duca_Titulo]
 
-		--Transportista
-		,[duca_Codigo_Transportista]
-		,[duca_Transportista_Nombre]
-		,modoTranspote.motr_Descripcion AS duca_ModoTransporte
+--		--Transportista
+--		,[duca_Codigo_Transportista]
+--		,[duca_Transportista_Nombre]
+--		,modoTranspote.motr_Descripcion AS duca_ModoTransporte
 
-		--Conductor
-		,conductor.[cont_NoIdentificacion]
-		,conductor.[cont_Licencia]
-		,paisConductor.pais_Codigo + ', '+ paisConductor.pais_Nombre AS [pais_Expedicion]
-		,ISNULL([cont_Nombre] + ' ' + [cont_Apellido], '----') AS conductorNombres
+--		--Conductor
+--		,conductor.[cont_NoIdentificacion]
+--		,conductor.[cont_Licencia]
+--		,paisConductor.pais_Codigo + ', '+ paisConductor.pais_Nombre AS [pais_Expedicion]
+--		,ISNULL([cont_Nombre] + ' ' + [cont_Apellido], '----') AS conductorNombres
 
-		--transporte
-		,transporte.[tran_IdUnidadTransporte]
-		,paisTransporte.pais_Codigo + ', '+ paisTransporte.pais_Nombre AS [pais_Transporte]
-		,marcas.[marc_Descripcion]
-		,[tran_Chasis]
-		,[tran_Remolque]
-		,[tran_CantCarga]
-		,[tran_NumDispositivoSeguridad]
-		,[tran_Equipamiento]
-		,[tran_TamanioEquipamiento]
-		,[tran_TipoCarga]
-		,[tran_IdContenedor]
+--		--transporte
+--		,transporte.[tran_IdUnidadTransporte]
+--		,paisTransporte.pais_Codigo + ', '+ paisTransporte.pais_Nombre AS [pais_Transporte]
+--		,marcas.[marc_Descripcion]
+--		,[tran_Chasis]
+--		,[tran_Remolque]
+--		,[tran_CantCarga]
+--		,[tran_NumDispositivoSeguridad]
+--		,[tran_Equipamiento]
+--		,[tran_TamanioEquipamiento]
+--		,[tran_TipoCarga]
+--		,[tran_IdContenedor]
 
-		,tbDeva.inco_Codigo
-		,tbDeva.[deva_ConversionDolares]
-		--Valores totales
-		--,(SELECT	 SUM([item_ValorTransaccion]) AS [item_ValorTransaccion]
-		--			,SUM([item_OtrosGastos]) AS [item_OtrosGastos]
-		--			,SUM([item_GastosDeTransporte]) AS [item_GastosDeTransporte]
-		--			,SUM([item_Seguro]) AS [item_Seguro]
-		--			,SUM([item_ValorAduana]) AS [item_ValorAduana]
-		--			,SUM([item_PesoBruto]) AS [item_PesoBruto]
-		--			,SUM([item_PesoNeto]) AS [item_PesoNeto]
-		--FROM [Adua].[tbItems] items INNER JOIN [Adua].[tbFacturas] fact
-		--ON fact.fact_Id = items.fact_Id INNER JOIN [Adua].[tbDeclaraciones_Valor] deva
-		--ON deva.deva_Id = fact.deva_Id INNER JOIN [Adua].[tbItemsDEVAPorDuca] dvd
-		--ON dvd.deva_Id = deva.deva_Id INNER JOIN [Adua].[tbDuca] duca1
-		--ON duca1.duca_Id = dvd.duca_Id
-		--WHERE duca1.duca_Id = duca.duca_Id FOR JSON AUTO ) AS ValoresTotales 
+--		,tbDeva.inco_Codigo
+--		,tbDeva.[deva_ConversionDolares]
+--		--Valores totales
+--		--,(SELECT	 SUM([item_ValorTransaccion]) AS [item_ValorTransaccion]
+--		--			,SUM([item_OtrosGastos]) AS [item_OtrosGastos]
+--		--			,SUM([item_GastosDeTransporte]) AS [item_GastosDeTransporte]
+--		--			,SUM([item_Seguro]) AS [item_Seguro]
+--		--			,SUM([item_ValorAduana]) AS [item_ValorAduana]
+--		--			,SUM([item_PesoBruto]) AS [item_PesoBruto]
+--		--			,SUM([item_PesoNeto]) AS [item_PesoNeto]
+--		--FROM [Adua].[tbItems] items INNER JOIN [Adua].[tbFacturas] fact
+--		--ON fact.fact_Id = items.fact_Id INNER JOIN [Adua].[tbDeclaraciones_Valor] deva
+--		--ON deva.deva_Id = fact.deva_Id INNER JOIN [Adua].[tbItemsDEVAPorDuca] dvd
+--		--ON dvd.deva_Id = deva.deva_Id INNER JOIN [Adua].[tbDuca] duca1
+--		--ON duca1.duca_Id = dvd.duca_Id
+--		--WHERE duca1.duca_Id = duca.duca_Id FOR JSON AUTO ) AS ValoresTotales 
 
-		--,(SELECT   [lige_Id]
-		--		, [lige_TipoTributo]
-		--		, [lige_TotalPorTributo]
-		--		, [lige_ModalidadPago]
-		--		, [lige_TotalGral]
-		--FROM [Adua].[tbLiquidacionGeneral] liquiG
-		--WHERE liquiG.duca_Id = duca.duca_Id FOR JSON AUTO) AS LiquidacionGeneral
+--		--,(SELECT   [lige_Id]
+--		--		, [lige_TipoTributo]
+--		--		, [lige_TotalPorTributo]
+--		--		, [lige_ModalidadPago]
+--		--		, [lige_TotalGral]
+--		--FROM [Adua].[tbLiquidacionGeneral] liquiG
+--		--WHERE liquiG.duca_Id = duca.duca_Id FOR JSON AUTO) AS LiquidacionGeneral
 
-		--,(SELECT m.* 
-		--		FROM 
-		--		 (SELECT	ROW_NUMBER() OVER(ORDER BY items.[item_Id] DESC) AS Row
-		--				,[item_Cantidad_Bultos]
-		--				,[item_ClaseBulto]
-		--				,[item_PesoNeto]
-		--				,[item_PesoBruto]
-		--				,[item_CuotaContingente]
-		--				,paisOrigen.pais_Codigo + ', '+ paisOrigen.pais_Nombre AS [pais_Origen]
-		--				,[unme_Descripcion]
-		--				,[item_Cantidad]
-		--				,[item_Acuerdo]
-		--				,[aran_Codigo]
-		--				,[item_CaracteristicasMercancias]
-		--				,[item_CriterioCertificarOrigen]
-		--				,[item_ReglasAccesorias]
-		--				,[item_ValorTransaccion]
-		--				,[item_GastosDeTransporte]
-		--				,[item_Seguro]
-		--				,[item_OtrosGastos]
-		--				,[item_ValorAduana]
-		--				,(SELECT * FROM [Adua].[tbLiquidacionPorLinea] lli WHERE lli.item_Id = items.item_Id FOR JSON AUTO) AS liquidacion
-		--FROM [Adua].[tbItems] items INNER JOIN [Adua].[tbFacturas] fact
-		--ON fact.fact_Id = items.fact_Id INNER JOIN [Adua].[tbDeclaraciones_Valor] deva
-		--ON deva.deva_Id = fact.deva_Id INNER JOIN [Adua].[tbItemsDEVAPorDuca] dvd
-		--ON dvd.deva_Id = deva.deva_Id INNER JOIN [Adua].[tbDuca] duca1
-		--ON duca1.duca_Id = dvd.duca_Id LEFT JOIN [Gral].[tbPaises] paisOrigen
-		--ON paisOrigen.pais_Id = [pais_IdOrigenMercancia]  LEFT JOIN [Gral].[tbUnidadMedidas] unidadesMed
-		--ON unidadesMed.[unme_Id] = items.[unme_Id] LEFT JOIN [Adua].[tbAranceles] aranceles
-		--ON aranceles.[aran_Id] = items.[aran_Id] 
-		--WHERE duca1.duca_Id = duca.duca_Id) AS m
-  --       FOR JSON AUTO) AS Mercancias 
+--		--,(SELECT m.* 
+--		--		FROM 
+--		--		 (SELECT	ROW_NUMBER() OVER(ORDER BY items.[item_Id] DESC) AS Row
+--		--				,[item_Cantidad_Bultos]
+--		--				,[item_ClaseBulto]
+--		--				,[item_PesoNeto]
+--		--				,[item_PesoBruto]
+--		--				,[item_CuotaContingente]
+--		--				,paisOrigen.pais_Codigo + ', '+ paisOrigen.pais_Nombre AS [pais_Origen]
+--		--				,[unme_Descripcion]
+--		--				,[item_Cantidad]
+--		--				,[item_Acuerdo]
+--		--				,[aran_Codigo]
+--		--				,[item_CaracteristicasMercancias]
+--		--				,[item_CriterioCertificarOrigen]
+--		--				,[item_ReglasAccesorias]
+--		--				,[item_ValorTransaccion]
+--		--				,[item_GastosDeTransporte]
+--		--				,[item_Seguro]
+--		--				,[item_OtrosGastos]
+--		--				,[item_ValorAduana]
+--		--				,(SELECT * FROM [Adua].[tbLiquidacionPorLinea] lli WHERE lli.item_Id = items.item_Id FOR JSON AUTO) AS liquidacion
+--		--FROM [Adua].[tbItems] items INNER JOIN [Adua].[tbFacturas] fact
+--		--ON fact.fact_Id = items.fact_Id INNER JOIN [Adua].[tbDeclaraciones_Valor] deva
+--		--ON deva.deva_Id = fact.deva_Id INNER JOIN [Adua].[tbItemsDEVAPorDuca] dvd
+--		--ON dvd.deva_Id = deva.deva_Id INNER JOIN [Adua].[tbDuca] duca1
+--		--ON duca1.duca_Id = dvd.duca_Id LEFT JOIN [Gral].[tbPaises] paisOrigen
+--		--ON paisOrigen.pais_Id = [pais_IdOrigenMercancia]  LEFT JOIN [Gral].[tbUnidadMedidas] unidadesMed
+--		--ON unidadesMed.[unme_Id] = items.[unme_Id] LEFT JOIN [Adua].[tbAranceles] aranceles
+--		--ON aranceles.[aran_Id] = items.[aran_Id] 
+--		--WHERE duca1.duca_Id = duca.duca_Id) AS m
+--  --       FOR JSON AUTO) AS Mercancias 
 			
 
-			--, AS Mercancias 
-		--	,(SELECT m.* 
-		--		FROM 
-		--		 (SELECT --* 
-		--		[tido_Codigo]
-		--		,doso_NumeroDocumento
-		--		,[doso_FechaEmision]
-		--		,[doso_FechaVencimiento]
-		--		,[doso_PaisEmision]
-		--		,paisDocumento.pais_Codigo + ', '+ paisDocumento.pais_Nombre AS PaisEmision
-		--		,[doso_LineaAplica]
-		--		,[doso_EntidadEmitioDocumento]
-		--		,[doso_Monto]
-		--FROM [Adua].[tbDocumentosDeSoporte] tdc INNER JOIN [Adua].[tbTipoDocumento] tpd
-		--ON tpd.[tido_Id] = tdc.[tido_Id]  LEFT JOIN [Gral].[tbPaises] paisDocumento
-		--ON paisDocumento.pais_Id =  [doso_PaisEmision] 
-		--WHERE tdc.duca_Id = duca.duca_Id) AS m
-  --       FOR JSON AUTO) AS Documentos
+--			--, AS Mercancias 
+--		--	,(SELECT m.* 
+--		--		FROM 
+--		--		 (SELECT --* 
+--		--		[tido_Codigo]
+--		--		,doso_NumeroDocumento
+--		--		,[doso_FechaEmision]
+--		--		,[doso_FechaVencimiento]
+--		--		,[doso_PaisEmision]
+--		--		,paisDocumento.pais_Codigo + ', '+ paisDocumento.pais_Nombre AS PaisEmision
+--		--		,[doso_LineaAplica]
+--		--		,[doso_EntidadEmitioDocumento]
+--		--		,[doso_Monto]
+--		--FROM [Adua].[tbDocumentosDeSoporte] tdc INNER JOIN [Adua].[tbTipoDocumento] tpd
+--		--ON tpd.[tido_Id] = tdc.[tido_Id]  LEFT JOIN [Gral].[tbPaises] paisDocumento
+--		--ON paisDocumento.pais_Id =  [doso_PaisEmision] 
+--		--WHERE tdc.duca_Id = duca.duca_Id) AS m
+--  --       FOR JSON AUTO) AS Documentos
 
-		--,(SELECT --* 
-		--		[tido_Codigo]
-		--		,doso_NumeroDocumento
-		--		,[doso_FechaEmision]
-		--		,[doso_FechaVencimiento]
-		--		,[doso_PaisEmision]
-		--		,paisDocumento.pais_Codigo + ', '+ paisDocumento.pais_Nombre AS PaisEmision
-		--		,[doso_LineaAplica]
-		--		,[doso_EntidadEmitioDocumento]
-		--		,[doso_Monto]
-		--FROM [Adua].[tbDocumentosDeSoporte] tdc INNER JOIN [Adua].[tbTipoDocumento] tpd
-		--ON tpd.[tido_Id] = tdc.[tido_Id]  LEFT JOIN [Gral].[tbPaises] paisDocumento
-		--ON paisDocumento.pais_Id =  [doso_PaisEmision] 
-		--WHERE tdc.duca_Id = duca.duca_Id FOR JSON AUTO   ) AS Documentos
+--		--,(SELECT --* 
+--		--		[tido_Codigo]
+--		--		,doso_NumeroDocumento
+--		--		,[doso_FechaEmision]
+--		--		,[doso_FechaVencimiento]
+--		--		,[doso_PaisEmision]
+--		--		,paisDocumento.pais_Codigo + ', '+ paisDocumento.pais_Nombre AS PaisEmision
+--		--		,[doso_LineaAplica]
+--		--		,[doso_EntidadEmitioDocumento]
+--		--		,[doso_Monto]
+--		--FROM [Adua].[tbDocumentosDeSoporte] tdc INNER JOIN [Adua].[tbTipoDocumento] tpd
+--		--ON tpd.[tido_Id] = tdc.[tido_Id]  LEFT JOIN [Gral].[tbPaises] paisDocumento
+--		--ON paisDocumento.pais_Id =  [doso_PaisEmision] 
+--		--WHERE tdc.duca_Id = duca.duca_Id FOR JSON AUTO   ) AS Documentos
 
 
-		,[duca_CanalAsignado]
+--		,[duca_CanalAsignado]
 
-		--,*
-FROM [Adua].[tbDuca] duca INNER JOIN [Adua].[tbItemsDEVAPorDuca] dvd
-ON dvd.duca_Id = duca.duca_Id INNER JOIN [Adua].[VW_tbDeclaraciones_ValorCompleto] tbDeva
-ON tbDeva.deva_Id = dvd.deva_Id LEFT JOIN [Adua].[tbAduanas] aduaRegistro
-ON duca.[duca_AduanaRegistro] = aduaRegistro.[adua_Id] LEFT JOIN [Adua].[tbAduanas] aduaDestino
-ON duca.[duca_AduanaDestino] = aduaDestino.[adua_Id] LEFT JOIN [Adua].[tbTiposIdentificacion] tipoExportador
-ON tipoExportador.[iden_Id] = duca.[duca_Tipo_Iden_Exportador] LEFT JOIN [Gral].[tbPaises] paisExportador
-ON paisExportador.pais_Id = [duca_Pais_Emision_Exportador] LEFT JOIN [Gral].[tbPaises] paisImportador
-ON paisImportador.pais_Id = [duca_Pais_Emision_Importador] LEFT JOIN [Adua].[tbRegimenesAduaneros] reginAduana
-ON reginAduana.regi_Id = [duca_Regimen_Aduanero] LEFT JOIN [Gral].[tbPaises] paisProcedencia
-ON paisProcedencia.pais_Id =  [duca_Pais_Procedencia] LEFT JOIN [Gral].[tbPaises] paisExportacion
-ON paisExportacion.pais_Id =  [duca_Pais_Exportacion] LEFT JOIN [Gral].[tbPaises] paisDestino
-ON paisDestino.pais_Id =  [duca_Pais_Destino] LEFT JOIN [Adua].[tbLugaresEmbarque] lugarDesembarque
-ON lugarDesembarque.emba_Id = [duca_Lugar_Desembarque] LEFT JOIN [Adua].[tbModoTransporte] modoTranspote
-ON modoTranspote.motr_Id = duca.[motr_Id] LEFT JOIN [Adua].[tbConductor] conductor
-ON conductor.[cont_Id] = duca.[duca_Conductor_Id] LEFT JOIN [Gral].[tbPaises] paisConductor
-ON paisConductor.pais_Id =  conductor.[pais_IdExpedicion] LEFT JOIN [Adua].[tbTransporte] transporte
-ON transporte.[tran_Id] =  conductor.[tran_Id] LEFT JOIN [Gral].[tbPaises] paisTransporte
-ON paisTransporte.pais_Id =  transporte.[pais_Id] LEFT JOIN [Adua].[tbMarcas] marcas
-ON marcas.[marc_Id] =  transporte.[marca_Id] 
+--		--,*
+--FROM [Adua].[tbDuca] duca INNER JOIN [Adua].[tbItemsDEVAPorDuca] dvd
+--ON dvd.duca_Id = duca.duca_Id INNER JOIN [Adua].[VW_tbDeclaraciones_ValorCompleto] tbDeva
+--ON tbDeva.deva_Id = dvd.deva_Id LEFT JOIN [Adua].[tbAduanas] aduaRegistro
+--ON duca.[duca_AduanaRegistro] = aduaRegistro.[adua_Id] LEFT JOIN [Adua].[tbAduanas] aduaDestino
+--ON duca.[duca_AduanaDestino] = aduaDestino.[adua_Id] LEFT JOIN [Adua].[tbTiposIdentificacion] tipoExportador
+--ON tipoExportador.[iden_Id] = duca.[duca_Tipo_Iden_Exportador] LEFT JOIN [Gral].[tbPaises] paisExportador
+--ON paisExportador.pais_Id = [duca_Pais_Emision_Exportador] LEFT JOIN [Gral].[tbPaises] paisImportador
+--ON paisImportador.pais_Id = [duca_Pais_Emision_Importador] LEFT JOIN [Adua].[tbRegimenesAduaneros] reginAduana
+--ON reginAduana.regi_Id = [duca_Regimen_Aduanero] LEFT JOIN [Gral].[tbPaises] paisProcedencia
+--ON paisProcedencia.pais_Id =  [duca_Pais_Procedencia] LEFT JOIN [Gral].[tbPaises] paisExportacion
+--ON paisExportacion.pais_Id =  [duca_Pais_Exportacion] LEFT JOIN [Gral].[tbPaises] paisDestino
+--ON paisDestino.pais_Id =  [duca_Pais_Destino] LEFT JOIN [Adua].[tbLugaresEmbarque] lugarDesembarque
+--ON lugarDesembarque.emba_Id = [duca_Lugar_Desembarque] LEFT JOIN [Adua].[tbModoTransporte] modoTranspote
+--ON modoTranspote.motr_Id = duca.[motr_Id] LEFT JOIN [Adua].[tbConductor] conductor
+--ON conductor.[cont_Id] = duca.[duca_Conductor_Id] LEFT JOIN [Gral].[tbPaises] paisConductor
+--ON paisConductor.pais_Id =  conductor.[pais_IdExpedicion] LEFT JOIN [Adua].[tbTransporte] transporte
+--ON transporte.[tran_Id] =  conductor.[tran_Id] LEFT JOIN [Gral].[tbPaises] paisTransporte
+--ON paisTransporte.pais_Id =  transporte.[pais_Id] LEFT JOIN [Adua].[tbMarcas] marcas
+--ON marcas.[marc_Id] =  transporte.[marca_Id] 
 
 
 
@@ -607,7 +607,7 @@ FROM	Prod.tbPedidosOrden po
 WHERE (po.peor_FechaEntrada BETWEEN @fechaInicio AND @fechaFin)
 END
 
-
+GO
 
 CREATE OR ALTER  PROCEDURE Prod.UDP_ReporteSeguimientoProcesosPO
 @orco_Codigo NVARCHAR(100)
