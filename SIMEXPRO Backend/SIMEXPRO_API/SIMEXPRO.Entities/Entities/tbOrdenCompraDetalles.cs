@@ -108,15 +108,8 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string SeguimientoProcesos { get; set; }
 
-
-
-
-
-
-
-
-
-
+        [NotMapped]
+        public string proc_CodigoHtml { get; set; }
 
 
 
