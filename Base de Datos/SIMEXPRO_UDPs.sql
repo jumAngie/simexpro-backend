@@ -17764,12 +17764,22 @@ CREATE OR ALTER PROC Prod.UDP_DibujarDetalles
 	@orco_Codigo NVARCHAR(100)
 AS
 BEGIN
-	SELECT	orden.orco_Id, code_Id, code_CantidadPrenda, estilos.esti_Descripcion, [tall_Nombre]  , proc_IdActual, [proc_Descripcion], [code_FechaProcActual]
-	FROM	[Prod].[tbOrdenCompraDetalles] orderdet	INNER JOIN [Prod].[tbOrdenCompra] orden
-	ON		orderdet.orco_Id = orden.orco_Id		INNER JOIN [Prod].[tbEstilos] estilos
-	ON		orderdet.esti_Id = estilos.esti_Id		INNER JOIN [Prod].[tbTallas] tallas
-	ON		orderdet.tall_Id = tallas.tall_Id		INNER JOIN [Prod].[tbProcesos] procesos
-	ON		orderdet.proc_IdActual = procesos.proc_Id
+	SELECT	orden.orco_Id, 
+			code_Id, 
+			code_CantidadPrenda, 
+			estilos.esti_Descripcion, 
+			[tall_Nombre], 
+			proc_IdActual, 
+			[proc_Descripcion], 
+			[code_FechaProcActual],
+			orderdet.colr_Id,
+			colores.colr_Nombre
+	FROM	[Prod].[tbOrdenCompraDetalles] orderdet		INNER JOIN [Prod].[tbOrdenCompra] orden
+	ON		orderdet.orco_Id = orden.orco_Id			INNER JOIN [Prod].[tbEstilos] estilos
+	ON		orderdet.esti_Id = estilos.esti_Id			INNER JOIN [Prod].[tbTallas] tallas
+	ON		orderdet.tall_Id = tallas.tall_Id			INNER JOIN [Prod].[tbProcesos] procesos
+	ON		orderdet.proc_IdActual = procesos.proc_Id	INNER JOIN [Prod].[tbColores] colores
+	ON		orderdet.colr_Id = colores.colr_Id
 	WHERE	orco_Codigo = @orco_Codigo
 	ORDER BY code_FechaProcActual ASC
 END
