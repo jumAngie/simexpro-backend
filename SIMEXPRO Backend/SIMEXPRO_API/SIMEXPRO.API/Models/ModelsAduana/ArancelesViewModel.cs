@@ -18,6 +18,8 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public int aran_ISV	{ get; set; }
         public decimal aran_SEL	{ get; set; }
         public decimal aran_ProdCons	{ get; set; }
+        public string impu_Descripcion { get; set; }
+        public int impu_Cantidad { get; set; }
         public bool aran_AplicaVehiculos { get; set; }
         public DateTime aran_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }

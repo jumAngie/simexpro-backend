@@ -30,6 +30,10 @@ namespace SIMEXPRO.Entities.Entities
         public int? usua_UsuarioModificacion { get; set; }
         [NotMapped]
         public string UsuarioModificacion { get; set; }
+        [NotMapped]
+        public string impu_Descripcion { get; set; }
+        [NotMapped]
+        public int impu_Cantidad { get; set; }
         public DateTime? aran_FechaModificacion { get; set; }
         public bool? aram_Estado { get; set; }
 

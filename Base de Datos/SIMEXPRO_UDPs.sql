@@ -9193,7 +9193,9 @@ BEGIN
 			END AS aran_Tipo,
 			aran_Descripcion,
 			 aran_DAI,
-			 impu.impu_Cantidad AS aran_ISV,
+			 aran_ISV,
+			 impu.impu_Descripcion,
+			 impu.impu_Cantidad,
 			 aran_ProdCons,
 			 aran_SEL,
 			 aran_AplicaVehiculos,
@@ -9230,8 +9232,10 @@ BEGIN
 				ELSE 'Arancel' 
 			END AS aran_Tipo,
 			aran_Descripcion,
-			 aran_DAI,
+			 aran_DAI, 
 			 aran_ISV,
+			 impu.impu_Descripcion,
+			 impu.impu_Cantidad,
 			 aran_ProdCons,
 			 aran_SEL,
 			 aran_AplicaVehiculos,
@@ -9248,6 +9252,7 @@ BEGIN
    FROM	Adua.tbAranceles ara
    INNER JOIN Acce.tbUsuarios usu ON ara.usua_UsuarioCreacion = usu.usua_Id
    LEFT JOIN Acce.tbUsuarios usu1 ON usu1.usua_Id = ara.usua_UsuarioModificacion 
+   LEFT JOIN [Adua].[tbImpuestos] impu ON impu.impu_Id = aran_ISV
    WHERE ara.aran_Codigo LIKE '%'+ @aran_Codigo + '%' AND aram_Estado = 1
    ORDER BY DATALENGTH(aran_Codigo) 
 
@@ -9263,7 +9268,9 @@ BEGIN
 			aran_Codigo,
 			aran_Descripcion,
 			 aran_DAI,
-			 aran_ISV,
+			  aran_ISV,
+			 impu.impu_Descripcion,
+			 impu.impu_Cantidad,
 			 aran_ProdCons,
 			 aran_SEL,
 			 aran_AplicaVehiculos,
@@ -9280,6 +9287,7 @@ BEGIN
    FROM	Adua.tbAranceles ara
    INNER JOIN Acce.tbUsuarios usu ON ara.usua_UsuarioCreacion = usu.usua_Id
    LEFT JOIN Acce.tbUsuarios usu1 ON usu1.usua_Id = ara.usua_UsuarioModificacion 
+   LEFT JOIN [Adua].[tbImpuestos] impu ON impu.impu_Id = aran_ISV
    WHERE DATALENGTH(aran_Codigo) = 10 AND aram_Estado = 1
 
 END
@@ -9293,7 +9301,9 @@ BEGIN
 			aran_Codigo,
 			aran_Descripcion,
 			 aran_DAI,
-			 aran_ISV,
+			  aran_ISV,
+			 impu.impu_Descripcion,
+			 impu.impu_Cantidad,
 			 aran_ProdCons,
 			 aran_SEL,
 			 aran_AplicaVehiculos,
@@ -9310,6 +9320,7 @@ BEGIN
    FROM	Adua.tbAranceles ara
    INNER JOIN Acce.tbUsuarios usu ON ara.usua_UsuarioCreacion = usu.usua_Id
    LEFT JOIN Acce.tbUsuarios usu1 ON usu1.usua_Id = ara.usua_UsuarioModificacion 
+   LEFT JOIN [Adua].[tbImpuestos] impu ON impu.impu_Id = aran_ISV
    WHERE DATALENGTH(aran_Codigo) = 12  AND aram_Estado = 1
 
 END
@@ -9323,7 +9334,9 @@ BEGIN
 			aran_Descripcion,
 			DATALENGTH(aran_Codigo)  AS lenght,
 			 aran_DAI,
-			 aran_ISV,
+			  aran_ISV,
+			 impu.impu_Descripcion,
+			 impu.impu_Cantidad,
 			 aran_ProdCons,
 			 aran_SEL,
 			 aran_AplicaVehiculos,
@@ -9340,6 +9353,7 @@ BEGIN
    FROM	Adua.tbAranceles ara
    INNER JOIN Acce.tbUsuarios usu ON ara.usua_UsuarioCreacion = usu.usua_Id
    LEFT JOIN Acce.tbUsuarios usu1 ON usu1.usua_Id = ara.usua_UsuarioModificacion 
+   LEFT JOIN [Adua].[tbImpuestos] impu ON impu.impu_Id = aran_ISV
    WHERE aram_Estado = 1 AND DATALENGTH(aran_Codigo) > 15
 
 END
