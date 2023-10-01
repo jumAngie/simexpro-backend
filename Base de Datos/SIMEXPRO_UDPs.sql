@@ -9258,6 +9258,46 @@ BEGIN
 
 END
 GO
+--Categorias por capitulo
+CREATE OR ALTER PROCEDURE Adua.UDP_tbAranceles_ListarPorCapitulo
+@aran_Codigo NVARCHAR(50)
+AS
+BEGIN
+	SELECT	aran_Id,
+			aran_Codigo,
+			DATALENGTH(aran_Codigo) AS tamaño, 
+			CASE 
+				WHEN DATALENGTH(aran_Codigo) = 10 THEN 'Categoria'
+				WHEN DATALENGTH(aran_Codigo) = 12 THEN 'Subcategoria'
+				ELSE 'Arancel' 
+			END AS aran_Tipo,
+			aran_Descripcion,
+			 aran_DAI,
+			 aran_ISV,
+			 impu.impu_Descripcion,
+			 impu.impu_Cantidad,
+			 aran_ProdCons,
+			 aran_SEL,
+			 aran_AplicaVehiculos,
+			ara.usua_UsuarioCreacion,
+			usu.usua_Nombre           AS UsuarioCreacion,		
+			ara.aran_FechaCreacion, 
+		
+		
+		ara.usua_UsuarioModificacion,
+		usu1.usua_Nombre              AS UsuarioModificacion,
+		ara.aran_FechaModificacion	
+		
+ 
+   FROM	Adua.tbAranceles ara
+   INNER JOIN Acce.tbUsuarios usu ON ara.usua_UsuarioCreacion = usu.usua_Id
+   LEFT JOIN Acce.tbUsuarios usu1 ON usu1.usua_Id = ara.usua_UsuarioModificacion 
+   LEFT JOIN [Adua].[tbImpuestos] impu ON impu.impu_Id = aran_ISV
+   WHERE aram_Estado = 1 AND SUBSTRING(aran_Codigo, 0, 3) = @aran_Codigo
+   ORDER BY aran_Codigo asc 
+
+END
+GO
 
 
 /*Listar Aranceles Categoria*/

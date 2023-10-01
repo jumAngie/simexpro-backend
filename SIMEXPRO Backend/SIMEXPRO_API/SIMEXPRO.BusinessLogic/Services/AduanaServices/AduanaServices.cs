@@ -215,6 +215,20 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return resultado.Error(ex.Message);
             }
         }
+        public ServiceResult ListarArancelesCapitulo(string codigo)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _arancelesRepository.ListCapitulo(codigo);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
 
         public ServiceResult ListarArancelById(int aran_Id)
         {
