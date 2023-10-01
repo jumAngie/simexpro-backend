@@ -17844,6 +17844,7 @@ CREATE OR ALTER PROC Prod.UDP_DibujarDetalles
 AS
 BEGIN
 	SELECT	orden.orco_Id, 
+			orden.orco_Codigo,
 			code_Id, 
 			code_CantidadPrenda, 
 			estilos.esti_Descripcion, 
