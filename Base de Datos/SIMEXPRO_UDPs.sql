@@ -9293,7 +9293,7 @@ BEGIN
    INNER JOIN Acce.tbUsuarios usu ON ara.usua_UsuarioCreacion = usu.usua_Id
    LEFT JOIN Acce.tbUsuarios usu1 ON usu1.usua_Id = ara.usua_UsuarioModificacion 
    LEFT JOIN [Adua].[tbImpuestos] impu ON impu.impu_Id = aran_ISV
-   WHERE aram_Estado = 1 AND SUBSTRING(aran_Codigo, 0, 3) = @aran_Codigo
+   WHERE aram_Estado = 1 AND (SUBSTRING(aran_Codigo, 0, 3) = @aran_Codigo OR  @aran_Codigo = '00')
    ORDER BY aran_Codigo asc 
 
 END
