@@ -172,6 +172,7 @@ namespace SIMEXPRO.DataAccess
         #region Aranceles
         public static string ListarAranceles = "Adua.UDP_tbAranceles_Listar";
         public static string ListarArancelesFiltrado = "Adua.UDP_tbAranceles_ListarByCodigo";
+        public static string ListarArancelesCapitulo = "Adua.UDP_tbAranceles_ListarPorCapitulo";
         public static string ListarArancelById = "Adua.UDP_tbAranceles_ListarById";
         public static string InsertarAranceles = "Adua.UDP_tbAranceles_Insertar";
         public static string EditarAranceles = "Adua.UDP_tbAranceles_Editar";
