@@ -84,12 +84,13 @@ END
 
 GO
 
-CREATE OR ALTER PROC Adua.UDP_Reporte_Contratos_Persona_Natural_Por_Fecha -- '2023-09-11','2023-09-12'
+CREATE OR ALTER PROC Adua.UDP_Reporte_Contratos_Persona_Natural_Por_Fecha  --'2022-09-11','2023-10-12'
 @fecha_inicio   DATE,
 @fecha_fin      DATE
 AS
 BEGIN
 	SELECT
+		pena_Id,
 		ISNULL(tbps.[pers_Nombre], 'N/D')									AS [pers_Nombre],
 		ISNULL([pena_DireccionExacta], 'N/D')								AS [pena_DireccionExacta],
 		ISNULL(tbcd.[ciud_Nombre], 'N/D')									AS [ciud_Nombre],
@@ -118,12 +119,13 @@ END
 GO
 
 
-CREATE OR ALTER PROC Adua.UDP_Reporte_Contratos_Persona_Juridica_Por_Fecha -- '2023-09-11','2023-09-20'
+CREATE OR ALTER PROC Adua.UDP_Reporte_Contratos_Persona_Juridica_Por_Fecha -- '2022-09-11','2023-10-20'
 @fecha_inicio   DATE,
 @fecha_fin      DATE
 AS
 BEGIN
 	SELECT
+		peju_Id,
 		ISNULL(tbps.[pers_Nombre], 'N/D')								AS [pers_Nombre],
 		ISNULL([peju_PuntoReferencia], 'N/D')							AS [peju_PuntoReferencia],
 		ISNULL([peju_NumeroLocalRepresentante], 'N/D')					AS [peju_NumeroLocalRepresentante],
@@ -164,6 +166,7 @@ CREATE OR ALTER PROC Adua.UDP_Reporte_Contratos_Comerciante_Individual_Por_Fecha
 AS
 BEGIN
 		SELECT
+		coin_Id,
 		ISNULL(tbps.[pers_Nombre], 'N/D')					AS [pers_Nombre],
 		ISNULL([pers_FormaRepresentacion], 'N/D')			AS [pers_FormaRepresentacion],
 		ISNULL(tbcd.[ciud_Nombre], 'N/D')					AS [ciud_Nombre],
