@@ -1,4 +1,4 @@
-CREATE OR ALTER PROC Prod.UDP_Reporte_ProduccionPorModulo 
+CREATE OR ALTER PROC Prod.UDP_Reporte_ProduccionPorModulo -- '01-01-2023','11-08-2023'
 @fecha_inicio   DATE,
 @fecha_fin      DATE
 AS
@@ -18,7 +18,7 @@ END
 
 GO
 
-CREATE OR ALTER PROC Prod.UDP_Reporte_Planificación_Produccion
+CREATE OR ALTER PROC Prod.UDP_Reporte_Planificación_Produccion --1
 @orco_Id INT
 AS
 BEGIN
@@ -158,7 +158,7 @@ END
 
 GO
 
-CREATE OR ALTER PROC Adua.UDP_Reporte_Contratos_Comerciante_Individual_Por_Fecha '2023-09-11','2023-09-18'
+CREATE OR ALTER PROC Adua.UDP_Reporte_Contratos_Comerciante_Individual_Por_Fecha --'2023-09-11','2023-09-18'
 @fecha_inicio   DATE,
 @fecha_fin      DATE
 AS
