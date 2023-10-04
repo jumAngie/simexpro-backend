@@ -9533,7 +9533,10 @@ BEGIN
 	        WHERE coco_Descripcion = @coco_Descripcion AND coco_Estado=0)
 			BEGIN 
 			   UPDATE Adua.tbCondicionesComerciales
-			   SET coco_Estado = 1
+			   SET 
+			   coco_Codigo = @coco_Codigo,
+			   coco_Descripcion = @coco_Descripcion,
+			   coco_Estado = 1
 			   WHERE coco_Descripcion =@coco_Descripcion
 			   SELECT 1
 			END

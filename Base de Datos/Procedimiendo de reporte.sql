@@ -376,7 +376,7 @@ GO
 ------
 --VAMOS CON EL OTRO 
 GO
-CREATE OR ALTER PROCEDURE adua.UDP_Reporte_Importaciones
+CREATE OR ALTER PROCEDURE adua.UDP_Reporte_Importaciones '2022-09-25','2023-10-25'
 @fechaInicio DATE,
 @fechaFin	 DATE
 AS 
