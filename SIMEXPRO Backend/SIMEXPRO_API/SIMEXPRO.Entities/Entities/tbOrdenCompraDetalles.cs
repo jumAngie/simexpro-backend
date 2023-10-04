@@ -112,7 +112,8 @@ namespace SIMEXPRO.Entities.Entities
         public string proc_CodigoHtml { get; set; }
 
 
-
+        [NotMapped]
+        public string detallesprocesos { get; set;  }
 
 
 

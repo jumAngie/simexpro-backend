@@ -119,7 +119,7 @@ END
 GO
 
 --/*Dibujar menu*/
-CREATE OR ALTER   PROCEDURE [Acce].[UDP_RolesPorPantalla_DibujadoMenu] 1
+CREATE OR ALTER   PROCEDURE [Acce].[UDP_RolesPorPantalla_DibujadoMenu] 
     @role_ID INT
 AS
 BEGIN
@@ -17879,7 +17879,7 @@ END
 
 -- ///
 go
-CREATE OR ALTER PROC Prod.UDP_DibujarDetalles
+CREATE OR ALTER PROC Prod.UDP_DibujarDetalles 
 	@orco_Codigo NVARCHAR(100)
 AS
 BEGIN
@@ -17894,7 +17894,23 @@ BEGIN
 			[proc_CodigoHtml],
 			[code_FechaProcActual],
 			orderdet.colr_Id,
-			colores.colr_Nombre
+			colores.colr_Nombre,
+			(SELECT  ensa_Id
+					,ensa_Cantidad
+					,empl.empl_Id
+					,CONCAT(empl.empl_Nombres, ' ', empl.empl_Apellidos) AS empl_NombreCompleto
+					,ensa_FechaInicio
+					,ensa_FechaLimite
+					,modu.modu_Id
+					,modu.modu_Nombre
+					,ppro_Id
+					,procesos.proc_Id
+			FROM [Prod].[tbOrde_Ensa_Acab_Etiq] ensa		INNER JOIN [Gral].[tbEmpleados] empl
+			ON   ensa.empl_Id = empl.empl_Id				INNER JOIN [Prod].[tbModulos] modu
+			ON   ensa.modu_Id = modu.modu_Id				
+			WHERE ensa.code_Id = orderdet.code_Id
+			AND   modu.proc_Id = procesos.proc_Id
+			FOR JSON PATH) AS detallesprocesos
 	FROM	[Prod].[tbOrdenCompraDetalles] orderdet		INNER JOIN [Prod].[tbOrdenCompra] orden
 	ON		orderdet.orco_Id = orden.orco_Id			INNER JOIN [Prod].[tbEstilos] estilos
 	ON		orderdet.esti_Id = estilos.esti_Id			INNER JOIN [Prod].[tbTallas] tallas
