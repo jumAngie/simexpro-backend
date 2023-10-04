@@ -17897,7 +17897,17 @@ BEGIN
 			[proc_CodigoHtml],
 			[code_FechaProcActual],
 			orderdet.colr_Id,
+			orderdet.code_Unidad,
+			orderdet.code_Valor,
+			orderdet.code_Impuesto,
 			colores.colr_Nombre,
+			orderdet.[code_EspecificacionEmbalaje],
+			(CASE orderdet.code_Sexo 
+				WHEN 'M' THEN 'Masculino'
+				WHEN 'F' THEN 'Femenino'
+				WHEN 'U' THEN 'Unisex'
+				ELSE orderdet.code_Sexo 
+			END) AS code_Sexo,
 			(SELECT  ensa_Id
 					,ensa_Cantidad
 					,empl.empl_Id
