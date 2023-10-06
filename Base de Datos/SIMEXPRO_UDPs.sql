@@ -550,6 +550,7 @@ BEGIN
 	 AND (pant_EsAduana = @pant_EsAduana 
 	 OR pant_EsAduana IS NULL)
 	 OR @pant_EsAduana IS NULL
+	 ORDER BY pant_Esquema
 END
 GO
 
