@@ -29,6 +29,14 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             var listado = _aduanaServices.ListarDeclaraciones_Valor();
             return Ok(listado);
         }
+        
+        [HttpGet("ListarHistorial")]
+        public IActionResult IndexHistorial()
+        {
+            var listado = _aduanaServices.ListarDeclaraciones_ValorHistorial();
+            return Ok(listado);
+        }
+
 
         [HttpPost("InsertarTab1")]
         public IActionResult InsertTab1(Declaraciones_ValorControllerViewModel item)

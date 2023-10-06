@@ -186,6 +186,7 @@ namespace SIMEXPRO.DataAccess
 
         #region Boletin de Pago
         public static string ListarBoletinPago = "Adua.UDP_tbBoletinPago_Listar";
+        public static string ListarBoletinPagoHistorial = "Adua.UDP_Historial_BolentinPagos";
         public static string InsertarBoletinPago = "Adua.UDP_tbBoletinPago_Insertar";
         public static string EditarBoletinPago = "Adua.UDP_tbBoletinPago_Editar";
         #endregion
@@ -244,6 +245,7 @@ namespace SIMEXPRO.DataAccess
 
         #region Declaraciones de Valor
         public static string ListarDeclaracionesValor = "adua.UDP_tbDeclaraciones_ValorCompleto_Listar";
+        public static string ListarDeclaracionesValorHistorial = "Adua.UDP_Historial_DevaSinDuca";
 
         public static string InsertarDeclaracionesValorTAP1 = "adua.UDP_tbDeclaraciones_Valor_Tab1_Insertar";
         public static string EditarDeclaracionesValorTAP1 = "adua.UDP_tbDeclaraciones_Valor_Tab1_Editar";
@@ -306,6 +308,7 @@ namespace SIMEXPRO.DataAccess
 
         #region Duca
         public static string ListarDuca = "Adua.UDP_tbDuca_Listar";
+        public static string ListarDucaHistorial = "Adua.UDP_Historial_DUCAS";
         public static string ListarDuca_ById = "Adua.UDP_tbDuca_Listar_ById";
         public static string ListarDevaNoDuca = "Adua.UDP_tbDUCA_PreInsertarListado";
 

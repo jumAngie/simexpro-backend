@@ -175,6 +175,13 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return respuesta;
         }
 
+        public IEnumerable<tbDeclaraciones_Valor> ListVWHistorial()
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var respuesta = db.Query<tbDeclaraciones_Valor>(ScriptsDataBase.ListarDeclaracionesValorHistorial, commandType: CommandType.StoredProcedure);
+
+            return respuesta;
+        }
         public IEnumerable<VW_tbDeclaraciones_ValorCompleto> ListVW()
         {
             var con = new SIMEXPRO();

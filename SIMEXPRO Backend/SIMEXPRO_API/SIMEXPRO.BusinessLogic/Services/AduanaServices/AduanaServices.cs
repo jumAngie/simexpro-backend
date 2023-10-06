@@ -358,6 +358,22 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult ListarBoletinPagoHistorial()
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _boletinPagoRepository.ListHistorial();
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
+
+
         public ServiceResult InsertarBoletinPago(tbBoletinPago item)
         {
             var result = new ServiceResult();
@@ -815,6 +831,21 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+
+        public ServiceResult ListarDeclaraciones_ValorHistorial()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _declaraciones_ValorRepository.ListVWHistorial();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
 
         public ServiceResult InsertarDeclaraciones_ValorTab1(tbDeclaraciones_Valor item, tbDeclarantes itemDecl, tbImportadores itemImp)
         {
@@ -1308,6 +1339,22 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+        public ServiceResult ListarDucaHistorial()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _ducaRepository.ListHistorial();
+
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+
 
         public ServiceResult ListarDuca_ById(int id)
         {

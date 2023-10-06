@@ -60,6 +60,14 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
         }
 
+        public IEnumerable<tbBoletinPago> ListHistorial()
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            return db.Query<tbBoletinPago>(ScriptsDataBase.ListarBoletinPagoHistorial, null, commandType: CommandType.StoredProcedure);
+
+        }
+
+
         public RequestStatus Update(tbBoletinPago item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
