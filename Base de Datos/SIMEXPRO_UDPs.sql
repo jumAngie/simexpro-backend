@@ -11046,7 +11046,7 @@ AS
 BEGIN
 	SELECT	impu.impu_Id          ,--AS IdImpuesto,
 		    impu.impu_Descripcion ,--AS DescripcionImpuesto,
-		   		
+		   	[impu_Cantidad],
 			impu.usua_UsuarioCreacion,
 			usu.usua_Nombre         AS UsuarioCreacion ,
 			impu_FechaCreacion      ,--AS FechaCreacion,
@@ -11065,6 +11065,7 @@ GO
 --INSERTAR
 CREATE OR ALTER PROCEDURE Adua.UDP_tbImpuestos_Insertar 
 	@impu_Descripcion       NVARCHAR(150),
+	@impu_Cantidad			DECIMAL(18,2),
 	@usua_UsuarioCreacion	INT,
 	@impu_FechaCreacion     DATETIME
 AS
@@ -11081,10 +11082,12 @@ BEGIN
 			BEGIN 
 				INSERT INTO Adua.tbImpuestos (
 				                                  impu_Descripcion,
+												  impu_Cantidad,
 											      usua_UsuarioCreacion, 
 											      impu_FechaCreacion)
 			VALUES(
 			       @impu_Descripcion,
+				   @impu_Cantidad,
 				   @usua_UsuarioCreacion,
 				   @impu_FechaCreacion)
 				SELECT 1
@@ -11100,6 +11103,7 @@ GO
 CREATE OR ALTER PROCEDURE Adua.UDP_tbImpuestos_Editar 
     @impu_Id                    INT,
 	@impu_Descripcion           NVARCHAR(150),
+	@impu_Cantidad			DECIMAL(18,2),
 	@usua_UsuarioModificacion	INT,
 	@impu_FechaModificacion     DATETIME
 AS
@@ -11108,6 +11112,7 @@ BEGIN
 		UPDATE  Adua.tbImpuestos
 		SET		
 		        impu_Descripcion = @impu_Descripcion,
+				impu_Cantidad = @impu_Cantidad,
 				usua_UsuarioModificacion = @usua_UsuarioModificacion,
 				impu_FechaModificacion = @impu_FechaModificacion
 		WHERE	impu_Id = @impu_Id
