@@ -1,14 +1,17 @@
-CREATE OR ALTER PROC Prod.UDP_Reporte_ProduccionPorModulo -- '01-01-2023','11-08-2023'
+CREATE OR ALTER PROC Prod.UDP_Reporte_ProduccionPorModulo --'01-01-2023','11-08-2023'
 @fecha_inicio   DATE,
 @fecha_fin      DATE
 AS
 BEGIN
+
+	DECLARE @cantidad_total DECIMAL(18,2) = (SELECT SUM(rdet_TotalDia) FROM Prod.tbReporteModuloDiaDetalle WHERE rdet_FechaCreacion BETWEEN @fecha_inicio  AND @fecha_fin )
+
 	SELECT
 			Modulo.modu_Nombre,
 			SUM(ReporteModuloDiaDetalle.rdet_TotalDia) AS TotalProduccion,
 			AVG(rdet_TotalDia) AS PromedioCantidad,
 			AVG(rdet_TotalDanado) AS PromedioDanio,
-			CAST(SUM(CAST(ReporteModuloDiaDetalle.rdet_TotalDia  AS DECIMAL(18,2))) * 100.0 / SUM(SUM(CAST(ReporteModuloDiaDetalle.rdet_TotalDia AS DECIMAL(18,2))))OVER() AS DECIMAL(18,2)) AS PorcentajeProduccion
+			(CAST(SUM(rdet_TotalDia) AS DECIMAL(18,2)) / @cantidad_total) * 100 AS promedioProduccion
 	FROM	Prod.tbReporteModuloDiaDetalle  ReporteModuloDiaDetalle
 			INNER JOIN Prod.tbReporteModuloDia ReporteModuloDia ON ReporteModuloDiaDetalle.remo_Id = ReporteModuloDia.remo_Id
 			INNER JOIN Prod.tbModulos AS Modulo ON ReporteModuloDia.modu_Id = Modulo.modu_Id
