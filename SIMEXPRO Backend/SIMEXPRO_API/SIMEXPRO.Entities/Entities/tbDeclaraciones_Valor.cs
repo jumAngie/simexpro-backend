@@ -89,7 +89,10 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string inte_Fax { get; set; }
         [NotMapped]
-        public int inte_ciudId { get; set; } 
+        public int inte_ciudId { get; set; }
+
+        [NotMapped]
+        public string Facturas { get; set; }
 
         public string deva_LugarEntrega { get; set; }
         public int? pais_EntregaId { get; set; }
