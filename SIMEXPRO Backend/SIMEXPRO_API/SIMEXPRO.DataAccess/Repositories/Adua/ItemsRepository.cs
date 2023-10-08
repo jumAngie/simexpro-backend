@@ -147,7 +147,10 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@item_CriterioCertificarOrigen", item.item_CriterioCertificarOrigen, DbType.String, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@item_FechaModificacion", item.item_FechaModificacion, DbType.String, ParameterDirection.Input);
-
+            parametros.Add("@EsNuevo", item.item_EsNuevo, DbType.Boolean, ParameterDirection.Input);
+            parametros.Add("@EsHibrido", item.item_EsHibrido, DbType.Boolean, ParameterDirection.Input);
+            parametros.Add("@LitrosTotales", item.item_LitrosTotales, DbType.Decimal, ParameterDirection.Input);
+            parametros.Add("@CigarrosTotales", item.item_CigarrosTotales, DbType.Int32, ParameterDirection.Input);
 
             var answer = db.QueryFirst<string>(ScriptsDataBase.EditarItems, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
