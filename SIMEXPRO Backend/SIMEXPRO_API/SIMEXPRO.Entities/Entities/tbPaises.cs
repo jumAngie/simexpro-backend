@@ -12,7 +12,7 @@ namespace SIMEXPRO.Entities.Entities
         public tbPaises()
         {
             tbConductor = new HashSet<tbConductor>();
-            //tbDeclaraciones_Valor = new HashSet<tbDeclaraciones_Valor>();
+            tbPaisesEstanTratadosConHonduras = new HashSet<tbPaisesEstanTratadosConHonduras>();
             tbDucaduca_Pais_DestinoNavigation = new HashSet<tbDuca>();
             tbDucaduca_Pais_Emision_ExportadorNavigation = new HashSet<tbDuca>();
             tbDucaduca_Pais_Emision_ImportadorNavigation = new HashSet<tbDuca>();
@@ -57,5 +57,6 @@ namespace SIMEXPRO.Entities.Entities
         public virtual ICollection<tbItems> tbItems { get; set; }
         public virtual ICollection<tbProvincias> tbProvincias { get; set; }
         public virtual ICollection<tbTransporte> tbTransporte { get; set; }
+        public virtual ICollection<tbPaisesEstanTratadosConHonduras> tbPaisesEstanTratadosConHonduras { get; set; } 
     }
 }

@@ -42,6 +42,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[Adua].[tbArancelesPorTratados]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[Adua].[tbBaseCalculos]",
          "ObjectType": 0
       },
@@ -130,6 +134,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[Adua].[tbEcotasa]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[Adua].[tbEstadoBoletin]",
          "ObjectType": 0
       },
@@ -158,7 +166,15 @@
          "ObjectType": 0
       },
       {
+         "Name": "[Adua].[tbImpuestoProduccionComsumoCondiciones]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[Adua].[tbImpuestos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbImpuestoSelectivoConsumoCondicionesVehiculos]",
          "ObjectType": 0
       },
       {
@@ -218,6 +234,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[Adua].[tbPaisesEstanTratadosConHonduras]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[Adua].[tbPersonaJuridica]",
          "ObjectType": 0
       },
@@ -259,6 +279,10 @@
       },
       {
          "Name": "[Adua].[tbTransporte]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Adua].[tbTratadosLibreComercio]",
          "ObjectType": 0
       },
       {
@@ -359,6 +383,10 @@
       },
       {
          "Name": "[Prod].[tbFuncionesMaquina]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[Prod].[tbImpuestosProd]",
          "ObjectType": 0
       },
       {
@@ -468,13 +496,9 @@
       {
          "Name": "[Adua].[VW_tbDuca_GenerarDuca]",
          "ObjectType": 3
-      },
-      {
-         "Name": "[Prod].[VW_tbOrdenCompraDetalle_LineaTiempo]",
-         "ObjectType": 3
       }
    ],
-   "UiHint": "simexpro.SIMEXPRO",
+   "UiHint": "simexproserver.SIMEXPRO",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": true,
    "UseDbContextSplitting": false,

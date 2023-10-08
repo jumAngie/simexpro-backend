@@ -12,6 +12,7 @@ namespace SIMEXPRO.Entities.Entities
         public tbOrde_Ensa_Acab_Etiq()
         {
             tbRevisionDeCalidad = new HashSet<tbRevisionDeCalidad>();
+            tbReporteModuloDiaDetalle = new HashSet<tbReporteModuloDiaDetalle>();
         }
 
         [NotMapped]
@@ -62,5 +63,6 @@ namespace SIMEXPRO.Entities.Entities
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }
         public virtual ICollection<tbRevisionDeCalidad> tbRevisionDeCalidad { get; set; }
+        public virtual ICollection<tbReporteModuloDiaDetalle> tbReporteModuloDiaDetalle { get; set; }
     }
 }

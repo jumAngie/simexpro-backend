@@ -9091,7 +9091,54 @@ WHERE duca.duca_Id = @duca_Id
 END
 GO
 
- 
+--*********************************************************************--
+--------------------- PROC DE DUCA INICIAR --------------------------------------
+CREATE OR ALTER PROC Adua.UDP_tbDUCA_PreInsertarListado
+AS
+BEGIN
+	SELECT DEVA.deva_Id,
+		   DEVA.pais_ExportacionId,
+		   PaisExportacion.pais_Nombre,
+		   DEVA.inco_Id,
+		   Incoterm.inco_Codigo,
+		   DEVA.deva_FechaAceptacion
+	  FROM [Adua].[tbDeclaraciones_Valor] DEVA
+INNER JOIN [Gral].[tbPaises] PaisExportacion
+		ON DEVA.pais_ExportacionId = PaisExportacion.pais_Id
+INNER JOIN [Adua].[tbIncoterm] Incoterm
+		ON DEVA.inco_Id = Incoterm.inco_Id
+ LEFT JOIN [Adua].[tbItemsDEVAPorDuca] ITEMSDEVAPorDuca 
+		ON DEVA.deva_Id = ITEMSDEVAPorDuca.deva_Id
+	 WHERE ITEMSDEVAPorDuca.deva_Id IS NULL AND deva_Finalizacion = 1; -- Excluir registros que existen en la otra tabla
+END
+GO
+--------------------- PROC DE DUCA FINALIZAR --------------------------------------
+--*********************************************************************--
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbPaisesEstanTratadosConHonduras_TratadoByPaisId
+(
+	@pais_Id		INT
+)
+AS
+BEGIN
+	SELECT trli_Id FROM Adua.tbPaisesEstanTratadosConHonduras WHERE pais_Id = @pais_Id
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbTratadosLibreComercio_ListById
+(
+	@trli_Id	INT
+)
+AS
+BEGIN
+	SELECT trli_Id, 
+		   trli_NombreTratado, 
+		   trli_FechaInicio 
+	  FROM Adua.tbTratadosLibreComercio
+	 WHERE trli_Id = @trli_Id
+END
+GO
+
 /* Preinsert DUCA*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_PreInsertar
 AS
@@ -9167,32 +9214,56 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_InsertarTab1
 	@duca_Lugar_Desembarque				NVARCHAR(MAX),
 	@duca_Manifiesto					NVARCHAR(150),
 	@duca_Titulo						NVARCHAR(150),
-	@duca_Ventaja						NVARCHAR(100),
+	@trli_Id							INT,
 	@usua_UsuarioCreacion				INT,
 	@duca_FechaCreacion					DATETIME
 AS
 BEGIN
 	BEGIN TRY
-	 UPDATE Adua.tbDuca
-		SET duca_No_Duca					 = UPPER(@duca_No_Duca),
-			duca_No_Correlativo_Referencia	 = UPPER(@duca_No_Correlativo_Referencia),
-			duca_AduanaRegistro				 = @duca_AduanaRegistro,
-			duca_AduanaDestino				 = @duca_AduanaDestino,
-			duca_Regimen_Aduanero			 = @duca_Regimen_Aduanero,
-			duca_Modalidad					 = @duca_Modalidad,
-			duca_Clase						 = @duca_Clase,
-			duca_FechaVencimiento			 = @duca_FechaVencimiento,
-			duca_Pais_Procedencia			 = @duca_Pais_Procedencia,
-			duca_Pais_Destino				 = @duca_Pais_Destino,
-			duca_Deposito_Aduanero			 = @duca_Deposito_Aduanero,
-			duca_Lugar_Desembarque			 = @duca_Lugar_Desembarque,
-			duca_Manifiesto					 = UPPER(@duca_Manifiesto),
-			duca_Titulo						 = UPPER(@duca_Titulo),
-			duca_Ventaja					 = @duca_Ventaja,
-			usua_UsuarioCreacion			 = @usua_UsuarioCreacion,
-			duca_FechaCreacion				 = @duca_FechaCreacion
-	  WHERE duca_Id = @duca_Id	
-
+		IF(@trli_Id > 0)
+			BEGIN
+			 UPDATE Adua.tbDuca
+				SET duca_No_Duca					 = UPPER(@duca_No_Duca),
+					duca_No_Correlativo_Referencia	 = UPPER(@duca_No_Correlativo_Referencia),
+					duca_AduanaRegistro				 = @duca_AduanaRegistro,
+					duca_AduanaDestino				 = @duca_AduanaDestino,
+					duca_Regimen_Aduanero			 = @duca_Regimen_Aduanero,
+					duca_Modalidad					 = @duca_Modalidad,
+					duca_Clase						 = @duca_Clase,
+					duca_FechaVencimiento			 = @duca_FechaVencimiento,
+					duca_Pais_Procedencia			 = @duca_Pais_Procedencia,
+					duca_Pais_Destino				 = @duca_Pais_Destino,
+					duca_Deposito_Aduanero			 = @duca_Deposito_Aduanero,
+					duca_Lugar_Desembarque			 = @duca_Lugar_Desembarque,
+					duca_Manifiesto					 = UPPER(@duca_Manifiesto),
+					duca_Titulo						 = UPPER(@duca_Titulo),
+					trli_Id							 = @trli_Id,
+					usua_UsuarioCreacion			 = @usua_UsuarioCreacion,
+					duca_FechaCreacion				 = @duca_FechaCreacion
+			  WHERE duca_Id = @duca_Id	
+			END
+		ELSE
+			BEGIN
+			 UPDATE Adua.tbDuca
+				SET duca_No_Duca					 = UPPER(@duca_No_Duca),
+					duca_No_Correlativo_Referencia	 = UPPER(@duca_No_Correlativo_Referencia),
+					duca_AduanaRegistro				 = @duca_AduanaRegistro,
+					duca_AduanaDestino				 = @duca_AduanaDestino,
+					duca_Regimen_Aduanero			 = @duca_Regimen_Aduanero,
+					duca_Modalidad					 = @duca_Modalidad,
+					duca_Clase						 = @duca_Clase,
+					duca_FechaVencimiento			 = @duca_FechaVencimiento,
+					duca_Pais_Procedencia			 = @duca_Pais_Procedencia,
+					duca_Pais_Destino				 = @duca_Pais_Destino,
+					duca_Deposito_Aduanero			 = @duca_Deposito_Aduanero,
+					duca_Lugar_Desembarque			 = @duca_Lugar_Desembarque,
+					duca_Manifiesto					 = UPPER(@duca_Manifiesto),
+					duca_Titulo						 = UPPER(@duca_Titulo),
+					usua_UsuarioCreacion			 = @usua_UsuarioCreacion,
+					duca_FechaCreacion				 = @duca_FechaCreacion
+			  WHERE duca_Id = @duca_Id	
+			END
+	 
 		SELECT 1
 	END TRY
 	BEGIN CATCH
@@ -9253,7 +9324,7 @@ BEGIN
 						  ,duca_NombreSocial_Declarante = @duca_NombreSocial_Declarante
 						  ,duca_DomicilioFiscal_Declarante = @duca_DomicilioFiscal_Declarante
 						  ,duca_Codigo_Transportista = @duca_Codigo_Transportista 
-						  ,motr_id = @motr_Id
+						  ,motr_Id = @motr_Id
 						  ,duca_Transportista_Nombre = @duca_Transportista_Nombre
 						  ,duca_Conductor_Id = @ducaConductor      
 					 WHERE duca_Id = @duca_Id
@@ -17161,29 +17232,6 @@ BEGIN
 	END CATCH
 END
 GO
-
-
-
---*********************************************************************--
---------------------- PROC DE DUCA INICIAR --------------------------------------
-CREATE OR ALTER PROC Adua.UDP_tbDUCA_PreInsertarListado
-AS
-BEGIN
-    SELECT
-        DEVA.deva_Id, 
-        ADUAIngreso.adua_Codigo + ' ' + ADUAIngreso.adua_Nombre AS 'adua_IngresoNombre', 
-        ADUADespacho.adua_Codigo + ' ' + ADUADespacho.adua_Nombre AS 'adua_DespachoNombre',
-        DEVA.deva_FechaAceptacion
-    FROM [Adua].[tbDeclaraciones_Valor] DEVA
-    INNER JOIN [Adua].[tbAduanas] ADUAIngreso ON DEVA.deva_AduanaIngresoId = ADUAIngreso.adua_Id
-    INNER JOIN [Adua].[tbAduanas] ADUADespacho ON DEVA.deva_AduanaDespachoId = ADUADespacho.adua_Id
-    LEFT JOIN [Adua].[tbItemsDEVAPorDuca] ITEMSDEVAPorDuca ON DEVA.deva_Id = ITEMSDEVAPorDuca.deva_Id
-    WHERE ITEMSDEVAPorDuca.deva_Id IS NULL AND deva_Finalizacion = 1
-	; -- Excluir registros que existen en la otra tabla
-END
-
---------------------- PROC DE DUCA FINALIZAR --------------------------------------
---*********************************************************************--
 
 -------****************** FILTRADO  DE DATOS ***************----------
 

@@ -64,7 +64,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parameters.Add("@duca_Lugar_Desembarque", item.duca_Lugar_Desembarque, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Manifiesto", item.duca_Manifiesto, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Titulo", item.duca_Titulo, DbType.String, ParameterDirection.Input);
-            parameters.Add("@duca_Ventaja", item.duca_Ventaja, DbType.String, ParameterDirection.Input);
+            parameters.Add("@trli_Id", item.trli_Id, DbType.Int32, ParameterDirection.Input);
 
             parameters.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@duca_FechaCreacion", item.duca_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
@@ -206,7 +206,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parameters.Add("@duca_Lugar_Desembarque", item.duca_Lugar_Desembarque, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Manifiesto", item.duca_Manifiesto, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Titulo", item.duca_Titulo, DbType.String, ParameterDirection.Input);
-            parameters.Add("@duca_Ventaja", item.duca_Ventaja, DbType.String, ParameterDirection.Input);
+            parameters.Add("@trli_Id", item.trli_Id, DbType.Int32, ParameterDirection.Input);
 
             parameters.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@duca_FechaModificacion", item.duca_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
