@@ -7350,7 +7350,7 @@ END
 
 GO
 /* LISTAR items*/
-CREATE OR ALTER PROCEDURE Adua.UDP_tbItems_Listar 
+CREATE OR ALTER PROCEDURE Adua.UDP_tbItems_Listar 9
 	@fact_Id				INT
 AS
 BEGIN
@@ -7365,6 +7365,7 @@ BEGIN
 		   item_Marca, 
 		   item_Modelo, 
 		   merc_Id, 
+		   aran_Id,
 		   pais_IdOrigenMercancia, 
 		   item_ClasificacionArancelaria, 
 		   item_ValorUnitario, 
@@ -7382,7 +7383,11 @@ BEGIN
 		   item.usua_UsuarioModificacion, 
 		   usuaModifica.usua_Nombre				AS usuarioModificacionNombre,
 		   item_FechaModificacion, 
-		   item_Estado
+		   item_Estado,
+		   item_EsNuevo,
+           item_EsHibrido,
+           item_LitrosTotales,
+		   item_CigarrosTotales
 	FROM Adua.tbItems item 
 	INNER JOIN Acce.tbUsuarios usuaCrea		ON item.usua_UsuarioCreacion = usuaCrea.usua_Id 
 	LEFT JOIN Acce.tbUsuarios usuaModifica  ON item.usua_UsuarioModificacion = usuaModifica.usua_Id
@@ -7391,114 +7396,68 @@ END
 
 
 GO
-CREATE OR ALTER   PROCEDURE Adua.UDP_tbItems_Insertar
-	@fact_Id									INT, 
-	@item_Cantidad								INT, 
-	@item_PesoNeto								DECIMAL(18,2), 
-	@item_PesoBruto								DECIMAL(18,2), 
-	@unme_Id									INT, 
-	@item_IdentificacionComercialMercancias		NVARCHAR(300), 
-	@item_CaracteristicasMercancias				NVARCHAR(400), 
-	@item_Marca									NVARCHAR(50), 
-	@item_Modelo								NVARCHAR(100), 
-	@aran_Id									INT,
-	@merc_Id									INT, 
-	@pais_IdOrigenMercancia						INT, 
-	@item_ClasificacionArancelaria				CHAR(16), 
-	@item_ValorUnitario							DECIMAL(18,2), 
-	@item_GastosDeTransporte					DECIMAL(18,2), 
-	@item_ValorTransaccion						DECIMAL(18,2), 
-	@item_Seguro								DECIMAL(18,2), 
-	@item_OtrosGastos							DECIMAL(18,2), 
-	@item_ValorAduana							DECIMAL(18,2), 
-	@item_CuotaContingente						DECIMAL(18,2), 
-	@item_ReglasAccesorias						NVARCHAR(MAX), 
-	@item_CriterioCertificarOrigen				NVARCHAR(MAX), 
-	@usua_UsuarioCreacion						INT, 
-	@item_FechaCreacion							DATETIME
-AS
-BEGIN
-	BEGIN TRANSACTION
-	BEGIN TRY
-		INSERT INTO Adua.tbItems(fact_Id, 
-									 item_Cantidad, 
-									 item_PesoNeto, 
-									 item_PesoBruto, 
-									 unme_Id, 
-									 item_IdentificacionComercialMercancias, 
-									 item_CaracteristicasMercancias, 
-									 item_Marca, 
-									 item_Modelo,
-									 aran_Id,
-									 merc_Id, 
-									 pais_IdOrigenMercancia, 
-									 item_ClasificacionArancelaria, 
-									 item_ValorUnitario, 
-									 item_GastosDeTransporte, 
-									 item_ValorTransaccion, 
-									 item_Seguro, 
-									 item_OtrosGastos, 
-									 item_ValorAduana, 
-									 item_CuotaContingente, 
-									 item_ReglasAccesorias, 
-									 item_CriterioCertificarOrigen, 
-									 usua_UsuarioCreacion, 
-									 item_FechaCreacion)
-		VALUES (@fact_Id, 
-				@item_Cantidad, 
-				@item_PesoNeto, 
-				@item_PesoBruto, 
-				@unme_Id, 
-				@item_IdentificacionComercialMercancias, 
-				@item_CaracteristicasMercancias, 
-				@item_Marca, 
-				@item_Modelo,
-				@aran_Id,
-				@merc_Id, 
-				@pais_IdOrigenMercancia, 
-				@item_ClasificacionArancelaria, 
-				@item_ValorUnitario, 
-				@item_GastosDeTransporte, 
-				@item_ValorTransaccion, 
-				@item_Seguro, 
-				@item_OtrosGastos, 
-				@item_ValorAduana, 
-				@item_CuotaContingente, 
-				@item_ReglasAccesorias, 
-				@item_CriterioCertificarOrigen, 
-				@usua_UsuarioCreacion, 
-				@item_FechaCreacion)
-
-		DECLARE @item_Id INT = SCOPE_IDENTITY()
-
-		INSERT INTO Adua.tbItemsHistorial(item_Id, 
-											  fact_Id, 
-											  item_Cantidad, 
-											  item_PesoNeto, 
-											  item_PesoBruto, 
-											  unme_Id, 
-											  item_IdentificacionComercialMercancias, 
-											  item_CaracteristicasMercancias, 
-											  item_Marca, 
-											  item_Modelo, 
-											  merc_Id, 
-											  pais_IdOrigenMercancia, 
-											  item_ClasificacionArancelaria, 
-											  item_ValorUnitario, 
-											  item_GastosDeTransporte, 
-											  item_ValorTransaccion, 
-											  item_Seguro, 
-											  item_OtrosGastos, 
-											  item_ValorAduana, 
-											  item_CuotaContingente, 
-											  item_ReglasAccesorias, 
-											  item_CriterioCertificarOrigen, 
-											  hduc_UsuarioAccion, 
-											  hduc_FechaAccion, 
-											  hduc_Accion)
-
-			VALUES (@item_Id, 
-					@fact_Id, 
+	CREATE OR ALTER   PROCEDURE Adua.UDP_tbItems_Insertar
+		@fact_Id									INT, 
+		@item_Cantidad								INT, 
+		@item_PesoNeto								DECIMAL(18,2), 
+		@item_PesoBruto								DECIMAL(18,2), 
+		@unme_Id									INT, 
+		@item_IdentificacionComercialMercancias		NVARCHAR(300), 
+		@item_CaracteristicasMercancias				NVARCHAR(400), 
+		@item_Marca									NVARCHAR(50), 
+		@item_Modelo								NVARCHAR(100), 
+		@aran_Id									INT,
+		@merc_Id									INT, 
+		@pais_IdOrigenMercancia						INT, 
+		@item_ClasificacionArancelaria				CHAR(16), 
+		@item_ValorUnitario							DECIMAL(18,2), 
+		@item_GastosDeTransporte					DECIMAL(18,2), 
+		@item_ValorTransaccion						DECIMAL(18,2), 
+		@item_Seguro								DECIMAL(18,2), 
+		@item_OtrosGastos							DECIMAL(18,2), 
+		@item_ValorAduana							DECIMAL(18,2), 
+		@item_CuotaContingente						DECIMAL(18,2), 
+		@item_ReglasAccesorias						NVARCHAR(MAX), 
+		@item_CriterioCertificarOrigen				NVARCHAR(MAX), 
+		@usua_UsuarioCreacion						INT, 
+		@item_FechaCreacion							DATETIME,
+		@EsNuevo									BIT,
+		@EsHibrido									BIT,
+		@LitrosTotales								DECIMAL(18,2),
+		@CigarrosTotales							INT
+	AS
+	BEGIN
+		BEGIN TRANSACTION
+		BEGIN TRY
+			INSERT INTO Adua.tbItems(fact_Id, 
+										 item_Cantidad, 
+										 item_PesoNeto, 
+										 item_PesoBruto, 
+										 unme_Id, 
+										 item_IdentificacionComercialMercancias, 
+										 item_CaracteristicasMercancias, 
+										 item_Marca, 
+										 item_Modelo,
+										 aran_Id,
+										 merc_Id, 
+										 pais_IdOrigenMercancia, 
+										 item_ClasificacionArancelaria, 
+										 item_ValorUnitario, 
+										 item_GastosDeTransporte, 
+										 item_ValorTransaccion, 
+										 item_Seguro, 
+										 item_OtrosGastos, 
+										 item_ValorAduana, 
+										 item_CuotaContingente, 
+										 item_ReglasAccesorias, 
+										 item_CriterioCertificarOrigen, 
+										 item_EsNuevo,
+										 item_EsHibrido,
+										 item_LitrosTotales,
+										 item_CigarrosTotales,
+										 usua_UsuarioCreacion, 
+										 item_FechaCreacion)
+			VALUES (@fact_Id, 
 					@item_Cantidad, 
 					@item_PesoNeto, 
 					@item_PesoBruto, 
@@ -7506,7 +7465,8 @@ BEGIN
 					@item_IdentificacionComercialMercancias, 
 					@item_CaracteristicasMercancias, 
 					@item_Marca, 
-					@item_Modelo, 
+					@item_Modelo,
+					@aran_Id,
 					@merc_Id, 
 					@pais_IdOrigenMercancia, 
 					@item_ClasificacionArancelaria, 
@@ -7518,21 +7478,228 @@ BEGIN
 					@item_ValorAduana, 
 					@item_CuotaContingente, 
 					@item_ReglasAccesorias, 
-					@item_CriterioCertificarOrigen,
+					@item_CriterioCertificarOrigen, 
+					@EsNuevo,
+					@EsHibrido,
+					@LitrosTotales,
+					@CigarrosTotales,
 					@usua_UsuarioCreacion, 
-					@item_FechaCreacion,
-					'Insertar')
+					@item_FechaCreacion)
 
-		SELECT 1
+			DECLARE @item_Id INT = SCOPE_IDENTITY()
 
-		COMMIT TRAN
-	END TRY
-	BEGIN CATCH
-		SELECT 'Error Message: ' + ERROR_MESSAGE()
-		ROLLBACK TRAN
-	END CATCH
-END
-}
+			INSERT INTO Adua.tbItemsHistorial(item_Id, 
+												  fact_Id, 
+												  item_Cantidad, 
+												  item_PesoNeto, 
+												  item_PesoBruto, 
+												  unme_Id, 
+												  item_IdentificacionComercialMercancias, 
+												  item_CaracteristicasMercancias, 
+												  item_Marca, 
+												  item_Modelo, 
+												  merc_Id, 
+												  pais_IdOrigenMercancia, 
+												  item_ClasificacionArancelaria, 
+												  item_ValorUnitario, 
+												  item_GastosDeTransporte, 
+												  item_ValorTransaccion, 
+												  item_Seguro, 
+												  item_OtrosGastos, 
+												  item_ValorAduana, 
+												  item_CuotaContingente, 
+												  item_ReglasAccesorias, 
+												  item_CriterioCertificarOrigen, 
+												  hduc_UsuarioAccion, 
+												  hduc_FechaAccion, 
+												  hduc_Accion)
+
+				VALUES (@item_Id, 
+						@fact_Id, 
+						@item_Cantidad, 
+						@item_PesoNeto, 
+						@item_PesoBruto, 
+						@unme_Id, 
+						@item_IdentificacionComercialMercancias, 
+						@item_CaracteristicasMercancias, 
+						@item_Marca, 
+						@item_Modelo, 
+						@merc_Id, 
+						@pais_IdOrigenMercancia, 
+						@item_ClasificacionArancelaria, 
+						@item_ValorUnitario, 
+						@item_GastosDeTransporte, 
+						@item_ValorTransaccion, 
+						@item_Seguro, 
+						@item_OtrosGastos, 
+						@item_ValorAduana, 
+						@item_CuotaContingente, 
+						@item_ReglasAccesorias, 
+						@item_CriterioCertificarOrigen,
+						@usua_UsuarioCreacion, 
+						@item_FechaCreacion,
+						'Insertar')
+		
+			--Variables para condicion
+			DECLARE @aran_DAI DECIMAL(18,2);
+			DECLARE @aran_SEL DECIMAL(18,2);		
+			DECLARE @aran_ISV INT = 2;
+			DECLARE @aran_ProdCons DECIMAL(18,2);
+			DECLARE @AplicaVehiculo BIT;
+			DECLARE @ArancelVehicular BIT;
+			DECLARE @CodigoArancel NVARCHAR(MAX);
+
+			--Variables para calculos
+			DECLARE @SelVehiculo  DECIMAL(18,2);--Impuesto sel del vehiculo
+			DECLARE @EcoVehiculo  DECIMAL(18,2);--Impuesto Ecotasa del vehiculo
+			DECLARE @IsvItem  DECIMAL(18,2);--Impuesto Ecotasa del vehiculo
+
+			SELECT	@CodigoArancel = [aran_Codigo],
+					@aran_DAI = [aran_DAI],
+					@aran_SEL = [aran_SEL],
+					@aran_ISV = [aran_ISV],
+					@aran_ProdCons = [aran_ProdCons],
+					@AplicaVehiculo = [aran_AplicaVehiculos],
+					@ArancelVehicular = [aran_ArancelVehicular]
+			FROM	Adua.tbAranceles
+			WHERE	aran_Id =  @aran_Id		
+
+
+			--EL DAI SE INSERTA SIEMPRE							
+			INSERT INTO [Adua].[tbLiquidacionPorLinea]([lili_Tipo], [lili_Alicuota], [lili_Total], [lili_ModalidadPago], [lili_TotalGral], [item_Id])
+			VALUES ('DAI',@aran_DAI,NULL,NULL,NULL,@item_Id);
+
+			--INSERTAR ISV Y VERIFICAR SI ESTE ES NULO EN EL ARANCEL
+			IF(@aran_ISV > 0)
+				BEGIN
+					SELECT  @IsvItem = impu_Cantidad
+					FROM	Adua.tbImpuestos
+					WHERE	impu_Id = 2
+
+				END
+			ELSE
+				BEGIN
+					SET @IsvItem = 0
+				END
+
+			--EL ISV SE INSERTA SIEMPRE	PARA CUALQUIER ITEM PERO EVALUANDO SU VALOR DEPENDIENDO SI ES 2, 3 O NULL						
+			INSERT INTO [Adua].[tbLiquidacionPorLinea]([lili_Tipo], [lili_Alicuota], [lili_Total], [lili_ModalidadPago], [lili_TotalGral], [item_Id])
+			VALUES ('ISV',@IsvItem,NULL,NULL,NULL,@item_Id);
+
+
+
+
+			IF(@ArancelVehicular = 1)
+				BEGIN
+				--BEGIN SI EL ITEM ES UN VEHICULO
+				
+				-- SE INSERTARA LA ECOTASA
+				SELECT  @EcoVehiculo = ecot_CantidadPagar
+				FROM	Adua.tbEcotasa
+				WHERE	(@item_ValorUnitario BETWEEN ecot_RangoIncial AND ecot_RangoFinal)
+
+				INSERT INTO [Adua].[tbLiquidacionPorLinea]([lili_Tipo], [lili_Alicuota], [lili_Total], [lili_ModalidadPago], [lili_TotalGral], [item_Id])
+				VALUES ('ECOTASA',1,@EcoVehiculo,NULL,NULL,@item_Id);
+
+
+					IF(@AplicaVehiculo = 1)
+						BEGIN
+						--BEGIN IF APLICA VEHICULO
+							IF(@EsHibrido = 1)
+
+								BEGIN	
+									INSERT INTO [Adua].[tbLiquidacionPorLinea]([lili_Tipo], [lili_Alicuota], [lili_Total], [lili_ModalidadPago], [lili_TotalGral], [item_Id])
+									VALUES ('SEL',0,NULL,NULL,NULL,@item_Id);
+								END
+
+							ELSE
+
+								BEGIN
+									---Evaluamos Nuevo XD
+										IF(@EsNuevo = 1)
+											BEGIN
+
+												SELECT  @SelVehiculo = selh_ImpuestoCobrar
+												FROM	[Adua].[tbImpuestoSelectivoConsumoCondicionesVehiculos]
+												WHERE	(@item_ValorUnitario BETWEEN selh_RangoInicio AND selh_RangoFin) AND  selh_EsNuevo = 1
+
+											END
+										ELSE
+											BEGIN
+
+												--SOLO EVALUAR LOS RANGOS
+												SELECT  @SelVehiculo = selh_ImpuestoCobrar
+												FROM	[Adua].[tbImpuestoSelectivoConsumoCondicionesVehiculos]
+												WHERE	(@item_ValorUnitario BETWEEN selh_RangoInicio AND selh_RangoFin) AND  selh_EsNuevo = 0
+
+											END
+
+									INSERT INTO [Adua].[tbLiquidacionPorLinea]([lili_Tipo], [lili_Alicuota], [lili_Total], [lili_ModalidadPago], [lili_TotalGral], [item_Id])
+									VALUES ('SEL',@SelVehiculo,NULL,NULL,NULL,@item_Id);
+
+								END
+						--END IF APLICA VEHICULO
+						END
+
+					ELSE
+					
+						BEGIN
+						--END BEGIN APLICA VEHICULO
+							IF(@aran_SEL > 0)
+								BEGIN
+									INSERT INTO [Adua].[tbLiquidacionPorLinea]([lili_Tipo], [lili_Alicuota], [lili_Total], [lili_ModalidadPago], [lili_TotalGral], [item_Id])
+									VALUES ('SEL',@aran_SEL,NULL,NULL,NULL,@item_Id);
+								END
+						--END ELSE APLICA VEHICULO
+						END
+
+				--END SI EL ITEM ES UN VEHICULO
+				END
+			ELSE
+				BEGIN
+				--BEGIN SI EL ITEM NO ES UN VEHICULO
+
+
+					IF(@LitrosTotales > 0)
+						BEGIN
+							--VERIFICACION DE EXCEPCIÓN QUE NO SEA UN CIGARRO
+								IF(@aran_ProdCons > 0 AND @CodigoArancel <> '2402.20.00.00')
+									BEGIN
+										DECLARE @CalculoTotalPagarPorLitros DECIMAL(18,4) = @LitrosTotales * @aran_ProdCons;
+
+										INSERT INTO [Adua].[tbLiquidacionPorLinea]([lili_Tipo], [lili_Alicuota], [lili_Total], [lili_ModalidadPago], [lili_TotalGral], [item_Id])
+										VALUES ('PROCONS',@aran_ProdCons,@CalculoTotalPagarPorLitros,NULL,NULL,@item_Id);
+
+									END
+
+						END
+
+					IF(@CigarrosTotales > 0)
+						BEGIN
+							IF(@aran_ProdCons > 0 AND @CodigoArancel = '2402.20.00.00')
+							BEGIN
+								DECLARE @CalculoTotalPagarPorCigarros DECIMAL(18,4) = @CigarrosTotales * (@aran_ProdCons / 1000);
+
+								INSERT INTO [Adua].[tbLiquidacionPorLinea]([lili_Tipo], [lili_Alicuota], [lili_Total], [lili_ModalidadPago], [lili_TotalGral], [item_Id])
+								VALUES ('PROCONS',@aran_ProdCons,@CalculoTotalPagarPorCigarros,NULL,NULL,@item_Id);
+
+							END	
+
+						END
+				
+				--END SI EL ITEM NO ES UN VEHICULO
+				END
+
+			SELECT 1
+
+			COMMIT TRAN
+		END TRY
+		BEGIN CATCH
+			SELECT 'Error Message: ' + ERROR_MESSAGE()
+			ROLLBACK TRAN
+		END CATCH
+	END
+
 
 GO
 CREATE OR ALTER     PROCEDURE [Adua].[UDP_tbItems_Editar]
@@ -9246,6 +9413,7 @@ BEGIN
 			 aran_ProdCons,
 			 aran_SEL,
 			 aran_AplicaVehiculos,
+			 aran_ArancelVehicular,
 			ara.usua_UsuarioCreacion,
 			usu.usua_Nombre           AS UsuarioCreacion,		
 			ara.aran_FechaCreacion, 
@@ -9264,6 +9432,7 @@ BEGIN
    ORDER BY DATALENGTH(aran_Codigo) 
 
 END
+
 GO
 --Categorias por capitulo
 CREATE OR ALTER PROCEDURE Adua.UDP_tbAranceles_ListarPorCapitulo
@@ -9306,6 +9475,18 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE Adua.UDP_tbAranceles_ListarById
+	@aran_Id INT
+AS
+BEGIN
+	SELECT	aran_Id,
+			aran_Codigo,
+			aran_Descripcion
+	FROM	Adua.tbAranceles
+	WHERE	aran_Id = @aran_Id
+END
+
+GO
 
 /*Listar Aranceles Categoria*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbAranceles_ListarCategoria

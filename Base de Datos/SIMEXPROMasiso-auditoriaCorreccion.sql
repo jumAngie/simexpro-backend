@@ -1395,6 +1395,10 @@ CREATE TABLE Adua.tbItems(
 	item_CuotaContingente                     DECIMAL(18,2),
 	item_ReglasAccesorias                     NVARCHAR(MAX),
 	item_CriterioCertificarOrigen             NVARCHAR(MAX),
+	item_EsNuevo									  BIT,
+	item_EsHibrido								  BIT,
+	item_LitrosTotales							  DECIMAL(18,2),
+	item_CigarrosTotales							  INT,
 
 	usua_UsuarioCreacion                      INT NOT NULL, 
 	item_FechaCreacion                        DATETIME NOT NULL ,
@@ -1416,6 +1420,8 @@ CREATE TABLE Adua.tbItems(
 	--CONSTRAINT FK_Adua_tbItems_usua_UsuarioEliminacion_Acce_tbUsuarios_usua_Id		FOREIGN KEY (usua_UsuarioEliminacion)	REFERENCES Acce.tbUsuarios(usua_Id)
 );
 GO
+
+
 
 
 CREATE TABLE Adua.tbItemsHistorial(
