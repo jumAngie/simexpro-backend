@@ -156,7 +156,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
         public IEnumerable<tbDuca> ListHistorial()
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
-            return db.Query<tbDuca>(ScriptsDataBase.ListarDuca, null, commandType: System.Data.CommandType.StoredProcedure);
+            return db.Query<tbDuca>(ScriptsDataBase.ListarDucaHistorial, null, commandType: System.Data.CommandType.StoredProcedure);
         }
 
 

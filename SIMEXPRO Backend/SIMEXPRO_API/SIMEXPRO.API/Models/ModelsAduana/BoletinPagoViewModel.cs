@@ -39,5 +39,8 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public DateTime? boen_FechaModificacion { get; set; }
         public bool boen_Estado { get; set; }
 
+        [NotMapped]
+        public string Detalles { get; set; }
+
     }
 }
