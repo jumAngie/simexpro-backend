@@ -7391,7 +7391,7 @@ END
 
 
 GO
-CREATE OR ALTER PROCEDURE Adua.UDP_tbItems_Insertar
+CREATE OR ALTER   PROCEDURE Adua.UDP_tbItems_Insertar
 	@fact_Id									INT, 
 	@item_Cantidad								INT, 
 	@item_PesoNeto								DECIMAL(18,2), 
@@ -7401,6 +7401,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbItems_Insertar
 	@item_CaracteristicasMercancias				NVARCHAR(400), 
 	@item_Marca									NVARCHAR(50), 
 	@item_Modelo								NVARCHAR(100), 
+	@aran_Id									INT,
 	@merc_Id									INT, 
 	@pais_IdOrigenMercancia						INT, 
 	@item_ClasificacionArancelaria				CHAR(16), 
@@ -7427,7 +7428,8 @@ BEGIN
 									 item_IdentificacionComercialMercancias, 
 									 item_CaracteristicasMercancias, 
 									 item_Marca, 
-									 item_Modelo, 
+									 item_Modelo,
+									 aran_Id,
 									 merc_Id, 
 									 pais_IdOrigenMercancia, 
 									 item_ClasificacionArancelaria, 
@@ -7450,7 +7452,8 @@ BEGIN
 				@item_IdentificacionComercialMercancias, 
 				@item_CaracteristicasMercancias, 
 				@item_Marca, 
-				@item_Modelo, 
+				@item_Modelo,
+				@aran_Id,
 				@merc_Id, 
 				@pais_IdOrigenMercancia, 
 				@item_ClasificacionArancelaria, 
@@ -7527,11 +7530,12 @@ BEGIN
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
 		ROLLBACK TRAN
-	END CATCH
+	END CATCH
 END
+}
 
 GO
-CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbItems_Editar]
+CREATE OR ALTER     PROCEDURE [Adua].[UDP_tbItems_Editar]
 	@item_Id									INT,
 	@fact_Id									INT, 
 	@item_Cantidad								INT, 
@@ -7543,6 +7547,7 @@ CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbItems_Editar]
 	@item_Marca									NVARCHAR(50), 
 	@item_Modelo								NVARCHAR(100), 
 	@merc_Id									INT, 
+	@aran_Id									INT,
 	@pais_IdOrigenMercancia						INT, 
 	@item_ClasificacionArancelaria				CHAR(16), 
 	@item_ValorUnitario							DECIMAL(18,2), 
@@ -7569,7 +7574,8 @@ BEGIN
 			item_IdentificacionComercialMercancias = @item_IdentificacionComercialMercancias, 
 			item_CaracteristicasMercancias = @item_CaracteristicasMercancias, 
 			item_Marca = @item_Marca, 
-			item_Modelo = @item_Modelo, 
+			item_Modelo = @item_Modelo,
+			aran_Id	= @aran_Id,
 			merc_Id = @merc_Id, 
 			pais_IdOrigenMercancia = @pais_IdOrigenMercancia, 
 			item_ClasificacionArancelaria = @item_ClasificacionArancelaria, 
