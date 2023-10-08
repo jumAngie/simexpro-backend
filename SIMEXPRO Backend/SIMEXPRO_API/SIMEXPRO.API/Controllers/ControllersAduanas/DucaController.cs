@@ -53,6 +53,13 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(list);
         }
 
+        [HttpPost("List_ByNoDuca")]
+        public IActionResult List_ByNoDuca(string NoDuca)
+        {
+            var list = _aduanaServices.List_ByNoDuca(NoDuca);
+            return Ok(list);
+        }
+
         [HttpGet("GenerarDuca")]
         public IActionResult Genera(int duca_Id)
         {

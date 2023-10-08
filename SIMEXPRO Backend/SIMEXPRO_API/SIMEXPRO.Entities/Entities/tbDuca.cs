@@ -105,6 +105,9 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string Nombre_pais_destino { get; set; }
 
+ 
+        
+
 
 
         [NotMapped]
@@ -197,6 +200,12 @@ namespace SIMEXPRO.Entities.Entities
         public string impuestos { get; set; }
         [NotMapped]
         public string valoresTotales { get; set; }
+
+
+        [NotMapped]
+        public string Devas { get; set; }
+
+
 
         public virtual tbRegimenesAduaneros duca_Regimen_AduaneroNavigation { get; set; }
         public virtual tbDeclaraciones_Valor deva { get; set; }

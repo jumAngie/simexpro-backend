@@ -44,6 +44,9 @@ namespace SIMEXPRO.Entities.Entities
         public DateTime? boen_FechaModificacion { get; set; }
         public bool boen_Estado { get; set; }
 
+        [NotMapped]
+        public string Detalles { get; set; }
+
         public virtual tbCodigoImpuesto coim { get; set; }
         public virtual tbDuca duca { get; set; }
         public virtual tbEstadoBoletin esbo { get; set; }
