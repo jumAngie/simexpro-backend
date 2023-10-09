@@ -2212,6 +2212,20 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+
+        public ServiceResult CalcularValorAduana(int item_Id, int trli_Id, int duca_Id, decimal deva_ConversionDolares)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _itemsRepository.CalcularvalorAduana(item_Id, trli_Id, duca_Id, deva_ConversionDolares);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region LiquidacionGeneral

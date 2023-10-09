@@ -2819,12 +2819,12 @@ GO
 --Seccion pt2
 CREATE TABLE Adua.tbLiquidacionGeneral(
 	lige_Id					 INT IDENTITY(1,1),
-	lige_TipoTributo		 NVARCHAR(50) NOT NULL,
-	lige_TotalPorTributo	 NVARCHAR(25) NOT NULL,
-	lige_ModalidadPago		 NVARCHAR(55) NOT NULL,
-	lige_TotalGral			 NVARCHAR(50) NULL,
 	duca_Id				     INT NOT NULL,
-
+	lige_TipoTributo		 NVARCHAR(50),
+	lige_TotalPorTributo	 DECIMAL(18,2),
+	lige_ModalidadPago		 NVARCHAR(55),
+	lige_TotalGral			 DECIMAL(18,2),
+	
 	CONSTRAINT PK_Adua_tbLiquidacionGeneral_lige_Id PRIMARY KEY(lige_Id),
 	CONSTRAINT FK_Adua_tbDuca_duca_Id_Adua_tbLiquidacionGeneral_duca_Id FOREIGN KEY (duca_Id) REFERENCES Adua.tbDuca (duca_Id)
 	--CONSTRAINT FK_Adua_tbLiquidacionGeneral_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id	    FOREIGN KEY (usua_UsuarioCreacion)     		REFERENCES Acce.tbUsuarios 	(usua_Id),
@@ -2832,6 +2832,7 @@ CREATE TABLE Adua.tbLiquidacionGeneral(
 	--CONSTRAINT FK_Adua_tbLiquidacionGeneral_Acce_tbUsuarios_usua_UsuarioEliminacion_usua_Id  FOREIGN KEY (usua_UsuarioEliminacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id)
 );
 GO
+
 
 CREATE TABLE Adua.tbLiquidacionGeneralHistorial(
 	hlig_Id 				 INT IDENTITY(1,1),
@@ -2952,8 +2953,8 @@ CREATE TABLE Adua.tbBoletinPago(
 	--boen_FechaEliminacion		   DATETIME DEFAULT NULL,
     boen_Estado                    BIT DEFAULT 1 NOT NULL,
     CONSTRAINT PK_Adua_tbBoletinPago_boen_Id 									      PRIMARY KEY (boen_Id),
-    CONSTRAINT FK_Adua_tbBoletinPago_lige_Id_Adua_tbLiquidacionGeneral_lige_Id 		  FOREIGN KEY (liqu_Id)                  REFERENCES Adua.tbLiquidacionGeneral(lige_Id),
-    CONSTRAINT FK_Adua_tbBoletinPago_tipl_Id_Adua_tbTipoLiquidacion_tipl_Id 		  FOREIGN KEY (tipl_Id)                  REFERENCES Adua.tbTipoLiquidacion(tipl_Id),
+	CONSTRAINT FK_Adua_tbBoletinPago_lige_Id_Adua_tbLiquidacionGeneral_lige_Id 		  FOREIGN KEY (liqu_Id)                  REFERENCES Adua.tbLiquidacionGeneral(lige_Id),
+	CONSTRAINT FK_Adua_tbBoletinPago_tipl_Id_Adua_tbTipoLiquidacion_tipl_Id 		  FOREIGN KEY (tipl_Id)                  REFERENCES Adua.tbTipoLiquidacion(tipl_Id),
     CONSTRAINT FK_Adua_tbBoletinPago_esbo_Id_Adua_tbEstadoBoletin_esbo_Id 			  FOREIGN KEY (esbo_Id)                  REFERENCES Adua.tbEstadoBoletin(esbo_Id),
     CONSTRAINT FK_Adua_tbBoletinPago_coim_Id_Adua_tbCodigoImpuesto_coim_Id 			  FOREIGN KEY (coim_Id)                  REFERENCES Adua.tbCodigoImpuesto(coim_Id),
 	CONSTRAINT FK_Adua_tbBoletinPago_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id     FOREIGN KEY (usua_UsuarioCreacion)     REFERENCES Acce.tbUsuarios (usua_Id),

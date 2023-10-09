@@ -4149,11 +4149,10 @@ BEGIN
 			INNER JOIN Acce.tbUsuarios UsuarioCreacion			ON UsuarioCreacion.usua_Id			= documentosOrdenCompraDetalle.usua_UsuarioCreacion
 			LEFT  JOIN Acce.tbUsuarios UsuarioModificacion		ON UsuarioModificacion.usua_Id		= documentosOrdenCompraDetalle.usua_UsuarioModificacion
 	 
-	 WHERE code_Estado = 1 AND code_Id�=�@code_Id
-
+	 WHERE code_Estado = 1 AND code_Id = @code_Id
 END
-
 GO
+
 CREATE OR ALTER     PROCEDURE Prod.UDP_tbDocumentosOrdenCompraDetalles_Insertar 
 @code_Id					 int,
 @dopo_NombreArchivo          NVARCHAR(MAX),
@@ -4184,7 +4183,6 @@ BEGIN TRY
 	   SELECT 0	
 	END CATCH    
 END
-
 GO
 
 
@@ -4260,7 +4258,7 @@ BEGIN TRANSACTION
 	BEGIN CATCH 
 	ROLLBACK TRAN
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END�CATCH�
+	END CATCH
 END
 
 GO
@@ -4282,12 +4280,11 @@ FROM	Adua.tbFormasdePago form
 		LEFT JOIN Acce.tbUsuarios usu1	ON usu1.usua_Id = form.usua_UsuarioModificacion   
 WHERE	fopa_Estado = 1
 END
-
+GO
 
 
 
 /**************Crear Formas de pago**********************/
-GO
 ALTER   PROCEDURE [Adua].[UDP_tbFormasdePago_Insertar] 
    @fopa_Descripcion        NVARCHAR(MAX), 
    @usua_UsuarioCreacion    INT, 
@@ -4406,7 +4403,6 @@ FROM    Adua.tbAduanas adu
         LEFT JOIN Gral.tbProvincias prov   ON prov.pvin_Id = ciud.pvin_Id
  WHERE    adu.adua_Estado = 1
 END
-
 GO
 
 /*Listar aduanas ById*/
@@ -4435,9 +4431,9 @@ FROM    Adua.tbAduanas adu
  WHERE  adu.adua_Estado = 1 AND adu.adua_Id = @adua_Id
  ORDER BY adua_FechaCreacion DESC
 END
+GO
 
 /*Aduanas Crear */
-GO
 CREATE OR ALTER PROCEDURE Adua.UDP_tbAduanas_Insertar 
    @adua_Codigo				   char(4),
    @adua_Nombre                NVARCHAR(MAX),
@@ -6336,6 +6332,7 @@ BEGIN
 		ROLLBACK TRAN
 	END CATCH
 END
+GO
 
 CREATE OR ALTER PROCEDURE adua.UDP_tbDeclaraciones_Valor_Tab2_Insertar
 	@deva_Id						INT,
@@ -7346,9 +7343,8 @@ BEGIN
 		ROLLBACK TRAN
 	END CATCH
 END
-
-
 GO
+
 /* LISTAR items*/
 CREATE OR ALTER PROCEDURE Adua.UDP_tbItems_Listar 
 	@fact_Id				INT
@@ -7357,6 +7353,9 @@ BEGIN
 	SELECT item_Id, 
 	       fact_Id, 
 		   item_Cantidad, 
+		   item_Cantidad_Bultos,
+		   item_ClaseBulto,
+		   item_Acuerdo,
 		   item_PesoNeto, 
 		   item_PesoBruto, 
 		   unme_Id, 
@@ -7365,9 +7364,10 @@ BEGIN
 		   item_Marca, 
 		   item_Modelo, 
 		   merc_Id, 
-		   aran_Id,
+		   item.aran_Id,
 		   pais_IdOrigenMercancia, 
-		   item_ClasificacionArancelaria, 
+		   paisOrigen.pais_Codigo + ' - ' + paisOrigen.pais_Nombre AS 'NombrePaisOrigen',
+		   aranceles.aran_Codigo AS 'item_ClasificacionArancelaria', 
 		   item_ValorUnitario, 
 		   item_GastosDeTransporte, 
 		   item_ValorTransaccion, 
@@ -7388,14 +7388,18 @@ BEGIN
            item_EsHibrido,
            item_LitrosTotales,
 		   item_CigarrosTotales
-	FROM Adua.tbItems item 
-	INNER JOIN Acce.tbUsuarios usuaCrea		ON item.usua_UsuarioCreacion = usuaCrea.usua_Id 
-	LEFT JOIN Acce.tbUsuarios usuaModifica  ON item.usua_UsuarioModificacion = usuaModifica.usua_Id
-	WHERE fact_Id = @fact_Id
+	  FROM Adua.tbItems item 
+INNER JOIN Acce.tbUsuarios usuaCrea		
+		ON item.usua_UsuarioCreacion = usuaCrea.usua_Id 
+INNER JOIN Adua.tbAranceles aranceles
+		ON aranceles.aran_Id = item.aran_Id
+INNER JOIN Gral.tbPaises paisOrigen
+		ON pais_IdOrigenMercancia = paisOrigen.pais_Id
+ LEFT JOIN Acce.tbUsuarios usuaModifica  ON item.usua_UsuarioModificacion = usuaModifica.usua_Id
+	 WHERE fact_Id = @fact_Id
 END
-
-
 GO
+
 	CREATE OR ALTER   PROCEDURE Adua.UDP_tbItems_Insertar
 		@fact_Id									INT, 
 		@item_Cantidad								INT, 
@@ -7700,9 +7704,8 @@ GO
 			ROLLBACK TRAN
 		END CATCH
 	END
-
-
 GO
+
 CREATE OR ALTER     PROCEDURE [Adua].[UDP_tbItems_Editar]
 	@item_Id									INT,
 	@fact_Id									INT, 
@@ -8110,7 +8113,219 @@ GO
 	END
 GO
 
+CREATE OR ALTER PROCEDURE Adua.UDP_tbItems_CalcularValorAduana
+(
+	@item_Id					INT,
+	@trli_Id					INT,
+	@duca_Id					INT,
+	@deva_ConversionDolares		DECIMAL(18,2)
+)
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRAN
+			DECLARE @item_ValorTransaccion DECIMAL(18,2) = 0,  @item_GastosDeTransporte DECIMAL(18,2) = 0, 
+					@item_Seguro DECIMAL(18,2) = 0, @item_OtrosGastos DECIMAL(18,2) = 0, @item_ValorAduana DECIMAL(18,2) = 0,
+					@aran_Id INT, @NuevoDAI DECIMAL(18,2), @CantidadFilas INT, @lili_TotalGral DECIMAL(18,2) = 0, @lige_TotalGral DECIMAL(18,2) = 0;
+
+			SELECT @aran_Id = aran_Id,
+				   @item_ValorTransaccion = item_ValorTransaccion,
+				   @item_GastosDeTransporte = item_GastosDeTransporte,
+				   @item_Seguro = item_Seguro,
+				   @item_OtrosGastos = item_OtrosGastos
+			  FROM Adua.tbItems
+			 WHERE item_Id = @item_Id
+
+			 SET @item_ValorAduana = (@item_ValorTransaccion + @item_GastosDeTransporte + @item_Seguro + @item_OtrosGastos) * @deva_ConversionDolares;
+
+			UPDATE Adua.tbItems
+			   SET item_ValorAduana = @item_ValorAduana
+			 WHERE item_Id = @item_Id
+
+			 SELECT @CantidadFilas = COUNT(*)
+			   FROM Adua.tbArancelesPorTratados
+			  WHERE aran_Id = @aran_Id AND trli_Id = @trli_Id
+			
+
+			IF(@CantidadFilas > 0)
+			BEGIN
+				SELECT @NuevoDAI = axtl_TasaActual
+				  FROM Adua.tbArancelesPorTratados
+			     WHERE aran_Id = @aran_Id AND trli_Id = @trli_Id
+
+				 UPDATE Adua.tbLiquidacionPorLinea
+					SET lili_Alicuota = @NuevoDAI
+				  WHERE lili_Tipo = 'DAI' AND item_Id = @item_Id
+			END
+			ELSE
+			BEGIN
+				 UPDATE Adua.tbLiquidacionPorLinea
+					SET lili_Alicuota = 0
+				  WHERE lili_Tipo = 'DAI' AND item_Id = @item_Id
+			END
+			
+			UPDATE Adua.tbLiquidacionPorLinea
+			SET lili_Total = (lili_Alicuota / 100) * @item_ValorAduana
+			WHERE item_Id = @item_Id AND lili_Tipo = 'DAI' 
+			
+			UPDATE Adua.tbLiquidacionPorLinea
+			SET lili_Total = (lili_Alicuota / 100) * @item_ValorAduana
+			WHERE item_Id = @item_Id AND lili_Tipo = 'ISV' 
+
+			UPDATE Adua.tbLiquidacionPorLinea
+			SET lili_Total = (lili_Alicuota / 100) * @item_ValorAduana
+			WHERE item_Id = @item_Id AND lili_Tipo = 'SEL'
+
+
+		  SELECT @lili_TotalGral = @lili_TotalGral + lili_Total
+			FROM Adua.tbLiquidacionPorLinea
+		   WHERE item_Id = @item_Id AND lili_Tipo = 'DAI' 
+
+		   SELECT @lili_TotalGral = @lili_TotalGral + lili_Total
+			 FROM Adua.tbLiquidacionPorLinea
+			WHERE item_Id = @item_Id AND lili_Tipo = 'ISV'
+
+		   SELECT @lili_TotalGral = @lili_TotalGral + lili_Total
+			 FROM Adua.tbLiquidacionPorLinea
+			WHERE item_Id = @item_Id AND lili_Tipo = 'SEL'
+
+			SELECT @lili_TotalGral = @lili_TotalGral + lili_Total
+			  FROM Adua.tbLiquidacionPorLinea
+			 WHERE item_Id = @item_Id AND lili_Tipo = 'PROCONS'
+
+			SELECT @lili_TotalGral = @lili_TotalGral + lili_Total
+			  FROM Adua.tbLiquidacionPorLinea
+			 WHERE item_Id = @item_Id AND lili_Tipo = 'ECOTASA'
+
+			UPDATE Adua.tbLiquidacionPorLinea
+			   SET lili_TotalGral = @lili_TotalGral
+			 WHERE item_Id = @item_Id
+
+
+			IF((SELECT COUNT(*) FROM Adua.tbLiquidacionPorLinea WHERE item_Id = @item_Id AND lili_Tipo = 'DAI') > 0)
+			BEGIN
+				DECLARE @lili_TotalDAI DECIMAL(18,2) = (SELECT lili_Total FROM Adua.tbLiquidacionPorLinea WHERE item_Id = @item_Id AND lili_Tipo = 'DAI');
+				DECLARE @lige_IdDAI INT = (SELECT lige_Id FROM Adua.tbLiquidacionGeneral WHERE duca_Id = @duca_Id AND lige_TipoTributo = 'DAI' )
+
+				IF(@lige_IdDAI > 0)
+				BEGIN
+					UPDATE Adua.tbLiquidacionGeneral
+					   SET lige_TotalPorTributo = lige_TotalPorTributo + @lili_TotalDAI
+					 WHERE lige_Id = @lige_IdDAI
+				END
+				ELSE
+				BEGIN
+					INSERT INTO Adua.tbLiquidacionGeneral (duca_Id, lige_TipoTributo, lige_TotalPorTributo, lige_TotalGral)
+					VALUES (@duca_Id, 'DAI', @lili_TotalDAI, 0)
+				END
+			END
+
+			IF((SELECT COUNT(*) FROM Adua.tbLiquidacionPorLinea WHERE item_Id = @item_Id AND lili_Tipo = 'ISV') > 0)
+			BEGIN
+				DECLARE @lili_TotalISV DECIMAL(18,2) = (SELECT lili_Total FROM Adua.tbLiquidacionPorLinea WHERE item_Id = @item_Id AND lili_Tipo = 'ISV');
+				DECLARE @lige_IdISV INT = (SELECT lige_Id FROM Adua.tbLiquidacionGeneral WHERE duca_Id = @duca_Id AND lige_TipoTributo = 'ISV' )
+
+				IF(@lige_IdISV > 0)
+				BEGIN
+					UPDATE Adua.tbLiquidacionGeneral
+					   SET lige_TotalPorTributo = lige_TotalPorTributo + @lili_TotalISV
+					 WHERE lige_Id = @lige_IdISV
+				END
+				ELSE
+				BEGIN
+					INSERT INTO Adua.tbLiquidacionGeneral (duca_Id, lige_TipoTributo, lige_TotalPorTributo, lige_TotalGral)
+					VALUES (@duca_Id, 'ISV', @lili_TotalISV, 0)
+				END
+			END
+			
+			IF((SELECT COUNT(*) FROM Adua.tbLiquidacionPorLinea WHERE item_Id = @item_Id AND lili_Tipo = 'SEL') > 0)
+			BEGIN
+				DECLARE @lili_TotalSEL DECIMAL(18,2) = (SELECT lili_Total FROM Adua.tbLiquidacionPorLinea WHERE item_Id = @item_Id AND lili_Tipo = 'SEL');
+				DECLARE @lige_IdSEL INT = (SELECT lige_Id FROM Adua.tbLiquidacionGeneral WHERE duca_Id = @duca_Id AND lige_TipoTributo = 'SEL' )
+
+				IF(@lige_IdSEL > 0)
+				BEGIN
+					UPDATE Adua.tbLiquidacionGeneral
+					   SET lige_TotalPorTributo = lige_TotalPorTributo + @lili_TotalSEL
+					 WHERE lige_Id = @lige_IdSEL
+				END
+				ELSE
+				BEGIN
+					INSERT INTO Adua.tbLiquidacionGeneral (duca_Id, lige_TipoTributo, lige_TotalPorTributo, lige_TotalGral)
+					VALUES (@duca_Id, 'SEL', @lili_TotalSEL, 0)
+				END
+			END
+			
+			IF((SELECT COUNT(*) FROM Adua.tbLiquidacionPorLinea WHERE item_Id = @item_Id AND lili_Tipo = 'ECOTASA') > 0)
+			BEGIN
+				DECLARE @lili_TotalECOTASA DECIMAL(18,2) = (SELECT lili_Total FROM Adua.tbLiquidacionPorLinea WHERE item_Id = @item_Id AND lili_Tipo = 'ECOTASA');
+				DECLARE @lige_IdECOTASA INT = (SELECT lige_Id FROM Adua.tbLiquidacionGeneral WHERE duca_Id = @duca_Id AND lige_TipoTributo = 'ECOTASA' )
+
+				IF(@lige_IdECOTASA > 0)
+				BEGIN
+					UPDATE Adua.tbLiquidacionGeneral
+					   SET lige_TotalPorTributo = lige_TotalPorTributo + @lili_TotalECOTASA
+					 WHERE lige_Id = @lige_IdECOTASA
+				END
+				ELSE
+				BEGIN
+					INSERT INTO Adua.tbLiquidacionGeneral (duca_Id, lige_TipoTributo, lige_TotalPorTributo, lige_TotalGral)
+					VALUES (@duca_Id, 'ECOTASA', @lili_TotalECOTASA, 0)
+				END
+			END
+
+			IF((SELECT COUNT(*) FROM Adua.tbLiquidacionPorLinea WHERE item_Id = @item_Id AND lili_Tipo = 'PROCONS') > 0)
+			BEGIN
+				DECLARE @lili_TotalPROCONS DECIMAL(18,2) = (SELECT lili_Total FROM Adua.tbLiquidacionPorLinea WHERE item_Id = @item_Id AND lili_Tipo = 'PROCONS');
+				DECLARE @lige_IdPROCONS INT = (SELECT lige_Id FROM Adua.tbLiquidacionGeneral WHERE duca_Id = @duca_Id AND lige_TipoTributo = 'PROCONS' )
+
+				IF(@lige_IdPROCONS > 0)
+				BEGIN
+					UPDATE Adua.tbLiquidacionGeneral
+					   SET lige_TotalPorTributo = lige_TotalPorTributo + @lili_TotalPROCONS
+					 WHERE lige_Id = @lige_IdPROCONS
+				END
+				ELSE
+				BEGIN
+					INSERT INTO Adua.tbLiquidacionGeneral (duca_Id, lige_TipoTributo, lige_TotalPorTributo, lige_TotalGral)
+					VALUES (@duca_Id, 'PROCONS', @lili_TotalPROCONS, 0)
+				END
+			END
+
+		  SELECT @lige_TotalGral = @lige_TotalGral + lige_TotalPorTributo
+			FROM Adua.tbLiquidacionGeneral 
+		   WHERE duca_Id = @duca_Id AND lige_TipoTributo = 'DAI' 
+
+		 SELECT @lige_TotalGral = @lige_TotalGral + lige_TotalPorTributo
+			FROM Adua.tbLiquidacionGeneral 
+		   WHERE duca_Id = @duca_Id AND lige_TipoTributo = 'ISV' 
+
+		    SELECT @lige_TotalGral = @lige_TotalGral + lige_TotalPorTributo
+			FROM Adua.tbLiquidacionGeneral 
+		   WHERE duca_Id = @duca_Id AND lige_TipoTributo = 'SEL' 
+
+		    SELECT @lige_TotalGral = @lige_TotalGral + lige_TotalPorTributo
+			FROM Adua.tbLiquidacionGeneral 
+		   WHERE duca_Id = @duca_Id AND lige_TipoTributo = 'ECOTASA' 
+
+		    SELECT @lige_TotalGral = @lige_TotalGral + lige_TotalPorTributo
+			FROM Adua.tbLiquidacionGeneral 
+		   WHERE duca_Id = @duca_Id AND lige_TipoTributo = 'PROCONS' 
+
+			UPDATE Adua.tbLiquidacionGeneral
+			   SET lige_TotalGral = lige_TotalGral + @lige_TotalGral
+			 WHERE duca_Id = @duca_Id
+			 
+		COMMIT 
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		ROLLBACK
+		SELECT 'Error Message: ' + ERROR_MESSAGE()	
+	END CATCH
+END
 GO
+
 CREATE OR ALTER PROCEDURE Adua.UDP_tbBaseCalculos_Listar
 	@deva_Id			INT
 AS
@@ -8859,6 +9074,7 @@ BEGIN
 		   duca_Pais_Destino, 
 		   duca_Deposito_Aduanero, 
 		   duca_Lugar_Desembarque, 
+		   emba_Codigo,
 		   duca_Manifiesto, 
 		   duca_Titulo, 
 		   trli_Id, 
@@ -8910,6 +9126,8 @@ INNER JOIN Adua.tbAduanas aduanaRegistro
 		ON duca.duca_AduanaRegistro = aduanaRegistro.adua_Id
  LEFT JOIN Adua.tbConductor conductor
 		ON duca.duca_Conductor_Id = conductor.cont_Id
+ LEFT JOIN Adua.tbLugaresEmbarque desembarque
+		ON duca_Lugar_Desembarque = desembarque.emba_Id
  LEFT JOIN Adua.tbTransporte transporte
 	    ON conductor.tran_Id = transporte.tran_Id
   ORDER BY duca_Id DESC
@@ -9057,7 +9275,8 @@ BEGIN
 		   DEVA.regi_Id,
 		   regi.regi_Codigo,
 		   regi.regi_Descripcion,
-		   DEVA.deva_FechaAceptacion
+		   DEVA.deva_FechaAceptacion,
+		   DEVA.deva_ConversionDolares
 	  FROM [Adua].[tbDeclaraciones_Valor] DEVA
 INNER JOIN [Gral].[tbPaises] PaisExportacion
 		ON DEVA.pais_ExportacionId = PaisExportacion.pais_Id
@@ -9107,15 +9326,13 @@ BEGIN
 	BEGIN TRY
 		INSERT INTO Adua.tbDuca (duca_No_Duca, duca_No_Correlativo_Referencia, duca_AduanaRegistro, duca_AduanaDestino, duca_Regimen_Aduanero, duca_Modalidad,duca_Clase, duca_FechaVencimiento,duca_Pais_Procedencia,duca_Pais_Destino ,duca_Deposito_Aduanero, duca_Lugar_Desembarque,duca_Manifiesto,duca_Titulo, usua_UsuarioCreacion, duca_FechaCreacion)
 		VALUES (NULL, NULL, NULL, NULL, NULL, NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL, NULL, NULL)
-
+ 
 		SELECT SCOPE_IDENTITY()
-
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error: ' + ERROR_MESSAGE();
 	END CATCH
 END
-
 GO
 
 /* Insert [Adua].[tbItemsDEVAPorDuca]*/
@@ -9559,6 +9776,8 @@ BEGIN
 
 			DELETE FROM Adua.tbTransporte WHERE tran_Id = @tran_Id
 
+			DELETE FROM Adua.tbLiquidacionGeneral WHERE duca_Id = @duca_Id
+
 		COMMIT
 		SELECT 1
 	END TRY
@@ -9566,6 +9785,20 @@ BEGIN
 		ROLLBACK
 		SELECT 'Error: ' + ERROR_MESSAGE();
 	END CATCH
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_Finalizado
+(
+	@duca_Id	INT
+)
+AS
+BEGIN
+	UPDATE Adua.tbDuca
+	SET duca_Finalizado = 1
+	WHERE duca_Id = @duca_Id
+
+	SELECT 1
 END
 GO
 
@@ -11620,7 +11853,6 @@ GO
 -----------------PROCEDIMIENTOS ALMACENADOS Y VISTAS MÓDULO PRODUCCION
 
 -----------------------------------------------/UDPS Para orden de compra---------------------------------------------
-
 CREATE OR ALTER   PROCEDURE Prod.UDP_tbOrdenCompra_ObtenerPorId_Para_LineaTiempo
 (
 	@orco_Codigo		nvarchar(100)
@@ -11666,12 +11898,10 @@ BEGIN
   LEFT JOIN Acce.tbUsuarios			usuarioModificacion		ON ordenCompra.usua_UsuarioModificacion		= usuarioModificacion.usua_Id
 	  WHERE orco_Codigo = @orco_Codigo
 END
-
-
+GO
 
 -------------------------------------------------------------------------------------------------------------
 --ORDEN DE COMPRA ENCABEZADO---------------------------------------------------------------------------------
-
 CREATE OR ALTER   PROCEDURE Prod.UDP_tbOrdenCompra_Listado
 AS
 BEGIN
@@ -15101,10 +15331,9 @@ BEGIN
 		SELECT 'Error Message: ' + ERROR_MESSAGE() 
 	END CATCH
 END
-
+GO
 
 --*****Editar*****--
-
 CREATE OR ALTER PROCEDURE [Prod].[UDP_tbPedidosOrden_Editar]
 @peor_Codigo				NVARCHAR(100),
 @peor_Id					INT, 
@@ -15153,6 +15382,7 @@ BEGIN
 		SELECT 'Error Message: ' + ERROR_MESSAGE() 
 	END CATCH
 END
+GO
 
 CREATE OR ALTER PROCEDURE Prod.UDP_tbPedidosOrden_Finalizado
 	@peor_Id	INT
@@ -15169,7 +15399,6 @@ BEGIN
 		SELECT 'Error:' + ERROR_MESSAGE()
 	END CATCH
 END
-
 GO
 
 --*****ReporteModuloDia*****-
@@ -15286,7 +15515,6 @@ END
 GO
 
 
-
 /*Listar Maquinaria Historial*/
 GO
 CREATE OR ALTER PROCEDURE Prod.UDP_tbMaquinaHistorial_Listar
@@ -15315,9 +15543,9 @@ BEGIN
 	LEFT JOIN  Acce.tbUsuarios	usuarioElimina		ON maquiHisto.usua_UsuarioEliminacion = usuarioElimina.usua_Id
 	WHERE mahi_Estado = 1
 END
+GO
 
 /*Insertar Maquinaria Historial*/
-GO
 CREATE OR ALTER PROCEDURE Prod.UDP_tbMaquinaHistorial_Insertar
 	@maqu_Id				INT, 
 	@mahi_FechaInicio		DATETIME, 
@@ -15342,9 +15570,9 @@ BEGIN
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
 	END CATCH
 END
+GO
 
 /*Editar Maquinaria Historial*/
-GO
 CREATE OR ALTER PROCEDURE Prod.UDP_tbMaquinaHistorial_Editar
 	@mahi_Id					INT,
 	@maqu_Id					INT, 
@@ -15372,9 +15600,9 @@ BEGIN
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
 	END CATCH
 END
+GO
 
 /*Editar Maquinaria Historial*/
-GO
 CREATE OR ALTER PROCEDURE Prod.UDP_tbMaquinaHistorial_Eliminar
 	@mahi_Id					INT,
 	@usua_UsuarioEliminacion	INT, 
@@ -15395,8 +15623,6 @@ BEGIN
 	END CATCH
 END
 GO
-
-
 
 
 /* LISTAR MATERIALES BRINDAR */
@@ -15425,10 +15651,9 @@ BEGIN
 			LEFT JOIN Prod.tbOrdenCompraDetalles ordeC   ON ordeC.code_Id   = mabr.code_Id
 			LEFT JOIN Prod.tbMateriales mate             ON mate.mate_Id    = mabr.mate_Id
 			INNER JOIN Gral.tbUnidadMedidas unid		 ON mabr.unme_Id	= unid.unme_Id
-	  WHERE mabr_Estado�=�1
+	  WHERE mabr_Estado = 1
 
 END
-
 GO
 
 /*PROCEDIMIENTO DE Listar materiales a brindar por el code_Id*/
@@ -15460,7 +15685,6 @@ BEGIN
 			INNER JOIN Gral.tbUnidadMedidas unid		 ON mabr.unme_Id	= unid.unme_Id
 	  WHERE mabr_Estado = 1 AND mabr.code_Id = @code_Id
 END
-
 GO
 
 /* INSERTAR MATERIALES BRINDAR */
@@ -15491,7 +15715,7 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
-	END�CATCH
+	END CATCH
 END
 
 GO
@@ -15522,7 +15746,6 @@ BEGIN
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
 	END CATCH
 END
-
 GO
 
 /* ELIMINAR MATERIALES BRINDAR  */
@@ -15573,7 +15796,6 @@ BEGIN
 			SELECT 'Error Message: ' + ERROR_MESSAGE()
 	END CATCH
 END
-
 GO
 
 CREATE OR ALTER   PROCEDURE [Prod].[UDP_tbProcesoPorOrdenCompraDetalle_Insertar]
@@ -15602,7 +15824,6 @@ BEGIN
 		SELECT 'Error Message: ' + ERROR_MESSAGE() AS Resultado
 	END CATCH
 END
-
 GO
 
 
@@ -16012,6 +16233,7 @@ BEGIN
         SELECT 'Error Message: ' + ERROR_MESSAGE()
     END CATCH
 END
+GO
 
 CREATE OR ALTER PROCEDURE Prod.UDP_tbPODetallePorPedidoOrdenDetalle_Editar 
 	@ocpo_Id						INT,

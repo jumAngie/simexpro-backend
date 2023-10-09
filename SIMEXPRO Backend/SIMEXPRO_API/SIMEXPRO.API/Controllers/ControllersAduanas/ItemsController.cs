@@ -69,5 +69,13 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
 
             return Ok(respuesta);
         }
+
+        [HttpPost("CalcularValorAduana")]
+        public IActionResult CalcularValorAduana(int item_Id, int trli_Id, int duca_Id, decimal deva_ConversionDolares)
+        {
+            var respuesta = _aduanaServices.CalcularValorAduana(item_Id, trli_Id, duca_Id, deva_ConversionDolares);
+
+            return Ok(respuesta);
+        }
     }
 }
