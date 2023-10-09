@@ -5725,6 +5725,7 @@ END
 --GO
 GO
 
+
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDeclaracionValor_Eliminar
 	@deva_Id	INT,
 	@fact_Id	INT,
@@ -6337,6 +6338,8 @@ BEGIN
 	END CATCH
 END
 
+GO
+
 CREATE OR ALTER PROCEDURE adua.UDP_tbDeclaraciones_Valor_Tab2_Insertar
 	@deva_Id						INT,
 	@prov_decl_Nombre_Raso			NVARCHAR(250),
@@ -6643,6 +6646,22 @@ BEGIN
 	END CATCH
 END
 GO
+
+CREATE OR ALTER PROCEDURE Adua.tbDeclaranciones_Valor_EliminarIntermediario 
+	@deva_Id		INT
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE [Adua].[tbDeclaraciones_Valor]
+		SET		[inte_Id] = null
+		WHERE   [deva_Id] = @deva_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 0
+	END CATCH
+END
 
 --CREATE OR ALTER PROCEDURE adua.UDP_tbDeclaraciones_Valor_Tab2_Editar
 --	@deva_Id						INT,
