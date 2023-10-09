@@ -38,6 +38,9 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public int nico_Id { get; set; }
         [NotMapped]
+
+        public string impo_RTN { get; set; }
+        [NotMapped]
         public string nico_Descripcion { get; set; }
         [NotMapped]
         public string impo_NivelComercial_Otro { get; set; }
