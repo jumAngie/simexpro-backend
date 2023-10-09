@@ -194,6 +194,18 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return respuesta;
         }
 
+        public IEnumerable<tbDeclaraciones_Valor> List_ByDucaId(int id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@duca_Id", id, DbType.Int32, ParameterDirection.Input);
+             
+            var respuesta = db.Query<tbDeclaraciones_Valor>(ScriptsDataBase.ListarDevasByDucaId, parametros, commandType: CommandType.StoredProcedure);
+
+            return respuesta;
+        }
+
         public IEnumerable<tbDeclaraciones_Valor> ListVWHistorial()
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);

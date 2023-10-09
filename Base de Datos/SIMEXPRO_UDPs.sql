@@ -18636,4 +18636,22 @@ BEGIN
 		SELECT 0
 	END CATCH
 END
+
 GO
+
+
+  CREATE OR ALTER PROCEDURE Adua.UDP_tbItemsDevaByDuca_Id
+  @duca_Id INT
+  AS
+  BEGIN
+	BEGIN TRY
+	  SELECT deva.*
+	  FROM Adua.tbItemsDEVAPorDuca duquitaModric INNER JOIN [Adua].[VW_tbDeclaraciones_ValorCompleto] deva
+	  ON duquitaModric.deva_Id = deva.deva_Id
+	  WHERE duca_Id = @duca_Id
+	END TRY
+
+	BEGIN CATCH
+		SELECT 0
+	END CATCH
+  END

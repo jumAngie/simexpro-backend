@@ -29,7 +29,14 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             var listado = _aduanaServices.ListarDeclaraciones_Valor();
             return Ok(listado);
         }
-        
+
+        [HttpGet("Listar_ByDucaId")]
+        public IActionResult Index(int id)
+        {
+            var listado = _aduanaServices.ListarDeclaraciones_Valor_ByDucaId(id);
+            return Ok(listado);
+        }
+
         [HttpGet("ListarHistorial")]
         public IActionResult IndexHistorial()
         {

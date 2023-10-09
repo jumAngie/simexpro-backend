@@ -328,6 +328,7 @@ namespace SIMEXPRO.DataAccess
         public static string CancelarEliminarDuca = "Adua.UDP_tbDuca_CancelarEliminarDuca";
 
         public static string FinalizarDuca = "Adua.UDP_tbDuca_Finalizado";
+        public static string ListarDevasByDucaId = "Adua.UDP_tbItemsDevaByDuca_Id";
         #endregion
 
         #region Estado Boletin
