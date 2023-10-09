@@ -9149,7 +9149,6 @@ INNER JOIN Adua.tbAduanas aduanaRegistro
 		ON duca_Lugar_Desembarque = desembarque.emba_Id
  LEFT JOIN Adua.tbTransporte transporte
 	    ON conductor.tran_Id = transporte.tran_Id
-  ORDER BY duca_Id DESC
 END
 GO
 
