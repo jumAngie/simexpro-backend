@@ -36,6 +36,18 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             var listado = _aduanaServices.ListarDeclaraciones_ValorHistorial();
             return Ok(listado);
         }
+        
+        
+        [HttpGet("ListarFacturasByDeva")]
+        
+        public IActionResult ListarFacturasByDeva(int deva_Id)
+        {
+            var listado = _aduanaServices.ListarFacturasByDeva(deva_Id);
+            listado.Data = _mapper.Map<IEnumerable<FacturasViewModel>>(listado.Data);
+            return Ok(listado);
+        }
+
+
 
 
         [HttpPost("InsertarTab1")]

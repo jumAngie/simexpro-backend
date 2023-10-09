@@ -246,6 +246,7 @@ namespace SIMEXPRO.DataAccess
         #region Declaraciones de Valor
         public static string ListarDeclaracionesValor = "adua.UDP_tbDeclaraciones_ValorCompleto_Listar";
         public static string ListarDeclaracionesValorHistorial = "Adua.UDP_Historial_DevaSinDuca";
+        public static string ListarFacturasPorDeva = "Adua.UDP_FacturaByDevaId";
 
         public static string InsertarDeclaracionesValorTAP1 = "adua.UDP_tbDeclaraciones_Valor_Tab1_Insertar";
         public static string EditarDeclaracionesValorTAP1 = "adua.UDP_tbDeclaraciones_Valor_Tab1_Editar";

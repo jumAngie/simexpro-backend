@@ -182,6 +182,20 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
             return respuesta;
         }
+       
+        public IEnumerable<tbFacturas> ListFacturasByDeva(int Id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+
+            var parametros = new DynamicParameters();
+            parametros.Add("@deva_Id", Id, DbType.String, ParameterDirection.Input);
+
+            return db.Query<tbFacturas>(ScriptsDataBase.ListarFacturasPorDeva, parametros, commandType: CommandType.StoredProcedure);
+        }
+
+
+
+
         public IEnumerable<VW_tbDeclaraciones_ValorCompleto> ListVW()
         {
             var con = new SIMEXPRO();

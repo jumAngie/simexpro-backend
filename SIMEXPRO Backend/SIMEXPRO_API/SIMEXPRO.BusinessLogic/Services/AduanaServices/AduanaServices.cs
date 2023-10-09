@@ -845,6 +845,21 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+       
+        public ServiceResult ListarFacturasByDeva(int Id)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _declaraciones_ValorRepository.ListFacturasByDeva(Id);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
 
 
         public ServiceResult InsertarDeclaraciones_ValorTab1(tbDeclaraciones_Valor item, tbDeclarantes itemDecl, tbImportadores itemImp)
