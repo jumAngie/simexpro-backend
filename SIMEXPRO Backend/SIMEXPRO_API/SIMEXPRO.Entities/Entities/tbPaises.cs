@@ -14,9 +14,6 @@ namespace SIMEXPRO.Entities.Entities
             tbConductor = new HashSet<tbConductor>();
             tbPaisesEstanTratadosConHonduras = new HashSet<tbPaisesEstanTratadosConHonduras>();
             tbDucaduca_Pais_DestinoNavigation = new HashSet<tbDuca>();
-            tbDucaduca_Pais_Emision_ExportadorNavigation = new HashSet<tbDuca>();
-            tbDucaduca_Pais_Emision_ImportadorNavigation = new HashSet<tbDuca>();
-            tbDucaduca_Pais_ExportacionNavigation = new HashSet<tbDuca>();
             tbDucaduca_Pais_ProcedenciaNavigation = new HashSet<tbDuca>();
             tbItems = new HashSet<tbItems>();
             tbProvincias = new HashSet<tbProvincias>();
@@ -50,9 +47,6 @@ namespace SIMEXPRO.Entities.Entities
         public virtual ICollection<tbDeclaraciones_Valor> tbDeclaraciones_Valorpais_Entrega { get; set; }
         public virtual ICollection<tbDeclaraciones_Valor> tbDeclaraciones_Valorpais_Exportacion { get; set; }
         public virtual ICollection<tbDuca> tbDucaduca_Pais_DestinoNavigation { get; set; }
-        public virtual ICollection<tbDuca> tbDucaduca_Pais_Emision_ExportadorNavigation { get; set; }
-        public virtual ICollection<tbDuca> tbDucaduca_Pais_Emision_ImportadorNavigation { get; set; }
-        public virtual ICollection<tbDuca> tbDucaduca_Pais_ExportacionNavigation { get; set; }
         public virtual ICollection<tbDuca> tbDucaduca_Pais_ProcedenciaNavigation { get; set; }
         public virtual ICollection<tbItems> tbItems { get; set; }
         public virtual ICollection<tbProvincias> tbProvincias { get; set; }

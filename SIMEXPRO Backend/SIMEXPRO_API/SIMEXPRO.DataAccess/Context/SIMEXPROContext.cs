@@ -2165,7 +2165,7 @@ namespace SIMEXPRO.DataAccess.Context
             modelBuilder.Entity<tbDuca>(entity =>
             {
                 entity.HasKey(e => e.duca_Id)
-                    .HasName("PK_Adua_tbDuca_duca_No_Duca");
+                    .HasName("PK_Adua_tbDuca_duca_Id");
 
                 entity.ToTable("tbDuca", "Adua");
 
@@ -2183,9 +2183,23 @@ namespace SIMEXPRO.DataAccess.Context
 
                 entity.Property(e => e.duca_Finalizado).HasDefaultValueSql("((0))");
 
+                entity.Property(e => e.duca_GastosSeguroTotal).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.duca_GastosTransporteTotal).HasColumnType("decimal(18, 2)");
+
                 entity.Property(e => e.duca_No_Duca).HasMaxLength(100);
 
                 entity.Property(e => e.duca_Numero_Id_Declarante).HasMaxLength(200);
+
+                entity.Property(e => e.duca_OtrosGastosTotal).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.duca_PesoBrutoTotal).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.duca_PesoNetoTotal).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.duca_ValorTotalEnAduana).HasColumnType("decimal(18, 2)");
+
+                entity.Property(e => e.duca_ValorTransaccionTotal).HasColumnType("decimal(18, 2)");
 
                 entity.HasOne(d => d.duca_AduanaDestinoNavigation)
                     .WithMany(p => p.tbDucaduca_AduanaDestinoNavigation)

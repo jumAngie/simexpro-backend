@@ -2511,6 +2511,14 @@ CREATE TABLE Adua.tbDuca(
 	duca_Transportista_Nombre		NVARCHAR(MAX) DEFAULT NULL,
 	motr_Id                 		INT DEFAULT NULL,
 	duca_Conductor_Id				INT DEFAULT NULL,
+	
+	duca_ValorTransaccionTotal		DECIMAL(18,2) DEFAULT NULL,
+	duca_GastosTransporteTotal		DECIMAL(18,2) DEFAULT NULL,
+	duca_GastosSeguroTotal			DECIMAL(18,2) DEFAULT NULL,
+	duca_OtrosGastosTotal			DECIMAL(18,2) DEFAULT NULL,
+	duca_ValorTotalEnAduana			DECIMAL(18,2) DEFAULT NULL,
+	duca_PesoBrutoTotal				DECIMAL(18,2) DEFAULT NULL,
+	duca_PesoNetoTotal				DECIMAL(18,2) DEFAULT NULL,
 
 	duca_Finalizado					BIT DEFAULT 0,
 	usua_UsuarioCreacion			INT,
@@ -2519,7 +2527,7 @@ CREATE TABLE Adua.tbDuca(
 	duca_FechaModificacion			DATETIME DEFAULT NULL,
 	duca_Estado 					BIT DEFAULT 1
 	
-	CONSTRAINT PK_Adua_tbDuca_duca_No_Duca PRIMARY KEY(duca_Id),
+	CONSTRAINT PK_Adua_tbDuca_duca_Id PRIMARY KEY (duca_Id),
 	CONSTRAINT FK_Adua_tbDuca_duca_AduanaRegistro_Adua_tbAduana_adua_Id					FOREIGN KEY (duca_AduanaRegistro)               REFERENCES Adua.tbAduanas				(adua_Id),
 	CONSTRAINT FK_Adua_tbDuca_duca_AduanaDestino_Adua_tbAduana_adua_Id					FOREIGN KEY (duca_AduanaDestino)				REFERENCES Adua.tbAduanas				(adua_Id),
 	CONSTRAINT FK_Adua_tbDuca_duca_Regimen_Aduanero_Adua_tbRegimenesAduaneros_regi_Id	FOREIGN KEY (duca_Regimen_Aduanero)				REFERENCES Adua.tbRegimenesAduaneros	(regi_Id),
@@ -2809,7 +2817,6 @@ GO
 
 
 --Seccion pt2
-
 CREATE TABLE Adua.tbLiquidacionGeneral(
 	lige_Id					 INT IDENTITY(1,1),
 	lige_TipoTributo		 NVARCHAR(50) NOT NULL,
@@ -2819,7 +2826,7 @@ CREATE TABLE Adua.tbLiquidacionGeneral(
 	duca_Id				     INT NOT NULL,
 
 	CONSTRAINT PK_Adua_tbLiquidacionGeneral_lige_Id PRIMARY KEY(lige_Id),
-	CONSTRAINT FK_Adua_tbDuca_duca_Id_Adua_tbLiquidacionGeneral_duca_Id FOREIGN KEY (duca_Id) REFERENCES Adua.tbDuca(duca_Id)
+	CONSTRAINT FK_Adua_tbDuca_duca_Id_Adua_tbLiquidacionGeneral_duca_Id FOREIGN KEY (duca_Id) REFERENCES Adua.tbDuca (duca_Id)
 	--CONSTRAINT FK_Adua_tbLiquidacionGeneral_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id	    FOREIGN KEY (usua_UsuarioCreacion)     		REFERENCES Acce.tbUsuarios 	(usua_Id),
 	--CONSTRAINT FK_Adua_tbLiquidacionGeneral_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id	FOREIGN KEY (usua_UsuarioModificacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id),
 	--CONSTRAINT FK_Adua_tbLiquidacionGeneral_Acce_tbUsuarios_usua_UsuarioEliminacion_usua_Id  FOREIGN KEY (usua_UsuarioEliminacion) 		REFERENCES Acce.tbUsuarios 	(usua_Id)
@@ -3060,7 +3067,6 @@ CREATE TABLE Adua.tbItemsDEVAPorDuca (
 		CONSTRAINT FK_Acce_tbUsuarios_Adua_tbItemsDEVAPorDuca_usua_UsuarioModificacion		FOREIGN KEY (usua_UsuarioModificacion)	REFERENCES Acce.tbUsuarios(usua_Id),
 );
 GO
-
 
 CREATE TABLE Adua.tbTratadosLibreComercio(
 	trli_Id						INT IDENTITY(1,1),

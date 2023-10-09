@@ -8844,124 +8844,75 @@ go
 CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_Listar
 AS
 BEGIN
-   SELECT --Identificación de la Declaración parte I
-		  duca_Id,
-		  duca_No_Duca, 
-		  duca_No_Correlativo_Referencia, 
-		  
-		  --4.1 Exportador / Proveedor
-		  duca_Tipo_Iden_Exportador, 
-		  tipo.iden_Descripcion					AS 'Tipo_identidad_exportador_descripcion',
-		  duca_Pais_Emision_Exportador,
-		  paisEE.pais_Nombre					AS 'Nombre_pais_del_exportador', 
-		  duca_DomicilioFiscal_Exportador, 
-		  
-		  --Identificación de la Declaración parte II --
-		  duca.duca_AduanaRegistro,
-		  adua1.adua_Nombre						AS 'Nombre_Aduana_Registro',			
-		  duca.duca_AduanaDestino,
-		  adua2.adua_Nombre						AS 'Nombre_Aduana_Destino',
-		  
-		  --5.1  Iportador / Destinatario
-		  duca_Numero_Id_Importador, 
-		  duca_Pais_Emision_Importador,
-		  paisEI.pais_Nombre					AS 'Nombre_pais_importador',
-		  duca_DomicilioFiscal_Importador, 
-		  
-		  --Identificación de la Declaración parte III
-		  duca.duca_Regimen_Aduanero,
-		  duca.duca_Modalidad,
-		  duca.duca_Clase,
-		  duca.duca_FechaVencimiento,
-		  
-		  --Identificacion de la Declaracion parte IV
-		  duca_Pais_Procedencia,
-		  paisP.pais_Nombre						AS 'Nombre_pais_procedencia', 
-		  duca_Pais_Exportacion,
-		  paisE.pais_Nombre						AS 'Nombre_pais_exportacion', 
-		  duca_Pais_Destino,
-		  paisD.pais_Nombre						AS 'Nombre_pais_destino', 
-		  duca_Deposito_Aduanero,
-		  duca_Lugar_Desembarque,
-		  embarque.emba_Codigo,
-		  duca_Manifiesto, 
-		  duca_Titulo, 
-		  
-		  --6.1 Declarante 
-		  duca_Codigo_Declarante,
-		  duca_Numero_Id_Declarante, 
-		  duca_NombreSocial_Declarante,
-		  duca_DomicilioFiscal_Declarante, 
-		  
-		  --19.1 Transportista 		
-		  duca_Codigo_Transportista,
-		  duca.motr_id, 
-		  duca_Transportista_Nombre,
-		  
-		  --23.1 Conductor 
-		  duca_Conductor_Id,
-		  cond.cont_NoIdentificacion,
-		  cond.cont_Licencia,
-		  paisc.pais_Nombre						AS 'Nombre_pais_conductor',
-		  cond.cont_Nombre,
-		  cond.cont_Apellido,
-		  cond.pais_IdExpedicion,		
-		  duca_Conductor_Id, 
-		  duca_Ventaja,
+   SELECT  duca_Id, 
+		   duca_No_Duca, 
+		   duca_No_Correlativo_Referencia, 
+		   duca_AduanaRegistro, 
+		   aduanaRegistro.adua_Nombre AS 'Nombre_Aduana_Registro',
+		   duca_AduanaDestino, 
+		   duca_Regimen_Aduanero, 
+		   duca_Modalidad, 
+		   duca_Clase, 
+		   duca_FechaVencimiento, 
+		   duca_Pais_Procedencia,
+		   paisProcedencia.pais_Codigo + ' - ' + paisProcedencia.pais_Nombre + ' - ' + paisProcedencia.pais_Prefijo AS 'Nombre_pais_procedencia',
+		   duca_Pais_Destino, 
+		   duca_Deposito_Aduanero, 
+		   duca_Lugar_Desembarque, 
+		   duca_Manifiesto, 
+		   duca_Titulo, 
+		   trli_Id, 
+		   
+		   duca_Codigo_Declarante, 
+		   duca_Numero_Id_Declarante, 
+		   duca_NombreSocial_Declarante, 
+		   duca_DomicilioFiscal_Declarante, 
+		   duca_Codigo_Transportista, 
+		   duca_Transportista_Nombre, 
+		   motr_Id,
+		   
+		   duca_Conductor_Id, 
+		   conductor.cont_NoIdentificacion,
+		   conductor.cont_Licencia,
+		   conductor.pais_IdExpedicion,
+		   conductor.cont_Nombre,
+		   conductor.cont_Apellido,
+		   conductor.tran_Id,
+		   transporte.tran_IdUnidadTransporte,
+		   transporte.pais_Id AS 'Id_pais_transporte',
+		   transporte.marca_Id	AS 'Transporte_marca_Id',
+		   transporte.tran_Chasis,
+		   transporte.tran_Remolque,
+		   transporte.tran_CantCarga,
+		   transporte.tran_NumDispositivoSeguridad,
+		   transporte.tran_Equipamiento,
+		   transporte.tran_TamanioEquipamiento,
+		   transporte.tran_TipoCarga,
+		   transporte.tran_IdContenedor,
 
-		  --Identificacion de la Declaracion parte V
-		  trns.tran_Id,
-		  trns.tran_IdUnidadTransporte,
-		  trns.tran_TamanioEquipamiento,
-		  trns.pais_Id							AS 'Id_pais_transporte',
-		  paist.pais_Nombre						AS 'Nombre_pais_transporte',
-		  trns.marca_Id							AS 'Transporte_marca_Id',
-		  marc.marc_Descripcion					AS 'Transporte_marc_Descripcion',
-		  trns.tran_Chasis,
-		  trns.tran_Remolque,
-		  trns.tran_CantCarga,
-		  trns.tran_NumDispositivoSeguridad,
-		  trns.tran_Equipamiento,
-		  	  
-		  --Tamaño del equipamiento
-		  trns.tran_TipoCarga,
-		  trns.tran_IdContenedor,	
-		  	  
-		  --Otros gastos
-		  
-		  --32.Totales 
-		  duca.duca_PesoBrutoTotal,      
-		  duca.duca_PesoNetoTotal,
-		  
-		  --Liquidacion general 
-		  --Mercancias
-		  duca.usua_UsuarioCreacion,
-		  usu1.usua_Nombre, 
-		  duca_FechaCreacion, 
-		  duca.usua_UsuarioModificacion, 
-		  usu2.usua_Nombre,
-		  duca_FechaModificacion, 
-		  duca_Finalizado,
-		  duca_Estado
-	 FROM Adua.tbDuca duca 
-LEFT JOIN Acce.tbUsuarios				AS usu1		ON duca.usua_UsuarioCreacion = usu1.usua_Id
-LEFT JOIN Acce.tbUsuarios				AS usu2		ON duca.usua_UsuarioModificacion = usu2.usua_Id
-LEFT JOIN Adua.tbConductor				AS cond		ON duca.duca_Conductor_Id = cond.cont_Id
-LEFT JOIN Adua.tbTransporte				AS trns		ON cond.tran_Id = trns.tran_Id 
-LEFT JOIN Gral.tbPaises					AS paisc	ON cond.pais_IdExpedicion = paisc.pais_Id 
-LEFT JOIN Gral.tbPaises					AS paist	ON paist.pais_Id = trns.pais_Id
-LEFT JOIN Adua.tbMarcas					AS marc		ON marc.marc_Id = trns.marca_Id
-LEFT JOIN Gral.tbPaises					AS paisD	ON duca.duca_Pais_Destino = paisD.pais_Id
-LEFT JOIN Gral.tbPaises					AS paisEE	ON duca.duca_Pais_Emision_Exportador = paisEE.pais_Id
-LEFT JOIN Gral.tbPaises					AS paisEI	ON duca.duca_Pais_Emision_Importador = paisEI.pais_Id
-LEFT JOIN Gral.tbPaises					AS paisE	ON duca.duca_Pais_Exportacion = paisE.pais_Id
-LEFT JOIN Gral.tbPaises					AS paisP	ON duca.duca_Pais_Procedencia = paisP.pais_Id
-LEFT JOIN Adua.tbLugaresEmbarque		AS embarque ON duca.duca_Lugar_Desembarque = embarque.emba_Id
-LEFT JOIN Adua.tbModoTransporte			AS modoT	ON duca.motr_id = modoT.motr_Id
-LEFT JOIN Adua.tbAduanas				AS adua1	ON duca.duca_AduanaRegistro = adua1.adua_Id
-LEFT JOIN Adua.tbAduanas				AS adua2	ON duca.duca_AduanaDestino = adua2.adua_Id
-LEFT JOIN Adua.tbTiposIdentificacion	AS tipo		ON duca.duca_Tipo_Iden_Exportador = tipo.iden_Id
-ORDER BY duca_FechaCreacion DESC
+		   duca_ValorTransaccionTotal, 
+		   duca_GastosTransporteTotal, 
+		   duca_GastosSeguroTotal, 
+		   duca_OtrosGastosTotal, 
+		   duca_ValorTotalEnAduana, 
+		   duca_PesoBrutoTotal, 
+		   duca_PesoNetoTotal, 
+		   duca_Finalizado, 
+		   duca.usua_UsuarioCreacion, 
+		   duca_FechaCreacion, 
+		   duca.usua_UsuarioModificacion, 
+		   duca_FechaModificacion, 
+		   duca_Estado
+	  FROM Adua.tbDuca duca
+INNER JOIN Gral.tbPaises paisProcedencia
+		ON duca.duca_Pais_Procedencia = paisProcedencia.pais_Id
+INNER JOIN Adua.tbAduanas aduanaRegistro
+		ON duca.duca_AduanaRegistro = aduanaRegistro.adua_Id
+ LEFT JOIN Adua.tbConductor conductor
+		ON duca.duca_Conductor_Id = conductor.cont_Id
+ LEFT JOIN Adua.tbTransporte transporte
+	    ON conductor.tran_Id = transporte.tran_Id
+  ORDER BY duca_Id DESC
 END
 GO
 
@@ -8977,9 +8928,10 @@ BEGIN
 		  duca_No_Correlativo_Referencia, 
 		  
 		  --4.1 Exportador / Proveedor
-		  duca_Tipo_Iden_Exportador, 
+		  --duca_Tipo_Iden_Exportador, 
 		  tipo.iden_Descripcion					AS 'Tipo_identidad_exportador_descripcion',
-		  duca_Pais_Emision_Exportador,
+
+		  --duca_Pais_Emision_Exportador,
 		  paisEE.pais_Nombre					AS 'Nombre_pais_del_exportador', 
 		  duca_DomicilioFiscal_Exportador, 
 		  
@@ -8991,7 +8943,7 @@ BEGIN
 		  
 		  --5.1  Iportador / Destinatario
 		  duca_Numero_Id_Importador, 
-		  duca_Pais_Emision_Importador,
+		  --duca_Pais_Emision_Importador,
 		  paisEI.pais_Nombre					AS 'Nombre_pais_importador',
 		  duca_DomicilioFiscal_Importador, 
 		  
@@ -9004,7 +8956,7 @@ BEGIN
 		  --Identificacion de la Declaracion parte IV
 		  duca_Pais_Procedencia,
 		  paisP.pais_Nombre						AS 'Nombre_pais_procedencia', 
-		  duca_Pais_Exportacion,
+		  --duca_Pais_Exportacion,
 		  paisE.pais_Nombre						AS 'Nombre_pais_exportacion', 
 		  duca_Pais_Destino,
 		  paisD.pais_Nombre						AS 'Nombre_pais_destino', 
@@ -9099,14 +9051,20 @@ BEGIN
 	SELECT DEVA.deva_Id,
 		   DEVA.pais_ExportacionId,
 		   PaisExportacion.pais_Nombre,
+		   PaisExportacion.pais_Codigo,
 		   DEVA.inco_Id,
 		   Incoterm.inco_Codigo,
+		   DEVA.regi_Id,
+		   regi.regi_Codigo,
+		   regi.regi_Descripcion,
 		   DEVA.deva_FechaAceptacion
 	  FROM [Adua].[tbDeclaraciones_Valor] DEVA
 INNER JOIN [Gral].[tbPaises] PaisExportacion
 		ON DEVA.pais_ExportacionId = PaisExportacion.pais_Id
 INNER JOIN [Adua].[tbIncoterm] Incoterm
 		ON DEVA.inco_Id = Incoterm.inco_Id
+INNER JOIN [Adua].[tbRegimenesAduaneros] regi
+		ON DEVA.regi_Id = regi.regi_Id
  LEFT JOIN [Adua].[tbItemsDEVAPorDuca] ITEMSDEVAPorDuca 
 		ON DEVA.deva_Id = ITEMSDEVAPorDuca.deva_Id
 	 WHERE ITEMSDEVAPorDuca.deva_Id IS NULL AND deva_Finalizacion = 1; -- Excluir registros que existen en la otra tabla
@@ -9121,7 +9079,10 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbPaisesEstanTratadosConHonduras_TratadoByPai
 )
 AS
 BEGIN
-	SELECT trli_Id FROM Adua.tbPaisesEstanTratadosConHonduras WHERE pais_Id = @pais_Id
+	DECLARE @trli_Id INT = 0;
+	SELECT @trli_Id =trli_Id FROM Adua.tbPaisesEstanTratadosConHonduras WHERE pais_Id = @pais_Id
+
+	SELECT @trli_Id
 END
 GO
 
@@ -9259,6 +9220,7 @@ BEGIN
 					duca_Lugar_Desembarque			 = @duca_Lugar_Desembarque,
 					duca_Manifiesto					 = UPPER(@duca_Manifiesto),
 					duca_Titulo						 = UPPER(@duca_Titulo),
+					trli_Id							 = NULL,
 					usua_UsuarioCreacion			 = @usua_UsuarioCreacion,
 					duca_FechaCreacion				 = @duca_FechaCreacion
 			  WHERE duca_Id = @duca_Id	
@@ -9395,31 +9357,56 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbDuca_EditarTab1
 	@duca_Lugar_Desembarque				NVARCHAR(MAX),
 	@duca_Manifiesto					NVARCHAR(150),
 	@duca_Titulo						NVARCHAR(150),
-	@duca_Ventaja						NVARCHAR(100),
+	@trli_Id							INT,
 	@usua_UsuarioModificacion			INT,
 	@duca_FechaModificacion				DATETIME
 AS
 BEGIN
 	BEGIN TRY
-	 UPDATE Adua.tbDuca
-		SET duca_No_Duca					 = UPPER(@duca_No_Duca),
-			duca_No_Correlativo_Referencia	 = UPPER(@duca_No_Correlativo_Referencia),
-			duca_AduanaRegistro				 = @duca_AduanaRegistro,
-			duca_AduanaDestino				 = @duca_AduanaDestino,
-			duca_Regimen_Aduanero			 = @duca_Regimen_Aduanero,
-			duca_Modalidad					 = @duca_Modalidad,
-			duca_Clase						 = @duca_Clase,
-			duca_FechaVencimiento			 = @duca_FechaVencimiento,
-			duca_Pais_Procedencia			 = @duca_Pais_Procedencia,
-			duca_Pais_Destino				 = @duca_Pais_Destino,
-			duca_Deposito_Aduanero			 = @duca_Deposito_Aduanero,
-			duca_Lugar_Desembarque			 = @duca_Lugar_Desembarque,
-			duca_Manifiesto					 = UPPER(@duca_Manifiesto),
-			duca_Titulo						 = UPPER(@duca_Titulo),
-			duca_Ventaja					 = @duca_Ventaja,
-			usua_UsuarioModificacion		 = @usua_UsuarioModificacion,
-			duca_FechaModificacion			 = @duca_FechaModificacion
-	  WHERE duca_Id = @duca_Id	
+	IF(@trli_Id > 0)
+			BEGIN
+			 UPDATE Adua.tbDuca
+				SET duca_No_Duca					 = UPPER(@duca_No_Duca),
+					duca_No_Correlativo_Referencia	 = UPPER(@duca_No_Correlativo_Referencia),
+					duca_AduanaRegistro				 = @duca_AduanaRegistro,
+					duca_AduanaDestino				 = @duca_AduanaDestino,
+					duca_Regimen_Aduanero			 = @duca_Regimen_Aduanero,
+					duca_Modalidad					 = @duca_Modalidad,
+					duca_Clase						 = @duca_Clase,
+					duca_FechaVencimiento			 = @duca_FechaVencimiento,
+					duca_Pais_Procedencia			 = @duca_Pais_Procedencia,
+					duca_Pais_Destino				 = @duca_Pais_Destino,
+					duca_Deposito_Aduanero			 = @duca_Deposito_Aduanero,
+					duca_Lugar_Desembarque			 = @duca_Lugar_Desembarque,
+					duca_Manifiesto					 = UPPER(@duca_Manifiesto),
+					duca_Titulo						 = UPPER(@duca_Titulo),
+					trli_Id							 = @trli_Id,
+					usua_UsuarioModificacion		 = @usua_UsuarioModificacion,
+					duca_FechaModificacion			 = @duca_FechaModificacion
+			  WHERE duca_Id = @duca_Id	
+			END
+		ELSE
+			BEGIN
+			 UPDATE Adua.tbDuca
+				SET duca_No_Duca					 = UPPER(@duca_No_Duca),
+					duca_No_Correlativo_Referencia	 = UPPER(@duca_No_Correlativo_Referencia),
+					duca_AduanaRegistro				 = @duca_AduanaRegistro,
+					duca_AduanaDestino				 = @duca_AduanaDestino,
+					duca_Regimen_Aduanero			 = @duca_Regimen_Aduanero,
+					duca_Modalidad					 = @duca_Modalidad,
+					duca_Clase						 = @duca_Clase,
+					duca_FechaVencimiento			 = @duca_FechaVencimiento,
+					duca_Pais_Procedencia			 = @duca_Pais_Procedencia,
+					duca_Pais_Destino				 = @duca_Pais_Destino,
+					duca_Deposito_Aduanero			 = @duca_Deposito_Aduanero,
+					duca_Lugar_Desembarque			 = @duca_Lugar_Desembarque,
+					duca_Manifiesto					 = UPPER(@duca_Manifiesto),
+					duca_Titulo						 = UPPER(@duca_Titulo),
+					trli_Id							 = NULL,
+					usua_UsuarioModificacion		 = @usua_UsuarioModificacion,
+					duca_FechaModificacion			 = @duca_FechaModificacion
+			  WHERE duca_Id = @duca_Id	
+			END
 
 		  SELECT 1
 	END TRY
@@ -17497,6 +17484,7 @@ BEGIN
 			deva.deva_Finalizacion,
 			deva.deva_PagoEfectuado, 
 			deva.pais_ExportacionId, 
+
 			paix.pais_Codigo + ' - ' + paix.pais_Nombre as pais_ExportacionNombre,
 			deva.deva_FechaExportacion, 
 			deva.mone_Id, 
@@ -17576,6 +17564,7 @@ BEGIN
 			deva.pais_EntregaId, 
 			pais.pais_Codigo + ' - ' + pais.pais_Nombre as pais_EntregaNombre,
 			inco.inco_Id, 
+			inco.inco_Codigo,
 			inco.inco_Descripcion,
 			deva.inco_Version, 
 			deva.deva_NumeroContrato, 

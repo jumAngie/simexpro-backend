@@ -113,6 +113,9 @@ namespace SIMEXPRO.Entities.Entities
         public int? pais_ExportacionId { get; set; }
         [NotMapped]
         public string? pais_Nombre { get; set; }
+        [NotMapped]
+        public string pais_Codigo { get; set; }
+
         public DateTime? deva_FechaExportacion { get; set; }
         public int? mone_Id { get; set; }
         public string mone_Otra { get; set; }

@@ -32,12 +32,20 @@ namespace SIMEXPRO.Entities.Entities
         public string duca_Transportista_Nombre { get; set; }
         public int? motr_Id { get; set; }
         public int? duca_Conductor_Id { get; set; }
+        public decimal? duca_ValorTransaccionTotal { get; set; }
+        public decimal? duca_GastosTransporteTotal { get; set; }
+        public decimal? duca_GastosSeguroTotal { get; set; }
+        public decimal? duca_OtrosGastosTotal { get; set; }
+        public decimal? duca_ValorTotalEnAduana { get; set; }
+        public decimal? duca_PesoBrutoTotal { get; set; }
+        public decimal? duca_PesoNetoTotal { get; set; }
         public bool? duca_Finalizado { get; set; }
         public int? usua_UsuarioCreacion { get; set; }
         public DateTime? duca_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }
         public DateTime? duca_FechaModificacion { get; set; }
         public bool? duca_Estado { get; set; }
+
 
         [NotMapped]
         public string emba_Codigo { get; set; }
@@ -200,9 +208,6 @@ namespace SIMEXPRO.Entities.Entities
         public virtual tbPaises duca_Pais_DestinoNavigation { get; set; }
 
         public virtual tbLugaresEmbarque duca_Lugar_DesembarqueNavigation { get; set; }
-        public virtual tbPaises duca_Pais_Emision_ExportadorNavigation { get; set; }
-        public virtual tbPaises duca_Pais_Emision_ImportadorNavigation { get; set; }
-        public virtual tbPaises duca_Pais_ExportacionNavigation { get; set; }
         public virtual tbPaises duca_Pais_ProcedenciaNavigation { get; set; }
         public virtual tbTiposIdentificacion duca_Tipo_Iden_ExportadorNavigation { get; set; }
         public virtual tbModoTransporte motr { get; set; }

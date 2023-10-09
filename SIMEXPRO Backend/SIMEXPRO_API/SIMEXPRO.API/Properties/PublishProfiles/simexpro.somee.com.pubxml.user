@@ -6,13 +6,13 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAPAsVh3vlXk223Q51rwUbYgAAAAACAAAAAAAQZgAAAAEAACAAAADK/ZdYUQobzeot/1uU6VqiIWIwXNPge76AUdSTgVq3WgAAAAAOgAAAAAIAACAAAADsX2vuyc1rgRNU75Hcj2VpHP7DEOeMNTmgew3zsnJ/xzAAAAAgD2Hyj/V2fR4EnVsbhAljo8Jm/LZsG/ZW8zJ6L/7cnicWNEfwszLYMApRJsK3P0hAAAAAzG81JSY1Dr8CEO+tcGfpRpmAra5RHjR1EfFE0YRrxranWYUQrXyJOlzLeSrD7fIkFhoAQ6Ewwixg3mXIpGmmvA==</EncryptedPassword>
-    <_PublishTargetUrl>ftp://198.37.116.30/www.simexpro.somee.com</_PublishTargetUrl>
-    <History>True|2023-09-13T06:01:25.5218484Z;</History>
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAHcoKpaSjqEO9qWNfXu3n6wAAAAACAAAAAAAQZgAAAAEAACAAAABwRvVej9WXo3qUQb06GUzSskSD8tOf/l81JpKZQ6KVPQAAAAAOgAAAAAIAACAAAACavZu5IW+Mcvt9J4cTDVbl6aJ26I+L15GfIHvtK52faDAAAABuXegUdEKo/tB2j64OveIld/OLCSsShRu/9CMfKeY9937biehIzamJDBfmw8QDYVtAAAAAkEOBLpW+PFGZp6IK168P/o8N00kyVEAgpU1OFIo/KFNd3fqBsOclSkIQHGdVWoUIJVmvf5b6GkMWZ25Wz7LJHA==</EncryptedPassword>
+    <_PublishTargetUrl>ftp://198.37.116.42/www.simexpro.somee.com</_PublishTargetUrl>
+    <History>True|2023-10-09T00:01:24.8251300Z;True|2023-09-13T00:01:25.5218484-06:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="appsettings.json">
-      <publishTime>08/31/2023 03:21:55</publishTime>
+      <publishTime>10/06/2023 19:47:50</publishTime>
     </File>
     <File Include="AutoMapper.dll">
       <publishTime>01/05/2022 09:27:54</publishTime>
@@ -168,37 +168,37 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>11/15/2019 02:53:46</publishTime>
     </File>
     <File Include="SIMEXPRO.API.deps.json">
-      <publishTime>09/12/2023 23:59:46</publishTime>
+      <publishTime>10/08/2023 17:59:58</publishTime>
     </File>
     <File Include="SIMEXPRO.API.dll">
-      <publishTime>09/12/2023 23:59:43</publishTime>
+      <publishTime>10/08/2023 17:59:55</publishTime>
     </File>
     <File Include="SIMEXPRO.API.exe">
-      <publishTime>09/12/2023 23:59:43</publishTime>
+      <publishTime>10/08/2023 17:59:55</publishTime>
     </File>
     <File Include="SIMEXPRO.API.pdb">
-      <publishTime>09/12/2023 23:59:43</publishTime>
+      <publishTime>10/08/2023 17:59:55</publishTime>
     </File>
     <File Include="SIMEXPRO.API.runtimeconfig.json">
-      <publishTime>09/11/2023 23:22:38</publishTime>
+      <publishTime>10/08/2023 16:43:10</publishTime>
     </File>
     <File Include="SIMEXPRO.BusinessLogic.dll">
-      <publishTime>09/12/2023 17:51:37</publishTime>
+      <publishTime>10/08/2023 17:52:31</publishTime>
     </File>
     <File Include="SIMEXPRO.BusinessLogic.pdb">
-      <publishTime>09/12/2023 17:51:37</publishTime>
+      <publishTime>10/08/2023 17:52:31</publishTime>
     </File>
     <File Include="SIMEXPRO.DataAccess.dll">
-      <publishTime>09/12/2023 17:51:36</publishTime>
+      <publishTime>10/08/2023 17:52:31</publishTime>
     </File>
     <File Include="SIMEXPRO.DataAccess.pdb">
-      <publishTime>09/12/2023 17:51:36</publishTime>
+      <publishTime>10/08/2023 17:52:31</publishTime>
     </File>
     <File Include="SIMEXPRO.Entities.dll">
-      <publishTime>09/12/2023 17:51:35</publishTime>
+      <publishTime>10/08/2023 17:52:29</publishTime>
     </File>
     <File Include="SIMEXPRO.Entities.pdb">
-      <publishTime>09/12/2023 17:51:35</publishTime>
+      <publishTime>10/08/2023 17:52:29</publishTime>
     </File>
     <File Include="Swashbuckle.AspNetCore.Swagger.dll">
       <publishTime>09/23/2020 06:47:20</publishTime>
@@ -234,7 +234,7 @@ edite el archivo MSBuild. Visite https://go.microsoft.com/fwlink/?LinkID=208121 
       <publishTime>10/18/2022 10:32:24</publishTime>
     </File>
     <File Include="web.config">
-      <publishTime>09/12/2023 23:59:46</publishTime>
+      <publishTime>10/08/2023 17:59:58</publishTime>
     </File>
   </ItemGroup>
 </Project>
