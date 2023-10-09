@@ -15,6 +15,8 @@ namespace SIMEXPRO.Entities.Entities
             tbAsignacionesOrden = new HashSet<tbAsignacionesOrden>();
             tbModulos = new HashSet<tbModulos>();
             tbOrdenCompraDetalles = new HashSet<tbOrdenCompraDetalles>();
+            tbOrdenCompraDetallesproc_IdActualNavigation = new HashSet<tbOrdenCompraDetalles>();
+            tbOrdenCompraDetallesproc_IdComienzaNavigation = new HashSet<tbOrdenCompraDetalles>();
             tbProcesoPorOrdenCompraDetalle = new HashSet<tbProcesoPorOrdenCompraDetalle>();
         }
 
@@ -49,6 +51,7 @@ namespace SIMEXPRO.Entities.Entities
         public virtual ICollection<tbOrdenCompraDetalles> tbOrdenCompraDetalles { get; set; }
         public virtual ICollection<tbOrde_Ensa_Acab_Etiq> tbOrde_Ensa_Acab_Etiq { get; set; }
         public virtual ICollection<tbProcesoPorOrdenCompraDetalle> tbProcesoPorOrdenCompraDetalle { get; set; }
-
+        public virtual ICollection<tbOrdenCompraDetalles> tbOrdenCompraDetallesproc_IdActualNavigation { get; set; }
+        public virtual ICollection<tbOrdenCompraDetalles> tbOrdenCompraDetallesproc_IdComienzaNavigation { get; set; }
     }
 }

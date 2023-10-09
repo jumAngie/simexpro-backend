@@ -454,6 +454,14 @@ namespace SIMEXPRO.DataAccess
         public static string EditarPersonas = "Adua.UDP_tbPersonas_Editar";
         #endregion
 
+        #region PaisesEstanTratadosConHonduras
+        public static string TratadoByPaisId = "Adua.UDP_tbPaisesEstanTratadosConHonduras_TratadoByPaisId";
+        #endregion
+
+        #region TratadosLibreComercio
+        public static string ListTratadosById = "Adua.UDP_tbTratadosLibreComercio_ListById";
+        #endregion
+
         #region Tipo Documentos
         public static string ListarTipoDocumento = "Adua.UDP_tbTipoDocumento_Listar";
         public static string InsertarTipoDocumento = "Adua.UDP_tbTipoDocumento_Insertar";

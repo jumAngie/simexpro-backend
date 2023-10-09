@@ -14,11 +14,11 @@
    "SelectedToBeGenerated": 2,
    "Tables": [
       {
-         "Name": "[Prod].[tbRevisionDeCalidadErrores]",
+         "Name": "[Adua].[tbDuca]",
          "ObjectType": 0
       }
    ],
-   "UiHint": "simexpro.SIMEXPRO",
+   "UiHint": "simexproserver.SIMEXPRO",
    "UseBoolPropertiesWithoutDefaultSql": false,
    "UseDatabaseNames": true,
    "UseDbContextSplitting": false,

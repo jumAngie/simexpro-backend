@@ -72,7 +72,7 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public string Nombre_Aduana_Registro { get; set; }
 
        
-        public string Nombre_Aduana_Salida { get; set; }
+        public string Nombre_Aduana_Destino { get; set; }
 
        
         public int deva_AduanaIngresoId { get; set; }
@@ -183,6 +183,11 @@ namespace SIMEXPRO.API.Models.ModelsAduana
 
        
         public string usua_NombreModificacion { get; set; }
+
+
+        [NotMapped]
+        public string Devas { get; set; }
+      
 
     }
 }
