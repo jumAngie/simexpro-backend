@@ -909,6 +909,27 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult CancelarIntermediario(int deva_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var respuesta = _declaraciones_ValorRepository.CancelarIntermediario(deva_Id);
+                if (respuesta.MessageStatus == "1")
+                {
+                    return result.Ok(respuesta);
+                }
+                else
+                {
+                    return result.Error(respuesta);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
         public ServiceResult InsertarDeclaraciones_ValorTab3(tbDeclaraciones_Valor item)
         {
             var result = new ServiceResult();

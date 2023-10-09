@@ -253,6 +253,7 @@ namespace SIMEXPRO.DataAccess
 
         public static string InsertarDeclaracionesValorTAP2 = "adua.UDP_tbDeclaraciones_Valor_Tab2_Insertar";
         public static string EditarDeclaracionesValorTAP2 = "adua.UDP_tbDeclaraciones_Valor_Tab2_Editar";
+        public static string CancelarIntermediario = "Adua.tbDeclaranciones_Valor_EliminarIntermediario";
 
         public static string InsertarDeclaracionesValorTAP3 = "adua.UDP_tbDeclaraciones_Valor_Tab3_Insertar";
         public static string EditarDeclaracionesValorTAP3 = "adua.UDP_tbDeclaraciones_Valor_Tab3_Editar";

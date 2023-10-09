@@ -84,6 +84,14 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
 
         }
 
+        [HttpGet("CancelarIntermediario")]
+        public IActionResult CancelarIntermediario(int deva_Id)
+        {
+            var respuesta = _aduanaServices.CancelarIntermediario(deva_Id);
+
+            return Ok(respuesta);
+        }
+
         [HttpPost("InsertarTab3")]
         public IActionResult InsertTab3(Declaraciones_ValorViewModel item)
         {

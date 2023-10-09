@@ -128,6 +128,25 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return resultado;
         }
 
+        public RequestStatus CancelarIntermediario(int deva_Id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+
+            var parametros = new DynamicParameters();
+
+            var resultado = new RequestStatus();
+
+            parametros.Add("@deva_Id", deva_Id, DbType.Int32, ParameterDirection.Input);
+
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.CancelarIntermediario, parametros, commandType: CommandType.StoredProcedure);
+
+            resultado.MessageStatus = respuesta;
+
+            return resultado;
+        }
+
+
+
         public RequestStatus InsertTab3(tbDeclaraciones_Valor item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
