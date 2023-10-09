@@ -18706,7 +18706,7 @@ END
 GO
 CREATE OR ALTER PROCEDURE Adua.UDP_tbBoletinPago_Insertar 
 	@liqu_Id                 INT, 
-	--@duca_No_Duca		     NVARCHAR(100),
+	@duca_Id		     NVARCHAR(100),
 	@tipl_Id                 INT, 
 	@boen_FechaEmision       DATE, 
 	@esbo_Id                 INT, 
@@ -18747,8 +18747,7 @@ BEGIN
 										   boen_FechaCreacion,
 										   boen_Estado)
 			VALUES(@liqu_Id, 
-				  --@duca_No_Duca,
-				   NULL,
+				   @duca_Id,
 			       @tipl_Id, 
 				   @boen_FechaEmision, 
 				   @esbo_Id, 
