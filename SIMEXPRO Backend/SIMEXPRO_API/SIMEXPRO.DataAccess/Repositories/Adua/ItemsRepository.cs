@@ -156,5 +156,23 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             result.MessageStatus = answer;
             return result;
         }
+
+        public RequestStatus CalcularvalorAduana(int item_Id, int trli_Id, int duca_Id, decimal deva_ConversionDolares)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            
+            var parametros = new DynamicParameters();
+            parametros.Add("@item_Id", item_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@trli_Id", trli_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@duca_Id", duca_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@deva_ConversionDolares", deva_ConversionDolares, DbType.Decimal, ParameterDirection.Input);
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.CalcularValorAduana, parametros, commandType: CommandType.StoredProcedure);
+
+            return new RequestStatus()
+            {
+                CodeStatus = respuesta.Contains("Error") ? 0 : 1,
+                MessageStatus = respuesta
+            };
+        }
     }
 }

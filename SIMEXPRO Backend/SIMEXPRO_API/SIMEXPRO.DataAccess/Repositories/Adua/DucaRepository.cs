@@ -64,7 +64,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parameters.Add("@duca_Lugar_Desembarque", item.duca_Lugar_Desembarque, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Manifiesto", item.duca_Manifiesto, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Titulo", item.duca_Titulo, DbType.String, ParameterDirection.Input);
-            parameters.Add("@duca_Ventaja", item.duca_Ventaja, DbType.String, ParameterDirection.Input);
+            parameters.Add("@trli_Id", item.trli_Id, DbType.Int32, ParameterDirection.Input);
 
             parameters.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@duca_FechaCreacion", item.duca_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
@@ -171,11 +171,10 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return db.Query<tbDuca>(ScriptsDataBase.ListarDuca_ById, parametros, commandType: System.Data.CommandType.StoredProcedure);
         }
 
-        public IEnumerable<tbDuca> List_ByNoDuca(string NoDuca)
+        public IEnumerable<VW_tbDuca_GenerarDuca> List_ByNoDuca(string NoDuca)
         {
-            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
-            var Query = db.Query<tbDuca>(ScriptsDataBase.ListarDuca, null, commandType: System.Data.CommandType.StoredProcedure);
-            return Query.Where(x => x.duca_No_Duca == NoDuca);
+            var con = new SIMEXPRO();
+            return con.VW_tbDuca_GenerarDuca.Where(x => x.duca_No_Duca == NoDuca);
         }
 
         public IEnumerable<VW_tbDuca_GenerarDuca> generarDuca(int duca_Id)
@@ -206,7 +205,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parameters.Add("@duca_Lugar_Desembarque", item.duca_Lugar_Desembarque, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Manifiesto", item.duca_Manifiesto, DbType.String, ParameterDirection.Input);
             parameters.Add("@duca_Titulo", item.duca_Titulo, DbType.String, ParameterDirection.Input);
-            parameters.Add("@duca_Ventaja", item.duca_Ventaja, DbType.String, ParameterDirection.Input);
+            parameters.Add("@trli_Id", item.trli_Id, DbType.Int32, ParameterDirection.Input);
 
             parameters.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
             parameters.Add("@duca_FechaModificacion", item.duca_FechaModificacion, DbType.DateTime, ParameterDirection.Input);

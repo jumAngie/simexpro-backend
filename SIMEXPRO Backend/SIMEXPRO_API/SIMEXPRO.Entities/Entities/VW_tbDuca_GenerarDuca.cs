@@ -17,14 +17,14 @@ namespace SIMEXPRO.Entities.Entities
         public string? adua_IngresoNombre { get; set; }
         public string? duca_AduanaDestino { get; set; }
         public string? prov_NumeroIdentificacion { get; set; }
-        public string? duca_TipoIdentificacionExportador { get; set; }
-        public string? duca_PaisExportador { get; set; }
+        //public string? duca_TipoIdentificacionExportador { get; set; }
+        //public string? duca_PaisExportador { get; set; }
         public string? prov_Nombre_Raso { get; set; }
-        public string? duca_DomicilioFiscal_Exportador { get; set; }
+        //public string? duca_DomicilioFiscal_Exportador { get; set; }
         public string? impo_NumRegistro { get; set; }
         public string? impo_Nombre_Raso { get; set; }
-        public string? duca_PaisImportador { get; set; }
-        public string? duca_DomicilioFiscal_Importador { get; set; }
+        //public string? duca_PaisImportador { get; set; }
+        //public string? duca_DomicilioFiscal_Importador { get; set; }
         public string? duca_Codigo_Declarante { get; set; }
         public string? duca_Numero_Id_Declarante { get; set; }
         public string? duca_NombreSocial_Declarante { get; set; }
@@ -34,7 +34,7 @@ namespace SIMEXPRO.Entities.Entities
         public string? duca_Clase { get; set; }
         public DateTime? duca_FechaVencimiento { get; set; }
         public string? duca_PaisProcedencia { get; set; }
-        public string? duca_PaisExportacion { get; set; }
+        //public string? duca_PaisExportacion { get; set; }
         public string? duca_PaisDestino { get; set; }
         public string? duca_Deposito_Aduanero { get; set; }
         public string? duca_Lugar_Desembarque { get; set; }
@@ -65,6 +65,6 @@ namespace SIMEXPRO.Entities.Entities
         public string? LiquidacionGeneral { get; set; }
         public string? Mercancias { get; set; }
         public string? Documentos { get; set; }
-        public string? duca_CanalAsignado { get; set; }
+        //public string? duca_CanalAsignado { get; set; }
     }
 }

@@ -246,6 +246,7 @@ namespace SIMEXPRO.DataAccess
         #region Declaraciones de Valor
         public static string ListarDeclaracionesValor = "adua.UDP_tbDeclaraciones_ValorCompleto_Listar";
         public static string ListarDeclaracionesValorHistorial = "Adua.UDP_Historial_DevaSinDuca";
+        public static string ListarFacturasPorDeva = "Adua.UDP_FacturaByDevaId";
 
         public static string InsertarDeclaracionesValorTAP1 = "adua.UDP_tbDeclaraciones_Valor_Tab1_Insertar";
         public static string EditarDeclaracionesValorTAP1 = "adua.UDP_tbDeclaraciones_Valor_Tab1_Editar";
@@ -383,6 +384,7 @@ namespace SIMEXPRO.DataAccess
         public static string EditarItemDuca = "Adua.UDP_tbItems_EditarItemDuca";
         public static string EditarItems = "Adua.UDP_tbItems_Editar";
         public static string EliminarItems = "Adua.UDP_tbItems_Eliminar";
+        public static string CalcularValorAduana = "Adua.UDP_tbItems_CalcularValorAduana";
         #endregion
 
         #region Importadores
@@ -451,6 +453,14 @@ namespace SIMEXPRO.DataAccess
         public static string ListarPersonas = "Adua.UDP_tbPersonas_Listar";
         public static string InsertarPersonas = "Adua.UDP_tbPersonas_Insertar";
         public static string EditarPersonas = "Adua.UDP_tbPersonas_Editar";
+        #endregion
+
+        #region PaisesEstanTratadosConHonduras
+        public static string TratadoByPaisId = "Adua.UDP_tbPaisesEstanTratadosConHonduras_TratadoByPaisId";
+        #endregion
+
+        #region TratadosLibreComercio
+        public static string ListTratadosById = "Adua.UDP_tbTratadosLibreComercio_ListById";
         #endregion
 
         #region Tipo Documentos

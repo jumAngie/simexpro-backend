@@ -12,7 +12,6 @@ namespace SIMEXPRO.Entities.Entities
 
         public tbFacturasExportacion()
         {
-            tbDuca = new HashSet<tbDuca>();
             tbFacturasExportacionDetalles = new HashSet<tbFacturasExportacionDetalles>();
         }
 
@@ -68,9 +67,9 @@ namespace SIMEXPRO.Entities.Entities
         public string orco_Codigo { get; set; }
 
         public virtual tbOrdenCompra orco { get; set; }
+        public virtual tbDuca duca { get; set; }
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }
         public virtual ICollection<tbFacturasExportacionDetalles> tbFacturasExportacionDetalles { get; set; }
-        public virtual ICollection<tbDuca> tbDuca { get; set; }
     }
 }

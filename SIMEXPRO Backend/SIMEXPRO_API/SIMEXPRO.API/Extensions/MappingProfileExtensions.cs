@@ -78,6 +78,7 @@ namespace SIMEXPRO.API.Extentions
             CreateMap<tbCondiciones, CondicionesViewModel>().ReverseMap();
             CreateMap<RegimenesAduanerosViewModel, tbRegimenesAduaneros>().ReverseMap();
             CreateMap<ItemsDEVAxDUCAViewModel, tbItemsDEVAPorDuca>().ReverseMap();
+            CreateMap<TratadosLibreComercioViewModel, tbTratadosLibreComercio>().ReverseMap();
             #endregion
 
             #region Producción
