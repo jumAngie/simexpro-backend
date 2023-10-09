@@ -18655,3 +18655,263 @@ GO
 		SELECT 0
 	END CATCH
   END
+
+  GO
+
+  --**********BOLETIN PAGO**********--
+/*Listar boletin de pago*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbBoletinPago_Listar
+AS
+BEGIN
+	SELECT  boletin.boen_Id, 
+	        boletin.liqu_Id, 
+			boletin.duca_No_Duca,
+			lig.lige_TotalGral,
+			boletin.tipl_Id, 
+			tipli.tipl_Descripcion,
+			boletin.boen_FechaEmision, 
+			boletin.esbo_Id,
+			estadoB.esbo_Descripcion,
+			boletin.boen_Observaciones, 
+			boletin.boen_NDeclaracion,
+			--boletin.pena_RTN, 
+			boletin.boen_Preimpreso, 
+			--boletin.boen_Declarante, 
+			boletin.boen_TotalPagar, 
+			boletin.boen_TotalGarantizar, 
+			--boletin.boen_RTN, 
+			--boletin.boen_TipoEncabezado, 
+			boletin.coim_Id, 
+			codigoIm.coim_Descripcion,
+			boletin.copa_Id, 
+			boletin.usua_UsuarioCreacion, 
+            usuaCrea.usua_Nombre		  AS usuarioCreacionNombre,
+			boletin.boen_FechaCreacion, 
+			boletin.usua_UsuarioModificacion,
+			usuaModifica.usua_Nombre      AS usuarioModificacionNombre,
+			boletin.boen_FechaModificacion, 
+			boen_Estado  
+      FROM  Adua.tbBoletinPago boletin
+	       LEFT JOIN Acce.tbUsuarios usuaCrea			ON boletin.usua_UsuarioCreacion     = usuaCrea.usua_Id 
+		   LEFT JOIN  Acce.tbUsuarios usuaModifica		ON boletin.usua_UsuarioModificacion = usuaModifica.usua_Id 
+		   LEFT JOIN Adua.tbLiquidacionGeneral lig      ON boletin.liqu_Id                  = lig.lige_Id
+		   LEFT JOIN Adua.tbTipoLiquidacion tipli       ON boletin.tipl_Id                  = tipli.tipl_Id
+		   LEFT JOIN Adua.tbEstadoBoletin estadoB       ON boletin.esbo_Id                  = estadoB.esbo_Id
+		   LEFT JOIN Adua.tbCodigoImpuesto codigoIm     ON boletin.coim_Id                  = codigoIm.coim_Id
+	 WHERE boen_Estado = 1
+END
+
+
+/*Insertar boletin de pago*/
+GO
+CREATE OR ALTER PROCEDURE Adua.UDP_tbBoletinPago_Insertar 
+	@liqu_Id                 INT, 
+	--@duca_No_Duca		     NVARCHAR(100),
+	@tipl_Id                 INT, 
+	@boen_FechaEmision       DATE, 
+	@esbo_Id                 INT, 
+	@boen_Observaciones      NVARCHAR(200), 
+	@boen_NDeclaracion       NVARCHAR(200), 
+	--@pena_RTN                VARCHAR(20), 
+	@boen_Preimpreso         NVARCHAR(MAX), 
+	--@boen_Declarante         NVARCHAR(200), 
+	@boen_TotalPagar         DECIMAL(18,2), 
+	@boen_TotalGarantizar    DECIMAL(18,2), 
+	--@boen_RTN                NVARCHAR(100),
+	--@boen_TipoEncabezado     NVARCHAR(200), 
+	@coim_Id                 INT, 
+	@copa_Id                 INT, 
+	@usua_UsuarioCreacion    INT, 
+	@boen_FechaCreacion      DATETIME
+AS 
+BEGIN
+	
+	BEGIN TRY
+			INSERT INTO Adua.tbBoletinPago(liqu_Id,
+										   duca_No_Duca,
+			                               tipl_Id, 
+										   boen_FechaEmision, 
+										   esbo_Id, 
+										   boen_Observaciones, 
+										   boen_NDeclaracion, 
+										   --pena_RTN, 
+										   boen_Preimpreso, 
+										   --boen_Declarante, 
+										   boen_TotalPagar, 
+										   boen_TotalGarantizar, 
+										   --boen_RTN, 
+										   --boen_TipoEncabezado, 
+										   coim_Id, 
+										   copa_Id, 
+										   usua_UsuarioCreacion, 
+										   boen_FechaCreacion,
+										   boen_Estado)
+			VALUES(@liqu_Id, 
+				  --@duca_No_Duca,
+				   NULL,
+			       @tipl_Id, 
+				   @boen_FechaEmision, 
+				   @esbo_Id, 
+				   @boen_Observaciones, 
+				   @boen_NDeclaracion, 
+				   --@pena_RTN, 
+				   @boen_Preimpreso, 
+				   --@boen_Declarante, 
+				   @boen_TotalPagar, 
+				   @boen_TotalGarantizar, 
+				   --@boen_RTN, 
+				   --@boen_TipoEncabezado, 
+				   @coim_Id, 
+				   @copa_Id, 
+				   @usua_UsuarioCreacion, 
+				   @boen_FechaCreacion,1)
+			SELECT SCOPE_IDENTITY()
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE()
+	END CATCH 
+END
+GO
+
+--Execute Adua.UDP_tbBoletinPago_Insertar 1,7,'2023-02-01',2,'observaciones','# declaracion','rtn542451162','preimpreso','declarante',520.00,500.00,'15145454','encabezado',1,1,1,'01-02-2023'
+--NO VA
+/*Editar boletin de pago*/
+CREATE OR ALTER PROCEDURE Adua.UDP_tbBoletinPago_Editar
+	@boen_Id                   INT,
+	@liqu_Id                   INT, 
+	@duca_No_Duca		       NVARCHAR(100),
+	@tipl_Id                   INT, 
+	@boen_FechaEmision         DATE, 
+	@esbo_Id                   INT, 
+	@boen_Observaciones        NVARCHAR(200), 
+	@boen_NDeclaracion         NVARCHAR(200), 
+	--@pena_RTN                  NVARCHAR(20), 
+	@boen_Preimpreso           NVARCHAR(MAX), 
+	--@boen_Declarante           NVARCHAR(200), 
+	@boen_TotalPagar           DECIMAL(18,2), 
+	@boen_TotalGarantizar      DECIMAL(18,2), 
+	--@boen_RTN                  NVARCHAR(100), 
+	--@boen_TipoEncabezado       NVARCHAR(200), 
+	@coim_Id                   INT,
+	@copa_Id                   INT,  
+	@usua_UsuarioModificacion  INT, 
+	@boen_FechaModificacion    DATETIME
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE  Adua.tbBoletinPago
+		SET		liqu_Id                   = @liqu_Id,
+			    duca_No_Duca			  = @duca_No_Duca,
+		        tipl_Id                   = @tipl_Id,
+				boen_FechaEmision         = @boen_FechaEmision,
+				esbo_Id                   = @esbo_Id,
+				boen_Observaciones        = @boen_Observaciones,
+				boen_NDeclaracion         = @boen_NDeclaracion,
+				--pena_RTN                  = @pena_RTN,
+				boen_Preimpreso           = @boen_Preimpreso,
+                --boen_Declarante           = @boen_Declarante,
+				boen_TotalPagar           = @boen_TotalPagar,
+                boen_TotalGarantizar      = @boen_TotalGarantizar,
+				--boen_RTN                  = @boen_RTN,
+				--boen_TipoEncabezado       = @boen_TipoEncabezado,
+				coim_Id                   = @coim_Id,
+				copa_Id                   = @copa_Id,
+				usua_UsuarioModificacion  = @usua_UsuarioModificacion,
+				boen_FechaModificacion    = @boen_FechaModificacion
+		WHERE	boen_Id                   = @boen_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE()
+	END CATCH
+END
+GO
+
+--**********DETALLES DE BOLETIN PAGO**********--
+CREATE OR ALTER PROCEDURE Adua.UDP_tbBoletinPagoDetalles_Listado_ByIdBoletin
+(
+	@boen_Id		INT
+)
+AS
+BEGIN
+	SELECT bode_Id,
+		   lige_Id,
+		   bode_Concepto,
+		   bode_TipoObligacion,
+		   bode_CuentaPA01,
+		   usua_UsuarioCreacion,           
+		   bode_FechaCreacion,             
+		   usua_UsuarioModificacion,       
+		   bode_FechaModificacion
+	  FROM Adua.tbBoletinPagoDetalles
+	 WHERE boen_Id = @boen_Id
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbBoletinPagoDetalles_Insertar
+(
+	@boen_Id					INT,
+	@lige_Id					INT,
+	@bode_Concepto				VARCHAR(50),
+	@bode_TipoObligacion		VARCHAR(50),
+	@bode_CuentaPA01			INT,
+	@usua_UsuarioCreacion       INT,
+    @bode_FechaCreacion         DATETIME
+)
+AS
+BEGIN
+	BEGIN TRY
+		INSERT INTO Adua.tbBoletinPagoDetalles
+					(boen_Id,
+					lige_Id,				   
+					bode_Concepto,				   
+					bode_TipoObligacion,			   
+					bode_CuentaPA01,				   
+					usua_UsuarioCreacion,           
+					bode_FechaCreacion)
+			VALUES (@boen_Id,
+					@lige_Id,			
+					@bode_Concepto,		
+					@bode_TipoObligacion,
+					@bode_CuentaPA01,	
+					@usua_UsuarioCreacion,
+					@bode_FechaCreacion)
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE()
+	END CATCH
+END
+GO
+
+CREATE OR ALTER PROCEDURE Adua.UDP_tbBoletinPagoDetalles_Editar
+(
+	@bode_Id					INT,
+	@lige_Id					INT,
+	@bode_Concepto				VARCHAR(50),
+	@bode_TipoObligacion		VARCHAR(50),
+	@bode_CuentaPA01			INT,
+	@usua_UsuarioModificacion   INT,
+    @bode_FechaModificacion     DATETIME
+)
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE Adua.tbBoletinPagoDetalles
+		   SET lige_Id					= @lige_Id,	
+			   bode_Concepto			= @bode_Concepto,		
+			   bode_TipoObligacion		= @bode_TipoObligacion,
+			   bode_CuentaPA01			= @bode_CuentaPA01,
+			   usua_UsuarioModificacion	= @usua_UsuarioModificacion, 
+			   bode_FechaModificacion	= @bode_FechaModificacion
+		 WHERE bode_Id = @bode_Id
+
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Error Message: ' + ERROR_MESSAGE()
+	END CATCH
+END
+GO
