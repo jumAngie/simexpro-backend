@@ -189,3 +189,148 @@ FROM	[Adua].[tbComercianteIndividual]	tbci
 
 WHERE	tbci.[coin_FechaCreacion] >= @fecha_inicio AND tbci.[coin_FechaCreacion] <=  @fecha_fin
 END
+
+GO
+
+ALTER   PROCEDURE [Prod].[UDP_Reporte_ProduccionAreas] 
+@fechaInicio DATE,
+@fechaFin DATE,
+@tipa_Id INT
+AS
+BEGIN
+SELECT	area.tipa_area
+		,SUM(rdet_TotalDia) AS TotalPeriodo
+		,SUM(rdet_TotalDanado) AS TotalDanado
+		,SUM(rdet_TotalDia) - SUM(rdet_TotalDanado) AS TotalExitoso
+		,AVG(rdet_TotalDia) AS PromedioDia
+		,AVG(rdet_TotalDanado) AS PromedioDanado
+		,AVG(rdet_TotalDia - rdet_TotalDanado) AS PromedioExitoso
+		,(SUM(rdet_TotalDanado) * 100) / CAST (SUM(rdet_TotalDia) AS DECIMAL(18,2)) AS PorcentajeDanado
+		,100 - ((SUM(rdet_TotalDanado) * 100) / CAST (SUM(rdet_TotalDia) AS DECIMAL(18,2))) AS PorcentajeBueno
+		,(SELECT m.*
+			FROM 
+			(SELECT  rdd.rdet_Id
+			         ,orco.orco_Codigo
+					 ,rdd.remo_Id
+					 ,rdd.rdet_TotalDia
+					 ,rdd.rdet_TotalDanado
+					 ,ensa2.code_Id
+					 ,code2.esti_Id
+					 ,esti.esti_Descripcion
+					 ,code2.code_Sexo
+					 ,code_Valor				
+					 ,remd2.remo_Fecha
+			  FROM prod.tbReporteModuloDiaDetalle rdd 
+			  LEFT JOIN prod.tbReporteModuloDia remd2 ON remd2.remo_Id = rdd.remo_Id
+			  LEFT JOIN prod.tbModulos modu2 ON remd2.modu_Id = modu2.modu_Id 
+			  LEFT JOIN Prod.tbOrde_Ensa_Acab_Etiq ensa2 ON ensa2.ensa_Id = rdd.ensa_Id
+			  LEFT JOIN Prod.tbOrdenCompraDetalles code2 ON code2.code_Id = ensa2.code_Id
+			  LEFT JOIN Prod.tbOrdenCompra orco ON orco.orco_Id = code2.orco_Id
+			 
+			  LEFT JOIN [Prod].[tbEstilos] esti ON esti.esti_Id = code2.esti_Id
+			  WHERE  (remd2.remo_Fecha BETWEEN @fechaInicio AND @fechaFin) AND rdd.remo_Id IN (
+								SELECT remo_Id FROM Prod.tbArea area1 INNER JOIN [Prod].tbProcesos prox1
+								ON prox1.proc_Id = area1.proc_Id INNER JOIN prod.tbModulos modu1
+								ON modu1.proc_Id = prox1.proc_Id INNER JOIN prod.tbReporteModuloDia remd1
+								ON remd1.modu_Id = modu1.modu_Id 
+								WHERE area1.tipa_Id = area.tipa_Id 
+								
+								)			
+		)AS m FOR JSON AUTO)
+		
+		 AS Detalles
+FROM Prod.tbArea area INNER JOIN [Prod].tbProcesos prox
+ON prox.proc_Id = area.proc_Id INNER JOIN prod.tbModulos modu
+ON modu.proc_Id = prox.proc_Id INNER JOIN prod.tbReporteModuloDia remd
+ON remd.modu_Id = modu.modu_Id INNER JOIN prod.tbReporteModuloDiaDetalle rmdd
+ON rmdd.remo_Id = remd.remo_Id
+WHERE (remd.remo_Fecha BETWEEN @fechaInicio AND @fechaFin) AND (area.tipa_Id = @tipa_Id OR @tipa_Id = 0)
+GROUP BY area.tipa_area, area.tipa_Id
+END
+
+
+GO
+
+CREATE  OR ALTER  PROCEDURE [Prod].[UDP_ReporteSeguimientoProcesosPO] -- '12345'
+@orco_Codigo NVARCHAR(100)
+AS
+BEGIN
+
+SELECT DISTINCT
+     orco.orco_Id,
+	 orco.orco_Codigo,
+	 clie.clie_Nombre_O_Razon_Social,
+	 orco.orco_EstadoFinalizado,
+	 orco.orco_EstadoOrdenCompra,
+
+	 
+	 orde.code_Id,
+	 proceActual.proc_Descripcion AS proc_Actual,
+	 proceComienza.proc_Descripcion as proc_Comienza,
+	 orde.code_CantidadPrenda,
+	 estilo.esti_Descripcion,
+	 talla.tall_Nombre,
+	 orde.code_Sexo,
+	 colores.colr_Nombre,
+
+	 todo.ppro_Id AS OrdenProduccion,
+
+	 faex.faex_Id,
+	 faex.faex_Fecha AS FechaExportacion, 
+	 fade.fede_Cantidad AS CantidadExportada, 
+	 fade.fede_Cajas, 
+	 fade.fede_TotalDetalle,
+	 
+	 (
+		SELECT p.* 
+					FROM 
+				(  SELECT	 pros.proc_Descripcion,	
+				             modu.modu_Nombre ,    
+							 area.tipa_area ,     
+				
+				CASE
+				   WHEN asor.asor_FechaInicio IS NULL THEN 'NADA'
+				ELSE CONVERT(NVARCHAR, asor.asor_FechaInicio, 120)
+			    END AS asor_FechaInicio,
+			    CASE
+				   WHEN asor.asor_FechaLimite IS NULL THEN 'NADA'
+				ELSE CONVERT(NVARCHAR, asor.asor_FechaLimite, 120)
+			   END AS asor_FechaLimite,
+			    CASE
+				   WHEN asor.asor_Cantidad IS NULL THEN 'NADA'
+				ELSE CONVERT(NVARCHAR, asor.asor_Cantidad, 120)
+			   END AS asor_Cantidad,
+			  
+			  CASE
+				   WHEN empl.empl_Nombres + ' '+ empl_Apellidos IS NULL THEN 'Nada'
+				ELSE CONVERT(NVARCHAR, (empl.empl_Nombres + ' '+ empl_Apellidos), 120)
+			   END AS Empleado
+
+			  
+				             
+										
+					FROM	Prod.tbOrdenCompraDetalles ordenCompraDetalle
+						LEFT JOIN	Prod.tbProcesoPorOrdenCompraDetalle	procesos ON	ordenCompraDetalle.code_Id = procesos.code_Id
+						LEFT JOIN	Prod.tbProcesos	pros                         ON	pros.proc_Id = procesos.proc_Id					
+						LEFT JOIN   Prod.tbAsignacionesOrden asor                ON asor.proc_Id = procesos.proc_Id  AND   ordenCompraDetalle.code_Id = asor.asor_OrdenDetId
+						LEFT JOIN   Gral.tbEmpleados empl                        ON asor.empl_Id = empl.empl_Id
+					    LEFT JOIN   Prod.tbModulos modu                          ON modu.proc_Id = procesos.proc_Id
+						LEFT JOIN   Prod.tbArea area                             ON area.proc_Id = procesos.proc_Id
+
+						WHERE       orde.code_Id = procesos.code_Id) AS p
+				FOR JSON PATH ) AS SeguimientoProcesos
+			
+FROM 
+Prod.tbOrdenCompraDetalles orde
+INNER JOIN Prod.tbOrdenCompra orco                       ON orco.orco_Id        = orde.orco_Id
+INNER JOIN Prod.tbProcesos	proceActual                  ON	proceActual.proc_Id = orde.proc_IdActual	
+INNER JOIN Prod.tbProcesos	proceComienza                ON	proceComienza.proc_Id = orde.proc_IdComienza	
+INNER JOIN Prod.tbClientes clie                          ON orco.orco_IdCliente = clie.clie_Id 
+INNER JOIN Prod.tbEstilos estilo			             ON	orde.esti_Id		= estilo.esti_Id
+INNER JOIN Prod.tbTallas	talla	                     ON	orde.tall_Id		= talla.tall_Id
+INNER JOIN Prod.tbColores	colores	                     ON	orde.colr_Id	    = colores.colr_Id
+LEFT  JOIN Prod.tbOrde_Ensa_Acab_Etiq todo               ON todo.code_Id        = orde.code_Id
+LEFT  JOIN Prod.tbFacturasExportacionDetalles fade       ON orde.code_Id        = fade.code_Id
+LEFT  JOIN Prod.tbFacturasExportacion faex               ON fade.faex_Id        = faex.faex_Id 
+WHERE  orco.orco_Codigo = @orco_Codigo
+END
