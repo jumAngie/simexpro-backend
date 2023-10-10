@@ -98,6 +98,23 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             var answer = db.Query<tbGraficas>(ScriptsDataBase.RegimenesAduaneros_CantidadPorcentaje, null, commandType: CommandType.StoredProcedure);
             return answer;
         }
+        public IEnumerable<tbGraficas> PaisesExportadores()
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+
+            var answer = db.Query<tbGraficas>(ScriptsDataBase.PaisesMasExportadores, null, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
+        
+        public IEnumerable<tbGraficas> TratadosMasUsados()
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+
+            var answer = db.Query<tbGraficas>(ScriptsDataBase.TratadosMasUsados, null, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
 
     }
 }

@@ -3340,6 +3340,32 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+        public ServiceResult PaisesExportadores()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _aduanagraficasrepository.PaisesExportadores();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult TratadosMasUsados()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _aduanagraficasrepository.TratadosMasUsados();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region Regimenes Aduaneros

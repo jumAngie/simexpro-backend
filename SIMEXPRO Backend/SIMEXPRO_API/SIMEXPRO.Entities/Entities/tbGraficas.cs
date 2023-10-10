@@ -72,5 +72,8 @@ namespace SIMEXPRO.Entities.Entities
         // Aduanas con mas importaciones
 
         public string adua_Nombre {get;set;}
+
+        // Tratados mas usados
+        public string trli_NombreTratado { get;set;}
     }
 }

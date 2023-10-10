@@ -413,4 +413,34 @@ AS
 	END
 GO
 
--- 
+-- Paises que mas importaciones realializan 
+CREATE OR ALTER PROCEDURE adua.UDP_PaisesConImportacionesRealizadas
+AS 
+BEGIN
+
+	DECLARE @totaldevas INT = (SELECT COUNT(deva_id) FROM [Adua].[tbItemsDEVAPorDuca] )
+
+	SELECT pais.pais_Nombre
+			,count(pais.pais_Id) Cantidad	
+			,(CAST(COUNT(pais.pais_Id) AS decimal(18, 2)) / @totaldevas * 100) AS Porcentaje
+	FROM [Adua].[tbItemsDEVAPorDuca] duquitaModric
+	INNER JOIN [Adua].[tbDeclaraciones_Valor] deva ON deva.deva_Id = duquitaModric.deva_Id
+	INNER JOIN gral.tbPaises pais ON pais.pais_Id = deva.pais_ExportacionId
+	GROUP by pais_Nombre
+END 
+
+GO
+--tratados mas usados 
+CREATE OR ALTER PROCEDURE adua.TratadosLibreComercioMasUsado
+AS
+BEGIN
+
+	DECLARE @totalDucas INT = (SELECT COUNT(duca_Id) FROM [Adua].tbDuca )
+	SELECT	ISNULL(trati.trli_NombreTratado, 'Sin tratado') AS trli_NombreTratado
+			,COUNT(duca_Id) Cantidad
+			,(CAST(COUNT(duca_Id) AS decimal(18, 2)) / @totalDucas * 100) AS Porcentaje
+	FROM adua.tbDuca duquitaModric
+	LEFT JOIN [Adua].[tbTratadosLibreComercio] trati ON duquitaModric.trli_Id = trati.trli_Id
+	GROUP BY trli_NombreTratado
+
+END

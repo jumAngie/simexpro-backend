@@ -819,6 +819,8 @@ namespace SIMEXPRO.DataAccess
         public static string Importaciones_Mes = "Adua.UDP_Importaciones_Mes";
         public static string Importaciones_Anio = "Adua.UDP_Importaciones_Anio";
         public static string RegimenesAduaneros_CantidadPorcentaje = "Adua.UDP_RegimenesAduaneros_CantidadPorcentaje";
+        public static string PaisesMasExportadores = "Adua.UDP_PaisesConImportacionesRealizadas";
+        public static string TratadosMasUsados = "Adua.TratadosLibreComercioMasUsado";
         #endregion
 
         #region Reportes
