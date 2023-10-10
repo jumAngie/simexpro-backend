@@ -11256,7 +11256,7 @@ BEGIN
   LEFT JOIN Acce.tbUsuarios			usuarioModificacion		ON ordenCompra.usua_UsuarioModificacion		= usuarioModificacion.usua_Id
 	  WHERE orco_Codigo = @orco_Codigo
 END
-
+GO
 
 
 -------------------------------------------------------------------------------------------------------------
