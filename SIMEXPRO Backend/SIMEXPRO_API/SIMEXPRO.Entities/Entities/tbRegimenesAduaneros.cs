@@ -12,6 +12,7 @@ namespace SIMEXPRO.Entities.Entities
         public tbRegimenesAduaneros()
         {
             tbDuca = new HashSet<tbDuca>();
+            tbDeclaraciones_Valor = new HashSet<tbDeclaraciones_Valor>();
         }
 
         public int regi_Id { get; set; }
@@ -39,5 +40,6 @@ namespace SIMEXPRO.Entities.Entities
         public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }
 
         public virtual ICollection<tbDuca> tbDuca { get; set; }
+        public virtual ICollection<tbDeclaraciones_Valor> tbDeclaraciones_Valor { get; set; }
     }
 }

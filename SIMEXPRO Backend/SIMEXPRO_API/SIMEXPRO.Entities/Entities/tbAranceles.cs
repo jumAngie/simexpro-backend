@@ -23,6 +23,8 @@ namespace SIMEXPRO.Entities.Entities
         public decimal aran_SEL { get; set; }
         public decimal aran_ProdCons { get; set; }
         public bool aran_AplicaVehiculos { get; set; }
+        [NotMapped]
+        public bool aran_ArancelVehicular { get; set; } 
         public int usua_UsuarioCreacion { get; set; }
         [NotMapped]
         public string UsuarioCreacion { get; set; }

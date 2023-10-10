@@ -8,7 +8,7 @@ namespace SIMEXPRO.API.Models.ModelsAduana
     public class ItemsViewModel
     {
         public int item_Id { get; set; }
-        public int fact_Id { get; set; }
+        public int fact_Id { get; set; }    
         public int item_Cantidad { get; set; }
         public int item_Cantidad_Bultos { get; set; }
         public string item_ClaseBulto { get; set; }
@@ -35,6 +35,14 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public decimal? item_CuotaContingente { get; set; }
         public string item_ReglasAccesorias { get; set; }
         public string item_CriterioCertificarOrigen { get; set; }
+
+        public bool item_EsNuevo { get; set; }
+
+        public bool item_EsHibrido { get; set; }
+
+        public decimal item_LitrosTotales { get; set; }
+
+        public int item_CigarrosTotales { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         public string NombrePaisOrigen { get; set; }
         public string usuarioCreacionNombre { get; set; }

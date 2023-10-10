@@ -30,6 +30,33 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(listado);
         }
 
+        [HttpGet("Listar_ByDucaId")]
+        public IActionResult Index(int id)
+        {
+            var listado = _aduanaServices.ListarDeclaraciones_Valor_ByDucaId(id);
+            return Ok(listado);
+        }
+
+        [HttpGet("ListarHistorial")]
+        public IActionResult IndexHistorial()
+        {
+            var listado = _aduanaServices.ListarDeclaraciones_ValorHistorial();
+            return Ok(listado);
+        }
+        
+        
+        [HttpGet("ListarFacturasByDeva")]
+        
+        public IActionResult ListarFacturasByDeva(int deva_Id)
+        {
+            var listado = _aduanaServices.ListarFacturasByDeva(deva_Id);
+            listado.Data = _mapper.Map<IEnumerable<FacturasViewModel>>(listado.Data);
+            return Ok(listado);
+        }
+
+
+
+
         [HttpPost("InsertarTab1")]
         public IActionResult InsertTab1(Declaraciones_ValorControllerViewModel item)
         {
@@ -62,6 +89,14 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             else
                 return BadRequest(result);
 
+        }
+
+        [HttpGet("CancelarIntermediario")]
+        public IActionResult CancelarIntermediario(int deva_Id)
+        {
+            var respuesta = _aduanaServices.CancelarIntermediario(deva_Id);
+
+            return Ok(respuesta);
         }
 
         [HttpPost("InsertarTab3")]

@@ -2,9 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-
 #nullable disable
-
 namespace SIMEXPRO.Entities.Entities
 {
     public partial class tbDeclaraciones_Valor
@@ -39,6 +37,9 @@ namespace SIMEXPRO.Entities.Entities
         public string impo_NumRegistro { get; set; }
         [NotMapped]
         public int nico_Id { get; set; }
+        [NotMapped]
+
+        public string impo_RTN { get; set; }
         [NotMapped]
         public string nico_Descripcion { get; set; }
         [NotMapped]
@@ -89,11 +90,16 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string inte_Fax { get; set; }
         [NotMapped]
-        public int inte_ciudId { get; set; } 
+        public int inte_ciudId { get; set; }
+
+        [NotMapped]
+        public string Facturas { get; set; }
 
         public string deva_LugarEntrega { get; set; }
         public int? pais_EntregaId { get; set; }
         public int? inco_Id { get; set; }
+        [NotMapped]
+        public string inco_Codigo { get; set; }
         [NotMapped]
         public string inco_Descripcion { get; set; }
         public string inco_Version { get; set; }
@@ -108,6 +114,11 @@ namespace SIMEXPRO.Entities.Entities
         public string deva_FormaPagoOtra { get; set; }
         public int? emba_Id { get; set; }
         public int? pais_ExportacionId { get; set; }
+        [NotMapped]
+        public string? pais_Nombre { get; set; }
+        [NotMapped]
+        public string pais_Codigo { get; set; }
+
         public DateTime? deva_FechaExportacion { get; set; }
         public int? mone_Id { get; set; }
         public string mone_Otra { get; set; }
@@ -126,7 +137,7 @@ namespace SIMEXPRO.Entities.Entities
         public int? usua_UsuarioEliminacion { get; set; }
         [NotMapped]
         public DateTime? deva_FechaEliminacion { get; set; }
-
+        public bool deva_Finalizacion { get; set; }
 
         public virtual tbAduanas deva_AduanaDespacho { get; set; }
         public virtual tbAduanas deva_AduanaIngreso { get; set; }
@@ -140,6 +151,7 @@ namespace SIMEXPRO.Entities.Entities
         public virtual tbPaises pais_Exportacion { get; set; }
         public virtual tbPaises pais_Entrega { get; set; }
         public virtual tbProveedoresDeclaracion pvde { get; set; }
+        public virtual tbRegimenesAduaneros regi { get; set; }
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }
         public virtual ICollection<tbBaseCalculos> tbBaseCalculos { get; set; }

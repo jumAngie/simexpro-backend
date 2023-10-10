@@ -32,6 +32,16 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(listado);
         }
 
+        [HttpGet("ListarHistorial")]
+        public IActionResult IndexHistorial()
+        {
+            var listado = _aduanaServices.ListarBoletinPagoHistorial();
+            listado.Data = _mapper.Map<IEnumerable<BoletinPagoViewModel>>(listado.Data);
+            return Ok(listado);
+        }
+
+
+
         [HttpPost("Insertar")]
         public IActionResult Insertar(BoletinPagoViewModel boletinPago)
         {

@@ -28,6 +28,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
             parametros.Add("@impu_Descripcion", item.impu_Descripcion, DbType.String, ParameterDirection.Input);
+            parametros.Add("@impu_Cantidad", item.impu_Cantidad, DbType.Decimal, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@impu_FechaCreacion", item.impu_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.InsertarImpuestos, parametros, commandType: CommandType.StoredProcedure);
@@ -49,6 +50,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             var parametros = new DynamicParameters();
             parametros.Add("@impu_Id", item.impu_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@impu_Descripcion", item.impu_Descripcion, DbType.String, ParameterDirection.Input);
+            parametros.Add("@impu_Cantidad", item.impu_Cantidad, DbType.Decimal, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@impu_FechaModificacion", item.impu_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.EditarImpuestos, parametros, commandType: CommandType.StoredProcedure);

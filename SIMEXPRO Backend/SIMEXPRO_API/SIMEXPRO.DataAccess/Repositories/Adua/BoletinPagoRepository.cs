@@ -29,6 +29,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             var parametros = new DynamicParameters();
             parametros.Add("@liqu_Id", item.liqu_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@duca_Id", item.duca_Id, DbType.String, ParameterDirection.Input);
+            //parametros.Add("@duca_No_Duca", item.duca_Id, DbType.String, ParameterDirection.Input);
             parametros.Add("@tipl_Id", item.tipl_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@boen_FechaEmision", item.boen_FechaEmision, DbType.Date, ParameterDirection.Input);
             parametros.Add("@esbo_Id", item.esbo_Id, DbType.Int32, ParameterDirection.Input);
@@ -59,6 +60,14 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return db.Query<tbBoletinPago>(ScriptsDataBase.ListarBoletinPago, null, commandType: CommandType.StoredProcedure);
 
         }
+
+        public IEnumerable<tbBoletinPago> ListHistorial()
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            return db.Query<tbBoletinPago>(ScriptsDataBase.ListarBoletinPagoHistorial, null, commandType: CommandType.StoredProcedure);
+
+        }
+
 
         public RequestStatus Update(tbBoletinPago item)
         {

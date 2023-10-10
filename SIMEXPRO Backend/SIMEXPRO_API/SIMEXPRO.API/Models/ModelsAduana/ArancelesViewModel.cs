@@ -21,6 +21,7 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public string impu_Descripcion { get; set; }
         public int impu_Cantidad { get; set; }
         public bool aran_AplicaVehiculos { get; set; }
+        public bool aran_ArancelVehicular { get; set; }
         public DateTime aran_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }
         [NotMapped]
