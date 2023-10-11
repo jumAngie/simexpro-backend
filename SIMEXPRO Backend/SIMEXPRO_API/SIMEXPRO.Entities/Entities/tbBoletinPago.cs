@@ -36,6 +36,9 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string coim_Descripcion { get; set; }
         public int copa_Id { get; set; }
+
+        [NotMapped]
+        public string copa_Descripcion { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         [NotMapped]
         public string usuarioCreacionNombre { get; set; }
