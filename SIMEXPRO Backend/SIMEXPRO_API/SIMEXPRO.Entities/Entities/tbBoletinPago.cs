@@ -17,6 +17,8 @@ namespace SIMEXPRO.Entities.Entities
         public int liqu_Id { get; set; }
         public int duca_Id { get; set; }
         [NotMapped]
+        public int duca_No_Duca { get; set; }
+        [NotMapped]
         public string lige_TotalGral { get; set; }
         public int tipl_Id { get; set; }
         [NotMapped]
