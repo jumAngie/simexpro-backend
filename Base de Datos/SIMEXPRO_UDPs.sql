@@ -8310,6 +8310,15 @@ BEGIN
 					VALUES (@duca_Id, 'PROCONS', @lili_TotalPROCONS, 0)
 				END
 			END
+	
+			DECLARE @lige_IdSTD INT = (SELECT lige_Id FROM Adua.tbLiquidacionGeneral WHERE duca_Id = @duca_Id AND lige_TipoTributo = 'STD')
+			DECLARE @lige_TotalPorTributoSTD DECIMAL(18,2) = @deva_ConversionDolares * 5;
+
+			IF(@lige_IdSTD = 0)
+			BEGIN
+				INSERT INTO Adua.tbLiquidacionGeneral (duca_Id, lige_TipoTributo, lige_TotalPorTributo, lige_TotalGral)
+				VALUES (@duca_Id, 'STD', @lige_TotalPorTributoSTD, 0)
+			END
 
 		  SELECT @lige_TotalGral = @lige_TotalGral + lige_TotalPorTributo
 			FROM Adua.tbLiquidacionGeneral 
@@ -17244,36 +17253,37 @@ GO
 
 
 /*Insertar Colores*/
-CREATE OR ALTER PROC Prod.UDP_tbColores_Insertar --'verde','22', 1,'10.16-2004'
-@colr_Nombre NVARCHAR(100),
-@colr_Codigo NVARCHAR(100),
-@colr_CodigoHtml  NVARCHAR(100),
-@usua_UsuarioCreacion INT,
-@colr_FechaCreacion DATETIME
-AS BEGIN
-
-BEGIN TRY
-		INSERT INTO Prod.tbColores(colr_Nombre, 
-					       colr_Codigo,
-						   colr_CodigoHtml,
-						   usua_UsuarioCreacion, 
-						   colr_FechaCreacion)
-		VALUES (@colr_Nombre, 
-				@colr_Codigo,
-				@colr_CodigoHtml,
-				@usua_UsuarioCreacion, 
-				@colr_FechaCreacion)
-
-		SELECT 1
-END TRY
-
-BEGIN CATCH
-
-		SELECT 'Error Message: ' + ERROR_MESSAGE()
-
-END CATCH
-END
+CREATE OR ALTER PROCEDURE Prod.UDP_tbColores_Insertar--'verde','22ss','#01DFD7',2,'02-02-2020'
+    @colr_Nombre NVARCHAR(100),
+    @colr_Codigo NVARCHAR(100),
+    @colr_CodigoHtml NVARCHAR(100),
+    @usua_UsuarioCreacion INT,
+    @colr_FechaCreacion DATETIME
+AS 
+BEGIN
+    BEGIN TRY
+        IF EXISTS (
+            SELECT colr_Id 
+            FROM Prod.tbColores
+            WHERE colr_Nombre = @colr_Nombre AND colr_CodigoHtml = @colr_CodigoHtml
+        )
+        BEGIN
+            SELECT 2;
+        END
+        ELSE 
+        BEGIN
+            INSERT INTO Prod.tbColores (colr_Nombre, colr_Codigo, colr_CodigoHtml, usua_UsuarioCreacion, colr_FechaCreacion)
+            VALUES (@colr_Nombre, @colr_Codigo, @colr_CodigoHtml, @usua_UsuarioCreacion, @colr_FechaCreacion);
+            
+            SELECT 1; 
+        END
+    END TRY
+    BEGIN CATCH
+        SELECT 'Error Message: ' + ERROR_MESSAGE();
+    END CATCH
+END;
 GO
+
 
 /*Editar Colores*/
 CREATE OR ALTER PROC Prod.UDP_tbColores_Editar
@@ -17284,26 +17294,30 @@ CREATE OR ALTER PROC Prod.UDP_tbColores_Editar
 	@usua_UsuarioModificacion INT,
 	@colr_FechaModificacion DATETIME
 AS BEGIN
-
 BEGIN TRY
+   IF EXISTS (
+            SELECT colr_Id 
+            FROM Prod.tbColores
+            WHERE colr_Nombre = @colr_Nombre AND colr_CodigoHtml = @colr_CodigoHtml
+        )
+		BEGIN
+		SELECT 2
+	END 
+  ELSE 
+    BEGIN     
+             UPDATE Prod.tbColores SET colr_Nombre = @colr_Nombre,
+			 colr_Codigo = @colr_Codigo,  
+			 colr_CodigoHtml=@colr_CodigoHtml,
+			 usua_UsuarioModificacion = @usua_UsuarioModificacion,
+			 colr_FechaModificacion = @colr_FechaModificacion
+		     WHERE colr_Id = @colr_Id
 
-UPDATE Prod.tbColores SET colr_Nombre = @colr_Nombre,
-						  colr_Codigo = @colr_Codigo,  
-						  colr_CodigoHtml=@colr_CodigoHtml,
-						  usua_UsuarioModificacion = @usua_UsuarioModificacion,
-						  colr_FechaModificacion = @colr_FechaModificacion
-					  WHERE colr_Id = @colr_Id
-
-					  SELECT 1
-
+		SELECT 1
+   END 
 END TRY
-
 BEGIN CATCH
-
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
-
 END CATCH
-
 END
 GO
 
