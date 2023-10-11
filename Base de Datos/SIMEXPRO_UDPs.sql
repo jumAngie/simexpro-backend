@@ -18777,7 +18777,7 @@ GO
 CREATE OR ALTER PROCEDURE Adua.UDP_tbBoletinPago_Editar
 	@boen_Id                   INT,
 	@liqu_Id                   INT, 
-	@duca_Id		           NVARCHAR(100),
+	@duca_No_Duca		       NVARCHAR(100),
 	@tipl_Id                   INT, 
 	@boen_FechaEmision         DATE, 
 	@esbo_Id                   INT, 
@@ -18799,7 +18799,7 @@ BEGIN
 	BEGIN TRY
 		UPDATE  Adua.tbBoletinPago
 		SET		liqu_Id                   = @liqu_Id,
-			    duca_No_Duca			  = @duca_Id,
+			    duca_No_Duca			  = @duca_No_Duca,
 		        tipl_Id                   = @tipl_Id,
 				boen_FechaEmision         = @boen_FechaEmision,
 				esbo_Id                   = @esbo_Id,
