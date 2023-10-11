@@ -1656,19 +1656,19 @@ END
 GO
 --************CIUDADES******************--
 /*Listar Paises*/
-CREATE OR ALTER PROCEDURE Gral.UDP_tbCiudades_Listar
+CREATE OR ALTER PROCEDURE Gral.UDP_tbCiudades_Listar 
 	@ciud_EsAduana		BIT
 AS
 BEGIN
-SELECT	ciud_Id								,
-		ciud_Nombre							,
-		ciud_EsAduana						,
-		ciu.pvin_Id							,
-		provi.pvin_Nombre					,
-		provi.pvin_Codigo					,
-		pais.pais_Id                        ,
-		pais.pais_Codigo					,
-		pais.pais_Nombre					,
+SELECT	ciud_Id											,
+		ciud_Nombre										,
+		ciud_EsAduana									,
+		ciu.pvin_Id										,
+		provi.pvin_Nombre								,
+		provi.pvin_Codigo								,
+		pais.pais_Id									,
+		pais.pais_Codigo								,
+		gral.ProperCase(pais.pais_Nombre) AS pais_Nombre,
 		ciu.usua_UsuarioCreacion			,
 		usu1.usua_Nombre					AS usuarioCreacionNombre,
 		ciud_FechaCreacion					, 
