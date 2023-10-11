@@ -13197,6 +13197,7 @@ AS
 BEGIN
 SELECT	remo_Id, 
 		modu.modu_Id, 
+		modu.proc_Id as usua_UsuarioModifica, 
 		modu.modu_Nombre,
 		empleados.empl_Nombres + ' ' + empleados.empl_Apellidos as Empleado,
 		remo_Fecha,
@@ -13212,6 +13213,7 @@ SELECT	remo_Id,
 		rdet.[rdet_TotalDia], 
 		rdet.[rdet_TotalDanado], 
 		[proc].[proc_Descripcion],
+		--modu.proc_Id AS colr_Nombre,
 		modu.proc_Id,  
 
 		(CASE code.code_Sexo 
@@ -13256,6 +13258,7 @@ FROM	Prod.tbReporteModuloDia rmd
 		INNER JOIN Gral.tbEmpleados  empleados		ON modu.empr_Id	= empleados.empl_Id
 		INNER JOIN Acce.tbUsuarios crea				ON crea.usua_Id = rmd.usua_UsuarioCreacion 
 		LEFT JOIN  Acce.tbUsuarios modi				ON modi.usua_Id = rmd.usua_UsuarioModificacion 	
+ORDER BY rmd.remo_FechaCreacion ASC
 END
 GO
 
@@ -13348,8 +13351,6 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbReporteModuloDia_Editar
 @remo_Id					INT, 
 @modu_Id					INT, 
 @remo_Fecha					DATE, 
-@remo_TotalDia				INT, 
-@remo_TotalDanado			INT, 
 @usua_UsuarioModificacion	INT, 
 @remo_FechaModificacion	 	DATETIME 
 AS
@@ -13358,18 +13359,18 @@ BEGIN
 		UPDATE Prod.tbReporteModuloDia
 		SET modu_Id					= @modu_Id, 
 		remo_Fecha					= @remo_Fecha, 
-		remo_TotalDia				= @remo_TotalDia, 
-		remo_TotalDanado			= @remo_TotalDanado, 
 		usua_UsuarioModificacion	= @usua_UsuarioModificacion, 
 		remo_FechaModificacion		= @remo_FechaModificacion	 
-		where remo_Id				= @remo_Id				
+		WHERE remo_Id				= @remo_Id				
+
+		SELECT 1 
+
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE() 
 	END CATCH
 END
 GO
-
 
 --*****Finalizar*****--
 
