@@ -2765,7 +2765,7 @@ BEGIN
 				Civil.escv_Nombre,
 				Personas.ofpr_Id, 
 				Profesion.ofpr_Nombre,
-
+				
 				Personas.pers_escvRepresentante,
 				Civil2.escv_Nombre					AS EstadoCivilRepresentante,
 				Personas.pers_OfprRepresentante,
@@ -2777,7 +2777,8 @@ BEGIN
 				Personas.usua_UsuarioModificacion,
 				Usuario2.usua_Nombre				AS usuarioModificacion, 
 				Personas.pers_FechaModificacion, 
-				Personas.pers_Estado
+				Personas.pers_Estado,
+				Personas.pers_Nombre
 
 		FROM	Adua.tbPersonas				AS	Personas
 		INNER JOIN	Gral.tbOficinas				AS	Oficina		ON Personas.ofic_Id						= Oficina.ofic_Id
@@ -2800,6 +2801,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonas_Insertar
 	@ofic_Id					INT,
 	@escv_Id					INT,
 	@ofpr_Id					INT,
+	@pers_Nombre				NVARCHAR(150),
 	@pers_escvRepresentante		INT,
 	@pers_OfprRepresentante		INT,
 	@usua_UsuarioCreacion		INT,
@@ -2812,7 +2814,8 @@ BEGIN
 					(pers_RTN, 
 					ofic_Id, 
 					escv_Id, 
-					ofpr_Id, 
+					ofpr_Id,
+					pers_Nombre,
 					pers_escvRepresentante, 
 					pers_OfprRepresentante, 
 					usua_UsuarioCreacion, 
@@ -2821,6 +2824,7 @@ BEGIN
 					@ofic_Id,
 					@escv_Id,
 					@ofpr_Id,
+					@pers_Nombre,
 					@pers_escvRepresentante,
 					@pers_OfprRepresentante,
 					@usua_UsuarioCreacion,
@@ -2842,6 +2846,7 @@ CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbPersonas_Editar]
 	@ofic_Id					INT,
 	@escv_Id					INT,
 	@ofpr_Id					INT,
+	@pers_Nombre				NVARCHAR(150),
 	@pers_escvRepresentante		INT,
 	@pers_OfprRepresentante		INT,
 	@usua_UsuarioModificacion		INT,
@@ -2851,12 +2856,13 @@ AS
 BEGIN
 	BEGIN TRY
 			UPDATE Adua.tbPersonas 
-			   SET pers_RTN					= @pers_RTN, 					
-				   ofic_Id					= @ofic_Id, 					
-				   escv_Id					= @escv_Id, 					
-				   ofpr_Id					= @ofpr_Id, 					
-				   pers_escvRepresentante	= @pers_escvRepresentante, 		
-				   pers_OfprRepresentante	= @pers_OfprRepresentante, 		
+			   SET pers_RTN						= @pers_RTN, 					
+				   ofic_Id						= @ofic_Id, 					
+				   escv_Id						= @escv_Id, 					
+				   ofpr_Id						= @ofpr_Id, 
+				   pers_Nombre					= @pers_Nombre,				
+				   pers_escvRepresentante		= @pers_escvRepresentante, 		
+				   pers_OfprRepresentante		= @pers_OfprRepresentante, 		
 				   usua_UsuarioModificacion		= @usua_UsuarioModificacion,      	
 				   pers_FechaModificacion		= @pers_FechaModificacion
 			 WHERE pers_Id = @pers_Id
