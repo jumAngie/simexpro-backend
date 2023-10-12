@@ -9391,6 +9391,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbItemsDEVAPorDuca_LiberarDevasPorDucaId
 AS
 BEGIN
 	BEGIN TRY
+
 		DELETE FROM [Adua].[tbItemsDEVAPorDuca] 
 			  WHERE [duca_Id] = @duca_Id
 
@@ -9789,6 +9790,45 @@ AS
 BEGIN
 	BEGIN TRY
 		BEGIN TRAN 
+			
+			DECLARE @facturasIdtable TABLE(fact_Id INT);
+			DECLARE @deva_Id AS INT, @fact_Id AS INT;
+
+			DECLARE devasId CURSOR FOR SELECT deva_Id FROM Adua.tbItemsDEVAPorDuca WHERE duca_Id = @duca_Id
+			OPEN devasId
+			FETCH NEXT FROM devasId INTO @deva_Id
+			WHILE @@FETCH_STATUS = 0
+			BEGIN
+				
+				DECLARE facturasId CURSOR FOR SELECT fact_Id FROM Adua.tbFacturas WHERE deva_Id = @deva_Id
+				OPEN facturasId
+				FETCH NEXT FROM facturasId INTO @fact_Id
+				WHILE @@FETCH_STATUS = 0
+				BEGIN
+					
+					UPDATE Adua.tbItems
+					   SET item_Cantidad_Bultos = NULL,
+						   item_ClaseBulto = NULL,
+						   item_PesoNeto = NULL,
+						   item_PesoBruto = NULL,
+						   item_CuotaContingente = NULL,
+						   item_Acuerdo = NULL,
+						   item_CriterioCertificarOrigen = NULL,
+						   item_ReglasAccesorias = NULL,
+						   item_GastosDeTransporte = NULL,
+						   item_Seguro = NULL,
+						   item_OtrosGastos = NULL
+					 WHERE fact_Id = @fact_Id
+
+					FETCH NEXT FROM facturasId INTO @fact_Id
+				END
+				CLOSE facturasId
+				DEALLOCATE facturasId
+
+				FETCH NEXT FROM devasId INTO @deva_Id
+			END
+			CLOSE devasId
+			DEALLOCATE devasId
 
 			DECLARE @cont_Id INT = (SELECT duca_Conductor_Id FROM Adua.tbDuca WHERE duca_Id = @duca_Id)
 			DECLARE @tran_Id INT = (SELECT tran_Id FROM Adua.tbConductor WHERE cont_Id = @cont_Id)
@@ -9797,14 +9837,14 @@ BEGIN
 
 			DELETE FROM Adua.tbItemsDEVAPorDuca WHERE duca_Id = @duca_Id
 
+			DELETE FROM Adua.tbLiquidacionGeneral WHERE duca_Id = @duca_Id
+
 			DELETE FROM Adua.tbDuca WHERE duca_Id = @duca_Id
 
 			DELETE FROM Adua.tbConductor WHERE cont_Id = @cont_Id
 
 			DELETE FROM Adua.tbTransporte WHERE tran_Id = @tran_Id
-
-			DELETE FROM Adua.tbLiquidacionGeneral WHERE duca_Id = @duca_Id
-
+			
 		COMMIT
 		SELECT 1
 	END TRY
