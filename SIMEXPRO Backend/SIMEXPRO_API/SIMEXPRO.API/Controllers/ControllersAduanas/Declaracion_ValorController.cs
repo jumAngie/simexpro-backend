@@ -37,6 +37,13 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(listado);
         }
 
+        [HttpGet("Listar_ByDevaId")]
+        public IActionResult list(int id)
+        {
+            var listado = _aduanaServices.ListarDeclaraciones_Valor_ByDevaId(id);
+            return Ok(listado);
+        }
+
         [HttpGet("ListarHistorial")]
         public IActionResult IndexHistorial()
         {
