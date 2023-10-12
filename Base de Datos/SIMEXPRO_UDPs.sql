@@ -8516,10 +8516,10 @@ BEGIN
 				END
 			END
 	
-			DECLARE @lige_IdSTD INT = (SELECT lige_Id FROM Adua.tbLiquidacionGeneral WHERE duca_Id = @duca_Id AND lige_TipoTributo = 'STD')
+			DECLARE @cantidadFilasStd INT = (SELECT COUNT(*) FROM Adua.tbLiquidacionGeneral WHERE duca_Id = @duca_Id AND lige_TipoTributo = 'STD')
 			DECLARE @lige_TotalPorTributoSTD DECIMAL(18,2) = @deva_ConversionDolares * 5;
 
-			IF(@lige_IdSTD = 0)
+			IF(@cantidadFilasStd = 0)
 			BEGIN
 				INSERT INTO Adua.tbLiquidacionGeneral (duca_Id, lige_TipoTributo, lige_TotalPorTributo, lige_TotalGral)
 				VALUES (@duca_Id, 'STD', @lige_TotalPorTributoSTD, 0)
