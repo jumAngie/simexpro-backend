@@ -462,6 +462,8 @@ namespace SIMEXPRO.DataAccess
         #endregion
 
         #region TratadosLibreComercio
+        public static string ListarTLC = "Adua.tbTratados_Listar";
+        public static string InsertarTLC = "Adua.tbTratados_Insertar";
         public static string ListTratadosById = "Adua.UDP_tbTratadosLibreComercio_ListById";
         #endregion
 
