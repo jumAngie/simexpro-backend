@@ -265,6 +265,8 @@ namespace SIMEXPRO.DataAccess
         public static string FinalizarDeva = "Adua.UDP_tbdeclaracion_Valor_Finalizar";
 
         public static string CancelarDeva = "Adua.UDP_tbDeclaracionValor_Eliminar";
+
+        public static string ListarDevaById = "adua.UDP_tbDeclaraciones_ValorCompleto_ListarById";
         #endregion
 
         #region Declarantes

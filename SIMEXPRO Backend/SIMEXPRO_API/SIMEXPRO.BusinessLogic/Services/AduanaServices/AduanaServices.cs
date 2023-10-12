@@ -850,6 +850,21 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult ListarDeclaraciones_Valor_ByDevaId(int id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _declaraciones_ValorRepository.List_ByDevaId(id);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+
         public ServiceResult ListarDeclaraciones_ValorHistorial()
         {
             var result = new ServiceResult();

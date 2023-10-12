@@ -205,6 +205,17 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
             return respuesta;
         }
+        public IEnumerable<VW_tbDeclaraciones_ValorCompleto> List_ByDevaId(int id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@deva_Id", id, DbType.Int32, ParameterDirection.Input);
+
+            var respuesta = db.Query<VW_tbDeclaraciones_ValorCompleto>(ScriptsDataBase.ListarDevaById, parametros, commandType: CommandType.StoredProcedure);
+
+            return respuesta;
+        }
 
         public IEnumerable<tbDeclaraciones_Valor> ListVWHistorial()
         {
