@@ -15945,7 +15945,7 @@ BEGIN
 								WHERE remo_Id = @remo_Id)
 
 		UPDATE [Prod].[tbProcesoPorOrdenCompraDetalle]
-		SET poco_Completado = poco_Completado + (@rdet_TotalDia - @rdet_TotalDanado)
+		SET poco_Completado = ISNULL(poco_Completado,0) + (@rdet_TotalDia - @rdet_TotalDanado)
 		WHERE code_Id = @Newcode_Id AND proc_Id = @proc_Id
 
 		SELECT 1
