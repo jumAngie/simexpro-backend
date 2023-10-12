@@ -12,6 +12,8 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public int liqu_Id { get; set; }
         public int duca_Id { get; set; }
         [NotMapped]
+        public int duca_No_Duca { get; set; }
+        [NotMapped]
         public string lige_TotalGral { get; set; }
         public int tipl_Id { get; set; }
         [NotMapped]
@@ -29,6 +31,9 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         [NotMapped]
         public string coim_Descripcion { get; set; }
         public int copa_Id { get; set; }
+
+        [NotMapped]
+        public string copa_Descripcion { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         [NotMapped]
         public string usuarioCreacionNombre { get; set; }

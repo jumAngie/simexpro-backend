@@ -1656,19 +1656,19 @@ END
 GO
 --************CIUDADES******************--
 /*Listar Paises*/
-CREATE OR ALTER PROCEDURE Gral.UDP_tbCiudades_Listar
+CREATE OR ALTER PROCEDURE Gral.UDP_tbCiudades_Listar 
 	@ciud_EsAduana		BIT
 AS
 BEGIN
-SELECT	ciud_Id								,
-		ciud_Nombre							,
-		ciud_EsAduana						,
-		ciu.pvin_Id							,
-		provi.pvin_Nombre					,
-		provi.pvin_Codigo					,
-		pais.pais_Id                        ,
-		pais.pais_Codigo					,
-		pais.pais_Nombre					,
+SELECT	ciud_Id											,
+		ciud_Nombre										,
+		ciud_EsAduana									,
+		ciu.pvin_Id										,
+		provi.pvin_Nombre								,
+		provi.pvin_Codigo								,
+		pais.pais_Id									,
+		pais.pais_Codigo								,
+		gral.ProperCase(pais.pais_Nombre) AS pais_Nombre,
 		ciu.usua_UsuarioCreacion			,
 		usu1.usua_Nombre					AS usuarioCreacionNombre,
 		ciud_FechaCreacion					, 
@@ -1785,7 +1785,7 @@ SELECT	pvin_Id								,
 		pvin_EsAduana							,
 		pvin_Codigo							,
 		provin.pais_Id 						,
-		pais.pais_Nombre					AS pais_Nombre,
+		gral.ProperCase(pais.pais_Nombre)	AS pais_Nombre,
 		provin.usua_UsuarioCreacion			,
 		usua1.usua_Nombre					AS UsuarioCreacionNombre,
 		pvin_FechaCreacion	 				, 
@@ -8310,6 +8310,15 @@ BEGIN
 					VALUES (@duca_Id, 'PROCONS', @lili_TotalPROCONS, 0)
 				END
 			END
+	
+			DECLARE @lige_IdSTD INT = (SELECT lige_Id FROM Adua.tbLiquidacionGeneral WHERE duca_Id = @duca_Id AND lige_TipoTributo = 'STD')
+			DECLARE @lige_TotalPorTributoSTD DECIMAL(18,2) = @deva_ConversionDolares * 5;
+
+			IF(@lige_IdSTD = 0)
+			BEGIN
+				INSERT INTO Adua.tbLiquidacionGeneral (duca_Id, lige_TipoTributo, lige_TotalPorTributo, lige_TotalGral)
+				VALUES (@duca_Id, 'STD', @lige_TotalPorTributoSTD, 0)
+			END
 
 		  SELECT @lige_TotalGral = @lige_TotalGral + lige_TotalPorTributo
 			FROM Adua.tbLiquidacionGeneral 
@@ -13197,6 +13206,7 @@ AS
 BEGIN
 SELECT	remo_Id, 
 		modu.modu_Id, 
+		modu.proc_Id as usua_UsuarioModifica, 
 		modu.modu_Nombre,
 		empleados.empl_Nombres + ' ' + empleados.empl_Apellidos as Empleado,
 		remo_Fecha,
@@ -13212,6 +13222,7 @@ SELECT	remo_Id,
 		rdet.[rdet_TotalDia], 
 		rdet.[rdet_TotalDanado], 
 		[proc].[proc_Descripcion],
+		--modu.proc_Id AS colr_Nombre,
 		modu.proc_Id,  
 
 		(CASE code.code_Sexo 
@@ -13256,6 +13267,7 @@ FROM	Prod.tbReporteModuloDia rmd
 		INNER JOIN Gral.tbEmpleados  empleados		ON modu.empr_Id	= empleados.empl_Id
 		INNER JOIN Acce.tbUsuarios crea				ON crea.usua_Id = rmd.usua_UsuarioCreacion 
 		LEFT JOIN  Acce.tbUsuarios modi				ON modi.usua_Id = rmd.usua_UsuarioModificacion 	
+ORDER BY rmd.remo_FechaCreacion ASC
 END
 GO
 
@@ -13348,8 +13360,6 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbReporteModuloDia_Editar
 @remo_Id					INT, 
 @modu_Id					INT, 
 @remo_Fecha					DATE, 
-@remo_TotalDia				INT, 
-@remo_TotalDanado			INT, 
 @usua_UsuarioModificacion	INT, 
 @remo_FechaModificacion	 	DATETIME 
 AS
@@ -13358,18 +13368,18 @@ BEGIN
 		UPDATE Prod.tbReporteModuloDia
 		SET modu_Id					= @modu_Id, 
 		remo_Fecha					= @remo_Fecha, 
-		remo_TotalDia				= @remo_TotalDia, 
-		remo_TotalDanado			= @remo_TotalDanado, 
 		usua_UsuarioModificacion	= @usua_UsuarioModificacion, 
 		remo_FechaModificacion		= @remo_FechaModificacion	 
-		where remo_Id				= @remo_Id				
+		WHERE remo_Id				= @remo_Id				
+
+		SELECT 1 
+
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE() 
 	END CATCH
 END
 GO
-
 
 --*****Finalizar*****--
 
@@ -17243,36 +17253,37 @@ GO
 
 
 /*Insertar Colores*/
-CREATE OR ALTER PROC Prod.UDP_tbColores_Insertar --'verde','22', 1,'10.16-2004'
-@colr_Nombre NVARCHAR(100),
-@colr_Codigo NVARCHAR(100),
-@colr_CodigoHtml  NVARCHAR(100),
-@usua_UsuarioCreacion INT,
-@colr_FechaCreacion DATETIME
-AS BEGIN
-
-BEGIN TRY
-		INSERT INTO Prod.tbColores(colr_Nombre, 
-					       colr_Codigo,
-						   colr_CodigoHtml,
-						   usua_UsuarioCreacion, 
-						   colr_FechaCreacion)
-		VALUES (@colr_Nombre, 
-				@colr_Codigo,
-				@colr_CodigoHtml,
-				@usua_UsuarioCreacion, 
-				@colr_FechaCreacion)
-
-		SELECT 1
-END TRY
-
-BEGIN CATCH
-
-		SELECT 'Error Message: ' + ERROR_MESSAGE()
-
-END CATCH
-END
+CREATE OR ALTER PROCEDURE Prod.UDP_tbColores_Insertar--'verde','22ss','#01DFD7',2,'02-02-2020'
+    @colr_Nombre NVARCHAR(100),
+    @colr_Codigo NVARCHAR(100),
+    @colr_CodigoHtml NVARCHAR(100),
+    @usua_UsuarioCreacion INT,
+    @colr_FechaCreacion DATETIME
+AS 
+BEGIN
+    BEGIN TRY
+        IF EXISTS (
+            SELECT colr_Id 
+            FROM Prod.tbColores
+            WHERE colr_Nombre = @colr_Nombre AND colr_CodigoHtml = @colr_CodigoHtml
+        )
+        BEGIN
+            SELECT 2;
+        END
+        ELSE 
+        BEGIN
+            INSERT INTO Prod.tbColores (colr_Nombre, colr_Codigo, colr_CodigoHtml, usua_UsuarioCreacion, colr_FechaCreacion)
+            VALUES (@colr_Nombre, @colr_Codigo, @colr_CodigoHtml, @usua_UsuarioCreacion, @colr_FechaCreacion);
+            
+            SELECT 1; 
+        END
+    END TRY
+    BEGIN CATCH
+        SELECT 'Error Message: ' + ERROR_MESSAGE();
+    END CATCH
+END;
 GO
+
 
 /*Editar Colores*/
 CREATE OR ALTER PROC Prod.UDP_tbColores_Editar
@@ -17283,26 +17294,30 @@ CREATE OR ALTER PROC Prod.UDP_tbColores_Editar
 	@usua_UsuarioModificacion INT,
 	@colr_FechaModificacion DATETIME
 AS BEGIN
-
 BEGIN TRY
+   IF EXISTS (
+            SELECT colr_Id 
+            FROM Prod.tbColores
+            WHERE colr_Nombre = @colr_Nombre AND colr_CodigoHtml = @colr_CodigoHtml
+        )
+		BEGIN
+		SELECT 2
+	END 
+  ELSE 
+    BEGIN     
+             UPDATE Prod.tbColores SET colr_Nombre = @colr_Nombre,
+			 colr_Codigo = @colr_Codigo,  
+			 colr_CodigoHtml=@colr_CodigoHtml,
+			 usua_UsuarioModificacion = @usua_UsuarioModificacion,
+			 colr_FechaModificacion = @colr_FechaModificacion
+		     WHERE colr_Id = @colr_Id
 
-UPDATE Prod.tbColores SET colr_Nombre = @colr_Nombre,
-						  colr_Codigo = @colr_Codigo,  
-						  colr_CodigoHtml=@colr_CodigoHtml,
-						  usua_UsuarioModificacion = @usua_UsuarioModificacion,
-						  colr_FechaModificacion = @colr_FechaModificacion
-					  WHERE colr_Id = @colr_Id
-
-					  SELECT 1
-
+		SELECT 1
+   END 
 END TRY
-
 BEGIN CATCH
-
 		SELECT 'Error Message: ' + ERROR_MESSAGE()
-
 END CATCH
-
 END
 GO
 
@@ -18777,7 +18792,7 @@ GO
 CREATE OR ALTER PROCEDURE Adua.UDP_tbBoletinPago_Editar
 	@boen_Id                   INT,
 	@liqu_Id                   INT, 
-	@duca_Id		           NVARCHAR(100),
+	@duca_No_Duca		       NVARCHAR(100),
 	@tipl_Id                   INT, 
 	@boen_FechaEmision         DATE, 
 	@esbo_Id                   INT, 
@@ -18799,7 +18814,7 @@ BEGIN
 	BEGIN TRY
 		UPDATE  Adua.tbBoletinPago
 		SET		liqu_Id                   = @liqu_Id,
-			    duca_No_Duca			  = @duca_Id,
+			    duca_No_Duca			  = @duca_No_Duca,
 		        tipl_Id                   = @tipl_Id,
 				boen_FechaEmision         = @boen_FechaEmision,
 				esbo_Id                   = @esbo_Id,

@@ -63,8 +63,6 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             parametros.Add("@remo_Id", item.remo_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@modu_Id", item.modu_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@remo_Fecha", item.remo_Fecha, DbType.Date, ParameterDirection.Input);
-            parametros.Add("@remo_TotalDia", item.remo_TotalDia, DbType.Int32, ParameterDirection.Input);
-            parametros.Add("@remo_TotalDanado", item.remo_TotalDanado, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@remo_FechaModificacion", item.remo_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.EditarReporteModuloDia, parametros, commandType: CommandType.StoredProcedure);
