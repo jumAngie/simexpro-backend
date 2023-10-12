@@ -132,6 +132,7 @@ namespace SIMEXPRO.BussinessLogic
             services.AddScoped<ProcesoPorOrdenCompraDetalleRepository>();
             services.AddScoped<FacturasExportacionRepository>();
             services.AddScoped<FacturasExportacionDetallesRepository>();
+            services.AddScoped<ImpuestoProdRepository>();
 
         }
 

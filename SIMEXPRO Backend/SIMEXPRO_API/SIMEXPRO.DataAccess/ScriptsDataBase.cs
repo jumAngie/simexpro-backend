@@ -792,6 +792,11 @@ namespace SIMEXPRO.DataAccess
         public static string PODetallesDDL = "Prod.UDP_PODetallesByID";
         #endregion
 
+        #region ImpuestosProd
+        public static string ListarImpuestosProd = "Prod.UDP_tbImpuestosProd_Listar";
+        public static string EditarImpuestosProd = "Prod.UDP_tbImpuestosProd_Editar";
+        #endregion
+
         #endregion
 
         #region Graficas

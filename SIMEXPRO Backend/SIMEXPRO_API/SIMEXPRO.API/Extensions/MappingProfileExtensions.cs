@@ -123,7 +123,7 @@ namespace SIMEXPRO.API.Extentions
 
             CreateMap<tbFacturasExportacion, FacturasExportacionViewModel>().ReverseMap();
             CreateMap<tbFacturasExportacionDetalles, FacturaExportacionDetallesViewModel>().ReverseMap();
-
+            CreateMap<tbImpuestosProd, ImpuestoProdViewModel>().ReverseMap();
             #endregion
 
             #region Acceso
