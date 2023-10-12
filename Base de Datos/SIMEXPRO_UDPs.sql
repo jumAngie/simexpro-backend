@@ -18968,3 +18968,134 @@ BEGIN
 	END CATCH
 END
 GO
+
+CREATE OR ALTER PROCEDURE adua.tbTratados_Listar
+AS
+BEGIN 
+
+SELECT  [trli_Id]
+		,[trli_NombreTratado]
+		,[trli_FechaInicio]
+		,TLC.[usua_UsuarioCreacion]
+		,usuCrea.usua_Nombre as UsuarioCreacionNombre
+		,[trli_FechaCreacion]
+		,TLC.[usua_UsuarioModificacion]
+		,usuModi.usua_Nombre as UsuarioModificadorNombre
+		,[trli_FechaModificacion]
+		,(SELECT m.* 
+				FROM 
+				 (SELECT	ROW_NUMBER() OVER(ORDER BY [patr_Id] DESC) AS [key],
+					[patr_Id], 
+					[trli_Id], 
+					tratado.[pais_Id],
+					pais.pais_Codigo,
+					pais.pais_Nombre,
+					pais.pais_prefijo
+		FROM [Adua].[tbPaisesEstanTratadosConHonduras] tratado
+		INNER JOIN gral.tbPaises pais ON tratado.pais_Id = pais.pais_Id
+		WHERE tratado.trli_Id = TLC.trli_Id) AS m
+         FOR JSON AUTO) AS Detalles
+FROM [Adua].[tbTratadosLibreComercio] TLC
+LEFT JOIN Acce.tbUsuarios usuModi ON TLC.usua_UsuarioModificacion = usuModi.usua_Id
+INNER JOIN Acce.tbUsuarios usuCrea ON TLC.usua_UsuarioCreacion = usuCrea.usua_Id
+
+END
+GO
+CREATE OR ALTER PROCEDURE adua.tbTratados_Insertar
+	@trli_NombreTratado			NVARCHAR(500),
+	@trli_FechaInicio			DATETIME,
+	@detalles					NVARCHAR(MAX),
+	@usua_UsuarioCreacion		INT,
+	@trli_FechaCreacion			DATETIME
+AS
+BEGIN
+
+	BEGIN TRANSACTION
+	BEGIN TRY
+
+	INSERT INTO [Adua].[tbTratadosLibreComercio](
+			[trli_NombreTratado], 
+			[trli_FechaInicio], 
+			[usua_UsuarioCreacion], 
+			[trli_FechaCreacion])
+	VALUES (
+			@trli_NombreTratado,		
+			@trli_FechaInicio,			
+			@usua_UsuarioCreacion,
+			@trli_FechaCreacion		
+			)
+
+	
+	DECLARE @trli_Id INT = SCOPE_IDENTITY();
+
+	INSERT INTO  [Adua].[tbPaisesEstanTratadosConHonduras](
+			[pais_Id],
+			[trli_Id], 
+			[usua_UsuarioCreacion], 
+			[patr_FechaCreacion]
+			)
+				SELECT *,
+				      @trli_Id,
+					  @usua_UsuarioCreacion,
+					  @trli_FechaCreacion 
+				FROM OPENJSON(@detalles, '$.paises')
+				WITH (
+					pais_Id INT
+				) 
+
+				SELECT 1
+	END TRY
+	BEGIN CATCH
+		 ROLLBACK TRAN
+		 SELECT 'Error Message: ' + ERROR_MESSAGE()
+	END CATCH
+END
+
+GO
+CREATE OR ALTER PROCEDURE adua.tbTratados_Editar
+	@trli_Id					INT,
+	@trli_NombreTratado			NVARCHAR(500),
+	@trli_FechaInicio			DATETIME,
+	@detalles					NVARCHAR(MAX),
+	@usua_UsuarioModificacion	INT,
+	@trli_FechaModificacion		DATETIME
+AS
+BEGIN
+
+	BEGIN TRANSACTION
+	BEGIN TRY
+
+	UPDATE [Adua].[tbTratadosLibreComercio]
+	SET		[trli_NombreTratado] = @trli_NombreTratado,
+			[trli_FechaInicio] = @trli_FechaInicio,
+			[usua_UsuarioModificacion] = @usua_UsuarioModificacion,
+			[trli_FechaModificacion] = @trli_FechaModificacion
+	WHERE @trli_Id = trli_Id
+	
+	DELETE FROM [Adua].[tbPaisesEstanTratadosConHonduras]
+	WHERE trli_Id = @trli_Id
+
+
+	INSERT INTO  [Adua].[tbPaisesEstanTratadosConHonduras](
+			[pais_Id],
+			[trli_Id], 
+			[usua_UsuarioCreacion], 
+			[patr_FechaCreacion]
+			)
+				SELECT *,
+				      @trli_Id,
+					  @usua_UsuarioModificacion,
+					  @trli_FechaModificacion 
+				FROM OPENJSON(@detalles, '$.paises')
+				WITH (
+					pais_Id INT
+				) 
+
+				SELECT 1
+	END TRY
+	BEGIN CATCH
+		 ROLLBACK TRAN
+		 SELECT 'Error Message: ' + ERROR_MESSAGE()
+	END CATCH
+END
+--SELECT * FROM 
