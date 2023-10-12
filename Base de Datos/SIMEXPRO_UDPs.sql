@@ -9596,6 +9596,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbItemsDEVAPorDuca_LiberarDevasPorDucaId
 AS
 BEGIN
 	BEGIN TRY
+
 		DELETE FROM [Adua].[tbItemsDEVAPorDuca] 
 			  WHERE [duca_Id] = @duca_Id
 
@@ -9994,6 +9995,45 @@ AS
 BEGIN
 	BEGIN TRY
 		BEGIN TRAN 
+			
+			DECLARE @facturasIdtable TABLE(fact_Id INT);
+			DECLARE @deva_Id AS INT, @fact_Id AS INT;
+
+			DECLARE devasId CURSOR FOR SELECT deva_Id FROM Adua.tbItemsDEVAPorDuca WHERE duca_Id = @duca_Id
+			OPEN devasId
+			FETCH NEXT FROM devasId INTO @deva_Id
+			WHILE @@FETCH_STATUS = 0
+			BEGIN
+				
+				DECLARE facturasId CURSOR FOR SELECT fact_Id FROM Adua.tbFacturas WHERE deva_Id = @deva_Id
+				OPEN facturasId
+				FETCH NEXT FROM facturasId INTO @fact_Id
+				WHILE @@FETCH_STATUS = 0
+				BEGIN
+					
+					UPDATE Adua.tbItems
+					   SET item_Cantidad_Bultos = NULL,
+						   item_ClaseBulto = NULL,
+						   item_PesoNeto = NULL,
+						   item_PesoBruto = NULL,
+						   item_CuotaContingente = NULL,
+						   item_Acuerdo = NULL,
+						   item_CriterioCertificarOrigen = NULL,
+						   item_ReglasAccesorias = NULL,
+						   item_GastosDeTransporte = NULL,
+						   item_Seguro = NULL,
+						   item_OtrosGastos = NULL
+					 WHERE fact_Id = @fact_Id
+
+					FETCH NEXT FROM facturasId INTO @fact_Id
+				END
+				CLOSE facturasId
+				DEALLOCATE facturasId
+
+				FETCH NEXT FROM devasId INTO @deva_Id
+			END
+			CLOSE devasId
+			DEALLOCATE devasId
 
 			DECLARE @cont_Id INT = (SELECT duca_Conductor_Id FROM Adua.tbDuca WHERE duca_Id = @duca_Id)
 			DECLARE @tran_Id INT = (SELECT tran_Id FROM Adua.tbConductor WHERE cont_Id = @cont_Id)
@@ -10002,14 +10042,14 @@ BEGIN
 
 			DELETE FROM Adua.tbItemsDEVAPorDuca WHERE duca_Id = @duca_Id
 
+			DELETE FROM Adua.tbLiquidacionGeneral WHERE duca_Id = @duca_Id
+
 			DELETE FROM Adua.tbDuca WHERE duca_Id = @duca_Id
 
 			DELETE FROM Adua.tbConductor WHERE cont_Id = @cont_Id
 
 			DELETE FROM Adua.tbTransporte WHERE tran_Id = @tran_Id
-
-			DELETE FROM Adua.tbLiquidacionGeneral WHERE duca_Id = @duca_Id
-
+			
 		COMMIT
 		SELECT 1
 	END TRY
@@ -16160,7 +16200,7 @@ BEGIN
 								WHERE remo_Id = @remo_Id)
 
 		UPDATE [Prod].[tbProcesoPorOrdenCompraDetalle]
-		SET poco_Completado = poco_Completado + (@rdet_TotalDia - @rdet_TotalDanado)
+		SET poco_Completado = ISNULL(poco_Completado,0) + (@rdet_TotalDia - @rdet_TotalDanado)
 		WHERE code_Id = @Newcode_Id AND proc_Id = @proc_Id
 
 		SELECT 1
@@ -19133,3 +19173,134 @@ BEGIN
 	END CATCH
 END
 GO
+
+CREATE OR ALTER PROCEDURE adua.tbTratados_Listar
+AS
+BEGIN 
+
+SELECT  [trli_Id]
+		,[trli_NombreTratado]
+		,[trli_FechaInicio]
+		,TLC.[usua_UsuarioCreacion]
+		,usuCrea.usua_Nombre as UsuarioCreacionNombre
+		,[trli_FechaCreacion]
+		,TLC.[usua_UsuarioModificacion]
+		,usuModi.usua_Nombre as UsuarioModificadorNombre
+		,[trli_FechaModificacion]
+		,(SELECT m.* 
+				FROM 
+				 (SELECT	ROW_NUMBER() OVER(ORDER BY [patr_Id] DESC) AS [key],
+					[patr_Id], 
+					[trli_Id], 
+					tratado.[pais_Id],
+					pais.pais_Codigo,
+					pais.pais_Nombre,
+					pais.pais_prefijo
+		FROM [Adua].[tbPaisesEstanTratadosConHonduras] tratado
+		INNER JOIN gral.tbPaises pais ON tratado.pais_Id = pais.pais_Id
+		WHERE tratado.trli_Id = TLC.trli_Id) AS m
+         FOR JSON AUTO) AS Detalles
+FROM [Adua].[tbTratadosLibreComercio] TLC
+LEFT JOIN Acce.tbUsuarios usuModi ON TLC.usua_UsuarioModificacion = usuModi.usua_Id
+INNER JOIN Acce.tbUsuarios usuCrea ON TLC.usua_UsuarioCreacion = usuCrea.usua_Id
+
+END
+GO
+CREATE OR ALTER PROCEDURE adua.tbTratados_Insertar
+	@trli_NombreTratado			NVARCHAR(500),
+	@trli_FechaInicio			DATETIME,
+	@detalles					NVARCHAR(MAX),
+	@usua_UsuarioCreacion		INT,
+	@trli_FechaCreacion			DATETIME
+AS
+BEGIN
+
+	BEGIN TRANSACTION
+	BEGIN TRY
+
+	INSERT INTO [Adua].[tbTratadosLibreComercio](
+			[trli_NombreTratado], 
+			[trli_FechaInicio], 
+			[usua_UsuarioCreacion], 
+			[trli_FechaCreacion])
+	VALUES (
+			@trli_NombreTratado,		
+			@trli_FechaInicio,			
+			@usua_UsuarioCreacion,
+			@trli_FechaCreacion		
+			)
+
+	
+	DECLARE @trli_Id INT = SCOPE_IDENTITY();
+
+	INSERT INTO  [Adua].[tbPaisesEstanTratadosConHonduras](
+			[pais_Id],
+			[trli_Id], 
+			[usua_UsuarioCreacion], 
+			[patr_FechaCreacion]
+			)
+				SELECT *,
+				      @trli_Id,
+					  @usua_UsuarioCreacion,
+					  @trli_FechaCreacion 
+				FROM OPENJSON(@detalles, '$.paises')
+				WITH (
+					pais_Id INT
+				) 
+
+				SELECT 1
+	END TRY
+	BEGIN CATCH
+		 ROLLBACK TRAN
+		 SELECT 'Error Message: ' + ERROR_MESSAGE()
+	END CATCH
+END
+
+GO
+CREATE OR ALTER PROCEDURE adua.tbTratados_Editar
+	@trli_Id					INT,
+	@trli_NombreTratado			NVARCHAR(500),
+	@trli_FechaInicio			DATETIME,
+	@detalles					NVARCHAR(MAX),
+	@usua_UsuarioModificacion	INT,
+	@trli_FechaModificacion		DATETIME
+AS
+BEGIN
+
+	BEGIN TRANSACTION
+	BEGIN TRY
+
+	UPDATE [Adua].[tbTratadosLibreComercio]
+	SET		[trli_NombreTratado] = @trli_NombreTratado,
+			[trli_FechaInicio] = @trli_FechaInicio,
+			[usua_UsuarioModificacion] = @usua_UsuarioModificacion,
+			[trli_FechaModificacion] = @trli_FechaModificacion
+	WHERE @trli_Id = trli_Id
+	
+	DELETE FROM [Adua].[tbPaisesEstanTratadosConHonduras]
+	WHERE trli_Id = @trli_Id
+
+
+	INSERT INTO  [Adua].[tbPaisesEstanTratadosConHonduras](
+			[pais_Id],
+			[trli_Id], 
+			[usua_UsuarioCreacion], 
+			[patr_FechaCreacion]
+			)
+				SELECT *,
+				      @trli_Id,
+					  @usua_UsuarioModificacion,
+					  @trli_FechaModificacion 
+				FROM OPENJSON(@detalles, '$.paises')
+				WITH (
+					pais_Id INT
+				) 
+
+				SELECT 1
+	END TRY
+	BEGIN CATCH
+		 ROLLBACK TRAN
+		 SELECT 'Error Message: ' + ERROR_MESSAGE()
+	END CATCH
+END
+--SELECT * FROM 

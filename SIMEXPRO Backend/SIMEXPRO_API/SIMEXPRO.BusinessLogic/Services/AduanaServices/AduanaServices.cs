@@ -2923,6 +2923,46 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+        public ServiceResult ListarTLC()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _tratadosLibreComercioRepository.List();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult InsertarTLC(tbTratadosLibreComercio item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _tratadosLibreComercioRepository.Insert(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult EditarTLC(tbTratadosLibreComercio item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _tratadosLibreComercioRepository.Update(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
         #endregion
 
         #region TipoDocumento
