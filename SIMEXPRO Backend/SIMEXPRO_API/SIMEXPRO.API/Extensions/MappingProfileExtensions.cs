@@ -79,6 +79,8 @@ namespace SIMEXPRO.API.Extentions
             CreateMap<RegimenesAduanerosViewModel, tbRegimenesAduaneros>().ReverseMap();
             CreateMap<ItemsDEVAxDUCAViewModel, tbItemsDEVAPorDuca>().ReverseMap();
             CreateMap<TratadosLibreComercioViewModel, tbTratadosLibreComercio>().ReverseMap();
+            CreateMap<EcotasaViewModel, tbEcotasa>().ReverseMap();
+            CreateMap<ImpuestosSelectivoConsumoCondicionesVehiculosViewModel, tbImpuestoSelectivoConsumoCondicionesVehiculos>().ReverseMap();
             #endregion
 
             #region Producción
@@ -123,7 +125,7 @@ namespace SIMEXPRO.API.Extentions
 
             CreateMap<tbFacturasExportacion, FacturasExportacionViewModel>().ReverseMap();
             CreateMap<tbFacturasExportacionDetalles, FacturaExportacionDetallesViewModel>().ReverseMap();
-
+            CreateMap<tbImpuestosProd, ImpuestoProdViewModel>().ReverseMap();
             #endregion
 
             #region Acceso
@@ -138,7 +140,7 @@ namespace SIMEXPRO.API.Extentions
             CreateMap<GraficasViewModel, tbGraficas>().ReverseMap();
             #endregion
 
-            #region
+            #region Reportes
             CreateMap<ReportesViewModel, tbReportes>().ReverseMap();
             #endregion
         }

@@ -93,5 +93,6 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             parametros.Add("@peor_Codigo", peor_Codigo, DbType.String, ParameterDirection.Input);
             return db.Query<tbPedidosOrden>(ScriptsDataBase.PedidosOrdenFind, parametros, commandType: CommandType.StoredProcedure);
         }
+
     }
 }

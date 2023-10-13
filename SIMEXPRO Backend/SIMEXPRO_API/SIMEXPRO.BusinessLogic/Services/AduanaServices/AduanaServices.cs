@@ -28,11 +28,13 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         private readonly DocumentosPDFRepository _documentosPDFRepository;
         private readonly DocumentosSancionesRepository _documentosSancionesRepository;
         private readonly DucaRepository _ducaRepository;
+        private readonly EcotasaRepository _ecotasaRepository;
         private readonly EstadoBoletinRepository _estadoBoletinRepository;
         private readonly EstadoMercanciasRepository _estadoMercanciasRepository;
         private readonly FacturasRepository _facturasRepository;
         private readonly FormasdePagoRepository _formasdePagoRepository;
         private readonly ImpuestosporAracelRepository _impuestosporAracelRepository;
+        private readonly ImpuestoSelectivoConsumoCondicionesVehiculosRepository _impuestoSelectivoConsumoCondicionesVehiculosRepository;
         private readonly ImpuestosRepository _impuestosRepository;
         private readonly IncotermRepository _incotermRepository;
         private readonly IntermediarioRepository _intermediarioRepository;
@@ -58,16 +60,53 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         private readonly ImportadoresRepository _importadoresRepository;
         private readonly ItemsDEVAporDUCARepository _itemsDEVAporDUCARepository;
 
-        public AduanaServices(AduanasRepository AduanasRepository, ArancelesRepository ArancelesRepository, BaseCalculosRepository BaseCalculosRepository, BoletinPagoRepository BoletinPagoRepository, BoletinPagoDetallesRepository BoletinPagoDetallesRepository,
-                                CodigoImpuestoRepository CodigoImpuestoRepository, ComercianteIndividualRepository ComercianteIndividualRepository, ConceptoPagoRepository ConceptoPagoRepository, CondicionesRepository CondicionesRepository,
-                                CondicionesComercialesRepository CondicionesComercialesRepository, Declaraciones_ValorHistorialRepository Declaraciones_ValorHistorialRepository, Declaraciones_ValorRepository Declaraciones_ValorRepository,
-                                DocumentosContratosRepository DocumentosContratosRepository, DocumentosdeSoporteRepository DocumentosdeSoporteRepository, DocumentosPDFRepository DocumentosPDFRepository,
-                                DocumentosSancionesRepository documentosSancionesRepository, DucaRepository DucaRepository, EstadoBoletinRepository EstadoBoletinRepository, EstadoMercanciasRepository EstadoMercanciasRepository, FacturasRepository FacturasRepository, FormasdePagoRepository FormasdePagoRepository, ImpuestosporAracelRepository ImpuestosporAracelRepository,
-                                ImpuestosRepository ImpuestosRepository, IncotermRepository IncotermRepository, IntermediarioRepository IntermediarioRepository, ItemsRepository ItemsRepository, LiquidacionGeneralRepository LiquidacionGeneralRepository,
-                                LiquidacionPorLineaRepository LiquidacionPorLineaRepository, LugaresEmbarqueRepository LugaresEmbarqueRepository, MarcasRepository MarcasRepository, ModoTransporteRepository ModoTransporteRepository,
-                                NivelesComercialesRepository NivelesComercialesRepository, PaisesEstanTratadosConHondurasRepository paisesEstanTratadosConHondurasRepository, PersonaJuridicaRepository PersonaJuridicaRepository, PersonaNaturalRepository PersonaNaturalRepository, PersonasRepository PersonasRepository,
-                                 TipoDocumentoRepository TipoDocumentoRepository, TipoIntermediarioRepository TipoIntermediarioRepository, TipoLiquidacionRepository TipoLiquidacionRepository, TiposIdentificacionRepository TiposIdentificacionRepository, TransporteRepository TransporteRepository,
-                                AduanaGraficasRepository AduanaGraficasRepository, RegimenesAduanerosRepository regimenesAduanerosRepository, ImportadoresRepository importadoresRepository, ItemsDEVAporDUCARepository itemsDEVAporDUCARepository, TratadosLibreComercioRepository tratadosLibreComercioRepository)
+        public AduanaServices(
+            AduanasRepository AduanasRepository, 
+            ArancelesRepository ArancelesRepository, 
+            BaseCalculosRepository BaseCalculosRepository, 
+            BoletinPagoRepository BoletinPagoRepository, 
+            BoletinPagoDetallesRepository BoletinPagoDetallesRepository,
+            CodigoImpuestoRepository CodigoImpuestoRepository, 
+            ComercianteIndividualRepository ComercianteIndividualRepository, 
+            ConceptoPagoRepository ConceptoPagoRepository, 
+            CondicionesRepository CondicionesRepository,
+            CondicionesComercialesRepository CondicionesComercialesRepository, 
+            Declaraciones_ValorHistorialRepository Declaraciones_ValorHistorialRepository, 
+            Declaraciones_ValorRepository Declaraciones_ValorRepository,
+            DocumentosContratosRepository DocumentosContratosRepository, 
+            DocumentosdeSoporteRepository DocumentosdeSoporteRepository, 
+            DocumentosPDFRepository DocumentosPDFRepository,
+            DocumentosSancionesRepository documentosSancionesRepository, 
+            DucaRepository DucaRepository,
+            EcotasaRepository ecotasaRepository,
+            EstadoBoletinRepository EstadoBoletinRepository, 
+            EstadoMercanciasRepository EstadoMercanciasRepository, 
+            FacturasRepository FacturasRepository, 
+            FormasdePagoRepository FormasdePagoRepository, 
+            ImpuestosporAracelRepository ImpuestosporAracelRepository,
+            ImpuestoSelectivoConsumoCondicionesVehiculosRepository impuestoSelectivoConsumoCondicionesVehiculosRepository,
+            ImpuestosRepository ImpuestosRepository, 
+            IncotermRepository IncotermRepository, 
+            IntermediarioRepository IntermediarioRepository, 
+            ItemsRepository ItemsRepository, 
+            LiquidacionGeneralRepository LiquidacionGeneralRepository,
+            LiquidacionPorLineaRepository LiquidacionPorLineaRepository, 
+            LugaresEmbarqueRepository LugaresEmbarqueRepository, 
+            MarcasRepository MarcasRepository, 
+            ModoTransporteRepository ModoTransporteRepository,
+            NivelesComercialesRepository NivelesComercialesRepository, 
+            PaisesEstanTratadosConHondurasRepository paisesEstanTratadosConHondurasRepository, PersonaJuridicaRepository PersonaJuridicaRepository, PersonaNaturalRepository PersonaNaturalRepository, PersonasRepository PersonasRepository,
+            TipoDocumentoRepository TipoDocumentoRepository, 
+            TipoIntermediarioRepository TipoIntermediarioRepository, 
+            TipoLiquidacionRepository TipoLiquidacionRepository, 
+            TiposIdentificacionRepository TiposIdentificacionRepository, 
+            TransporteRepository TransporteRepository,
+            AduanaGraficasRepository AduanaGraficasRepository,
+            RegimenesAduanerosRepository regimenesAduanerosRepository, 
+            ImportadoresRepository importadoresRepository, 
+            ItemsDEVAporDUCARepository itemsDEVAporDUCARepository, 
+            TratadosLibreComercioRepository tratadosLibreComercioRepository
+            )
         {
             _aduanasRepository = AduanasRepository;
             _arancelesRepository = ArancelesRepository;
@@ -86,11 +125,13 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             _documentosPDFRepository = DocumentosPDFRepository;
             _documentosSancionesRepository = documentosSancionesRepository;
             _ducaRepository = DucaRepository;
+            _ecotasaRepository = ecotasaRepository;
             _estadoBoletinRepository = EstadoBoletinRepository;
             _estadoMercanciasRepository = EstadoMercanciasRepository;
             _facturasRepository = FacturasRepository;
             _formasdePagoRepository = FormasdePagoRepository;
             _impuestosporAracelRepository = ImpuestosporAracelRepository;
+            _impuestoSelectivoConsumoCondicionesVehiculosRepository = impuestoSelectivoConsumoCondicionesVehiculosRepository;
             _impuestosRepository = ImpuestosRepository;
             _incotermRepository = IncotermRepository;
             _intermediarioRepository = IntermediarioRepository;
@@ -1613,6 +1654,64 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         }
         #endregion
 
+        #region Ecotasa
+        public ServiceResult ListarEcotasa()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _ecotasaRepository.List();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarEcotasa(tbEcotasa item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _ecotasaRepository.Insert(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult ActualizarEcotasa(tbEcotasa item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _ecotasaRepository.Update(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        
+        public ServiceResult EliminarEcotasa(tbEcotasa item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _ecotasaRepository.Delete(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        #endregion
+
         #region EstadoBoletin
         public ServiceResult ListarEstadoBoletin()
         {
@@ -1991,6 +2090,64 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         }
         #endregion
 
+        #region Impuesto Selectivo Consumo Condiciones Vehiculo
+        public ServiceResult ListarISCCV()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _impuestoSelectivoConsumoCondicionesVehiculosRepository.List();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarISCCV(tbImpuestoSelectivoConsumoCondicionesVehiculos item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _impuestoSelectivoConsumoCondicionesVehiculosRepository.Insert(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult ActualizarISCCV(tbImpuestoSelectivoConsumoCondicionesVehiculos item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _impuestoSelectivoConsumoCondicionesVehiculosRepository.Update(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult EliminarISCCV(tbImpuestoSelectivoConsumoCondicionesVehiculos item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _impuestoSelectivoConsumoCondicionesVehiculosRepository.Delete(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        #endregion
+
         #region Impuestos
         public ServiceResult ListarImpuestos()
         {
@@ -2201,6 +2358,20 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             catch (Exception ex)
             {
                 return resultado.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult ItemsOrdenPedido(string id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _itemsRepository.ItemsOrdenPedido(id);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
             }
         }
 

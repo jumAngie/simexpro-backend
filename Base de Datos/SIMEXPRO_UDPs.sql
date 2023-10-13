@@ -2765,7 +2765,7 @@ BEGIN
 				Civil.escv_Nombre,
 				Personas.ofpr_Id, 
 				Profesion.ofpr_Nombre,
-
+				
 				Personas.pers_escvRepresentante,
 				Civil2.escv_Nombre					AS EstadoCivilRepresentante,
 				Personas.pers_OfprRepresentante,
@@ -2777,7 +2777,8 @@ BEGIN
 				Personas.usua_UsuarioModificacion,
 				Usuario2.usua_Nombre				AS usuarioModificacion, 
 				Personas.pers_FechaModificacion, 
-				Personas.pers_Estado
+				Personas.pers_Estado,
+				Personas.pers_Nombre
 
 		FROM	Adua.tbPersonas				AS	Personas
 		INNER JOIN	Gral.tbOficinas				AS	Oficina		ON Personas.ofic_Id						= Oficina.ofic_Id
@@ -2800,6 +2801,7 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbPersonas_Insertar
 	@ofic_Id					INT,
 	@escv_Id					INT,
 	@ofpr_Id					INT,
+	@pers_Nombre				NVARCHAR(150),
 	@pers_escvRepresentante		INT,
 	@pers_OfprRepresentante		INT,
 	@usua_UsuarioCreacion		INT,
@@ -2812,7 +2814,8 @@ BEGIN
 					(pers_RTN, 
 					ofic_Id, 
 					escv_Id, 
-					ofpr_Id, 
+					ofpr_Id,
+					pers_Nombre,
 					pers_escvRepresentante, 
 					pers_OfprRepresentante, 
 					usua_UsuarioCreacion, 
@@ -2821,6 +2824,7 @@ BEGIN
 					@ofic_Id,
 					@escv_Id,
 					@ofpr_Id,
+					@pers_Nombre,
 					@pers_escvRepresentante,
 					@pers_OfprRepresentante,
 					@usua_UsuarioCreacion,
@@ -2842,6 +2846,7 @@ CREATE OR ALTER   PROCEDURE [Adua].[UDP_tbPersonas_Editar]
 	@ofic_Id					INT,
 	@escv_Id					INT,
 	@ofpr_Id					INT,
+	@pers_Nombre				NVARCHAR(150),
 	@pers_escvRepresentante		INT,
 	@pers_OfprRepresentante		INT,
 	@usua_UsuarioModificacion		INT,
@@ -2851,12 +2856,13 @@ AS
 BEGIN
 	BEGIN TRY
 			UPDATE Adua.tbPersonas 
-			   SET pers_RTN					= @pers_RTN, 					
-				   ofic_Id					= @ofic_Id, 					
-				   escv_Id					= @escv_Id, 					
-				   ofpr_Id					= @ofpr_Id, 					
-				   pers_escvRepresentante	= @pers_escvRepresentante, 		
-				   pers_OfprRepresentante	= @pers_OfprRepresentante, 		
+			   SET pers_RTN						= @pers_RTN, 					
+				   ofic_Id						= @ofic_Id, 					
+				   escv_Id						= @escv_Id, 					
+				   ofpr_Id						= @ofpr_Id, 
+				   pers_Nombre					= @pers_Nombre,				
+				   pers_escvRepresentante		= @pers_escvRepresentante, 		
+				   pers_OfprRepresentante		= @pers_OfprRepresentante, 		
 				   usua_UsuarioModificacion		= @usua_UsuarioModificacion,      	
 				   pers_FechaModificacion		= @pers_FechaModificacion
 			 WHERE pers_Id = @pers_Id
@@ -8516,10 +8522,10 @@ BEGIN
 				END
 			END
 	
-			DECLARE @lige_IdSTD INT = (SELECT lige_Id FROM Adua.tbLiquidacionGeneral WHERE duca_Id = @duca_Id AND lige_TipoTributo = 'STD')
+			DECLARE @cantidadFilasStd INT = (SELECT COUNT(*) FROM Adua.tbLiquidacionGeneral WHERE duca_Id = @duca_Id AND lige_TipoTributo = 'STD')
 			DECLARE @lige_TotalPorTributoSTD DECIMAL(18,2) = @deva_ConversionDolares * 5;
 
-			IF(@lige_IdSTD = 0)
+			IF(@cantidadFilasStd = 0)
 			BEGIN
 				INSERT INTO Adua.tbLiquidacionGeneral (duca_Id, lige_TipoTributo, lige_TotalPorTributo, lige_TotalGral)
 				VALUES (@duca_Id, 'STD', @lige_TotalPorTributoSTD, 0)
@@ -12440,7 +12446,8 @@ CREATE OR ALTER PROCEDURE Prod.UDP_OrdenCompraDataToExport
 AS
 BEGIN
 		SELECT	 
-			ordenCompra.orco_Id
+			ordenCompra.orco_Id,
+			ordenCompra.orco_Codigo
 			,cliente.clie_Nombre_O_Razon_Social
 			,cliente.clie_Direccion
 			,cliente.clie_RTN
@@ -12520,7 +12527,7 @@ BEGIN
 			 WHERE orco_Id = orco.orco_Id) AS cantidad_Items
 			,CONCAT(talla.tall_Codigo, ' (', talla.tall_Nombre, ')') AS tall_Nombre
 			,ordenCompraDetalle.colr_Id
-			,colores.colr_Nombre
+			,CONCAT(colores.colr_Codigo,' ',colores.colr_Nombre) AS colr_Nombre
 			,clie.clie_Nombre_O_Razon_Social
 	  FROM	Prod.tbOrdenCompraDetalles			    ordenCompraDetalle
 			INNER JOIN	Prod.tbEstilos				estilo						ON	ordenCompraDetalle.esti_Id						= estilo.esti_Id
@@ -12751,14 +12758,14 @@ GO
 
 ----------------------------------------------UDPS Para Asignaciones Orden--------------------------------------------
 
-CREATE OR ALTER PROCEDURE Prod.UDP_tbAsignacionesOrden_Listado
+CREATE OR ALTER PROCEDURE [Prod].[UDP_tbAsignacionesOrden_Listado]
 AS
 BEGIN
 	 SELECT asor_Id,						
 			asor_OrdenDetId,
 			esti.esti_Descripcion,
-			colr.colr_Nombre,
-			tall.tall_Nombre,
+			CONCAT(colr.colr_Codigo,' ',colr.colr_Nombre) AS colr_Nombre,
+			CONCAT(tall.tall_Codigo, ' (', tall.tall_Nombre, ')') AS tall_Nombre,
 			orco.orco_Id,
 			orco.orco_Codigo,
 			orco.orco_FechaEmision,
@@ -19304,3 +19311,82 @@ BEGIN
 	END CATCH
 END
 --SELECT * FROM 
+
+GO
+CREATE OR ALTER PROCEDURE Prod.UDP_tbItems_OrdenDePedido 
+(@duca_No_Duca NVARCHAR(100))
+AS
+BEGIN
+		DECLARE @Duca_Id INT = (SELECT duca_Id FROM Adua.tbDuca WHERE duca_No_Duca = @duca_No_Duca)
+
+		
+DECLARE @tbItems TABLE(
+			item_Id int ,
+			fact_Id int ,
+			item_Cantidad int ,
+			item_PesoNeto decimal(18, 2) ,
+			item_PesoBruto decimal(18, 2) ,
+			unme_Id int ,
+			item_IdentificacionComercialMercancias nvarchar(300) ,
+			item_CaracteristicasMercancias nvarchar(400) ,
+			item_Marca nvarchar(50) ,
+			item_Modelo nvarchar(100) ,
+			merc_Id int ,
+			pais_IdOrigenMercancia int ,
+			item_Cantidad_Bultos int ,
+			item_ClaseBulto nvarchar(100) ,
+			item_Acuerdo nvarchar(100) ,
+			item_ClasificacionArancelaria char(16) ,
+			item_ValorUnitario decimal(18, 2) ,
+			item_GastosDeTransporte decimal(18, 2) ,
+			item_ValorTransaccion decimal(18, 2) ,
+			item_Seguro decimal(18, 2) ,
+			item_OtrosGastos decimal(18, 2) ,
+			item_ValorAduana decimal(18, 2) ,
+			aran_Id int ,
+			item_CuotaContingente decimal(18, 2) ,
+			item_ReglasAccesorias nvarchar(max) ,
+			item_CriterioCertificarOrigen nvarchar(max) ,
+			usua_UsuarioCreacion int ,
+			item_FechaCreacion datetime ,
+			usua_UsuarioModificacion int ,
+			item_FechaModificacion datetime ,
+			item_Estado bit ,
+			item_EsNuevo bit ,
+			item_EsHibrido bit ,
+			item_LitrosTotales decimal(18, 2) ,
+			item_CigarrosTotales int)
+	
+	
+			DECLARE @facturasIdtable TABLE(fact_Id INT);
+			DECLARE @deva_Id AS INT, @fact_Id AS INT;
+
+			DECLARE devasId CURSOR FOR SELECT deva_Id FROM Adua.tbItemsDEVAPorDuca WHERE duca_Id = @Duca_Id
+			OPEN devasId
+			FETCH NEXT FROM devasId INTO @deva_Id
+			WHILE @@FETCH_STATUS = 0
+			BEGIN
+				
+				DECLARE facturasId CURSOR FOR SELECT fact_Id FROM Adua.tbFacturas WHERE deva_Id = @deva_Id
+				OPEN facturasId
+				FETCH NEXT FROM facturasId INTO @fact_Id
+				WHILE @@FETCH_STATUS = 0
+				BEGIN
+
+					INSERT INTO @tbItems 
+					SELECT * FROM Adua.tbItems WHERE fact_Id = @fact_Id
+
+					FETCH NEXT FROM facturasId INTO @fact_Id
+				END
+				CLOSE facturasId
+				DEALLOCATE facturasId
+
+				FETCH NEXT FROM devasId INTO @deva_Id
+			END
+			CLOSE devasId
+			DEALLOCATE devasId
+
+			SELECT * FROM @tbItems
+		
+
+END

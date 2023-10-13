@@ -47,11 +47,13 @@ namespace SIMEXPRO.BussinessLogic
             services.AddScoped<DocumentosPDFRepository>();
             services.AddScoped<DocumentosSancionesRepository>();
             services.AddScoped<DucaRepository>();
+            services.AddScoped<EcotasaRepository>();
             services.AddScoped<EstadoBoletinRepository>();
             services.AddScoped<EstadoMercanciasRepository>();
             services.AddScoped<FacturasRepository>();
             services.AddScoped<FormasdePagoRepository>();
             services.AddScoped<ImpuestosporAracelRepository>();
+            services.AddScoped<ImpuestoSelectivoConsumoCondicionesVehiculosRepository>();
             services.AddScoped<ImpuestosRepository>();
             services.AddScoped<IncotermRepository>();
             services.AddScoped<IntermediarioRepository>();
@@ -132,6 +134,7 @@ namespace SIMEXPRO.BussinessLogic
             services.AddScoped<ProcesoPorOrdenCompraDetalleRepository>();
             services.AddScoped<FacturasExportacionRepository>();
             services.AddScoped<FacturasExportacionDetallesRepository>();
+            services.AddScoped<ImpuestoProdRepository>();
 
         }
 
