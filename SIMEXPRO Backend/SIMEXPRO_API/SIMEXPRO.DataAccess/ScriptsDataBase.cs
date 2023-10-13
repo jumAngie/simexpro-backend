@@ -333,6 +333,14 @@ namespace SIMEXPRO.DataAccess
         public static string ListarDevasByDucaId = "Adua.UDP_tbItemsDevaByDuca_Id";
         #endregion
 
+        #region Ecotasa
+        public static string ListarEcotasa = "Adua.UDP_tbEcotasa_Listar";
+        public static string InsertarEcotasa = "Adua.UDP_tbEcotasa_Insertar";
+        public static string EditarEcotasa = "Adua.UDP_tbEcotasa_Editar";
+        public static string EliminarEcotasa = "Adua.UDP_tbEcotasa_Eliminar";
+
+        #endregion
+
         #region Estado Boletin
         public static string ListarEstadoBoletin = "Adua.UDP_tbEstadoBoletin_Listar";
         public static string InsertarEstadoBoletin = "Adua.UDP_tbEstadoBoletin_Insertar";
@@ -374,6 +382,14 @@ namespace SIMEXPRO.DataAccess
         public static string EditarImpuestosPorArancel = "Adua.UDP_tbImpuestosPorArancel_Editar";
         public static string EliminarImpuestosPorArancel = "Adua.UDP_tbImpuestosPorArancel_Eliminar";
         public static string CategoriaAranceles = "Adua.UDP_tbArancelesBuscarCategoria";
+        #endregion
+
+        #region Impuesto Selectivo Consumo Condiciones Vehiculos 
+        public static string ListarISCCV = "Adua.UDP_tbImpuestoSelectivoConsumoCondicionesVehiculos_Listar";
+        public static string InsertarISCCV = "Adua.UDP_tbImpuestoSelectivoConsumoCondicionesVehiculos_Insertar";
+        public static string EditarISCCV = "Adua.UDP_tbImpuestoSelectivoConsumoCondicionesVehiculos_Editar";
+        public static string EliminasISCCV = "Adua.UDP_tbImpuestoSelectivoConsumoCondicionesVehiculos_Eliminar";
+
         #endregion
 
         #region Incoterm

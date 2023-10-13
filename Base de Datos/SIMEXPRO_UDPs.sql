@@ -12446,7 +12446,8 @@ CREATE OR ALTER PROCEDURE Prod.UDP_OrdenCompraDataToExport
 AS
 BEGIN
 		SELECT	 
-			ordenCompra.orco_Id
+			ordenCompra.orco_Id,
+			ordenCompra.orco_Codigo
 			,cliente.clie_Nombre_O_Razon_Social
 			,cliente.clie_Direccion
 			,cliente.clie_RTN
