@@ -57,7 +57,13 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(response);
         }
 
-   
+        [HttpGet("ListarAcuerdosPorTratado")]
+        public IActionResult ListarAcuerdosPorTratado(int tratado, string capitulo)
+        {
+            var list = _aduanaServices.ListarAcuerdosPorTratado(tratado, capitulo);
+            list.Data = _mapper.Map<IEnumerable<ArancelesPorTratadoViewModel>>(list.Data);
+            return Ok(list);
+        }
 
     }
 }

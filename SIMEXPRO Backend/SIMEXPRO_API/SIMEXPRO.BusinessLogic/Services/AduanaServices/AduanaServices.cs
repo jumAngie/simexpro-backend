@@ -2963,6 +2963,20 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult ListarAcuerdosPorTratado(int tratado, string capitulo)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _tratadosLibreComercioRepository.ListAcuerdoPorTratado(tratado, capitulo);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
         #endregion
 
         #region TipoDocumento

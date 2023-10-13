@@ -43,6 +43,15 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             var parametros = new DynamicParameters();
             return db.Query<tbTratadosLibreComercio>(ScriptsDataBase.ListarTLC, parametros, commandType: CommandType.StoredProcedure);
         }
+        
+        public IEnumerable<tbArancelesPorTratados> ListAcuerdoPorTratado(int tratado, string capitulo)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@tlc_Id", tratado, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@aran_Codigo", capitulo, DbType.String, ParameterDirection.Input);
+            return db.Query<tbArancelesPorTratados>(ScriptsDataBase.ListAcuerdosPorTratado, parametros, commandType: CommandType.StoredProcedure);
+        }
 
         public RequestStatus Update(tbTratadosLibreComercio item)
         {
