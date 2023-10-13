@@ -30,8 +30,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@trli_NombreTratado", item.trli_NombreTratado, DbType.String, ParameterDirection.Input);
             parametros.Add("@trli_FechaInicio", item.trli_FechaInicio, DbType.DateTime, ParameterDirection.Input);
             parametros.Add("@detalles", item.detalles, DbType.String, ParameterDirection.Input);
-            parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.DateTime, ParameterDirection.Input);
-            parametros.Add("@trli_FechaCreacion", item.trli_FechaInicio, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@trli_FechaCreacion", item.trli_FechaInicio, DbType.DateTime, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.InsertarTLC, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
             return result;
@@ -53,9 +53,9 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@trli_NombreTratado", item.trli_NombreTratado, DbType.String, ParameterDirection.Input);
             parametros.Add("@trli_FechaInicio", item.trli_FechaInicio, DbType.DateTime, ParameterDirection.Input);
             parametros.Add("@detalles", item.detalles, DbType.String, ParameterDirection.Input);
-            parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.DateTime, ParameterDirection.Input);
-            parametros.Add("@trli_FechaModificacion", item.trli_FechaModificacion, DbType.Int32, ParameterDirection.Input);
-            var answer = db.QueryFirst<string>(ScriptsDataBase.InsertarTLC, parametros, commandType: CommandType.StoredProcedure);
+            parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@trli_FechaModificacion", item.trli_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.EditarTLC, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
             return result;
         }
