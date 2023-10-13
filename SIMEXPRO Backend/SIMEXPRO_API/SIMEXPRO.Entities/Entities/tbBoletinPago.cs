@@ -17,6 +17,8 @@ namespace SIMEXPRO.Entities.Entities
         public int liqu_Id { get; set; }
         public int duca_Id { get; set; }
         [NotMapped]
+        public int duca_No_Duca { get; set; }
+        [NotMapped]
         public string lige_TotalGral { get; set; }
         public int tipl_Id { get; set; }
         [NotMapped]
@@ -34,6 +36,9 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public string coim_Descripcion { get; set; }
         public int copa_Id { get; set; }
+
+        [NotMapped]
+        public string copa_Descripcion { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         [NotMapped]
         public string usuarioCreacionNombre { get; set; }
@@ -43,6 +48,9 @@ namespace SIMEXPRO.Entities.Entities
         public string usuarioModificacionNombre { get; set; }
         public DateTime? boen_FechaModificacion { get; set; }
         public bool boen_Estado { get; set; }
+
+        [NotMapped]
+        public string Detalles { get; set; }
 
         public virtual tbCodigoImpuesto coim { get; set; }
         public virtual tbDuca duca { get; set; }

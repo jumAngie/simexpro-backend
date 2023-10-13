@@ -39,6 +39,16 @@ namespace SIMEXPRO.Entities.Entities
         public decimal? item_CuotaContingente { get; set; }
         public string item_ReglasAccesorias { get; set; }
         public string item_CriterioCertificarOrigen { get; set; }
+        [NotMapped]
+        public bool aran_ArancelVehicular { get; set; }
+        [NotMapped]
+        public bool item_EsNuevo { get; set; }
+        [NotMapped]
+        public bool item_EsHibrido { get; set; }
+        [NotMapped]
+        public decimal item_LitrosTotales { get; set; }
+        [NotMapped]
+        public int item_CigarrosTotales { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         [NotMapped]
         public string NombrePaisOrigen { get; set; }

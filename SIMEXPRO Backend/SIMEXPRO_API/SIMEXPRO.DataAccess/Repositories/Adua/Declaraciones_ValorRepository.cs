@@ -128,6 +128,25 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             return resultado;
         }
 
+        public RequestStatus CancelarIntermediario(int deva_Id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+
+            var parametros = new DynamicParameters();
+
+            var resultado = new RequestStatus();
+
+            parametros.Add("@deva_Id", deva_Id, DbType.Int32, ParameterDirection.Input);
+
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.CancelarIntermediario, parametros, commandType: CommandType.StoredProcedure);
+
+            resultado.MessageStatus = respuesta;
+
+            return resultado;
+        }
+
+
+
         public RequestStatus InsertTab3(tbDeclaraciones_Valor item)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
@@ -174,6 +193,50 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
             return respuesta;
         }
+
+        public IEnumerable<tbDeclaraciones_Valor> List_ByDucaId(int id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@duca_Id", id, DbType.Int32, ParameterDirection.Input);
+             
+            var respuesta = db.Query<tbDeclaraciones_Valor>(ScriptsDataBase.ListarDevasByDucaId, parametros, commandType: CommandType.StoredProcedure);
+
+            return respuesta;
+        }
+        public IEnumerable<VW_tbDeclaraciones_ValorCompleto> List_ByDevaId(int id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@deva_Id", id, DbType.Int32, ParameterDirection.Input);
+
+            var respuesta = db.Query<VW_tbDeclaraciones_ValorCompleto>(ScriptsDataBase.ListarDevaById, parametros, commandType: CommandType.StoredProcedure);
+
+            return respuesta;
+        }
+
+        public IEnumerable<tbDeclaraciones_Valor> ListVWHistorial()
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var respuesta = db.Query<tbDeclaraciones_Valor>(ScriptsDataBase.ListarDeclaracionesValorHistorial, commandType: CommandType.StoredProcedure);
+
+            return respuesta;
+        }
+       
+        public IEnumerable<tbFacturas> ListFacturasByDeva(int Id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+
+            var parametros = new DynamicParameters();
+            parametros.Add("@deva_Id", Id, DbType.String, ParameterDirection.Input);
+
+            return db.Query<tbFacturas>(ScriptsDataBase.ListarFacturasPorDeva, parametros, commandType: CommandType.StoredProcedure);
+        }
+
+
+
 
         public IEnumerable<VW_tbDeclaraciones_ValorCompleto> ListVW()
         {

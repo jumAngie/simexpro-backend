@@ -28,11 +28,13 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         private readonly DocumentosPDFRepository _documentosPDFRepository;
         private readonly DocumentosSancionesRepository _documentosSancionesRepository;
         private readonly DucaRepository _ducaRepository;
+        private readonly EcotasaRepository _ecotasaRepository;
         private readonly EstadoBoletinRepository _estadoBoletinRepository;
         private readonly EstadoMercanciasRepository _estadoMercanciasRepository;
         private readonly FacturasRepository _facturasRepository;
         private readonly FormasdePagoRepository _formasdePagoRepository;
         private readonly ImpuestosporAracelRepository _impuestosporAracelRepository;
+        private readonly ImpuestoSelectivoConsumoCondicionesVehiculosRepository _impuestoSelectivoConsumoCondicionesVehiculosRepository;
         private readonly ImpuestosRepository _impuestosRepository;
         private readonly IncotermRepository _incotermRepository;
         private readonly IntermediarioRepository _intermediarioRepository;
@@ -43,6 +45,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         private readonly MarcasRepository _marcasRepository;
         private readonly ModoTransporteRepository _modoTransporteRepository;
         private readonly NivelesComercialesRepository _nivelesComercialesRepository;
+        private readonly PaisesEstanTratadosConHondurasRepository _paisesEstanTratadosConHondurasRepository;
         private readonly PersonaJuridicaRepository _personaJuridicaRepository;
         private readonly PersonaNaturalRepository _personaNaturalRepository;
         private readonly PersonasRepository _personasRepository;
@@ -51,21 +54,59 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         private readonly TipoLiquidacionRepository _tipoLiquidacionRepository;
         private readonly TiposIdentificacionRepository _tiposIdentificacionRepository;
         private readonly TransporteRepository _transporteRepository;
+        private readonly TratadosLibreComercioRepository _tratadosLibreComercioRepository;
         private readonly AduanaGraficasRepository _aduanagraficasrepository;
         private readonly RegimenesAduanerosRepository _regimenesAduanerosRepository;
         private readonly ImportadoresRepository _importadoresRepository;
         private readonly ItemsDEVAporDUCARepository _itemsDEVAporDUCARepository;
 
-        public AduanaServices(AduanasRepository AduanasRepository, ArancelesRepository ArancelesRepository, BaseCalculosRepository BaseCalculosRepository, BoletinPagoRepository BoletinPagoRepository, BoletinPagoDetallesRepository BoletinPagoDetallesRepository,
-                                CodigoImpuestoRepository CodigoImpuestoRepository, ComercianteIndividualRepository ComercianteIndividualRepository, ConceptoPagoRepository ConceptoPagoRepository, CondicionesRepository CondicionesRepository,
-                                CondicionesComercialesRepository CondicionesComercialesRepository, Declaraciones_ValorHistorialRepository Declaraciones_ValorHistorialRepository, Declaraciones_ValorRepository Declaraciones_ValorRepository,
-                                DocumentosContratosRepository DocumentosContratosRepository, DocumentosdeSoporteRepository DocumentosdeSoporteRepository, DocumentosPDFRepository DocumentosPDFRepository,
-                                DocumentosSancionesRepository documentosSancionesRepository, DucaRepository DucaRepository, EstadoBoletinRepository EstadoBoletinRepository, EstadoMercanciasRepository EstadoMercanciasRepository, FacturasRepository FacturasRepository, FormasdePagoRepository FormasdePagoRepository, ImpuestosporAracelRepository ImpuestosporAracelRepository,
-                                ImpuestosRepository ImpuestosRepository, IncotermRepository IncotermRepository, IntermediarioRepository IntermediarioRepository, ItemsRepository ItemsRepository, LiquidacionGeneralRepository LiquidacionGeneralRepository,
-                                LiquidacionPorLineaRepository LiquidacionPorLineaRepository, LugaresEmbarqueRepository LugaresEmbarqueRepository, MarcasRepository MarcasRepository, ModoTransporteRepository ModoTransporteRepository,
-                                NivelesComercialesRepository NivelesComercialesRepository, PersonaJuridicaRepository PersonaJuridicaRepository, PersonaNaturalRepository PersonaNaturalRepository, PersonasRepository PersonasRepository,
-                                 TipoDocumentoRepository TipoDocumentoRepository, TipoIntermediarioRepository TipoIntermediarioRepository, TipoLiquidacionRepository TipoLiquidacionRepository, TiposIdentificacionRepository TiposIdentificacionRepository, TransporteRepository TransporteRepository,
-                                AduanaGraficasRepository AduanaGraficasRepository, RegimenesAduanerosRepository regimenesAduanerosRepository, ImportadoresRepository importadoresRepository, ItemsDEVAporDUCARepository itemsDEVAporDUCARepository)
+        public AduanaServices(
+            AduanasRepository AduanasRepository, 
+            ArancelesRepository ArancelesRepository, 
+            BaseCalculosRepository BaseCalculosRepository, 
+            BoletinPagoRepository BoletinPagoRepository, 
+            BoletinPagoDetallesRepository BoletinPagoDetallesRepository,
+            CodigoImpuestoRepository CodigoImpuestoRepository, 
+            ComercianteIndividualRepository ComercianteIndividualRepository, 
+            ConceptoPagoRepository ConceptoPagoRepository, 
+            CondicionesRepository CondicionesRepository,
+            CondicionesComercialesRepository CondicionesComercialesRepository, 
+            Declaraciones_ValorHistorialRepository Declaraciones_ValorHistorialRepository, 
+            Declaraciones_ValorRepository Declaraciones_ValorRepository,
+            DocumentosContratosRepository DocumentosContratosRepository, 
+            DocumentosdeSoporteRepository DocumentosdeSoporteRepository, 
+            DocumentosPDFRepository DocumentosPDFRepository,
+            DocumentosSancionesRepository documentosSancionesRepository, 
+            DucaRepository DucaRepository,
+            EcotasaRepository ecotasaRepository,
+            EstadoBoletinRepository EstadoBoletinRepository, 
+            EstadoMercanciasRepository EstadoMercanciasRepository, 
+            FacturasRepository FacturasRepository, 
+            FormasdePagoRepository FormasdePagoRepository, 
+            ImpuestosporAracelRepository ImpuestosporAracelRepository,
+            ImpuestoSelectivoConsumoCondicionesVehiculosRepository impuestoSelectivoConsumoCondicionesVehiculosRepository,
+            ImpuestosRepository ImpuestosRepository, 
+            IncotermRepository IncotermRepository, 
+            IntermediarioRepository IntermediarioRepository, 
+            ItemsRepository ItemsRepository, 
+            LiquidacionGeneralRepository LiquidacionGeneralRepository,
+            LiquidacionPorLineaRepository LiquidacionPorLineaRepository, 
+            LugaresEmbarqueRepository LugaresEmbarqueRepository, 
+            MarcasRepository MarcasRepository, 
+            ModoTransporteRepository ModoTransporteRepository,
+            NivelesComercialesRepository NivelesComercialesRepository, 
+            PaisesEstanTratadosConHondurasRepository paisesEstanTratadosConHondurasRepository, PersonaJuridicaRepository PersonaJuridicaRepository, PersonaNaturalRepository PersonaNaturalRepository, PersonasRepository PersonasRepository,
+            TipoDocumentoRepository TipoDocumentoRepository, 
+            TipoIntermediarioRepository TipoIntermediarioRepository, 
+            TipoLiquidacionRepository TipoLiquidacionRepository, 
+            TiposIdentificacionRepository TiposIdentificacionRepository, 
+            TransporteRepository TransporteRepository,
+            AduanaGraficasRepository AduanaGraficasRepository,
+            RegimenesAduanerosRepository regimenesAduanerosRepository, 
+            ImportadoresRepository importadoresRepository, 
+            ItemsDEVAporDUCARepository itemsDEVAporDUCARepository, 
+            TratadosLibreComercioRepository tratadosLibreComercioRepository
+            )
         {
             _aduanasRepository = AduanasRepository;
             _arancelesRepository = ArancelesRepository;
@@ -84,11 +125,13 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             _documentosPDFRepository = DocumentosPDFRepository;
             _documentosSancionesRepository = documentosSancionesRepository;
             _ducaRepository = DucaRepository;
+            _ecotasaRepository = ecotasaRepository;
             _estadoBoletinRepository = EstadoBoletinRepository;
             _estadoMercanciasRepository = EstadoMercanciasRepository;
             _facturasRepository = FacturasRepository;
             _formasdePagoRepository = FormasdePagoRepository;
             _impuestosporAracelRepository = ImpuestosporAracelRepository;
+            _impuestoSelectivoConsumoCondicionesVehiculosRepository = impuestoSelectivoConsumoCondicionesVehiculosRepository;
             _impuestosRepository = ImpuestosRepository;
             _incotermRepository = IncotermRepository;
             _intermediarioRepository = IntermediarioRepository;
@@ -99,6 +142,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             _marcasRepository = MarcasRepository;
             _modoTransporteRepository = ModoTransporteRepository;
             _nivelesComercialesRepository = NivelesComercialesRepository;
+            _paisesEstanTratadosConHondurasRepository = paisesEstanTratadosConHondurasRepository;
             _personaJuridicaRepository = PersonaJuridicaRepository;
             _personaNaturalRepository = PersonaNaturalRepository;
             _personasRepository = PersonasRepository;
@@ -107,6 +151,7 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             _tipoLiquidacionRepository = TipoLiquidacionRepository;
             _tiposIdentificacionRepository = TiposIdentificacionRepository;
             _transporteRepository = TransporteRepository;
+            _tratadosLibreComercioRepository = tratadosLibreComercioRepository;
             _aduanagraficasrepository = AduanaGraficasRepository;
             _regimenesAduanerosRepository = regimenesAduanerosRepository;
             _importadoresRepository = importadoresRepository;
@@ -208,6 +253,20 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var list = _arancelesRepository.ListFiltrado(codigo);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
+        public ServiceResult ListarArancelesCapitulo(string codigo)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _arancelesRepository.ListCapitulo(codigo);
                 return resultado.Ok(list);
             }
             catch (Exception ex)
@@ -343,6 +402,22 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return resultado.Error(ex.Message);
             }
         }
+
+        public ServiceResult ListarBoletinPagoHistorial()
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _boletinPagoRepository.ListHistorial();
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
+
 
         public ServiceResult InsertarBoletinPago(tbBoletinPago item)
         {
@@ -802,6 +877,65 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult ListarDeclaraciones_Valor_ByDucaId(int id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _declaraciones_ValorRepository.List_ByDucaId(id);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult ListarDeclaraciones_Valor_ByDevaId(int id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _declaraciones_ValorRepository.List_ByDevaId(id);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+
+        public ServiceResult ListarDeclaraciones_ValorHistorial()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _declaraciones_ValorRepository.ListVWHistorial();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+       
+        public ServiceResult ListarFacturasByDeva(int Id)
+        {
+            var resultado = new ServiceResult();
+
+            try
+            {
+                var list = _declaraciones_ValorRepository.ListFacturasByDeva(Id);
+                return resultado.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return resultado.Error(ex.Message);
+            }
+        }
+
+
         public ServiceResult InsertarDeclaraciones_ValorTab1(tbDeclaraciones_Valor item, tbDeclarantes itemDecl, tbImportadores itemImp)
         {
             var result = new ServiceResult();
@@ -830,6 +964,27 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var respuesta = _declaraciones_ValorRepository.InsertTab2(item, declProv, declInte, itemProv, itemInte);
+                if (respuesta.MessageStatus == "1")
+                {
+                    return result.Ok(respuesta);
+                }
+                else
+                {
+                    return result.Error(respuesta);
+                }
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult CancelarIntermediario(int deva_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var respuesta = _declaraciones_ValorRepository.CancelarIntermediario(deva_Id);
                 if (respuesta.MessageStatus == "1")
                 {
                     return result.Ok(respuesta);
@@ -1294,6 +1449,22 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
                 return result.Error(ex.Message);
             }
         }
+        public ServiceResult ListarDucaHistorial()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _ducaRepository.ListHistorial();
+
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+
 
         public ServiceResult ListarDuca_ById(int id)
         {
@@ -1301,6 +1472,21 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var list = _ducaRepository.List_ById(id);
+
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult List_ByNoDuca(string NoDuca)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _ducaRepository.List_ByNoDuca(NoDuca);
 
                 return result.Ok(list);
             }
@@ -1464,6 +1650,64 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             catch (Exception ex)
             {
                 return resultado.Error(ex.Message);
+            }
+        }
+        #endregion
+
+        #region Ecotasa
+        public ServiceResult ListarEcotasa()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _ecotasaRepository.List();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarEcotasa(tbEcotasa item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _ecotasaRepository.Insert(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult ActualizarEcotasa(tbEcotasa item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _ecotasaRepository.Update(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        
+        public ServiceResult EliminarEcotasa(tbEcotasa item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _ecotasaRepository.Delete(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
             }
         }
         #endregion
@@ -1846,6 +2090,64 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         }
         #endregion
 
+        #region Impuesto Selectivo Consumo Condiciones Vehiculo
+        public ServiceResult ListarISCCV()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _impuestoSelectivoConsumoCondicionesVehiculosRepository.List();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult InsertarISCCV(tbImpuestoSelectivoConsumoCondicionesVehiculos item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _impuestoSelectivoConsumoCondicionesVehiculosRepository.Insert(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult ActualizarISCCV(tbImpuestoSelectivoConsumoCondicionesVehiculos item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _impuestoSelectivoConsumoCondicionesVehiculosRepository.Update(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult EliminarISCCV(tbImpuestoSelectivoConsumoCondicionesVehiculos item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _impuestoSelectivoConsumoCondicionesVehiculosRepository.Delete(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        #endregion
+
         #region Impuestos
         public ServiceResult ListarImpuestos()
         {
@@ -2110,6 +2412,20 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var map = _itemsRepository.Delete(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult CalcularValorAduana(int item_Id, int trli_Id, int duca_Id, decimal deva_ConversionDolares)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _itemsRepository.CalcularvalorAduana(item_Id, trli_Id, duca_Id, deva_ConversionDolares);
                 return result.Ok(map);
             }
             catch (Exception ex)
@@ -2734,6 +3050,78 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
         }
         #endregion
 
+        #region PaisesEstanTratadosConHonduras
+        public ServiceResult TratadoByPaisId(int pais_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _paisesEstanTratadosConHondurasRepository.TratadoByPaisId(pais_Id);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        #endregion
+
+        #region TratadosLibreComercio
+        public ServiceResult LisTratadosById(int trli_Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _tratadosLibreComercioRepository.ListTratadosById(trli_Id);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult ListarTLC()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _tratadosLibreComercioRepository.List();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult InsertarTLC(tbTratadosLibreComercio item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _tratadosLibreComercioRepository.Insert(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult EditarTLC(tbTratadosLibreComercio item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _tratadosLibreComercioRepository.Update(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        #endregion
+
         #region TipoDocumento
         public ServiceResult ListarTipoDocumento()
         {
@@ -3157,6 +3545,32 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             try
             {
                 var list = _aduanagraficasrepository.RegimenesAduaneros_CantidadPorcentaje();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult PaisesExportadores()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _aduanagraficasrepository.PaisesExportadores();
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        public ServiceResult TratadosMasUsados()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _aduanagraficasrepository.TratadosMasUsados();
                 return result.Ok(list);
             }
             catch (Exception ex)

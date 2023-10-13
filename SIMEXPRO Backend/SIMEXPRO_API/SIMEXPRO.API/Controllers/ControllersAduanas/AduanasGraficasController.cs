@@ -94,5 +94,18 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             var listado = _aduanaServices.RegimenesAduaneros_CantidadPorcentaje();
             return Ok(listado);
         }
+        
+        [HttpGet("PaisesMasExportadores")]
+        public IActionResult PaisesExportadores()
+        {
+            var listado = _aduanaServices.PaisesExportadores();
+            return Ok(listado);
+        }
+        [HttpGet("TratadosMasUsados")]
+        public IActionResult TratadosMasUsados()
+        {
+            var listado = _aduanaServices.TratadosMasUsados();
+            return Ok(listado);
+        }
     }
 }

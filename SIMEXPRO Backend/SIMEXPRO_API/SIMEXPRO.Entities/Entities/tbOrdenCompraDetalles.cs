@@ -112,13 +112,8 @@ namespace SIMEXPRO.Entities.Entities
         public string proc_CodigoHtml { get; set; }
 
 
-
-
-
-
-
-
-
+        [NotMapped]
+        public string detallesprocesos { get; set;  }
 
 
 
@@ -126,6 +121,7 @@ namespace SIMEXPRO.Entities.Entities
         public virtual tbEstilos esti { get; set; }
         public virtual tbOrdenCompra orco { get; set; }
         public virtual tbProcesos proc_IdComienzaNavigation { get; set; }
+        public virtual tbProcesos proc_IdActualNavigation { get; set; }
         public virtual tbTallas tall { get; set; }
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }

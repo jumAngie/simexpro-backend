@@ -63,7 +63,10 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@item_CriterioCertificarOrigen", item.item_CriterioCertificarOrigen, DbType.String, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@item_FechaCreacion", item.item_FechaCreacion, DbType.String, ParameterDirection.Input);
-
+            parametros.Add("@EsNuevo", item.item_EsNuevo, DbType.Boolean, ParameterDirection.Input);
+            parametros.Add("@EsHibrido", item.item_EsHibrido, DbType.Boolean, ParameterDirection.Input);
+            parametros.Add("@LitrosTotales", item.item_LitrosTotales, DbType.Decimal, ParameterDirection.Input);
+            parametros.Add("@CigarrosTotales", item.item_CigarrosTotales, DbType.Int32, ParameterDirection.Input);
 
             var answer = db.QueryFirst<string>(ScriptsDataBase.InsertarItems, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
@@ -144,11 +147,32 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@item_CriterioCertificarOrigen", item.item_CriterioCertificarOrigen, DbType.String, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@item_FechaModificacion", item.item_FechaModificacion, DbType.String, ParameterDirection.Input);
-
+            parametros.Add("@EsNuevo", item.item_EsNuevo, DbType.Boolean, ParameterDirection.Input);
+            parametros.Add("@EsHibrido", item.item_EsHibrido, DbType.Boolean, ParameterDirection.Input);
+            parametros.Add("@LitrosTotales", item.item_LitrosTotales, DbType.Decimal, ParameterDirection.Input);
+            parametros.Add("@CigarrosTotales", item.item_CigarrosTotales, DbType.Int32, ParameterDirection.Input);
 
             var answer = db.QueryFirst<string>(ScriptsDataBase.EditarItems, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
             return result;
+        }
+
+        public RequestStatus CalcularvalorAduana(int item_Id, int trli_Id, int duca_Id, decimal deva_ConversionDolares)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            
+            var parametros = new DynamicParameters();
+            parametros.Add("@item_Id", item_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@trli_Id", trli_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@duca_Id", duca_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@deva_ConversionDolares", deva_ConversionDolares, DbType.Decimal, ParameterDirection.Input);
+            var respuesta = db.QueryFirst<string>(ScriptsDataBase.CalcularValorAduana, parametros, commandType: CommandType.StoredProcedure);
+
+            return new RequestStatus()
+            {
+                CodeStatus = respuesta.Contains("Error") ? 0 : 1,
+                MessageStatus = respuesta
+            };
         }
     }
 }

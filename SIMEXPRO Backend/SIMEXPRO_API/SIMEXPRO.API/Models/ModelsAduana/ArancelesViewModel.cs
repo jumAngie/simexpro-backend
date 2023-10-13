@@ -14,6 +14,14 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public int usua_UsuarioCreacion { get; set; }
         [NotMapped]
         public string UsuarioCreacion { get; set; }
+        public decimal aran_DAI	{ get; set; }
+        public int aran_ISV	{ get; set; }
+        public decimal aran_SEL	{ get; set; }
+        public decimal aran_ProdCons	{ get; set; }
+        public string impu_Descripcion { get; set; }
+        public int impu_Cantidad { get; set; }
+        public bool aran_AplicaVehiculos { get; set; }
+        public bool aran_ArancelVehicular { get; set; }
         public DateTime aran_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }
         [NotMapped]

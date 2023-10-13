@@ -32,55 +32,64 @@ WHERE orco_Id = @orco_Id
 END
 GO
 
-
--- PROCEDIMIENTO PARA MOSTRAR EL TOTAL DE ORDENES DE COMPRA ANUALES
+-- PROCEDIMIENTO PARA MOSTRAR EL TOTAL DE ORDENES DE COMPRA DE LOS MESES DE ESTE AÑO
 CREATE OR ALTER PROCEDURE Prod.UDP_TotalOrdenesCompraAnual
 AS
 BEGIN
-    SELECT		
-        YEAR(orco_FechaCreacion) AS Anio,
+	SET LANGUAGE Spanish;
+
+    DECLARE @FechaInicio DATETIME
+    DECLARE @FechaFin DATETIME
+    
+    SET @FechaInicio = DATEFROMPARTS(YEAR(GETDATE()), 1, 1)
+    SET @FechaFin = DATEADD(DAY, -1, DATEFROMPARTS(YEAR(GETDATE()) + 1, 1, 1))
+    
+    SELECT
+		DATENAME(MONTH, orco_FechaCreacion) AS fecha,
         COUNT(orco_Id) AS orco_Conteo
     FROM Prod.tbOrdenCompra
-    GROUP BY YEAR(orco_FechaCreacion)
-    ORDER BY Anio;
+    WHERE orco_FechaCreacion >= @FechaInicio AND orco_FechaCreacion < @FechaFin
+    GROUP BY DATENAME(MONTH, orco_FechaCreacion) 
+    ORDER BY fecha;
 END
 GO
 
-
--- PROCEDIMIENTO PARA MOSTRAR EL TOTAL; DE OPRDENES DE COMPRA MENSUALES
+-- PROCEDIMIENTO PARA MOSTRAR EL TOTAL DE ÓRDENES DE COMPRA SEMANALES EN EL MES ACTUAL
 CREATE OR ALTER PROCEDURE Prod.UDP_TotalOrdenesCompraMensual
 AS
 BEGIN
-SET LANGUAGE Spanish;
-
+    SET LANGUAGE Spanish;
+    
+    DECLARE @MesActual INT
+    SET @MesActual = MONTH(GETDATE()) 
+    
     SELECT
         YEAR(orco_FechaCreacion) AS Anio,
-        MONTH(orco_FechaCreacion) AS Mes,
+        DATEPART(WEEK, orco_FechaCreacion) - DATEPART(WEEK, DATEFROMPARTS(YEAR(orco_FechaCreacion), @MesActual, 1)) + 1 AS Semana,
         COUNT(orco_Id) AS orco_Conteo,
-        DATENAME(MONTH, orco_FechaCreacion) AS MesLabel
+        'Semana ' + CAST(DATEPART(WEEK, orco_FechaCreacion) - DATEPART(WEEK, DATEFROMPARTS(YEAR(orco_FechaCreacion), @MesActual, 1)) + 1 AS NVARCHAR(10)) AS fecha
     FROM Prod.tbOrdenCompra
-    GROUP BY YEAR(orco_FechaCreacion), MONTH(orco_FechaCreacion), DATENAME(MONTH, orco_FechaCreacion)
-    ORDER BY Anio, Mes;
+    WHERE YEAR(orco_FechaCreacion) = YEAR(GETDATE()) AND MONTH(orco_FechaCreacion) = @MesActual
+    GROUP BY YEAR(orco_FechaCreacion), DATEPART(WEEK, orco_FechaCreacion)
+    ORDER BY Anio, Semana;
 END
 GO
 
-
--- PROCEDIMIENTO PARA MOSTRAR LAS ORDENES DE COMPRA DIARIAS
+-- PROCEDIMIENTO PARA MOSTRAR LAS ÓRDENES DE COMPRA DIARIAS DE LA SEMANA ACTUAL
 CREATE OR ALTER PROCEDURE Prod.UDP_TotalOrdenesCompraDiario
 AS
 BEGIN
-    SET LANGUAGE Spanish;
+    SET LANGUAGE Spanish;	
 
-    DECLARE @FechaInicial DATE, @FechaFinal DATE;
-    SET @FechaInicial = DATEADD(DAY, -7, GETDATE()); 
-    SET @FechaFinal = GETDATE();
+	DECLARE @SemanaActual INT;
+	SET @SemanaActual = DATEPART(WEEK, GETDATE())
     SELECT
-        CAST(orco_FechaCreacion AS DATE) AS Fecha,
+        DATENAME(WEEKDAY, orco_FechaCreacion) AS fecha,
         COUNT(orco_Id) AS orco_Conteo
     FROM Prod.tbOrdenCompra
-    WHERE orco_FechaCreacion BETWEEN @FechaInicial AND @FechaFinal
-    GROUP BY CAST(orco_FechaCreacion AS DATE)
-    ORDER BY Fecha;
+    WHERE DATEPART(WEEK, orco_FechaCreacion) = @SemanaActual
+    GROUP BY DATENAME(WEEKDAY, orco_FechaCreacion)
+    ORDER BY fecha;
 END
 GO
 
@@ -404,4 +413,34 @@ AS
 	END
 GO
 
--- 
+-- Paises que mas importaciones realializan 
+CREATE OR ALTER PROCEDURE adua.UDP_PaisesConImportacionesRealizadas
+AS 
+BEGIN
+
+	DECLARE @totaldevas INT = (SELECT COUNT(deva_id) FROM [Adua].[tbItemsDEVAPorDuca] )
+
+	SELECT pais.pais_Nombre
+			,count(pais.pais_Id) Cantidad	
+			,(CAST(COUNT(pais.pais_Id) AS decimal(18, 2)) / @totaldevas * 100) AS Porcentaje
+	FROM [Adua].[tbItemsDEVAPorDuca] duquitaModric
+	INNER JOIN [Adua].[tbDeclaraciones_Valor] deva ON deva.deva_Id = duquitaModric.deva_Id
+	INNER JOIN gral.tbPaises pais ON pais.pais_Id = deva.pais_ExportacionId
+	GROUP by pais_Nombre
+END 
+
+GO
+--tratados mas usados 
+CREATE OR ALTER PROCEDURE adua.TratadosLibreComercioMasUsado
+AS
+BEGIN
+
+	DECLARE @totalDucas INT = (SELECT COUNT(duca_Id) FROM [Adua].tbDuca )
+	SELECT	ISNULL(trati.trli_NombreTratado, 'Sin tratado') AS trli_NombreTratado
+			,COUNT(duca_Id) Cantidad
+			,(CAST(COUNT(duca_Id) AS decimal(18, 2)) / @totalDucas * 100) AS Porcentaje
+	FROM adua.tbDuca duquitaModric
+	LEFT JOIN [Adua].[tbTratadosLibreComercio] trati ON duquitaModric.trli_Id = trati.trli_Id
+	GROUP BY trli_NombreTratado
+
+END

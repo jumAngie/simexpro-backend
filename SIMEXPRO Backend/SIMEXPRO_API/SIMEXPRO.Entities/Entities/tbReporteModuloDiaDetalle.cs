@@ -60,7 +60,7 @@ namespace SIMEXPRO.Entities.Entities
 
         [NotMapped]
         public string usua_NombreUsuarioModificacion { get; set; }
-
+        public virtual tbOrde_Ensa_Acab_Etiq ensa { get; set; }
         public virtual tbOrdenCompraDetalles code { get; set; }
         public virtual tbReporteModuloDia remo { get; set; }
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
