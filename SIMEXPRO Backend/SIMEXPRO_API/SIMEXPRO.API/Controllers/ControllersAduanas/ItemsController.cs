@@ -70,6 +70,14 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(respuesta);
         }
 
+        [HttpPost("ItemsOrdenPedido")]
+        public IActionResult ItemsOrdenPedido(string id)
+        {
+            var respuesta = _aduanaServices.ItemsOrdenPedido(id);
+
+            return Ok(respuesta);
+        }
+
         [HttpPost("CalcularValorAduana")]
         public IActionResult CalcularValorAduana(int item_Id, int trli_Id, int duca_Id, decimal deva_ConversionDolares)
         {

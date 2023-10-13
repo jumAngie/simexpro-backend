@@ -753,6 +753,7 @@ namespace SIMEXPRO.DataAccess
         public static string EditarPedidosOrden = "Prod.UDP_tbPedidosOrden_Editar";
         public static string FinalizarPedidosOrden = "Prod.UDP_tbPedidosOrden_Finalizado";
         public static string PedidosOrdenFind = "Prod.UDP_tbPedidosOrden_FindCodigo";
+        public static string ItemsOrdenPedido  = "Prod.UDP_tbItems_OrdenDePedido";
         #endregion
 
         #region Orden de Pedido Detalles

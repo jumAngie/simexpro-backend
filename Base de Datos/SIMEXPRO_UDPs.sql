@@ -19311,3 +19311,82 @@ BEGIN
 	END CATCH
 END
 --SELECT * FROM 
+
+GO
+CREATE OR ALTER PROCEDURE Prod.UDP_tbItems_OrdenDePedido 
+(@duca_No_Duca NVARCHAR(100))
+AS
+BEGIN
+		DECLARE @Duca_Id INT = (SELECT duca_Id FROM Adua.tbDuca WHERE duca_No_Duca = @duca_No_Duca)
+
+		
+DECLARE @tbItems TABLE(
+			item_Id int ,
+			fact_Id int ,
+			item_Cantidad int ,
+			item_PesoNeto decimal(18, 2) ,
+			item_PesoBruto decimal(18, 2) ,
+			unme_Id int ,
+			item_IdentificacionComercialMercancias nvarchar(300) ,
+			item_CaracteristicasMercancias nvarchar(400) ,
+			item_Marca nvarchar(50) ,
+			item_Modelo nvarchar(100) ,
+			merc_Id int ,
+			pais_IdOrigenMercancia int ,
+			item_Cantidad_Bultos int ,
+			item_ClaseBulto nvarchar(100) ,
+			item_Acuerdo nvarchar(100) ,
+			item_ClasificacionArancelaria char(16) ,
+			item_ValorUnitario decimal(18, 2) ,
+			item_GastosDeTransporte decimal(18, 2) ,
+			item_ValorTransaccion decimal(18, 2) ,
+			item_Seguro decimal(18, 2) ,
+			item_OtrosGastos decimal(18, 2) ,
+			item_ValorAduana decimal(18, 2) ,
+			aran_Id int ,
+			item_CuotaContingente decimal(18, 2) ,
+			item_ReglasAccesorias nvarchar(max) ,
+			item_CriterioCertificarOrigen nvarchar(max) ,
+			usua_UsuarioCreacion int ,
+			item_FechaCreacion datetime ,
+			usua_UsuarioModificacion int ,
+			item_FechaModificacion datetime ,
+			item_Estado bit ,
+			item_EsNuevo bit ,
+			item_EsHibrido bit ,
+			item_LitrosTotales decimal(18, 2) ,
+			item_CigarrosTotales int)
+	
+	
+			DECLARE @facturasIdtable TABLE(fact_Id INT);
+			DECLARE @deva_Id AS INT, @fact_Id AS INT;
+
+			DECLARE devasId CURSOR FOR SELECT deva_Id FROM Adua.tbItemsDEVAPorDuca WHERE duca_Id = @Duca_Id
+			OPEN devasId
+			FETCH NEXT FROM devasId INTO @deva_Id
+			WHILE @@FETCH_STATUS = 0
+			BEGIN
+				
+				DECLARE facturasId CURSOR FOR SELECT fact_Id FROM Adua.tbFacturas WHERE deva_Id = @deva_Id
+				OPEN facturasId
+				FETCH NEXT FROM facturasId INTO @fact_Id
+				WHILE @@FETCH_STATUS = 0
+				BEGIN
+
+					INSERT INTO @tbItems 
+					SELECT * FROM Adua.tbItems WHERE fact_Id = @fact_Id
+
+					FETCH NEXT FROM facturasId INTO @fact_Id
+				END
+				CLOSE facturasId
+				DEALLOCATE facturasId
+
+				FETCH NEXT FROM devasId INTO @deva_Id
+			END
+			CLOSE devasId
+			DEALLOCATE devasId
+
+			SELECT * FROM @tbItems
+		
+
+END

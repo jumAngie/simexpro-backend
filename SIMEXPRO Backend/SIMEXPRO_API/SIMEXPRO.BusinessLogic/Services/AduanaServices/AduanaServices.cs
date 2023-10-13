@@ -2361,6 +2361,20 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult ItemsOrdenPedido(string id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _itemsRepository.ItemsOrdenPedido(id);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
         public ServiceResult InsertarItems(tbItems item)
         {
             var result = new ServiceResult();
