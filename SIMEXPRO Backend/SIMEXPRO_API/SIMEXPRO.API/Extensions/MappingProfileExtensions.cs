@@ -81,6 +81,7 @@ namespace SIMEXPRO.API.Extentions
             CreateMap<TratadosLibreComercioViewModel, tbTratadosLibreComercio>().ReverseMap();
             CreateMap<EcotasaViewModel, tbEcotasa>().ReverseMap();
             CreateMap<ImpuestosSelectivoConsumoCondicionesVehiculosViewModel, tbImpuestoSelectivoConsumoCondicionesVehiculos>().ReverseMap();
+            CreateMap<ArancelesPorTratadoViewModel, tbArancelesPorTratados>().ReverseMap();
             #endregion
 
             #region Producción
