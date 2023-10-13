@@ -28,7 +28,7 @@ GO
 
 
 --- Insertar
-CREATE OR ALTER PROCEDURE Adua.UDP_tbEcotasa_Insertar --100000000, 100000002, 10000, 1, '10-12-2023'
+CREATE OR ALTER PROCEDURE Adua.UDP_tbEcotasa_Insertar --1.00, 10000.00, 5000.00, 1, '10-12-2023'
 	@ecot_RangoIncial		DECIMAL(18,2), 
 	@ecot_RangoFinal		DECIMAL(18,2),
 	@ecot_CantidadPagar		DECIMAL(18,2),  
@@ -53,7 +53,7 @@ BEGIN
 			BEGIN
 				IF((@ecot_RangoIncial BETWEEN @minRangoInicial AND @maxRangoFinal) AND (@ecot_RangoFinal BETWEEN @minRangoInicial AND @maxRangoFinal))
 					BEGIN
-						SELECT 0
+						SELECT 2
 					END
 				ELSE
 					BEGIN
@@ -112,7 +112,7 @@ BEGIN
 					BEGIN
 						IF((@ecot_RangoIncial BETWEEN @minRangoInicial AND @maxRangoFinal) AND (@ecot_RangoFinal BETWEEN @minRangoInicial AND @maxRangoFinal))
 							BEGIN
-								SELECT 0
+								SELECT 2
 							END
 						ELSE
 							BEGIN
@@ -148,12 +148,13 @@ BEGIN
 			DECLARE @respuesta INT
 			EXEC dbo.UDP_ValidarReferencias 'ecot_Id', @ecot_Id, 'Adua.tbEcotasa', @respuesta OUTPUT
 
-			SELECT @respuesta AS Resultado
 			IF(@respuesta) = 1
 				BEGIN
 					DELETE FROM Adua.tbEcotasa
 					WHERE ecot_Id = @ecot_Id
 				END
+			
+			SELECT @respuesta
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()		
