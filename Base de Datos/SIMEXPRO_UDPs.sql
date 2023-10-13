@@ -11500,7 +11500,7 @@ BEGIN
 			 WHERE orco_Id = orco.orco_Id) AS cantidad_Items
 			,CONCAT(talla.tall_Codigo, ' (', talla.tall_Nombre, ')') AS tall_Nombre
 			,ordenCompraDetalle.colr_Id
-			,colores.colr_Nombre
+			,CONCAT(colores.colr_Codigo,' ',colores.colr_Nombre) AS colr_Nombre
 			,clie.clie_Nombre_O_Razon_Social
 	  FROM	Prod.tbOrdenCompraDetalles			    ordenCompraDetalle
 			INNER JOIN	Prod.tbEstilos				estilo						ON	ordenCompraDetalle.esti_Id						= estilo.esti_Id
@@ -11731,14 +11731,14 @@ GO
 
 ----------------------------------------------UDPS Para Asignaciones Orden--------------------------------------------
 
-CREATE OR ALTER PROCEDURE Prod.UDP_tbAsignacionesOrden_Listado
+CREATE OR ALTER PROCEDURE [Prod].[UDP_tbAsignacionesOrden_Listado]
 AS
 BEGIN
 	 SELECT asor_Id,						
 			asor_OrdenDetId,
 			esti.esti_Descripcion,
-			colr.colr_Nombre,
-			tall.tall_Nombre,
+			CONCAT(colr.colr_Codigo,' ',colr.colr_Nombre) AS colr_Nombre,
+			CONCAT(tall.tall_Codigo, ' (', tall.tall_Nombre, ')') AS tall_Nombre,
 			orco.orco_Id,
 			orco.orco_Codigo,
 			orco.orco_FechaEmision,
