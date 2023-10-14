@@ -22,6 +22,7 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public string item_Modelo { get; set; }
         public int merc_Id { get; set; }
         public int mate_SubCategoria { get; set; }
+        public string subc_Descripcion { get; set; }
         public string mate_Imagen { get; set; }
         public int? pais_IdOrigenMercancia { get; set; }
         public string item_ClasificacionArancelaria { get; set; }

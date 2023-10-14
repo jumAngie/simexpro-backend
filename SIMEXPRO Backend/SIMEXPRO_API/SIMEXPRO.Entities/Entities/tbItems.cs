@@ -41,6 +41,8 @@ namespace SIMEXPRO.Entities.Entities
         [NotMapped]
         public int mate_SubCategoria { get; set; }
         [NotMapped]
+        public string subc_Descripcion { get; set; }
+        [NotMapped]
         public string mate_Imagen { get; set; }
         public string item_CriterioCertificarOrigen { get; set; }
         [NotMapped]
