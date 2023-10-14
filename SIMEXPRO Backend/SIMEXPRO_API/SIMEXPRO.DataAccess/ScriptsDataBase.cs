@@ -487,6 +487,14 @@ namespace SIMEXPRO.DataAccess
         public static string ListAcuerdosPorTratado = "Adua.UDP_tbArancelesPorTratado_PorTratadoYCapitulo";
         #endregion
 
+        #region ArancelesPorTratado
+
+        public static string InsertarArancelPorTratado = "Adua.tbArancelesPorTratadoInsertar";
+        public static string EditarArancelPorTratado = "Adua.tbArancelesPorTratadoEditar";
+        public static string EliminarArancelPorTratado = "Adua.tbArancelesPorTratadoEliminar";
+
+        #endregion
+
         #region Tipo Documentos
         public static string ListarTipoDocumento = "Adua.UDP_tbTipoDocumento_Listar";
         public static string InsertarTipoDocumento = "Adua.UDP_tbTipoDocumento_Insertar";

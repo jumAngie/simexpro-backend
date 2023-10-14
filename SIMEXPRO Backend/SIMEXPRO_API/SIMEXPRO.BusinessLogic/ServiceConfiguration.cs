@@ -79,6 +79,7 @@ namespace SIMEXPRO.BussinessLogic
             services.AddScoped<ItemsDEVAporDUCARepository>();
             services.AddScoped<TratadosLibreComercioRepository>();
             services.AddScoped<PaisesEstanTratadosConHondurasRepository>();
+            services.AddScoped<ArancelesPorTratadoRepository>();
 
             //General
             services.AddScoped<AldeasRepository>();
