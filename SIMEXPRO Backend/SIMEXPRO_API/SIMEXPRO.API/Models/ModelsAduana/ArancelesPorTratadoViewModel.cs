@@ -14,6 +14,8 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         [NotMapped]
         public string aran_Codigo { get; set; }
         [NotMapped]
+        public string aran_Descripcion { get; set; }
+        [NotMapped]
         public string trli_NombreTratado { get; set; }
         public decimal axtl_TasaActual { get; set; }
         public int usua_usuarioCreacion { get; set; }
