@@ -19,7 +19,7 @@ namespace SIMEXPRO.Entities.Entities
         
         [NotMapped]
         public string lote_Stock { get; set; }
-[NotMapped]
+        [NotMapped]
         public int? mate_Id { get; set; }
         public string peor_Codigo { get; set; }
         [NotMapped]
@@ -35,9 +35,9 @@ namespace SIMEXPRO.Entities.Entities
         public int? duca_Id { get; set; }
         public decimal? peor_Impuestos { get; set; }
         public int ciud_Id { get; set; }
-        public string peor_DireccionExacta { get; set; }
+        public string? peor_DireccionExacta { get; set; }
         public DateTime? peor_FechaEntrada { get; set; }
-        public string peor_Obsevaciones { get; set; }
+        public string? peor_Obsevaciones { get; set; }
         public bool? peor_DadoCliente { get; set; }
         public bool? peor_Est { get; set; }
         public int usua_UsuarioCreacion { get; set; }

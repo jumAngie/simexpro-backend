@@ -98,6 +98,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             parametros.Add("@mate_Descripcion", item.mate_Descripcion, DbType.String, ParameterDirection.Input);
             parametros.Add("@prod_Cantidad", item.prod_Cantidad, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@prod_Precio", item.prod_Precio, DbType.Decimal, ParameterDirection.Input);
+            parametros.Add("@item_Id", item.item_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
 
             var answer = db.QueryFirst<string>(ScriptsDataBase.InsertarItemsPedidosOrdenDetalles, parametros, commandType: CommandType.StoredProcedure);

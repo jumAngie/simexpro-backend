@@ -29,6 +29,9 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public DateTime? prod_FechaModificacion { get; set; }
         public bool? prod_Estado { get; set; }
 
+        [NotMapped]
+        public int? item_Id { get; set; }
+
 
     }
 }
