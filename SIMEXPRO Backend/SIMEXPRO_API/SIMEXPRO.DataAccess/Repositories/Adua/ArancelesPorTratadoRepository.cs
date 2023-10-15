@@ -63,7 +63,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             parametros.Add("@usua_usuarioCreacion", item.usua_usuarioCreacion, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@axtl_FechaCreacion", item.axtl_FechaCreacion, DbType.DateTime, ParameterDirection.Input);
 
-            var answer = db.QueryFirst<string>(ScriptsDataBase.EliminarArancelPorTratado, parametros, commandType: CommandType.StoredProcedure);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.EditarArancelPorTratado, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
             return result;
         }
