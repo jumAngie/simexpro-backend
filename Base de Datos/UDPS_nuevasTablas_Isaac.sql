@@ -21,6 +21,7 @@ BEGIN
 	FROM Adua.tbEcotasa AS ecot
 	INNER JOIN Acce.tbUsuarios AS usuaCrea ON ecot.usua_UsuarioCreacion = usuaCrea.usua_Id
 	LEFT JOIN Acce.tbUsuarios AS usuaModifica ON ecot.usua_UsuarioModificacion = usuaModifica.usua_Id
+	ORDER BY ecot_FechaCreacion ASC
 END
 GO
 
@@ -28,7 +29,7 @@ GO
 
 
 --- Insertar
-CREATE OR ALTER PROCEDURE Adua.UDP_tbEcotasa_Insertar --20000, 21000, 2500, 1, '10-12-2023'
+CREATE OR ALTER PROCEDURE Adua.UDP_tbEcotasa_Insertar --11, 19, 5, 1, '10-12-2023'
 	@ecot_RangoIncial		DECIMAL(18,2), 
 	@ecot_RangoFinal		DECIMAL(18,2),
 	@ecot_CantidadPagar		DECIMAL(18,2),  
@@ -36,22 +37,15 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbEcotasa_Insertar --20000, 21000, 2500, 1, '
 	@ecot_FechaCreacion		DATETIME
 AS
 BEGIN
-	BEGIN TRY
-		
-		DECLARE @minRangoInicial DECIMAL (18,2) = (SELECT MIN(ecot_RangoIncial) FROM Adua.tbEcotasa)
-		DECLARE @maxRangoFinal DECIMAL (18,2) = (SELECT MAX(ecot_RangoFinal) FROM Adua.tbEcotasa)
+	BEGIN TRY	
 
-		IF	(
-				(@ecot_RangoIncial IN (SELECT ecot_RangoIncial FROM Adua.tbEcotasa) AND @ecot_RangoFinal IN (SELECT ecot_RangoFinal FROM Adua.tbEcotasa))
-				OR 
-				(EXISTS (SELECT * FROM Adua.tbEcotasa WHERE (@ecot_RangoIncial BETWEEN ecot_RangoIncial AND ecot_RangoFinal) AND (@ecot_RangoFinal BETWEEN ecot_RangoIncial AND ecot_RangoFinal)))
-			)
+		IF	(@ecot_RangoIncial IN (SELECT ecot_RangoIncial FROM Adua.tbEcotasa) AND @ecot_RangoFinal IN (SELECT ecot_RangoFinal FROM Adua.tbEcotasa))
 			BEGIN
 				SELECT 0
 			END
 		ELSE
 			BEGIN
-				IF((@ecot_RangoIncial BETWEEN @minRangoInicial AND @maxRangoFinal) AND (@ecot_RangoFinal BETWEEN @minRangoInicial AND @maxRangoFinal))
+				IF EXISTS (SELECT * FROM Adua.tbEcotasa WHERE @ecot_RangoIncial BETWEEN ecot_RangoIncial AND ecot_RangoFinal) AND EXISTS (SELECT * FROM Adua.tbEcotasa WHERE @ecot_RangoFinal BETWEEN ecot_RangoIncial AND ecot_RangoFinal) 
 					BEGIN
 						SELECT 2
 					END
@@ -82,9 +76,6 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbEcotasa_Editar --3, 16666.01, 18000, 10000,
 AS
 BEGIN
 	BEGIN TRY
-		
-		DECLARE @minRangoInicial DECIMAL (18,2) = (SELECT MIN(ecot_RangoIncial) FROM Adua.tbEcotasa)
-		DECLARE @maxRangoFinal DECIMAL (18,2) = (SELECT MAX(ecot_RangoFinal) FROM Adua.tbEcotasa)
 
 		IF EXISTS (SELECT * FROM Adua.tbEcotasa WHERE ecot_Id = @ecot_Id AND ecot_RangoIncial = @ecot_RangoIncial AND ecot_RangoFinal = @ecot_RangoFinal)
 			BEGIN
@@ -100,19 +91,13 @@ BEGIN
 			END
 		ELSE
 			BEGIN
-				IF	(
-						(@ecot_RangoIncial IN (SELECT ecot_RangoIncial FROM Adua.tbEcotasa) AND @ecot_RangoFinal IN (SELECT ecot_RangoFinal FROM Adua.tbEcotasa))
-					)
+				IF	(@ecot_RangoIncial IN (SELECT ecot_RangoIncial FROM Adua.tbEcotasa) AND @ecot_RangoFinal IN (SELECT ecot_RangoFinal FROM Adua.tbEcotasa))	
 					BEGIN
 						SELECT 0
 					END
 				ELSE
 					BEGIN
-						IF	(
-								(@ecot_RangoIncial BETWEEN @minRangoInicial AND @maxRangoFinal AND @ecot_RangoFinal BETWEEN @minRangoInicial AND @maxRangoFinal)
-								OR 
-								(EXISTS (SELECT * FROM Adua.tbEcotasa WHERE @ecot_RangoIncial BETWEEN ecot_RangoIncial AND ecot_RangoFinal OR @ecot_RangoFinal BETWEEN ecot_RangoIncial AND ecot_RangoFinal))
-							)
+						IF EXISTS (SELECT * FROM Adua.tbEcotasa WHERE @ecot_RangoIncial BETWEEN ecot_RangoIncial AND ecot_RangoFinal) AND EXISTS (SELECT * FROM Adua.tbEcotasa WHERE @ecot_RangoFinal BETWEEN ecot_RangoIncial AND ecot_RangoFinal) 
 							BEGIN
 								SELECT 2
 							END
@@ -185,6 +170,7 @@ BEGIN
 	FROM Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos AS isccv
 	INNER JOIN Acce.tbUsuarios AS usuaCrea ON isccv.usua_UsuarioCreacion = usuaCrea.usua_Id
 	LEFT JOIN Acce.tbUsuarios AS usuaModifica ON isccv.usua_UsuarioModificacion = usuaModifica.usua_Id
+	ORDER BY [selh_FechaCreacion] ASC
 END
 GO
 
@@ -200,23 +186,17 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbImpuestoSelectivoConsumoCondicionesVehiculo
 AS
 BEGIN
 	BEGIN TRY
-		
-		DECLARE @minRangoInicial DECIMAL (18,2) = (SELECT MIN(selh_RangoInicio) FROM Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos)
-		DECLARE @maxRangoFinal DECIMAL (18,2) = (SELECT MAX(selh_RangoFin) FROM Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos)
 
-		IF	(
-				(@selh_RangoInicio IN (SELECT selh_RangoInicio FROM Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos) AND @selh_RangoFin IN (SELECT selh_RangoFin FROM Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos))
-				OR 
-				(EXISTS (SELECT * FROM Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos WHERE (@selh_RangoInicio BETWEEN selh_RangoInicio AND selh_RangoFin) AND (@selh_RangoFin BETWEEN selh_RangoInicio AND selh_RangoFin)))
-			)
+		IF	(@selh_RangoInicio IN (SELECT selh_RangoInicio FROM Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos) AND @selh_RangoFin IN (SELECT selh_RangoFin FROM Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos))
 			BEGIN
-				SELECT 2
+				SELECT 0
 			END
 		ELSE
 			BEGIN
-				IF((@selh_RangoInicio BETWEEN @minRangoInicial AND @maxRangoFinal) AND (@selh_RangoFin BETWEEN @minRangoInicial AND @maxRangoFinal))
+				IF EXISTS (SELECT * FROM Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos WHERE @selh_RangoInicio BETWEEN selh_RangoInicio AND selh_RangoFin)
+					AND EXISTS (SELECT * FROM Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos WHERE @selh_RangoFin BETWEEN selh_RangoInicio AND selh_RangoFin)
 					BEGIN
-						SELECT 0
+						SELECT 2
 					END
 				ELSE
 					BEGIN
@@ -267,17 +247,14 @@ BEGIN
 			END
 		ELSE
 			BEGIN
-				IF	(
-						(@selh_RangoInicio IN (SELECT selh_RangoInicio FROM Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos) AND @selh_RangoFin IN (SELECT selh_RangoFin FROM Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos))
-						OR 
-						(EXISTS (SELECT * FROM Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos WHERE (@selh_RangoInicio BETWEEN selh_RangoInicio AND selh_RangoFin) AND (@selh_RangoFin BETWEEN selh_RangoInicio AND selh_RangoFin)))
-					)
+				IF	(@selh_RangoInicio IN (SELECT selh_RangoInicio FROM Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos) AND @selh_RangoFin IN (SELECT selh_RangoFin FROM Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos))
 					BEGIN
 						SELECT 0
 					END
 				ELSE
 					BEGIN
-						IF((@selh_RangoInicio BETWEEN @minRangoInicial AND @maxRangoFinal) AND (@selh_RangoFin BETWEEN @minRangoInicial AND @maxRangoFinal))
+						IF EXISTS (SELECT * FROM Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos WHERE @selh_RangoInicio BETWEEN selh_RangoInicio AND selh_RangoFin)
+							AND EXISTS (SELECT * FROM Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos WHERE @selh_RangoFin BETWEEN selh_RangoInicio AND selh_RangoFin)
 							BEGIN
 								SELECT 2
 							END
