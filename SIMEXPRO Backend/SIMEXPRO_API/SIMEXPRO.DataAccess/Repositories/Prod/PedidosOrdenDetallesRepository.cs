@@ -18,7 +18,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
             parametros.Add("@prod_Id", item.prod_Id, DbType.Int32, ParameterDirection.Input);
-            var answer = db.QueryFirst<string>(ScriptsDataBase.PedidosOrdenDetallesEliminar, parametros, commandType: CommandType.StoredProcedure);
+            parametros.Add("@item_Id", item.item_Id, DbType.Int32, ParameterDirection.Input);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.EliminarDetalleConDuca, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
             return result;
         }
