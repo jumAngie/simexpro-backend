@@ -184,5 +184,15 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             return answer;
         }
 
+        public IEnumerable<tbPaises> ExportacionPorPais(tbPaises item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@FechaInicio", item.FechaInicio, DbType.Date, ParameterDirection.Input);
+            parametros.Add("@FechaFin", item.FechaFin, DbType.Date, ParameterDirection.Input);
+            parametros.Add("@Pais_Id", item.pais_Id, DbType.Int32, ParameterDirection.Input);
+            var answer = db.Query<tbPaises>(ScriptsDataBase.ExportacionPorPais, parametros, commandType: CommandType.StoredProcedure);
+            return answer;
+        }
     }
 }

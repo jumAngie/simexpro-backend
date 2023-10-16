@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using SIMEXPRO.API.Models;
 using SIMEXPRO.API.Models.ModelsProduccion;
 using SIMEXPRO.BussinessLogic.Services.ProduccionServices;
 using SIMEXPRO.Entities.Entities;
@@ -151,6 +152,14 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
             return Ok(listado);
         }
 
+        [HttpPost("ExportacionPorPais")]
+        public IActionResult ExportacionPorPais(PaisesViewModel paisesViewModel)
+        {
+            var data = _mapper.Map<tbPaises>(paisesViewModel);
+            var listado = _produccionServices.ExportacionPorPais(data);
 
+            return Ok(listado);
+
+        }
     }
 }

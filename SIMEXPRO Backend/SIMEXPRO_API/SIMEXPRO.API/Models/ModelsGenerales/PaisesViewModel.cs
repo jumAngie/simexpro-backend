@@ -24,5 +24,10 @@ namespace SIMEXPRO.API.Models
         public int? usua_UsuarioEliminacion { get; set; }
         public DateTime? pais_FechaEliminacion { get; set; }
         public bool? pais_Estado { get; set; }
+
+
+        public DateTime FechaInicio { get; set; }
+        public DateTime FechaFin { get; set; }
+        public string Detalles { get; set; }
     }
 }

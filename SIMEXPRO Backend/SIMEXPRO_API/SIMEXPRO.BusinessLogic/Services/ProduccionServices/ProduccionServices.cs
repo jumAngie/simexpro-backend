@@ -4044,6 +4044,20 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
+        public ServiceResult ExportacionPorPais(tbPaises paises)
+        {
+            var result = new ServiceResult();
+
+            try
+            {
+                var list = _reportesRepository.ExportacionPorPais(paises);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
 
         #endregion
 

@@ -882,6 +882,7 @@ namespace SIMEXPRO.DataAccess
         public static string Contrato_CI = "Adua.UDP_Reporte_Contratos_Comerciante_Individual_Por_Fecha";
 
         public static string SeguimientoProcesos = "Prod.UDP_ReporteSeguimientoProcesosPO";
+        public static string ExportacionPorPais = "Adua.UDP_ExportacionesPorPais";
 
         #endregion
 
