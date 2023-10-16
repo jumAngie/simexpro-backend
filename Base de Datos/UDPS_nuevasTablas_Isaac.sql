@@ -28,7 +28,7 @@ GO
 
 
 --- Insertar
-CREATE OR ALTER PROCEDURE Adua.UDP_tbEcotasa_Insertar --1.00, 10000.00, 5000.00, 1, '10-12-2023'
+CREATE OR ALTER PROCEDURE Adua.UDP_tbEcotasa_Insertar --20000, 21000, 2500, 1, '10-12-2023'
 	@ecot_RangoIncial		DECIMAL(18,2), 
 	@ecot_RangoFinal		DECIMAL(18,2),
 	@ecot_CantidadPagar		DECIMAL(18,2),  
@@ -72,7 +72,7 @@ GO
 
 
 --- Editar
-CREATE OR ALTER PROCEDURE Adua.UDP_tbEcotasa_Editar --4, 100000000.00, 100000003.00, 10000.00, 1, '10-12-2023'
+CREATE OR ALTER PROCEDURE Adua.UDP_tbEcotasa_Editar --3, 16666.01, 18000, 10000, 1, '10-13-2023'
 	@ecot_Id					INT,
 	@ecot_RangoIncial			DECIMAL(18,2), 
 	@ecot_RangoFinal			DECIMAL(18,2),
@@ -102,15 +102,17 @@ BEGIN
 			BEGIN
 				IF	(
 						(@ecot_RangoIncial IN (SELECT ecot_RangoIncial FROM Adua.tbEcotasa) AND @ecot_RangoFinal IN (SELECT ecot_RangoFinal FROM Adua.tbEcotasa))
-						OR 
-						(EXISTS (SELECT * FROM Adua.tbEcotasa WHERE (@ecot_RangoIncial BETWEEN ecot_RangoIncial AND ecot_RangoFinal) AND (@ecot_RangoFinal BETWEEN ecot_RangoIncial AND ecot_RangoFinal)))				
 					)
 					BEGIN
 						SELECT 0
 					END
 				ELSE
 					BEGIN
-						IF((@ecot_RangoIncial BETWEEN @minRangoInicial AND @maxRangoFinal) AND (@ecot_RangoFinal BETWEEN @minRangoInicial AND @maxRangoFinal))
+						IF	(
+								(@ecot_RangoIncial BETWEEN @minRangoInicial AND @maxRangoFinal AND @ecot_RangoFinal BETWEEN @minRangoInicial AND @maxRangoFinal)
+								OR 
+								(EXISTS (SELECT * FROM Adua.tbEcotasa WHERE @ecot_RangoIncial BETWEEN ecot_RangoIncial AND ecot_RangoFinal OR @ecot_RangoFinal BETWEEN ecot_RangoIncial AND ecot_RangoFinal))
+							)
 							BEGIN
 								SELECT 2
 							END
@@ -145,16 +147,11 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbEcotasa_Eliminar
 AS
 BEGIN
 	BEGIN TRY
-			DECLARE @respuesta INT
-			EXEC dbo.UDP_ValidarReferencias 'ecot_Id', @ecot_Id, 'Adua.tbEcotasa', @respuesta OUTPUT
 
-			IF(@respuesta) = 1
-				BEGIN
-					DELETE FROM Adua.tbEcotasa
-					WHERE ecot_Id = @ecot_Id
-				END
+			DELETE FROM Adua.tbEcotasa
+			WHERE ecot_Id = @ecot_Id
 			
-			SELECT @respuesta
+			SELECT 1
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()		
@@ -213,7 +210,7 @@ BEGIN
 				(EXISTS (SELECT * FROM Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos WHERE (@selh_RangoInicio BETWEEN selh_RangoInicio AND selh_RangoFin) AND (@selh_RangoFin BETWEEN selh_RangoInicio AND selh_RangoFin)))
 			)
 			BEGIN
-				SELECT 0
+				SELECT 2
 			END
 		ELSE
 			BEGIN
@@ -282,7 +279,7 @@ BEGIN
 					BEGIN
 						IF((@selh_RangoInicio BETWEEN @minRangoInicial AND @maxRangoFinal) AND (@selh_RangoFin BETWEEN @minRangoInicial AND @maxRangoFinal))
 							BEGIN
-								SELECT 0
+								SELECT 2
 							END
 						ELSE
 							BEGIN
@@ -315,15 +312,11 @@ CREATE OR ALTER PROCEDURE Adua.UDP_tbImpuestoSelectivoConsumoCondicionesVehiculo
 AS
 BEGIN
 	BEGIN TRY
-			DECLARE @respuesta INT
-			EXEC dbo.UDP_ValidarReferencias 'selh_Id', @selh_Id, 'Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos', @respuesta OUTPUT
 
-			SELECT @respuesta AS Resultado
-			IF(@respuesta) = 1
-				BEGIN
-					DELETE FROM Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos
-					WHERE selh_Id = @selh_Id
-				END
+		DELETE FROM Adua.tbImpuestoSelectivoConsumoCondicionesVehiculos
+		WHERE selh_Id = @selh_Id
+
+		SELECT 1
 	END TRY
 	BEGIN CATCH
 		SELECT 'Error Message: ' + ERROR_MESSAGE()		

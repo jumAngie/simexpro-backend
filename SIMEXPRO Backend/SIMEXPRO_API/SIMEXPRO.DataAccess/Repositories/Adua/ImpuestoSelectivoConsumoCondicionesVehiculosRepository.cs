@@ -20,7 +20,7 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
             var parametros = new DynamicParameters();
             parametros.Add("@selh_Id", item.selh_Id, DbType.Int32, ParameterDirection.Input);
 
-            var answer = db.QueryFirst<string>(ScriptsDataBase.EliminasISCCV, parametros, commandType: CommandType.StoredProcedure);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.EliminarISCCV, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
             return result;
         }

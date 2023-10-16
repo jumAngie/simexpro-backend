@@ -6870,7 +6870,7 @@ BEGIN
 		SELECT 0
 	END CATCH
 END
-
+GO
 --CREATE OR ALTER PROCEDURE adua.UDP_tbDeclaraciones_Valor_Tab2_Editar
 --	@deva_Id						INT,
 --	@prov_decl_Nombre_Raso			NVARCHAR(250),

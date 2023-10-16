@@ -388,7 +388,7 @@ namespace SIMEXPRO.DataAccess
         public static string ListarISCCV = "Adua.UDP_tbImpuestoSelectivoConsumoCondicionesVehiculos_Listar";
         public static string InsertarISCCV = "Adua.UDP_tbImpuestoSelectivoConsumoCondicionesVehiculos_Insertar";
         public static string EditarISCCV = "Adua.UDP_tbImpuestoSelectivoConsumoCondicionesVehiculos_Editar";
-        public static string EliminasISCCV = "Adua.UDP_tbImpuestoSelectivoConsumoCondicionesVehiculos_Eliminar";
+        public static string EliminarISCCV = "Adua.UDP_tbImpuestoSelectivoConsumoCondicionesVehiculos_Eliminar";
 
         #endregion
 
