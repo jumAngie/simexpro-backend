@@ -91,6 +91,19 @@ namespace SIMEXPRO.DataAccess.Repositories.Adua
 
             return db.Query<tbItems>(ScriptsDataBase.ListarItems, parametros, commandType: CommandType.StoredProcedure);
         }
+        public IEnumerable<tbItems> List_ByFactId(int fact_Id)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            var parametros = new DynamicParameters();
+
+            parametros.Add("@fact_Id", fact_Id, DbType.Int32, ParameterDirection.Input);
+
+            var respuesta = db.Query<tbItems>(ScriptsDataBase.ListarItemsByFactId, parametros, commandType: CommandType.StoredProcedure);
+
+            return respuesta;
+        }
+
+
 
         public IEnumerable<tbItems> List()
         {

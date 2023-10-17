@@ -405,6 +405,7 @@ namespace SIMEXPRO.DataAccess
         public static string EditarItems = "Adua.UDP_tbItems_Editar";
         public static string EliminarItems = "Adua.UDP_tbItems_Eliminar";
         public static string CalcularValorAduana = "Adua.UDP_tbItems_CalcularValorAduana";
+        public static string ListarItemsByFactId = "Adua.UDP_tbItemsByfact_Id";
         #endregion
 
         #region Importadores

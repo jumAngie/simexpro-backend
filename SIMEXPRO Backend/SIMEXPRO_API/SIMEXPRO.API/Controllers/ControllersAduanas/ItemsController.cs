@@ -32,6 +32,16 @@ namespace SIMEXPRO.API.Controllers.ControllersAduanas
             return Ok(respuesta);
         }
 
+
+
+        [HttpGet("ListarItemsByFactId")]
+        public IActionResult ListarItemsByfactId(int fact_Id)
+        {
+            var listado = _aduanaServices.ListarItem_ByFactId(fact_Id);
+            listado.Data = _mapper.Map<IEnumerable<ItemsViewModel>>(listado.Data);
+            return Ok(listado);
+        }
+
         [HttpPost("Insertar")]
         public IActionResult Insert(ItemsViewModel concepto)
         {
