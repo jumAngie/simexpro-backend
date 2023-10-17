@@ -10,5 +10,8 @@ namespace SIMEXPRO.API.Models.ModelsProduccion
         public int impr_Id { get; set; }
         public string impr_Descripcion { get; set; }
         public decimal? impr_Valor { get; set; }
+        public int usua_UsuarioModificacion { get; set; }
+        public DateTime impr_FechaModificacion { get; set; }
+        public string usuarioNombre { get; set; }
     }
 }
