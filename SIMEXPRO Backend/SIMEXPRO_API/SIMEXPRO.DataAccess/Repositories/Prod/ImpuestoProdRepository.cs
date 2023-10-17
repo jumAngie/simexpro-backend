@@ -41,6 +41,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             var parametros = new DynamicParameters();
             parametros.Add("@impr_Id", item.impr_Id, DbType.Int32, ParameterDirection.Input);
             parametros.Add("@impr_Valor", item.impr_Valor, DbType.Decimal, ParameterDirection.Input);
+            parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@impr_FechaModificacion", item.impr_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
             var answer = db.QueryFirst<string>(ScriptsDataBase.EditarImpuestosProd, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
             return result;

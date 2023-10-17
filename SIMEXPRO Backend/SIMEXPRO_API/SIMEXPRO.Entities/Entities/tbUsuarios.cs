@@ -262,6 +262,7 @@ namespace SIMEXPRO.Entities.Entities
             tbUnidadMedidasusua_UsuarioModificacionNavigation = new HashSet<tbUnidadMedidas>();
             tbItemsDEVAPorDucausua_UsuarioCreacionNavigation = new HashSet<tbItemsDEVAPorDuca>();
             tbItemsDEVAPorDucausua_UsuarioModificacionNavigation = new HashSet<tbItemsDEVAPorDuca>();
+            tbImpuestosProdusua_UsuarioModificacionNavigation = new HashSet<tbImpuestosProd>();
         }
 
         public int usua_Id { get; set; }
@@ -576,5 +577,6 @@ namespace SIMEXPRO.Entities.Entities
         public virtual ICollection<tbItemsDEVAPorDuca> tbItemsDEVAPorDucausua_UsuarioCreacionNavigation { get; set; }
 
         public virtual ICollection<tbItemsDEVAPorDuca> tbItemsDEVAPorDucausua_UsuarioModificacionNavigation { get; set; }
+        public virtual ICollection<tbImpuestosProd> tbImpuestosProdusua_UsuarioModificacionNavigation { get; set; }
     }
 }
