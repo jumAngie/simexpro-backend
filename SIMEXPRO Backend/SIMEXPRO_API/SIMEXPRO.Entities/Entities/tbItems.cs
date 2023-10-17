@@ -44,6 +44,10 @@ namespace SIMEXPRO.Entities.Entities
         public string subc_Descripcion { get; set; }
         [NotMapped]
         public string mate_Imagen { get; set; }
+        [NotMapped]
+        public string unme_Descripcion { get; set; }
+        [NotMapped]
+        public string merc_Descripcion { get; set; }
         public string item_CriterioCertificarOrigen { get; set; }
         [NotMapped]
         public bool aran_ArancelVehicular { get; set; }
