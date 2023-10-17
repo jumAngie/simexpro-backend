@@ -29,6 +29,8 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public int? aran_Id { get; set; }
         public string aran_Descripcion { get; set; }
         public string aran_Codigo { get; set; }
+        public string unme_Descripcion { get; set; }
+        public string merc_Descripcion { get; set; }
         public decimal? item_ValorUnitario { get; set; }
         public decimal? item_GastosDeTransporte { get; set; }
         public decimal? item_ValorTransaccion { get; set; }
