@@ -46,6 +46,7 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
         private readonly FacturasExportacionRepository _facturasExportacionRepository;
         private readonly FacturasExportacionDetallesRepository _facturasExportacionDetallesRepository;
         private readonly ReportesRepository _reportesRepository;
+        private readonly ImpuestoProdRepository _impuestoProdRepository;
 
         public ProduccionServices(AreasRepository areasRepository,
                                     AsignacionesOrdenDetalleRepository asignacionesOrdenDetalleRepository,
@@ -83,7 +84,7 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
                                     ProcesoPorOrdenCompraDetalleRepository procesoPorOrdenCompraDetalleRepository,
                                     FacturasExportacionRepository facturasExportacionRepository,
                                     FacturasExportacionDetallesRepository facturasExportacionDetallesRepository,
-                                    ReportesRepository reportesRepository
+                                    ReportesRepository reportesRepository, ImpuestoProdRepository impuestoProdRepository
 
             )
         {
@@ -126,6 +127,7 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             _facturasExportacionRepository = facturasExportacionRepository;
             _facturasExportacionDetallesRepository = facturasExportacionDetallesRepository;
             _reportesRepository = reportesRepository;
+            _impuestoProdRepository = impuestoProdRepository;
         }
 
 
@@ -2192,6 +2194,30 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
                 return result.Error(ex.Message);
             }
         }
+
+
+
+        public ServiceResult InsertarItemsPedidosOrdenDetalle(tbPedidosOrdenDetalle item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _pedidosOrdenDetallesRepository.InsertItemsPedidosOrden(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+               
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region Pedidos Orden
@@ -2222,6 +2248,7 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
                 return result.Error(ex.Message);
             }
         }
+
         public ServiceResult InsertarPedidosOrden(tbPedidosOrden item)
         {
             var result = new ServiceResult();
@@ -4017,7 +4044,59 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
+        public ServiceResult ExportacionPorPais(tbPaises paises)
+        {
+            var result = new ServiceResult();
 
+            try
+            {
+                var list = _reportesRepository.ExportacionPorPais(paises);
+                return result.Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        #endregion
+
+        #region Impuesto Produccion
+        public ServiceResult ListarImpuestoPro()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _impuestoProdRepository.List();
+                return result.Ok(list);
+            }
+            catch (Exception e)
+            {
+                return result.Error(e.Message);
+            }
+        }
+        public ServiceResult ActualizarImpuestoProd(tbImpuestosProd item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+
+                var map = _impuestoProdRepository.Update(item);
+                if (map.MessageStatus == "1")
+                {
+                    return result.Ok(map);
+                }
+                else
+                {
+                    return result.Error(map);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
     }
 }

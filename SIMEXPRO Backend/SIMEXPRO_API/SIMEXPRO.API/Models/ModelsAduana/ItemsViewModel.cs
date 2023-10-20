@@ -21,11 +21,16 @@ namespace SIMEXPRO.API.Models.ModelsAduana
         public string item_Marca { get; set; }
         public string item_Modelo { get; set; }
         public int merc_Id { get; set; }
+        public int mate_SubCategoria { get; set; }
+        public string subc_Descripcion { get; set; }
+        public string mate_Imagen { get; set; }
         public int? pais_IdOrigenMercancia { get; set; }
         public string item_ClasificacionArancelaria { get; set; }
         public int? aran_Id { get; set; }
         public string aran_Descripcion { get; set; }
         public string aran_Codigo { get; set; }
+        public string unme_Descripcion { get; set; }
+        public string merc_Descripcion { get; set; }
         public decimal? item_ValorUnitario { get; set; }
         public decimal? item_GastosDeTransporte { get; set; }
         public decimal? item_ValorTransaccion { get; set; }

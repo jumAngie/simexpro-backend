@@ -39,6 +39,14 @@ namespace SIMEXPRO.Entities.Entities
         public bool? pais_Estado { get; set; }
 
 
+        [NotMapped]
+        public DateTime FechaInicio { get; set; }
+        [NotMapped]
+        public DateTime FechaFin { get; set; }
+        [NotMapped]
+        public string Detalles { get; set; }
+
+
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioEliminacionNavigation { get; set; }
         public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }

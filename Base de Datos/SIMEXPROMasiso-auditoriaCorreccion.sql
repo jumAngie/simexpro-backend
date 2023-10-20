@@ -1481,7 +1481,7 @@ CREATE TABLE Prod.tbMateriales(
 	mate_Id   					INT IDENTITY(1,1),
 	mate_Descripcion			NVARCHAR(200),
 	subc_Id  					INT,
-	colr_Id                     INT,
+	--colr_Id                     INT,
 	--mate_Precio					DECIMAL (18,2),
 	mate_Imagen					NVARCHAR(MAX) NOT NULL,
 	usua_UsuarioCreacion		INT					NOT NULL,
@@ -1493,7 +1493,7 @@ CREATE TABLE Prod.tbMateriales(
 	mate_Estado 				BIT					NOT NULL DEFAULT 1, 
 
 	CONSTRAINT PK_Prod_tbMateriales_mate_Id PRIMARY KEY (mate_Id),
-	CONSTRAINT FK_Prod_tbMateriales_colr_Id_Prod_tbColores_colr_Id                                  FOREIGN KEY (colr_Id)                   REFERENCES Prod.tbColores(colr_Id),
+	--CONSTRAINT FK_Prod_tbMateriales_colr_Id_Prod_tbColores_colr_Id                                  FOREIGN KEY (colr_Id)                   REFERENCES Prod.tbColores(colr_Id),
 	CONSTRAINT FK_Prod_tbMateriales_subc_Id_Prod_tbSubcategoria_subc_Id								FOREIGN KEY (subc_Id) 					REFERENCES Prod.tbSubcategoria(subc_Id),
 	CONSTRAINT FK_Prod_tbMateriales_usua_UsuarioCreacion_Acce_tbUsuarios_usua_Id					FOREIGN KEY (usua_UsuarioCreacion)		REFERENCES Acce.tbUsuarios (usua_Id),
 	CONSTRAINT FK_Prod_tbMateriales_usua_UsuarioModificacion_Acce_tbUsuarios_usua_Id				FOREIGN KEY (usua_UsuarioModificacion)	REFERENCES Acce.tbUsuarios (usua_Id),
@@ -2771,11 +2771,10 @@ GO
 -----------------Factura de exportación-------------------
 CREATE TABLE Prod.tbFacturasExportacion(
 	faex_Id						INT IDENTITY(1,1), 
-	duca_Id						INT NULL,
+	duca_Id						NVARCHAR(300),
 	faex_Fecha					DATETIME	  NOT NULL,
 	orco_Id						INT			  NOT NULL,
 	faex_Total					DECIMAL		  NOT NULL,
-
 	usua_UsuarioCreacion		INT NOT NULL,
 	faex_FechaCreacion			DATETIME NOT NULL,
 	usua_UsuarioModificacion	INT DEFAULT NULL,
@@ -2784,7 +2783,6 @@ CREATE TABLE Prod.tbFacturasExportacion(
 	faex_Estado					BIT DEFAULT 1
 
 	CONSTRAINT PK_Prod_tbFacturasExportacion_faex_Id									PRIMARY KEY(faex_Id),
-	CONSTRAINT FK_Prod_tbFacturasExportacion_Adua_tbDuca_duca_Id						FOREIGN KEY(duca_Id)				 REFERENCES Adua.tbDuca	    (duca_Id),
 	CONSTRAINT FK_Prod_tbFacturasExportacion_tbOrdenCompra_orco_Id						FOREIGN KEY(orco_Id)				   REFERENCES Prod.tbOrdenCompra(orco_Id),
 	CONSTRAINT FK_Prod_tbFacturasExportacion_Acce_tbUsuarios_usua_UsuarioCreacion		FOREIGN KEY(usua_UsuarioCreacion)	   REFERENCES Acce.tbUsuarios   (usua_Id),	
 	CONSTRAINT FK_Prod_tbFacturasExportacion_Acce_tbUsuarios_usua_UsuarioModificacion	FOREIGN KEY(usua_UsuarioModificacion)  REFERENCES Acce.tbUsuarios   (usua_Id)

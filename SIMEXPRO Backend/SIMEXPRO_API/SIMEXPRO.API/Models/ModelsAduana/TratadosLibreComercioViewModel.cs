@@ -9,6 +9,9 @@ namespace SIMEXPRO.API.Models.ModelsAduana
     {
         public int trli_Id { get; set; }
         public string trli_NombreTratado { get; set; }
+        public string detalles { get; set; }
+        public string UsuarioCreacionNombre { get; set; }
+        public string UsuarioModificadorNombre { get; set; }
         public DateTime trli_FechaInicio { get; set; }
         public int usua_UsuarioCreacion { get; set; }
         public DateTime trli_FechaCreacion { get; set; }

@@ -265,6 +265,8 @@ namespace SIMEXPRO.DataAccess
         public static string FinalizarDeva = "Adua.UDP_tbdeclaracion_Valor_Finalizar";
 
         public static string CancelarDeva = "Adua.UDP_tbDeclaracionValor_Eliminar";
+
+        public static string ListarDevaById = "adua.UDP_tbDeclaraciones_ValorCompleto_ListarById";
         #endregion
 
         #region Declarantes
@@ -331,6 +333,14 @@ namespace SIMEXPRO.DataAccess
         public static string ListarDevasByDucaId = "Adua.UDP_tbItemsDevaByDuca_Id";
         #endregion
 
+        #region Ecotasa
+        public static string ListarEcotasa = "Adua.UDP_tbEcotasa_Listar";
+        public static string InsertarEcotasa = "Adua.UDP_tbEcotasa_Insertar";
+        public static string EditarEcotasa = "Adua.UDP_tbEcotasa_Editar";
+        public static string EliminarEcotasa = "Adua.UDP_tbEcotasa_Eliminar";
+
+        #endregion
+
         #region Estado Boletin
         public static string ListarEstadoBoletin = "Adua.UDP_tbEstadoBoletin_Listar";
         public static string InsertarEstadoBoletin = "Adua.UDP_tbEstadoBoletin_Insertar";
@@ -374,6 +384,14 @@ namespace SIMEXPRO.DataAccess
         public static string CategoriaAranceles = "Adua.UDP_tbArancelesBuscarCategoria";
         #endregion
 
+        #region Impuesto Selectivo Consumo Condiciones Vehiculos 
+        public static string ListarISCCV = "Adua.UDP_tbImpuestoSelectivoConsumoCondicionesVehiculos_Listar";
+        public static string InsertarISCCV = "Adua.UDP_tbImpuestoSelectivoConsumoCondicionesVehiculos_Insertar";
+        public static string EditarISCCV = "Adua.UDP_tbImpuestoSelectivoConsumoCondicionesVehiculos_Editar";
+        public static string EliminarISCCV = "Adua.UDP_tbImpuestoSelectivoConsumoCondicionesVehiculos_Eliminar";
+
+        #endregion
+
         #region Incoterm
         public static string ListarIncoterm = "adua.UDP_tbIncoterm_Listar";
         public static string InsertarIncoterm = "adua.UDP_tbIncoterm_Insertar";
@@ -387,6 +405,7 @@ namespace SIMEXPRO.DataAccess
         public static string EditarItems = "Adua.UDP_tbItems_Editar";
         public static string EliminarItems = "Adua.UDP_tbItems_Eliminar";
         public static string CalcularValorAduana = "Adua.UDP_tbItems_CalcularValorAduana";
+        public static string ListarItemsByFactId = "Adua.UDP_tbItemsByfact_Id";
         #endregion
 
         #region Importadores
@@ -462,7 +481,19 @@ namespace SIMEXPRO.DataAccess
         #endregion
 
         #region TratadosLibreComercio
+        public static string ListarTLC = "Adua.tbTratados_Listar";
+        public static string InsertarTLC = "Adua.tbTratados_Insertar";
+        public static string EditarTLC = "Adua.tbTratados_Editar";
         public static string ListTratadosById = "Adua.UDP_tbTratadosLibreComercio_ListById";
+        public static string ListAcuerdosPorTratado = "Adua.UDP_tbArancelesPorTratado_PorTratadoYCapitulo";
+        #endregion
+
+        #region ArancelesPorTratado
+
+        public static string InsertarArancelPorTratado = "Adua.tbArancelesPorTratadoInsertar";
+        public static string EditarArancelPorTratado = "Adua.tbArancelesPorTratadoEditar";
+        public static string EliminarArancelPorTratado = "Adua.tbArancelesPorTratadoEliminar";
+
         #endregion
 
         #region Tipo Documentos
@@ -732,6 +763,7 @@ namespace SIMEXPRO.DataAccess
         public static string EditarPedidosOrden = "Prod.UDP_tbPedidosOrden_Editar";
         public static string FinalizarPedidosOrden = "Prod.UDP_tbPedidosOrden_Finalizado";
         public static string PedidosOrdenFind = "Prod.UDP_tbPedidosOrden_FindCodigo";
+        public static string ItemsOrdenPedido  = "Prod.UDP_tbItems_OrdenDePedido";
         #endregion
 
         #region Orden de Pedido Detalles
@@ -740,6 +772,9 @@ namespace SIMEXPRO.DataAccess
         public static string EditarPedidosOrdenDetalles = "Prod.UDP_tbPedidosOrdenDetalle_Editar";
         public static string PedidosOrdenDetallesFind = "Prod.UDP_tbPedidosOrdenDetalle_Find";
         public static string PedidosOrdenDetallesEliminar = "Prod.UDP_tbPedidosOrdenDetalle_Eliminar";
+        public static string InsertarItemsPedidosOrdenDetalles = "Prod.UDP_tbOrdenPedido_InsertDuca";
+        public static string EliminarDetalleConDuca = "Prod.UDP_tbPedidosOrden_Eliminar";
+
         #endregion
 
         #region Pedidos Produccion
@@ -788,6 +823,11 @@ namespace SIMEXPRO.DataAccess
         public static string EliminarFacturasExportacionDetalles = "Prod.UDP_tbFacturasExportacionDetalle_Eliminar";
 
         public static string PODetallesDDL = "Prod.UDP_PODetallesByID";
+        #endregion
+
+        #region ImpuestosProd
+        public static string ListarImpuestosProd = "Prod.UDP_tbImpuestosProd_Listar";
+        public static string EditarImpuestosProd = "Prod.UDP_tbImpuestosProd_Editar";
         #endregion
 
         #endregion
@@ -844,6 +884,7 @@ namespace SIMEXPRO.DataAccess
         public static string Contrato_CI = "Adua.UDP_Reporte_Contratos_Comerciante_Individual_Por_Fecha";
 
         public static string SeguimientoProcesos = "Prod.UDP_ReporteSeguimientoProcesosPO";
+        public static string ExportacionPorPais = "Adua.UDP_ExportacionesPorPais";
 
         #endregion
 

@@ -36,6 +36,9 @@ namespace SIMEXPRO.Entities.Entities
         public DateTime? prod_FechaModificacion { get; set; }
         public bool? prod_Estado { get; set; }
 
+        [NotMapped]
+        public int? item_Id { get; set; }
+
         public virtual tbMateriales mate { get; set; }
         public virtual tbPedidosOrden pedi { get; set; }
         public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }

@@ -1,13 +1,11 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Threading.Tasks;
 
-#nullable disable
-
-namespace SIMEXPRO.Entities.Entities
+namespace SIMEXPRO.API.Models.ModelsAduana
 {
-    public partial class tbEcotasa
+    public class EcotasaViewModel
     {
         public int ecot_Id { get; set; }
         public decimal ecot_RangoIncial { get; set; }
@@ -17,14 +15,7 @@ namespace SIMEXPRO.Entities.Entities
         public DateTime ecot_FechaCreacion { get; set; }
         public int? usua_UsuarioModificacion { get; set; }
         public DateTime? ecot_FechaModificacion { get; set; }
-
-        [NotMapped]
         public string usua_UsuarioCreacionNombre { get; set; }
-
-        [NotMapped]
         public string usua_UsuarioModificacionNombre { get; set; }
-
-        public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
-        public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }
     }
 }

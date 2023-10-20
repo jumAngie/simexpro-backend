@@ -18,7 +18,8 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             RequestStatus result = new RequestStatus();
             var parametros = new DynamicParameters();
             parametros.Add("@prod_Id", item.prod_Id, DbType.Int32, ParameterDirection.Input);
-            var answer = db.QueryFirst<string>(ScriptsDataBase.PedidosOrdenDetallesEliminar, parametros, commandType: CommandType.StoredProcedure);
+            parametros.Add("@item_Id", item.item_Id, DbType.Int32, ParameterDirection.Input);
+            var answer = db.QueryFirst<string>(ScriptsDataBase.EliminarDetalleConDuca, parametros, commandType: CommandType.StoredProcedure);
             result.MessageStatus = answer;
             return result;
         }
@@ -87,6 +88,23 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
         public IEnumerable<tbPedidosOrdenDetalle> List()
         {
             throw new NotImplementedException();
+        }
+
+        public RequestStatus InsertItemsPedidosOrden(tbPedidosOrdenDetalle item)
+        {
+            using var db = new SqlConnection(SIMEXPRO.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@peor_Id", item.pedi_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@mate_Descripcion", item.mate_Descripcion, DbType.String, ParameterDirection.Input);
+            parametros.Add("@prod_Cantidad", item.prod_Cantidad, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@prod_Precio", item.prod_Precio, DbType.Decimal, ParameterDirection.Input);
+            parametros.Add("@item_Id", item.item_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add("@usua_UsuarioCreacion", item.usua_UsuarioCreacion, DbType.Int32, ParameterDirection.Input);
+
+            var answer = db.QueryFirst<string>(ScriptsDataBase.InsertarItemsPedidosOrdenDetalles, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = answer;
+            return result;
         }
     }
 }

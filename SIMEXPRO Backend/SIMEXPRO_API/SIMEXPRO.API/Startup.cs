@@ -38,11 +38,8 @@ namespace SIMEXPRO.API
             {
                 option.AddPolicy("AllowFlutter", builder =>
                 {
-                    builder.WithOrigins("http://localhost:3000", 
-                                        "https://simexpro.onrender.com",
-                                        "https://simexpro.vercel.app",
-                                        "https://simexpro-rho.vercel.app",
-                                        "https://simexpro.up.railway.app") //NOMBRE DEL SERVIDOR
+                     //NOMBRE DEL SERVIDOR
+                     builder.AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .WithExposedHeaders("Authorization");

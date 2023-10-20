@@ -38,6 +38,16 @@ namespace SIMEXPRO.Entities.Entities
         public decimal? item_ValorAduana { get; set; }
         public decimal? item_CuotaContingente { get; set; }
         public string item_ReglasAccesorias { get; set; }
+        [NotMapped]
+        public int mate_SubCategoria { get; set; }
+        [NotMapped]
+        public string subc_Descripcion { get; set; }
+        [NotMapped]
+        public string mate_Imagen { get; set; }
+        [NotMapped]
+        public string unme_Descripcion { get; set; }
+        [NotMapped]
+        public string merc_Descripcion { get; set; }
         public string item_CriterioCertificarOrigen { get; set; }
         [NotMapped]
         public bool aran_ArancelVehicular { get; set; }

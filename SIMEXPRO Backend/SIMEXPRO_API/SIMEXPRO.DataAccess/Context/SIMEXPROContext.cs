@@ -3106,6 +3106,13 @@ namespace SIMEXPRO.DataAccess.Context
                 entity.ToTable("tbImpuestosProd", "Prod");
 
                 entity.Property(e => e.impr_Valor).HasColumnType("decimal(18, 4)");
+
+                entity.Property(e => e.impr_FechaModificacion).HasColumnType("datetime");
+
+                entity.HasOne(d => d.usua_UsuarioModificacionNavigation)
+                   .WithMany(p => p.tbImpuestosProdusua_UsuarioModificacionNavigation)
+                   .HasForeignKey(d => d.usua_UsuarioModificacion)
+                   .HasConstraintName("FK_Acce_tbUsuarios_usua_UsuarioModificacion_Prod_tbImpuestosProd_usua_Id");
             });
 
             modelBuilder.Entity<tbIncoterm>(entity =>

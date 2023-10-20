@@ -1,13 +1,12 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Threading.Tasks;
 
-#nullable disable
-
-namespace SIMEXPRO.Entities.Entities
+namespace SIMEXPRO.API.Models.ModelsAduana
 {
-    public partial class tbArancelesPorTratados
+    public class ArancelesPorTratadoViewModel
     {
         public int axtl_Id { get; set; }
         public int aran_Id { get; set; }
@@ -22,6 +21,5 @@ namespace SIMEXPRO.Entities.Entities
         public int usua_usuarioCreacion { get; set; }
         public DateTime axtl_FechaCreacion { get; set; }
 
-        public virtual tbUsuarios usua_usuarioCreacionNavigation { get; set; }
     }
 }

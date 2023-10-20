@@ -645,7 +645,7 @@ END
 
 GO
 
-CREATE OR ALTER  PROCEDURE Prod.UDP_ReporteSeguimientoProcesosPO
+CREATE OR  ALTER PROCEDURE [Prod].[UDP_ReporteSeguimientoProcesosPO] 
 @orco_Codigo NVARCHAR(100)
 AS
 BEGIN
@@ -678,34 +678,50 @@ SELECT DISTINCT
 	 (
 		SELECT p.* 
 					FROM 
-				(  SELECT	 pros.proc_Descripcion,		             
+				(  SELECT	 pros.proc_Descripcion,	
+				             modu2.modu_Nombre ,    
+							   
+				
 				CASE
-				   WHEN asor.asor_FechaInicio IS NULL THEN 'NADA'
-				ELSE CONVERT(NVARCHAR, asor.asor_FechaInicio, 120)
+				   WHEN asor.ensa_FechaInicio IS NULL THEN 'NADA'
+				ELSE CONVERT(NVARCHAR, asor.ensa_FechaInicio, 120)
 			    END AS asor_FechaInicio,
 			    CASE
-				   WHEN asor.asor_FechaLimite IS NULL THEN 'NADA'
-				ELSE CONVERT(NVARCHAR, asor.asor_FechaLimite, 120)
+				   WHEN asor.ensa_FechaLimite IS NULL THEN 'NADA'
+				ELSE CONVERT(NVARCHAR, asor.ensa_FechaLimite, 120)
 			   END AS asor_FechaLimite,
 			    CASE
-				   WHEN asor.asor_Cantidad IS NULL THEN 'NADA'
-				ELSE CONVERT(NVARCHAR, asor.asor_Cantidad, 120)
+				   WHEN asor.ensa_Cantidad IS NULL THEN 'NADA'
+				ELSE CONVERT(NVARCHAR, asor.ensa_Cantidad, 120)
 			   END AS asor_Cantidad,
 			  
 			  CASE
 				   WHEN empl.empl_Nombres + ' '+ empl_Apellidos IS NULL THEN 'Nada'
 				ELSE CONVERT(NVARCHAR, (empl.empl_Nombres + ' '+ empl_Apellidos), 120)
 			   END AS Empleado
+
+			  
 				             
 										
 					FROM	Prod.tbOrdenCompraDetalles ordenCompraDetalle
 						LEFT JOIN	Prod.tbProcesoPorOrdenCompraDetalle	procesos ON	ordenCompraDetalle.code_Id = procesos.code_Id
-						LEFT JOIN	Prod.tbProcesos	pros                         ON	pros.proc_Id = procesos.proc_Id					
-						LEFT JOIN   Prod.tbAsignacionesOrden asor                ON asor.proc_Id = procesos.proc_Id  AND   ordenCompraDetalle.code_Id = asor.asor_OrdenDetId
-						LEFT JOIN   Gral.tbEmpleados empl                        ON asor.empl_Id = empl.empl_Id
+						LEFT JOIN	Prod.tbProcesos	pros                         ON	pros.proc_Id = procesos.proc_Id		
+							
+						LEFT JOIN   Prod.tbOrde_Ensa_Acab_Etiq oeae              ON oeae.code_Id = ordenCompraDetalle.code_Id 
+
+						LEFT JOIN   Prod.tbModulos modu                          ON modu.modu_Id = oeae.modu_Id
+
+					    LEFT JOIN   Prod.tbOrde_Ensa_Acab_Etiq asor              ON asor.code_Id = ordenCompraDetalle.code_Id AND modu.proc_Id = pros.proc_Id
 					
+					    LEFT JOIN   Gral.tbEmpleados empl                        ON asor.empl_Id = empl.empl_Id
+					   
+					   LEFT JOIN   Prod.tbModulos modu2                          ON modu2.modu_Id = asor.modu_Id
+						
+
 						WHERE       orde.code_Id = procesos.code_Id) AS p
 				FOR JSON PATH ) AS SeguimientoProcesos
+
+			
 			
 FROM 
 Prod.tbOrdenCompraDetalles orde
