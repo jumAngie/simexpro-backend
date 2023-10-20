@@ -18122,15 +18122,12 @@ GO
 
 
 
-
-
  -- PROCEDIMIENTO PARA LISTAR LAS FACTURAS EXPORTACION
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Listar
 AS
 	BEGIN
 		SELECT	FactExport.faex_Id, 
-				ISNULL(FactExport.duca_Id, '') AS duca_Id,
-				ISNULL(Duca.duca_No_Duca, 'N/A') AS duca_No_Duca,
+				ISNULL(FactExport.duca_Id, 'N/A') AS duca_No_Duca,
 				FactExport.faex_Fecha, 
 				FactExport.orco_Id, 
 				CONCAT('No. ', PO.orco_Codigo, ' - ', Clie.clie_Nombre_O_Razon_Social, ' - ', CONVERT(DATE, PO.orco_FechaEmision)) AS orco_Descripcion,
@@ -18180,22 +18177,17 @@ AS
 		INNER JOIN Prod.tbOrdenCompra		AS PO			ON FactExport.orco_Id = PO.orco_Id
 		INNER JOIN Prod.tbClientes			AS Clie			ON PO.orco_IdCliente = Clie.clie_Id
 		INNER JOIN Acce.tbUsuarios			AS UserCrea		ON FactExport.usua_UsuarioCreacion = UserCrea.usua_Id
-		LEFT JOIN Adua.tbDuca				AS Duca			ON FactExport.duca_Id = Duca.duca_Id
 		LEFT JOIN Acce.tbUsuarios			AS UserModifica ON FactExport.usua_UsuarioModificacion = UserModifica.usua_Id
 		WHERE FactExport.faex_Estado = 1
 		--ORDER BY FactExport.faex_FechaCreacion ASC
 	END
 GO
 
-SELECT * FROM Prod.tbOrdenCompraDetalles
-SELECT *FROM Prod.tbOrdenCompra
 
-SELECT * FROM Prod.tbFacturasExportacion
-GO
 
 -- PROCEDIMIENTO PARA INSERTAR LAS FACTURAS EXPORTACION (ENCABEZADO)
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Insertar --'12345678696', '08/31/2023', 2, 3, '08/31/2023'
-	@duca_No_Duca			NVARCHAR(100),
+	@duca_No_Duca			NVARCHAR(300),
 	@faex_Fecha				DATETIME, 
 	@orco_Id				INT, 
 	@usua_UsuarioCreacion	INT, 
@@ -18203,11 +18195,10 @@ CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Insertar --'12345678696
 AS
 BEGIN
 	BEGIN TRY
-		DECLARE @duca_Id INT = (SELECT duca_Id FROM Adua.tbDuca WHERE duca_No_Duca = @duca_No_Duca)
 
 		INSERT INTO Prod.tbFacturasExportacion(duca_Id, faex_Fecha, orco_Id, 
 												faex_Total, usua_UsuarioCreacion, faex_FechaCreacion)
-		VALUES(@duca_Id, @faex_Fecha, @orco_Id, 0, @usua_UsuarioCreacion, @faex_FechaCreacion)
+		VALUES(@duca_No_Duca, @faex_Fecha, @orco_Id, 0, @usua_UsuarioCreacion, @faex_FechaCreacion)
 
 		DECLARE @faex_Id INT = SCOPE_IDENTITY();
 
@@ -18220,10 +18211,11 @@ BEGIN
 END
 GO
 
+
 -- PROCEDIMIENTO PARA EDITAR LAS FACTURAS EXPORTACION (ENCABEZADO)
 CREATE OR ALTER PROCEDURE Prod.UDP_tbFacturasExportacion_Editar
 	@faex_Id					INT, 
-	@duca_No_Duca				NVARCHAR(100), 
+	@duca_No_Duca				NVARCHAR(300), 
 	@faex_Fecha					DATETIME, 
 	@orco_Id					INT,   
 	@usua_UsuarioModificacion	INT, 
@@ -18233,7 +18225,6 @@ BEGIN
 	BEGIN TRY
 		
 		DECLARE @prev_orco_Id INT =	(SELECT orco_Id FROM Prod.tbFacturasExportacion WHERE faex_Id = @faex_Id)
-		DECLARE @duca_Id INT = (SELECT duca_Id FROM Adua.tbDuca WHERE duca_No_Duca = @duca_No_Duca)
 
 		IF @prev_orco_Id != @orco_Id
 			BEGIN
@@ -18245,7 +18236,7 @@ BEGIN
 
 
 				UPDATE Prod.tbFacturasExportacion
-				SET	duca_Id = @duca_Id, 
+				SET	duca_Id = @duca_No_Duca, 
 					faex_Fecha = @faex_Fecha, 
 					orco_Id = @orco_Id,
 					faex_Total = 0,
@@ -18258,7 +18249,7 @@ BEGIN
 		ELSE
 			BEGIN
 				UPDATE Prod.tbFacturasExportacion
-				SET	duca_Id = @duca_Id, 
+				SET	duca_Id = @duca_No_Duca, 
 					faex_Fecha = @faex_Fecha, 
 					orco_Id = @orco_Id, 
 					usua_UsuarioModificacion = @usua_UsuarioModificacion, 
