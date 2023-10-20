@@ -60,7 +60,7 @@ BEGIN
 	SELECT		mate.mate_Descripcion,
 				(SUM(peod.prod_Cantidad)) as TotalCantidad,
 				CONVERT( DECIMAL(18,2), (CONVERT(DECIMAL(18,2), SUM(peod.prod_Cantidad) * 100)) / CONVERT(DECIMAL(18,2),(SELECT SUM(prod_Cantidad)FROM Prod.tbPedidosOrdenDetalle))) AS PorcentajeProductos,
-				AVG(peod.prod_Precio) AS PrecioPromedioMaterial
+				CAST(AVG(peod.prod_Precio) AS DECIMAL(18,2)) AS PrecioPromedioMaterial
 		FROM	Prod.tbPedidosOrdenDetalle peod  LEFT JOIN Prod.tbMateriales mate ON peod.mate_Id = mate.mate_Id
 		WHERE	peod.prod_FechaCreacion BETWEEN @mate_FechaInicio AND @mate_FechaLimite
 		GROUP BY mate.mate_Descripcion;
