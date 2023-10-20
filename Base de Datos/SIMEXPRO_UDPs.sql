@@ -18561,12 +18561,11 @@ BEGIN
 					,modu.modu_Id
 					,modu.modu_Nombre
 					,ppro_Id
-					,procesos.proc_Id
+					,modu.proc_Id
 			FROM [Prod].[tbOrde_Ensa_Acab_Etiq] ensa		INNER JOIN [Gral].[tbEmpleados] empl
 			ON   ensa.empl_Id = empl.empl_Id				INNER JOIN [Prod].[tbModulos] modu
 			ON   ensa.modu_Id = modu.modu_Id				
 			WHERE ensa.code_Id = orderdet.code_Id
-			AND   modu.proc_Id = procesos.proc_Id
 			FOR JSON PATH) AS detallesprocesos
 	FROM	[Prod].[tbOrdenCompraDetalles] orderdet		INNER JOIN [Prod].[tbOrdenCompra] orden
 	ON		orderdet.orco_Id = orden.orco_Id			INNER JOIN [Prod].[tbEstilos] estilos
