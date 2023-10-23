@@ -190,6 +190,20 @@ namespace SIMEXPRO.BussinessLogic.Services.EventoServices
             }
         }
 
+        public ServiceResult ListarAduanas_ByCode(string code)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var list = _aduanasRepository.List_ByCode(code);
+                return result.Ok(list);
+            }
+            catch (Exception e)
+            {
+                return result.Error(e.Message);
+            }
+        }
+
         public ServiceResult InsertarAduanas(tbAduanas item)
         {
             var result = new ServiceResult();
