@@ -8551,6 +8551,10 @@ BEGIN
 			FROM Adua.tbLiquidacionGeneral 
 		   WHERE duca_Id = @duca_Id AND lige_TipoTributo = 'PROCONS' 
 
+		  SELECT @lige_TotalGral = @lige_TotalGral + lige_TotalPorTributo
+			FROM Adua.tbLiquidacionGeneral 
+		   WHERE duca_Id = @duca_Id AND lige_TipoTributo = 'STD'
+
 			UPDATE Adua.tbLiquidacionGeneral
 			   SET lige_TotalGral = lige_TotalGral + @lige_TotalGral
 			 WHERE duca_Id = @duca_Id
