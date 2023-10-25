@@ -50,7 +50,7 @@ BEGIN
     FROM Prod.tbOrdenCompra
     WHERE orco_FechaCreacion >= @FechaInicio AND orco_FechaCreacion < @FechaFin
     GROUP BY DATENAME(MONTH, orco_FechaCreacion) 
-    ORDER BY fecha;
+    ORDER BY fecha DESC;
 END
 GO
 
@@ -71,7 +71,7 @@ BEGIN
     FROM Prod.tbOrdenCompra
     WHERE YEAR(orco_FechaCreacion) = YEAR(GETDATE()) AND MONTH(orco_FechaCreacion) = @MesActual
     GROUP BY YEAR(orco_FechaCreacion), DATEPART(WEEK, orco_FechaCreacion)
-    ORDER BY Anio, Semana;
+    ORDER BY Anio, Semana ;
 END
 GO
 
@@ -98,6 +98,12 @@ GO
 CREATE OR ALTER PROCEDURE Prod.UDP_ContadorOrdenesCompra_PorEstado
 AS
 BEGIN
+     SET LANGUAGE Spanish;
+    
+    DECLARE @MesActual INT
+    SET @MesActual = MONTH(GETDATE()) 
+   
+  
 	SELECT	
 			COUNT(orco_Id) AS orco_Conteo, 
 			CASE orco_EstadoOrdenCompra
@@ -107,30 +113,12 @@ BEGIN
 			END AS orco_Avance
 		
 	FROM	Prod.tbOrdenCompra
+	WHERE  MONTH([orco_FechaCreacion]) = @MesActual
 	GROUP BY orco_EstadoOrdenCompra
 END
 GO
 
-
--- PROCEDIMIENTO PARA MOSTRAR LAS ORDENES DE COMPRA POR ESTADO DE LA ULTIMA SEMANA
-CREATE OR ALTER PROCEDURE Prod.UDP_ContadorOrdenesCompra_PorEstado_UltimaSemana
-AS
-BEGIN
-    DECLARE @FechaInicial DATE, @FechaFinal DATE;
-    SET @FechaInicial = DATEADD(DAY, -7, GETDATE()); 
-    SET @FechaFinal = GETDATE();
-
-	SELECT	
-			COUNT(orco_Id) AS orco_Conteo, 
-			CASE orco_EstadoOrdenCompra
-				WHEN 'P' THEN 'Pendiente'
-				WHEN 'T' THEN 'Terminado'
-			END AS orco_Avance
-	FROM	Prod.tbOrdenCompra
-	WHERE orco_FechaCreacion BETWEEN @FechaInicial AND @FechaFinal
-	GROUP BY orco_EstadoOrdenCompra
-END
-GO
+<
 
 
 
@@ -443,4 +431,67 @@ BEGIN
 	LEFT JOIN [Adua].[tbTratadosLibreComercio] trati ON duquitaModric.trli_Id = trati.trli_Id
 	GROUP BY trli_NombreTratado
 
+END
+
+GO
+
+CREATE OR ALTER PROC Adua.UDP_Importaciones_Anio
+AS
+BEGIN
+		SET LANGUAGE Spanish;
+
+    DECLARE @FechaInicio DATETIME
+    DECLARE @FechaFin DATETIME
+    
+    SET @FechaInicio = DATEFROMPARTS(YEAR(GETDATE()), 1, 1)
+    SET @FechaFin = DATEADD(DAY, -1, DATEFROMPARTS(YEAR(GETDATE()) + 1, 1, 1))
+    
+    SELECT
+		DATENAME(MONTH, [duca_FechaCreacion]) AS fecha,
+        COUNT([duca_Id]) AS cantidad
+    FROM [Adua].[tbDuca]
+    WHERE [duca_FechaCreacion] >= @FechaInicio AND [duca_FechaCreacion] < @FechaFin
+    GROUP BY DATENAME(MONTH, [duca_FechaCreacion]) 
+    ORDER BY fecha DESC;
+END
+
+
+GO
+
+CREATE OR ALTER PROC Adua.UDP_Importaciones_Mes
+AS
+BEGIN
+	SET LANGUAGE Spanish;
+    
+    DECLARE @MesActual INT
+    SET @MesActual = MONTH(GETDATE()) 
+    
+    SELECT
+        YEAR([duca_FechaCreacion]) AS Anio,
+        DATEPART(WEEK, [duca_FechaCreacion]) - DATEPART(WEEK, DATEFROMPARTS(YEAR([duca_FechaCreacion]), @MesActual, 1)) + 1 AS Semana,
+        COUNT([duca_Id]) AS cantidad,
+        'Semana ' + CAST(DATEPART(WEEK, [duca_FechaCreacion]) - DATEPART(WEEK, DATEFROMPARTS(YEAR([duca_FechaCreacion]), @MesActual, 1)) + 1 AS NVARCHAR(10)) AS fecha
+    FROM [Adua].[tbDuca]
+    WHERE YEAR([duca_FechaCreacion]) = YEAR(GETDATE()) AND MONTH([duca_FechaCreacion]) = @MesActual
+    GROUP BY YEAR([duca_FechaCreacion]), DATEPART(WEEK, [duca_FechaCreacion])
+    ORDER BY Anio, Semana;
+END
+
+
+GO
+
+CREATE OR ALTER PROC Adua.UDP_Importaciones_Semana
+AS
+BEGIN
+	 SET LANGUAGE Spanish;	
+
+	DECLARE @SemanaActual INT;
+	SET @SemanaActual = DATEPART(WEEK, GETDATE())
+    SELECT
+        DATENAME(WEEKDAY, [duca_FechaCreacion]) AS fecha,
+        COUNT([duca_Id]) AS cantidad
+    FROM [Adua].[tbDuca]
+    WHERE DATEPART(WEEK, [duca_FechaCreacion]) = @SemanaActual
+    GROUP BY DATENAME(WEEKDAY, [duca_FechaCreacion])
+    ORDER BY fecha;
 END
