@@ -16209,7 +16209,7 @@ BEGIN
 
 		UPDATE [Prod].[tbProcesoPorOrdenCompraDetalle]
 		SET poco_Completado = ISNULL(poco_Completado,0) + (@rdet_TotalDia - @rdet_TotalDanado)
-		WHERE code_Id = @Newcode_Id AND proc_Id = @proc_Id
+		WHERE poco_Id = (SELECT TOP(1) poco_Id FROM [Prod].[tbProcesoPorOrdenCompraDetalle] WHERE code_Id = @Newcode_Id AND proc_Id = @proc_Id)
 
 		SELECT 1
 		COMMIT; 
@@ -16234,6 +16234,7 @@ AS
 BEGIN
 	BEGIN TRY
 
+		DECLARE @cantiadadVieja INT = (SELECT rdet_TotalDia - rdet_TotalDanado FROM Prod.tbReporteModuloDiaDetalle WHERE rdet_Id = @rdet_Id)
 
 		UPDATE	Prod.tbReporteModuloDiaDetalle 
 		SET		remo_Id						=	@remo_Id, 
@@ -16249,6 +16250,23 @@ BEGIN
 		SET [remo_TotalDia] = (SELECT SUM(rdet_TotalDia) FROM Prod.tbReporteModuloDiaDetalle WHERE remo_Id = @remo_Id ),
 			[remo_TotalDanado] = (SELECT SUM(rdet_TotalDanado) FROM Prod.tbReporteModuloDiaDetalle WHERE remo_Id = @remo_Id )
 		WHERE [remo_Id] = @remo_Id
+
+
+		
+		DECLARE @Newcode_Id INT = (SELECT code_Id FROM [Prod].[tbOrde_Ensa_Acab_Etiq] WHERE ensa_Id = @ensa_Id)
+		DECLARE @proc_Id INT = (SELECT proc_Id FROM [Prod].[tbReporteModuloDia] AS remo 
+								INNER JOIN [Prod].[tbModulos] modu ON remo.modu_Id = modu.modu_Id 
+								WHERE remo_Id = @remo_Id)
+
+
+		IF(@cantiadadVieja <= (@rdet_TotalDia - @rdet_TotalDanado))
+		UPDATE [Prod].[tbProcesoPorOrdenCompraDetalle]
+		SET poco_Completado = ISNULL(poco_Completado,0) + (@rdet_TotalDia - @rdet_TotalDanado - @cantiadadVieja)
+		WHERE poco_Id = (SELECT TOP(1) poco_Id FROM [Prod].[tbProcesoPorOrdenCompraDetalle] WHERE code_Id = @Newcode_Id AND proc_Id = @proc_Id)
+		ELSE
+		UPDATE [Prod].[tbProcesoPorOrdenCompraDetalle]
+		SET poco_Completado = (ISNULL(poco_Completado,0) - @cantiadadVieja) + (@rdet_TotalDia - @rdet_TotalDanado)
+		WHERE poco_Id = (SELECT TOP(1) poco_Id FROM [Prod].[tbProcesoPorOrdenCompraDetalle] WHERE code_Id = @Newcode_Id AND proc_Id = @proc_Id)
 
 		SELECT 1
 		COMMIT;
