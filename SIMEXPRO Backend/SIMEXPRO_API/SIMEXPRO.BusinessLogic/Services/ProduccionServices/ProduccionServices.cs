@@ -3953,12 +3953,12 @@ namespace SIMEXPRO.BussinessLogic.Services.ProduccionServices
             }
         }
 
-        public ServiceResult MateriasDePO(tbOrdenCompra orden)
+        public ServiceResult MateriasDePO(int orco_Id)
         {
             var result = new ServiceResult();
             try
             {
-                var list = _reportesRepository.MateriasDePO(orden);
+                var list = _reportesRepository.MateriasDePO(orco_Id);
                 return result.Ok(list);
             }
             catch (Exception ex)

@@ -115,8 +115,7 @@ namespace SIMEXPRO.API.Controllers.ControllersProduccion
         [HttpPost("MaterialesPorPO")]
         public IActionResult MaterialesPorPO(OrdenCompraViewModel orden)
         {
-            var data = _mapper.Map<tbOrdenCompra>(orden);
-            var listado = _produccionServices.MateriasDePO(data);
+            var listado = _produccionServices.MateriasDePO(orden.orco_Id);
             return Ok(listado);
         }
 

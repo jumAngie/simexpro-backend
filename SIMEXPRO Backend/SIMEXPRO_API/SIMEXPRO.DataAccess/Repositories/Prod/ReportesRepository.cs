@@ -115,11 +115,11 @@ namespace SIMEXPRO.DataAccess.Repositories.Prod
             var answer = db.Query<VW_tbDeclaraciones_ValorCompleto>(ScriptsDataBase.DevaPendiente, parametros, commandType: CommandType.StoredProcedure);
             return answer;
         }
-        public IEnumerable<tbOrdenCompra> MateriasDePO(tbOrdenCompra item)
+        public IEnumerable<tbOrdenCompra> MateriasDePO(int orco_Id)
         {
             using var db = new SqlConnection(SIMEXPRO.ConnectionString);
             var parametros = new DynamicParameters();
-            parametros.Add ("@orco_Id", item.orco_Id, DbType.Int32, ParameterDirection.Input);
+            parametros.Add ("@orco_Id", orco_Id, DbType.Int32, ParameterDirection.Input);
             var answer = db.Query<tbOrdenCompra>(ScriptsDataBase.MateriasDePO, parametros, commandType: CommandType.StoredProcedure);
             return answer;
         }
